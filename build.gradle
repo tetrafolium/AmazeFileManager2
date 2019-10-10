@@ -11,6 +11,14 @@ buildscript {
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+
+    // NOTE: local addition for tractrix/codelift-plugins#1308
+    // from https://inspecode.strophoid.io/jobs/github.com/tetrafolium/AmazeFileManager2/2/tasks/android-lint
+    android {
+        lintOptions {
+            abortOnError false
+        }
+    }
 }
 
 allprojects {
@@ -25,12 +33,4 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
-}
-
-// NOTE: local addition for tractrix/codelift-plugins#1308
-// from https://inspecode.strophoid.io/jobs/github.com/tetrafolium/AmazeFileManager2/2/tasks/android-lint
-android {
-    lintOptions {
-        abortOnError false
-    }
 }
