@@ -2,43 +2,46 @@ inspecode:
 
   astyle:
     auto-fix: true
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 217 }
 
   checkstyle:
     auto-fix: true
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 999 } # too many issues detected: 17381 > 1000
 
   clang-format:
     auto-fix: true
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 331 }
 
   cpd:
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 33 }
 
   #### not supported yet ??
   #fortify:
   #  thresholds: { num-issues: 999 }
 
   fossology:
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 16 }
 
   grep:
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 57 }
 
+  ## Execution failed for task ':app:validateSigningPlayRelease'.
+  ## > Keystore file not set for signing config config
   infer:
     thresholds: { num-issues: 999 }
 
   jscpd:
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 178 }
 
   misspell:
     auto-fix: true
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 5 }
 
   pmd:
     auto-fix: true
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 42 }
 
+  ## FAILURE: Build failed with an exception.
   ## Classfiles/jarfiles of targets are not specified.
   ## Please specify targets with the "-targets", "-project" or "-analyzeFromFile" option.
   #spotbugs:
@@ -46,11 +49,11 @@ inspecode:
 
   uncrustify:
     auto-fix: true
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 330 }
 
   #### not supported yet ??
   #understand:
   #  thresholds: { num-issues: 999 }
 
   unused:
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 250 }
