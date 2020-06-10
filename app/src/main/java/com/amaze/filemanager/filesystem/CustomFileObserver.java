@@ -91,18 +91,18 @@ public class CustomFileObserver extends FileObserver {
         long deltaTime = Calendar.getInstance().getTimeInMillis() - lastMessagedTime;
 
         switch (event) {
-            case CREATE:
-            case MOVED_TO:
-                pathsAdded.add(path);
-                break;
-            case DELETE:
-            case MOVED_FROM:
-                pathsRemoved.add(path);
-                break;
-            case DELETE_SELF:
-            case MOVE_SELF:
-                handler.obtainMessage(GOBACK).sendToTarget();
-                return;
+        case CREATE:
+        case MOVED_TO:
+            pathsAdded.add(path);
+            break;
+        case DELETE:
+        case MOVED_FROM:
+            pathsRemoved.add(path);
+            break;
+        case DELETE_SELF:
+        case MOVE_SELF:
+            handler.obtainMessage(GOBACK).sendToTarget();
+            return;
         }
 
 
@@ -157,7 +157,7 @@ public class CustomFileObserver extends FileObserver {
     private void startPollingSystem() {
         executor = Executors.newScheduledThreadPool(1);
         executor.scheduleWithFixedDelay(new FileTimerTask(path, this),
-                DEFER_CONSTANT_SECONDS, DEFER_CONSTANT_SECONDS, TimeUnit.SECONDS); //This doesn't work with milliseconds (don't know why)
+                                        DEFER_CONSTANT_SECONDS, DEFER_CONSTANT_SECONDS, TimeUnit.SECONDS); //This doesn't work with milliseconds (don't know why)
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

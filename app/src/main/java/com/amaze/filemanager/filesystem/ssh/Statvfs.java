@@ -46,11 +46,11 @@ public class Statvfs
      * @param path remote path
      * @return {@link Request}
      */
-    public static final Request request(final SFTPClient sftpClient, final String path){
+    public static final Request request(final SFTPClient sftpClient, final String path) {
         return sftpClient.getSFTPEngine().newRequest(PacketType.EXTENDED)
-                .putString(STATVFS_OPENSSH_COM)
-                .putString(path,
-                        sftpClient.getSFTPEngine().getSubsystem().getRemoteCharset());
+               .putString(STATVFS_OPENSSH_COM)
+               .putString(path,
+                          sftpClient.getSFTPEngine().getSubsystem().getRemoteCharset());
     }
 
     /**
@@ -207,19 +207,19 @@ public class Statvfs
         @Override
         public String toString() {
             return new StringBuilder()
-                    .append("Response statvfs@openssh.com query for [").append(remotePath).append("], ")
-                    .append("fileSystemBlockSize=").append(fileSystemBlockSize).append(',')
-                    .append("fundamentalFileSystemBlockSize=").append(fundamentalFileSystemBlockSize).append(',')
-                    .append("fileSystemBlocks=").append(fileSystemBlocks).append(',')
-                    .append("freeFileSystemBlocks=").append(freeFileSystemBlocks).append(',')
-                    .append("availableFileSystemBlocks=").append(availableFileSystemBlocks).append(',')
-                    .append("totalFileInodes=").append(totalFileInodes).append(',')
-                    .append("freeFileInodes=").append(freeFileInodes).append(',')
-                    .append("availableFileInodes=").append(availableFileInodes).append(',')
-                    .append("fileSystemId=").append(getFileSystemId()).append(',')
-                    .append("fileSystemFlag=").append(fileSystemFlag).append(',')
-                    .append("filenameMaxLength=").append(filenameMaxLength)
-                    .toString();
+                   .append("Response statvfs@openssh.com query for [").append(remotePath).append("], ")
+                   .append("fileSystemBlockSize=").append(fileSystemBlockSize).append(',')
+                   .append("fundamentalFileSystemBlockSize=").append(fundamentalFileSystemBlockSize).append(',')
+                   .append("fileSystemBlocks=").append(fileSystemBlocks).append(',')
+                   .append("freeFileSystemBlocks=").append(freeFileSystemBlocks).append(',')
+                   .append("availableFileSystemBlocks=").append(availableFileSystemBlocks).append(',')
+                   .append("totalFileInodes=").append(totalFileInodes).append(',')
+                   .append("freeFileInodes=").append(freeFileInodes).append(',')
+                   .append("availableFileInodes=").append(availableFileInodes).append(',')
+                   .append("fileSystemId=").append(getFileSystemId()).append(',')
+                   .append("fileSystemFlag=").append(fileSystemFlag).append(',')
+                   .append("filenameMaxLength=").append(filenameMaxLength)
+                   .toString();
         }
     }
 }

@@ -55,7 +55,7 @@ public class ScrimInsetsRelativeLayout extends RelativeLayout {
 
     private void init(Context context, AttributeSet attrs, int defStyle) {
         final TypedArray a = context.obtainStyledAttributes(attrs,
-                R.styleable.ScrimInsetsFrameLayout, defStyle, 0);
+                             R.styleable.ScrimInsetsFrameLayout, defStyle, 0);
         if (a == null) {
             return;
         }

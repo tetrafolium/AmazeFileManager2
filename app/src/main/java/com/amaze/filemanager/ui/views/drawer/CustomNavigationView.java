@@ -14,7 +14,7 @@ import android.view.MenuItem;
  * This class if for intercepting item selections so that they can be saved and restored.
  */
 public class CustomNavigationView extends NavigationView
-        implements NavigationView.OnNavigationItemSelectedListener {
+    implements NavigationView.OnNavigationItemSelectedListener {
 
     private OnNavigationItemSelectedListener subclassListener;
     private int checkedId = -1;
@@ -114,7 +114,7 @@ public class CustomNavigationView extends NavigationView
      */
     public boolean isNavigationViewSavedStateMissing() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && Build.VERSION.SDK_INT <= Build.VERSION_CODES.P;
+               && Build.VERSION.SDK_INT <= Build.VERSION_CODES.P;
     }
 
     static class SavedState extends BaseSavedState {
@@ -137,13 +137,13 @@ public class CustomNavigationView extends NavigationView
 
         //required field that makes Parcelables from a Parcel
         public static final Parcelable.Creator<SavedState> CREATOR =
-                new Parcelable.Creator<SavedState>() {
-                    public SavedState createFromParcel(Parcel in) {
-                        return new SavedState(in);
-                    }
-                    public SavedState[] newArray(int size) {
-                        return new SavedState[size];
-                    }
-                };
+        new Parcelable.Creator<SavedState>() {
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
     }
 }

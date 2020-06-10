@@ -87,7 +87,7 @@ public class ZipExtractor extends Extractor {
             throw new IOException(e);
         }
     }
-    
+
     /**
      * Method extracts {@link FileHeader} from {@link ZipFile}
      *
@@ -102,7 +102,7 @@ public class ZipExtractor extends Extractor {
         if(ArchivePasswordCache.getInstance().containsKey(filePath))
             entry.setPassword(ArchivePasswordCache.getInstance().get(filePath).toCharArray());
 
-        if (!outputFile.getCanonicalPath().startsWith(outputDir)){
+        if (!outputFile.getCanonicalPath().startsWith(outputDir)) {
             throw new IOException("Incorrect ZipEntry path!");
         }
 

@@ -80,7 +80,7 @@ public class CloudStreamSource extends RandomAccessStream {
         }
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 

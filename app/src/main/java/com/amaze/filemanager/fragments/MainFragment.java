@@ -340,12 +340,12 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
 
             @Override
             public int getSpanSize(int position) {
-                switch(adapter.getItemViewType(position)){
-                    case RecyclerAdapter.TYPE_HEADER_FILES:
-                    case RecyclerAdapter.TYPE_HEADER_FOLDERS:
-                        return columns;
-                    default:
-                        return 1;
+                switch(adapter.getItemViewType(position)) {
+                case RecyclerAdapter.TYPE_HEADER_FILES:
+                case RecyclerAdapter.TYPE_HEADER_FOLDERS:
+                    return columns;
+                default:
+                    return 1;
                 }
             }
         });
@@ -523,7 +523,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
             mode.setTitle(positions.size() + "");
             hideOption(R.id.openmulti, menu);
             menu.findItem(R.id.all).setTitle(positions.size() == folder_count + file_count ?
-                    R.string.deselect_all : R.string.selectall);
+                                             R.string.deselect_all : R.string.selectall);
 
             if (openMode != OpenMode.FILE) {
                 hideOption(R.id.addshortcut, menu);
@@ -622,130 +622,130 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
             computeScroll();
             ArrayList<LayoutElementParcelable> checkedItems = adapter.getCheckedItems();
             switch (item.getItemId()) {
-                case R.id.openmulti:
+            case R.id.openmulti:
 
-                    try {
+                try {
 
-                        Intent intent_result = new Intent(Intent.ACTION_SEND_MULTIPLE);
-                        ArrayList<Uri> resulturis = new ArrayList<>();
+                    Intent intent_result = new Intent(Intent.ACTION_SEND_MULTIPLE);
+                    ArrayList<Uri> resulturis = new ArrayList<>();
 
-                        for (LayoutElementParcelable element : checkedItems) {
-                            HybridFileParcelable baseFile = element.generateBaseFile();
-                            Uri resultUri = Utils.getUriForBaseFile(getActivity(), baseFile);
+                    for (LayoutElementParcelable element : checkedItems) {
+                        HybridFileParcelable baseFile = element.generateBaseFile();
+                        Uri resultUri = Utils.getUriForBaseFile(getActivity(), baseFile);
 
-                            if (resultUri != null) {
-                                resulturis.add(resultUri);
-                            }
-                        }
-
-                        intent_result.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        getActivity().setResult(FragmentActivity.RESULT_OK, intent_result);
-                        intent_result.putParcelableArrayListExtra(Intent.EXTRA_STREAM, resulturis);
-                        getActivity().finish();
-                        //mode.finish();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    return true;
-                case R.id.about:
-                    LayoutElementParcelable x = checkedItems.get(0);
-                    GeneralDialogCreation.showPropertiesDialogWithPermissions((x).generateBaseFile(),
-                            x.permissions, (ThemedActivity) getActivity(), getMainActivity().isRootExplorer(),
-                            utilsProvider.getAppTheme());
-                    mode.finish();
-                    return true;
-                case R.id.delete:
-                    GeneralDialogCreation.deleteFilesDialog(getContext(), LIST_ELEMENTS,
-                            getMainActivity(), checkedItems, utilsProvider.getAppTheme());
-                    return true;
-                case R.id.share:
-                    ArrayList<File> arrayList = new ArrayList<>();
-                    for (LayoutElementParcelable e: checkedItems) {
-                        arrayList.add(new File(e.desc));
-                    }
-                    if (arrayList.size() > 100)
-                        Toast.makeText(getActivity(), getResources().getString(R.string.share_limit),
-                                Toast.LENGTH_SHORT).show();
-                    else {
-
-                        switch (LIST_ELEMENTS.get(0).getMode()) {
-                            case DROPBOX:
-                            case BOX:
-                            case GDRIVE:
-                            case ONEDRIVE:
-                                FileUtils.shareCloudFile(LIST_ELEMENTS.get(0).desc,
-                                        LIST_ELEMENTS.get(0).getMode(), getContext());
-                                break;
-                            default:
-                                FileUtils.shareFiles(arrayList, getActivity(), utilsProvider.getAppTheme(), accentColor);
-                                break;
+                        if (resultUri != null) {
+                            resulturis.add(resultUri);
                         }
                     }
-                    return true;
-                case R.id.openparent:
-                    loadlist(new File(checkedItems.get(0).desc).getParent(), false, OpenMode.FILE);
-                    return true;
-                case R.id.all:
-                    if (adapter.areAllChecked(CURRENT_PATH)) {
-                        adapter.toggleChecked(false, CURRENT_PATH);
-                        item.setTitle(R.string.selectall);
-                    } else {
-                        adapter.toggleChecked(true, CURRENT_PATH);
-                        item.setTitle(R.string.deselect_all);
-                    }
-                    mode.invalidate();
 
-                    return true;
-                case R.id.rename:
-
-                    final HybridFileParcelable f;
-                    f = checkedItems.get(0).generateBaseFile();
-                    rename(f);
-                    mode.finish();
-                    return true;
-                case R.id.hide:
-                    for (int i1 = 0; i1 < checkedItems.size(); i1++) {
-                        hide(checkedItems.get(i1).desc);
-                    }
-                    updateList();
-                    mode.finish();
-                    return true;
-                case R.id.ex:
-                    getMainActivity().mainActivityHelper.extractFile(new File(checkedItems.get(0).desc));
-                    mode.finish();
-                    return true;
-                case R.id.cpy:
-                case R.id.cut: {
-                    HybridFileParcelable[] copies = new HybridFileParcelable[checkedItems.size()];
-                    for (int i = 0; i < checkedItems.size(); i++) {
-                        copies[i] = checkedItems.get(i).generateBaseFile();
-                    }
-                    int op = item.getItemId() == R.id.cpy? PasteHelper.OPERATION_COPY:PasteHelper.OPERATION_CUT;
-
-                    PasteHelper pasteHelper = new PasteHelper(op, copies);
-                    getMainActivity().setPaste(pasteHelper);
-
-                    mode.finish();
-                    return true;
+                    intent_result.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    getActivity().setResult(FragmentActivity.RESULT_OK, intent_result);
+                    intent_result.putParcelableArrayListExtra(Intent.EXTRA_STREAM, resulturis);
+                    getActivity().finish();
+                    //mode.finish();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                case R.id.compress:
-                    ArrayList<HybridFileParcelable> copies1 = new ArrayList<>();
-                    for (int i4 = 0; i4 < checkedItems.size(); i4++) {
-                        copies1.add(checkedItems.get(i4).generateBaseFile());
+                return true;
+            case R.id.about:
+                LayoutElementParcelable x = checkedItems.get(0);
+                GeneralDialogCreation.showPropertiesDialogWithPermissions((x).generateBaseFile(),
+                        x.permissions, (ThemedActivity) getActivity(), getMainActivity().isRootExplorer(),
+                        utilsProvider.getAppTheme());
+                mode.finish();
+                return true;
+            case R.id.delete:
+                GeneralDialogCreation.deleteFilesDialog(getContext(), LIST_ELEMENTS,
+                                                        getMainActivity(), checkedItems, utilsProvider.getAppTheme());
+                return true;
+            case R.id.share:
+                ArrayList<File> arrayList = new ArrayList<>();
+                for (LayoutElementParcelable e: checkedItems) {
+                    arrayList.add(new File(e.desc));
+                }
+                if (arrayList.size() > 100)
+                    Toast.makeText(getActivity(), getResources().getString(R.string.share_limit),
+                                   Toast.LENGTH_SHORT).show();
+                else {
+
+                    switch (LIST_ELEMENTS.get(0).getMode()) {
+                    case DROPBOX:
+                    case BOX:
+                    case GDRIVE:
+                    case ONEDRIVE:
+                        FileUtils.shareCloudFile(LIST_ELEMENTS.get(0).desc,
+                                                 LIST_ELEMENTS.get(0).getMode(), getContext());
+                        break;
+                    default:
+                        FileUtils.shareFiles(arrayList, getActivity(), utilsProvider.getAppTheme(), accentColor);
+                        break;
                     }
-                    GeneralDialogCreation.showCompressDialog((MainActivity) getActivity(), copies1, CURRENT_PATH);
-                    mode.finish();
-                    return true;
-                case R.id.openwith:
-                    boolean useNewStack = sharedPref.getBoolean(PREFERENCE_TEXTEDITOR_NEWSTACK, false);
-                    FileUtils.openunknown(new File(checkedItems.get(0).desc), getActivity(), true, useNewStack);
-                    return true;
-                case R.id.addshortcut:
-                    addShortcut(checkedItems.get(0));
-                    mode.finish();
-                    return true;
-                default:
-                    return false;
+                }
+                return true;
+            case R.id.openparent:
+                loadlist(new File(checkedItems.get(0).desc).getParent(), false, OpenMode.FILE);
+                return true;
+            case R.id.all:
+                if (adapter.areAllChecked(CURRENT_PATH)) {
+                    adapter.toggleChecked(false, CURRENT_PATH);
+                    item.setTitle(R.string.selectall);
+                } else {
+                    adapter.toggleChecked(true, CURRENT_PATH);
+                    item.setTitle(R.string.deselect_all);
+                }
+                mode.invalidate();
+
+                return true;
+            case R.id.rename:
+
+                final HybridFileParcelable f;
+                f = checkedItems.get(0).generateBaseFile();
+                rename(f);
+                mode.finish();
+                return true;
+            case R.id.hide:
+                for (int i1 = 0; i1 < checkedItems.size(); i1++) {
+                    hide(checkedItems.get(i1).desc);
+                }
+                updateList();
+                mode.finish();
+                return true;
+            case R.id.ex:
+                getMainActivity().mainActivityHelper.extractFile(new File(checkedItems.get(0).desc));
+                mode.finish();
+                return true;
+            case R.id.cpy:
+            case R.id.cut: {
+                HybridFileParcelable[] copies = new HybridFileParcelable[checkedItems.size()];
+                for (int i = 0; i < checkedItems.size(); i++) {
+                    copies[i] = checkedItems.get(i).generateBaseFile();
+                }
+                int op = item.getItemId() == R.id.cpy? PasteHelper.OPERATION_COPY:PasteHelper.OPERATION_CUT;
+
+                PasteHelper pasteHelper = new PasteHelper(op, copies);
+                getMainActivity().setPaste(pasteHelper);
+
+                mode.finish();
+                return true;
+            }
+            case R.id.compress:
+                ArrayList<HybridFileParcelable> copies1 = new ArrayList<>();
+                for (int i4 = 0; i4 < checkedItems.size(); i4++) {
+                    copies1.add(checkedItems.get(i4).generateBaseFile());
+                }
+                GeneralDialogCreation.showCompressDialog((MainActivity) getActivity(), copies1, CURRENT_PATH);
+                mode.finish();
+                return true;
+            case R.id.openwith:
+                boolean useNewStack = sharedPref.getBoolean(PREFERENCE_TEXTEDITOR_NEWSTACK, false);
+                FileUtils.openunknown(new File(checkedItems.get(0).desc), getActivity(), true, useNewStack);
+                return true;
+            case R.id.addshortcut:
+                addShortcut(checkedItems.get(0));
+                mode.finish();
+                return true;
+            default:
+                return false;
             }
         }
 
@@ -763,7 +763,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
             getMainActivity().setPagingEnabled(true);
 
             getMainActivity().updateViews(new ColorDrawable(MainActivity.currentTab == 1 ?
-                    primaryTwoColor : primaryColor));
+                                          primaryTwoColor : primaryColor));
 
             if (getMainActivity().getDrawer().isLocked()) {
                 getMainActivity().getDrawer().unlockIfNotOnTablet();
@@ -777,48 +777,48 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
         public void onReceive(Context context, Intent intent) {
             // load the list on a load broadcast
             switch (openMode) {
-                case ROOT:
-                case FILE:
-                    // local file system don't need an explicit load, we've set an observer to
-                    // take actions on creation/moving/deletion/modification of file on current path
+            case ROOT:
+            case FILE:
+                // local file system don't need an explicit load, we've set an observer to
+                // take actions on creation/moving/deletion/modification of file on current path
 
-                    // run media scanner
-                    String[] path = new String[1];
-                    String arg = intent.getStringExtra(MainActivity.KEY_INTENT_LOAD_LIST_FILE);
+                // run media scanner
+                String[] path = new String[1];
+                String arg = intent.getStringExtra(MainActivity.KEY_INTENT_LOAD_LIST_FILE);
 
-                    // run media scanner for only one context
-                    if (arg != null && getMainActivity().getCurrentMainFragment() == MainFragment.this) {
+                // run media scanner for only one context
+                if (arg != null && getMainActivity().getCurrentMainFragment() == MainFragment.this) {
 
-                        if (Build.VERSION.SDK_INT >= 19) {
+                    if (Build.VERSION.SDK_INT >= 19) {
 
-                            path[0] = arg;
+                        path[0] = arg;
 
-                            MediaScannerConnection.MediaScannerConnectionClient mediaScannerConnectionClient = new MediaScannerConnection.MediaScannerConnectionClient() {
-                                @Override
-                                public void onMediaScannerConnected() {
+                        MediaScannerConnection.MediaScannerConnectionClient mediaScannerConnectionClient = new MediaScannerConnection.MediaScannerConnectionClient() {
+                            @Override
+                            public void onMediaScannerConnected() {
 
-                                }
-
-                                @Override
-                                public void onScanCompleted(String path, Uri uri) {
-
-                                    Log.d("SCAN completed", path);
-                                }
-                            };
-
-                            if (mediaScannerConnection != null) {
-                                mediaScannerConnection.disconnect();
                             }
-                            mediaScannerConnection = new MediaScannerConnection(context, mediaScannerConnectionClient);
-                            //FileUtils.scanFile(context, mediaScannerConnection, path);
-                        } else {
-                            FileUtils.scanFile(new File(arg), context);
+
+                            @Override
+                            public void onScanCompleted(String path, Uri uri) {
+
+                                Log.d("SCAN completed", path);
+                            }
+                        };
+
+                        if (mediaScannerConnection != null) {
+                            mediaScannerConnection.disconnect();
                         }
+                        mediaScannerConnection = new MediaScannerConnection(context, mediaScannerConnectionClient);
+                        //FileUtils.scanFile(context, mediaScannerConnection, path);
+                    } else {
+                        FileUtils.scanFile(new File(arg), context);
                     }
-                    //break;
-                default:
-                    updateList();
-                    break;
+                }
+            //break;
+            default:
+                updateList();
+                break;
             }
         }
     };
@@ -852,7 +852,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
             // if search task is been running, cancel it
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             SearchWorkerFragment fragment = (SearchWorkerFragment) fragmentManager
-                    .findFragmentByTag(MainActivity.TAG_ASYNC_HELPER);
+                                            .findFragmentByTag(MainActivity.TAG_ASYNC_HELPER);
             if (fragment != null) {
                 if (fragment.mSearchAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
                     fragment.mSearchAsyncTask.cancel(true);
@@ -901,35 +901,35 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
                     encryptBaseFiles.add(encryptBaseFile);
 
                     EncryptDecryptUtils.decryptFile(getContext(), getMainActivity(), ma, openMode,
-                            e.generateBaseFile(), getActivity().getExternalCacheDir().getPath(),
-                            utilsProvider, true);
+                                                    e.generateBaseFile(), getActivity().getExternalCacheDir().getPath(),
+                                                    utilsProvider, true);
                 } else {
                     if (getMainActivity().mReturnIntent) {
                         // are we here to return an intent to another app
                         returnIntentResults(e.generateBaseFile());
                     } else {
                         switch (e.getMode()) {
-                            case SMB:
-                                launchSMB(e.generateBaseFile(), getMainActivity());
-                                break;
-                            case SFTP:
-                                Toast.makeText(getContext(), getResources().getString(R.string.please_wait), Toast.LENGTH_LONG).show();
-                                SshClientUtils.launchSftp(e.generateBaseFile(), getMainActivity());
-                                break;
-                            case OTG:
-                                FileUtils.openFile(OTGUtil.getDocumentFile(e.desc, getContext(), false),
-                                        (MainActivity) getActivity(), sharedPref);
-                                break;
-                            case DROPBOX:
-                            case BOX:
-                            case GDRIVE:
-                            case ONEDRIVE:
-                                Toast.makeText(getContext(), getResources().getString(R.string.please_wait), Toast.LENGTH_LONG).show();
-                                CloudUtil.launchCloud(e.generateBaseFile(), openMode, getMainActivity());
-                                break;
-                            default:
-                                FileUtils.openFile(new File(e.desc), (MainActivity) getActivity(), sharedPref);
-                                break;
+                        case SMB:
+                            launchSMB(e.generateBaseFile(), getMainActivity());
+                            break;
+                        case SFTP:
+                            Toast.makeText(getContext(), getResources().getString(R.string.please_wait), Toast.LENGTH_LONG).show();
+                            SshClientUtils.launchSftp(e.generateBaseFile(), getMainActivity());
+                            break;
+                        case OTG:
+                            FileUtils.openFile(OTGUtil.getDocumentFile(e.desc, getContext(), false),
+                                               (MainActivity) getActivity(), sharedPref);
+                            break;
+                        case DROPBOX:
+                        case BOX:
+                        case GDRIVE:
+                        case ONEDRIVE:
+                            Toast.makeText(getContext(), getResources().getString(R.string.please_wait), Toast.LENGTH_LONG).show();
+                            CloudUtil.launchCloud(e.generateBaseFile(), openMode, getMainActivity());
+                            break;
+                        default:
+                            FileUtils.openFile(new File(e.desc), (MainActivity) getActivity(), sharedPref);
+                            break;
                         }
 
                         dataUtils.addHistoryFile(e.desc);
@@ -1021,7 +1021,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
         }
 
         loadFilesListTask = new LoadFilesListTask(ma.getActivity(), path, ma, openMode,
-                getBoolean(PREFERENCE_SHOW_THUMB), getBoolean(PREFERENCE_SHOW_HIDDENFILES), (data) -> {
+        getBoolean(PREFERENCE_SHOW_THUMB), getBoolean(PREFERENCE_SHOW_HIDDENFILES), (data) -> {
             if (data != null && data.second != null) {
                 boolean isPathLayoutGrid = dataUtils.getListOrGridForPath(path, DataUtils.LIST) == DataUtils.GRID;
                 setListElements(data.second, back, path, data.first, false, isPathLayoutGrid);
@@ -1078,9 +1078,9 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
         if (isAdded()) {
             boolean isOtg = CURRENT_PATH.equals(OTGUtil.PREFIX_OTG + "/"),
                     isOnTheCloud = CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE + "/")
-                            || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_ONE_DRIVE + "/")
-                            || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_BOX + "/")
-                            || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_DROPBOX + "/");
+                                   || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_ONE_DRIVE + "/")
+                                   || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_BOX + "/")
+                                   || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_DROPBOX + "/");
 
             if (getBoolean(PREFERENCE_SHOW_GOBACK_BUTTON) && !CURRENT_PATH.equals("/")
                     && (openMode == OpenMode.FILE || openMode == OpenMode.ROOT) && !isOtg && !isOnTheCloud
@@ -1103,7 +1103,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
 
             if (adapter == null) {
                 adapter = new RecyclerAdapter(getMainActivity(), ma, utilsProvider, sharedPref,
-                        listView, LIST_ELEMENTS, ma.getActivity());
+                                              listView, LIST_ELEMENTS, ma.getActivity());
             } else {
                 adapter.setItems(listView, new ArrayList<>(LIST_ELEMENTS));
             }
@@ -1174,28 +1174,28 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
 
     private void startFileObserver() {
         switch (openMode) {
-            case ROOT:
-            case FILE:
-                if(customFileObserver != null && !customFileObserver.wasStopped()
-                        && customFileObserver.getPath().equals(getCurrentPath())) {
-                    return;
+        case ROOT:
+        case FILE:
+            if(customFileObserver != null && !customFileObserver.wasStopped()
+                    && customFileObserver.getPath().equals(getCurrentPath())) {
+                return;
+            }
+
+            File file = new File(CURRENT_PATH);
+
+            if (file.isDirectory() && file.canRead()) {
+                if (customFileObserver != null) {
+                    // already a watcher instantiated, first it should be stopped
+                    customFileObserver.stopWatching();
                 }
 
-                File file = new File(CURRENT_PATH);
-
-                if (file.isDirectory() && file.canRead()) {
-                    if (customFileObserver != null) {
-                        // already a watcher instantiated, first it should be stopped
-                        customFileObserver.stopWatching();
-                    }
-
-                    customFileObserver = new CustomFileObserver(CURRENT_PATH,
-                            new FileHandler(this, listView, getBoolean(PREFERENCE_SHOW_THUMB)));
-                    customFileObserver.startWatching();
-                }
-                break;
-            default:
-                break;
+                customFileObserver = new CustomFileObserver(CURRENT_PATH,
+                        new FileHandler(this, listView, getBoolean(PREFERENCE_SHOW_THUMB)));
+                customFileObserver.startWatching();
+            }
+            break;
+        default:
+            break;
         }
     }
 
@@ -1206,35 +1206,35 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
      */
     public void rename(final HybridFileParcelable f) {
         MaterialDialog renameDialog = GeneralDialogCreation.showNameDialog(getMainActivity(),
-            "",
-            f.getName(),
-            getResources().getString(R.string.rename),
-            getResources().getString(R.string.save),
-            null,
-            getResources().getString(R.string.cancel),
-            (dialog, which) -> {
-                EditText textfield = dialog.getCustomView().findViewById(R.id.singleedittext_input);
-                String name1 = textfield.getText().toString();
+                                      "",
+                                      f.getName(),
+                                      getResources().getString(R.string.rename),
+                                      getResources().getString(R.string.save),
+                                      null,
+                                      getResources().getString(R.string.cancel),
+        (dialog, which) -> {
+            EditText textfield = dialog.getCustomView().findViewById(R.id.singleedittext_input);
+            String name1 = textfield.getText().toString();
 
-                if (f.isSmb()){
-                    if (f.isDirectory() && !name1.endsWith("/"))
-                        name1 = name1 + "/";
-                }
-                getMainActivity().mainActivityHelper.rename(openMode, f.getPath(),
-                        CURRENT_PATH + "/" + name1, getActivity(), getMainActivity().isRootExplorer());
-            }, (text)-> {
-                    boolean isValidFilename = FileUtil.isValidFilename(text);
+            if (f.isSmb()) {
+                if (f.isDirectory() && !name1.endsWith("/"))
+                    name1 = name1 + "/";
+            }
+            getMainActivity().mainActivityHelper.rename(openMode, f.getPath(),
+                    CURRENT_PATH + "/" + name1, getActivity(), getMainActivity().isRootExplorer());
+        }, (text)-> {
+            boolean isValidFilename = FileUtil.isValidFilename(text);
 
-                    if (!isValidFilename) {
-                        return new WarnableTextInputValidator.ReturnState(
-                                WarnableTextInputValidator.ReturnState.STATE_ERROR, R.string.invalid_name);
-                    } else if (text.length() < 1) {
-                        return new WarnableTextInputValidator.ReturnState(
-                                WarnableTextInputValidator.ReturnState.STATE_ERROR, R.string.field_empty);
-                    }
+            if (!isValidFilename) {
+                return new WarnableTextInputValidator.ReturnState(
+                    WarnableTextInputValidator.ReturnState.STATE_ERROR, R.string.invalid_name);
+            } else if (text.length() < 1) {
+                return new WarnableTextInputValidator.ReturnState(
+                    WarnableTextInputValidator.ReturnState.STATE_ERROR, R.string.field_empty);
+            }
 
-                    return new WarnableTextInputValidator.ReturnState();
-            });
+            return new WarnableTextInputValidator.ReturnState();
+        });
 
         // place cursor at the starting of edit text by posting a runnable to edit text
         // this is done because in case android has not populated the edit text layouts yet, it'll
@@ -1290,12 +1290,12 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
                         else
                             loadlist(currentFile.getParent(getContext()), true, openMode);
                     } else if (CURRENT_PATH.equals("/") || CURRENT_PATH.equals(home) ||
-                            CURRENT_PATH.equals(OTGUtil.PREFIX_OTG + "/")
-                            || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_BOX + "/")
-                            || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_DROPBOX + "/")
-                            || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE + "/")
-                            || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_ONE_DRIVE + "/")
-                            )
+                               CURRENT_PATH.equals(OTGUtil.PREFIX_OTG + "/")
+                               || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_BOX + "/")
+                               || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_DROPBOX + "/")
+                               || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE + "/")
+                               || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_ONE_DRIVE + "/")
+                              )
                         getMainActivity().exit();
                     else if (FileUtils.canGoBack(getContext(), currentFile)) {
                         loadlist(currentFile.getParent(getContext()), true, openMode);
@@ -1318,9 +1318,9 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
                     CURRENT_PATH = parentPath;
 
                     MainActivityHelper.addSearchFragment(fm, new SearchWorkerFragment(),
-                            parentPath, MainActivityHelper.SEARCH_TEXT, openMode, getMainActivity().isRootExplorer(),
-                            sharedPref.getBoolean(SearchWorkerFragment.KEY_REGEX, false),
-                            sharedPref.getBoolean(SearchWorkerFragment.KEY_REGEX_MATCHES, false));
+                                                         parentPath, MainActivityHelper.SEARCH_TEXT, openMode, getMainActivity().isRootExplorer(),
+                                                         sharedPref.getBoolean(SearchWorkerFragment.KEY_REGEX, false),
+                                                         sharedPref.getBoolean(SearchWorkerFragment.KEY_REGEX_MATCHES, false));
                 } else loadlist(CURRENT_PATH, true, OpenMode.UNKNOWN);
 
                 mRetainSearchTask = false;
@@ -1374,10 +1374,10 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
                         e.printStackTrace();
                     }
                 } else if (CURRENT_PATH.equals("/") || CURRENT_PATH.equals(OTGUtil.PREFIX_OTG)
-                        || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_BOX + "/")
-                        || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_DROPBOX + "/")
-                        || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE + "/")
-                        || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_ONE_DRIVE + "/")) {
+                           || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_BOX + "/")
+                           || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_DROPBOX + "/")
+                           || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE + "/")
+                           || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_ONE_DRIVE + "/")) {
                     getMainActivity().exit();
                 } else if (FileUtils.canGoBack(getContext(), currentFile)) {
                     loadlist(currentFile.getParent(getContext()), true, openMode);
@@ -1483,7 +1483,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
                 file_count++;
                 LayoutElementParcelable layoutElement = new LayoutElementParcelable(getContext(), name,
                         aMFile.getPath(), "", "", Formatter.formatFileSize(getContext(),
-                        aMFile.length()), aMFile.length(), false, aMFile.lastModified() + "",
+                                aMFile.length()), aMFile.length(), false, aMFile.lastModified() + "",
                         false, getBoolean(PREFERENCE_SHOW_THUMB), OpenMode.SMB);
                 layoutElement.setMode(OpenMode.SMB);
                 searchHelper.add(layoutElement.generateBaseFile());
@@ -1575,8 +1575,8 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
 
         if (!ShortcutManagerCompat.isRequestPinShortcutSupported(ctx)) {
             Toast.makeText(getActivity(),
-                getString(R.string.addshortcut_not_supported_by_launcher),
-                Toast.LENGTH_SHORT).show();
+                           getString(R.string.addshortcut_not_supported_by_launcher),
+                           Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -1587,12 +1587,12 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
 
         // Using file path as shortcut id.
         ShortcutInfoCompat info = new ShortcutInfoCompat.Builder(ctx, path.desc)
-                .setActivity(getMainActivity().getComponentName())
-                .setIcon(IconCompat.createWithResource(ctx, R.mipmap.ic_launcher))
-                .setIntent(shortcutIntent)
-                .setLongLabel(path.desc)
-                .setShortLabel(new File(path.desc).getName())
-                .build();
+        .setActivity(getMainActivity().getComponentName())
+        .setIcon(IconCompat.createWithResource(ctx, R.mipmap.ic_launcher))
+        .setIntent(shortcutIntent)
+        .setLongLabel(path.desc)
+        .setShortLabel(new File(path.desc).getName())
+        .build();
 
         ShortcutManagerCompat.requestPinShortcut(ctx, info, null);
     }
@@ -1648,7 +1648,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
                 getMainActivity().getAppbar().getBottomBar().setPathText("");
                 getMainActivity().getAppbar().getBottomBar().setFullPathText(getString(R.string.searchresults, query));
             }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public static void launchSMB(final HybridFileParcelable baseFile, final Activity activity) {
@@ -1678,8 +1678,8 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
                                 activity.startActivity(i);
                             else
                                 Toast.makeText(activity,
-                                        activity.getResources().getString(R.string.smb_launch_error),
-                                        Toast.LENGTH_SHORT).show();
+                                               activity.getResources().getString(R.string.smb_launch_error),
+                                               Toast.LENGTH_SHORT).show();
                         } catch (ActivityNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -1689,7 +1689,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
                     e.printStackTrace();
                 }
             }
-        }.start();
+        } .start();
     }
 
     @Override

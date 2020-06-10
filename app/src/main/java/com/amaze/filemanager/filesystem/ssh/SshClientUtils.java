@@ -159,9 +159,9 @@ public abstract class SshClientUtils
         String uriWithoutProtocol = fullUri.substring(SSH_URI_PREFIX.length(), fullUri.lastIndexOf('@'));
         try {
             return (uriWithoutProtocol.lastIndexOf(':') > 0) ?
-                    SmbUtil.getSmbEncryptedPath(AppConfig.getInstance(), fullUri) :
-                    fullUri;
-        } catch(IOException | GeneralSecurityException e){
+                   SmbUtil.getSmbEncryptedPath(AppConfig.getInstance(), fullUri) :
+                   fullUri;
+        } catch(IOException | GeneralSecurityException e) {
             Log.e(TAG, "Error encrypting path", e);
             return fullUri;
         }
@@ -178,9 +178,9 @@ public abstract class SshClientUtils
         String uriWithoutProtocol = fullUri.substring(SSH_URI_PREFIX.length(), fullUri.lastIndexOf('@'));
         try {
             return (uriWithoutProtocol.lastIndexOf(':') > 0) ?
-                    SmbUtil.getSmbDecryptedPath(AppConfig.getInstance(), fullUri) :
-                    fullUri;
-        } catch(IOException | GeneralSecurityException e){
+                   SmbUtil.getSmbDecryptedPath(AppConfig.getInstance(), fullUri) :
+                   fullUri;
+        } catch(IOException | GeneralSecurityException e) {
             Log.e(TAG, "Error decrypting path", e);
             return fullUri;
         }
@@ -198,8 +198,8 @@ public abstract class SshClientUtils
     public static final String extractBaseUriFrom(@NonNull String fullUri) {
         String uriWithoutProtocol = fullUri.substring(SSH_URI_PREFIX.length());
         return uriWithoutProtocol.indexOf('/') == -1 ?
-            fullUri :
-            fullUri.substring(0, uriWithoutProtocol.indexOf('/') + SSH_URI_PREFIX.length());
+               fullUri :
+               fullUri.substring(0, uriWithoutProtocol.indexOf('/') + SSH_URI_PREFIX.length());
     }
 
     /**
@@ -214,8 +214,8 @@ public abstract class SshClientUtils
     public static final String extractRemotePathFrom(@NonNull String fullUri) {
         String uriWithoutProtocol = fullUri.substring(SSH_URI_PREFIX.length());
         return uriWithoutProtocol.indexOf('/') == -1 ?
-            "/" :
-            uriWithoutProtocol.substring(uriWithoutProtocol.indexOf('/'));
+               "/" :
+               uriWithoutProtocol.substring(uriWithoutProtocol.indexOf('/'));
     }
 
     /**
@@ -225,7 +225,7 @@ public abstract class SshClientUtils
      * @param client {@link SSHClient} instance
      */
     public static final void tryDisconnect(SSHClient client) {
-        if(client != null && client.isConnected()){
+        if(client != null && client.isConnected()) {
             try {
                 client.disconnect();
             } catch (IOException e) {
@@ -252,8 +252,8 @@ public abstract class SshClientUtils
                             activity.startActivity(i);
                         else
                             Toast.makeText(activity,
-                                    activity.getResources().getString(R.string.smb_launch_error),
-                                    Toast.LENGTH_SHORT).show();
+                                           activity.getResources().getString(R.string.smb_launch_error),
+                                           Toast.LENGTH_SHORT).show();
                     } catch (ActivityNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -267,9 +267,9 @@ public abstract class SshClientUtils
 
     //Decide the SSH URL depends on password/selected KeyPair
     public static String deriveSftpPathFrom(String hostname, int port, String username, String password,
-                                      KeyPair selectedParsedKeyPair) {
+                                            KeyPair selectedParsedKeyPair) {
         return (selectedParsedKeyPair != null || password == null) ?
-                String.format("ssh://%s@%s:%d", username, hostname, port) :
-                String.format("ssh://%s:%s@%s:%d", username, password, hostname, port);
+               String.format("ssh://%s@%s:%d", username, hostname, port) :
+               String.format("ssh://%s:%s@%s:%d", username, password, hostname, port);
     }
 }

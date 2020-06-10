@@ -160,12 +160,12 @@ public class CryptUtil {
      * @param targetDirectory   the target directory inside which we're going to decrypt
      */
     private void decrypt(final Context context, HybridFileParcelable sourceFile, HybridFile targetDirectory)
-            throws GeneralSecurityException, IOException {
+    throws GeneralSecurityException, IOException {
         if (progressHandler.getCancelled()) return;
         if (sourceFile.isDirectory()) {
 
             final HybridFile hFile = new HybridFile(targetDirectory.getMode(), targetDirectory.getPath(),
-                    sourceFile.getName().replace(CRYPT_EXTENSION, ""), sourceFile.isDirectory());
+                                                    sourceFile.getName().replace(CRYPT_EXTENSION, ""), sourceFile.isDirectory());
             FileUtil.mkdirs(context, hFile);
 
             sourceFile.forEachChildrenFile(context, sourceFile.isRoot(), file -> {
@@ -186,8 +186,8 @@ public class CryptUtil {
                     GenericCopyUtil.DEFAULT_BUFFER_SIZE);
 
             HybridFile targetFile = new HybridFile(targetDirectory.getMode(),
-                    targetDirectory.getPath(), sourceFile.getName().replace(CRYPT_EXTENSION, ""),
-                    sourceFile.isDirectory());
+                                                   targetDirectory.getPath(), sourceFile.getName().replace(CRYPT_EXTENSION, ""),
+                                                   sourceFile.isDirectory());
 
             progressHandler.setFileName(sourceFile.getName());
 
@@ -209,15 +209,15 @@ public class CryptUtil {
      * @param targetDirectory   the target directory in which we're going to encrypt
      */
     private void encrypt(final Context context, HybridFileParcelable sourceFile, HybridFile targetDirectory, String targetFilename)
-            throws GeneralSecurityException, IOException {
+    throws GeneralSecurityException, IOException {
 
         if (progressHandler.getCancelled()) return;
         if (sourceFile.isDirectory()) {
 
             // succeed #CRYPT_EXTENSION at end of directory/file name
             final HybridFile hFile = new HybridFile(targetDirectory.getMode(),
-                    targetDirectory.getPath(), targetFilename,
-                    sourceFile.isDirectory());
+                                                    targetDirectory.getPath(), targetFilename,
+                                                    sourceFile.isDirectory());
             FileUtil.mkdirs(context, hFile);
 
             sourceFile.forEachChildrenFile(context, sourceFile.isRoot(), file -> {
@@ -239,8 +239,8 @@ public class CryptUtil {
 
             // succeed #CRYPT_EXTENSION at end of directory/file name
             HybridFile targetFile = new HybridFile(targetDirectory.getMode(),
-                    targetDirectory.getPath(), targetFilename,
-                    sourceFile.isDirectory());
+                                                   targetDirectory.getPath(), targetFilename,
+                                                   sourceFile.isDirectory());
 
             progressHandler.setFileName(sourceFile.getName());
 
@@ -260,7 +260,7 @@ public class CryptUtil {
      */
     @RequiresApi(api = Build.VERSION_CODES.M)
     private static String aesEncryptPassword(String plainTextPassword)
-            throws GeneralSecurityException, IOException {
+    throws GeneralSecurityException, IOException {
 
         Cipher cipher = Cipher.getInstance(ALGO_AES);
         GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(128, IV.getBytes());
@@ -291,7 +291,7 @@ public class CryptUtil {
      */
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void aesEncrypt(BufferedInputStream inputStream, BufferedOutputStream outputStream)
-            throws GeneralSecurityException, IOException {
+    throws GeneralSecurityException, IOException {
 
         Cipher cipher = Cipher.getInstance(ALGO_AES);
 
@@ -327,7 +327,7 @@ public class CryptUtil {
      */
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void aesDecrypt(BufferedInputStream inputStream, BufferedOutputStream outputStream)
-            throws GeneralSecurityException, IOException {
+    throws GeneralSecurityException, IOException {
 
         Cipher cipher = Cipher.getInstance(ALGO_AES);
         GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(128, IV.getBytes());
@@ -382,7 +382,7 @@ public class CryptUtil {
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void rsaEncrypt(Context context, BufferedInputStream inputStream, BufferedOutputStream outputStream)
-            throws GeneralSecurityException, IOException {
+    throws GeneralSecurityException, IOException {
 
         Cipher cipher = Cipher.getInstance(ALGO_AES, "BC");
         RSAKeygen keygen = new RSAKeygen(context);
@@ -412,7 +412,7 @@ public class CryptUtil {
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void rsaDecrypt(Context context, BufferedInputStream inputStream,
-                                   BufferedOutputStream outputStream) throws GeneralSecurityException, IOException {
+                            BufferedOutputStream outputStream) throws GeneralSecurityException, IOException {
 
         Cipher cipher = Cipher.getInstance(ALGO_AES, "BC");
         RSAKeygen keygen = new RSAKeygen(context);
@@ -544,12 +544,12 @@ public class CryptUtil {
                 KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA", KEY_STORE_ANDROID);
 
                 KeyPairGeneratorSpec spec = new KeyPairGeneratorSpec.Builder(context)
-                        .setAlias(KEY_ALIAS_AMAZE)
-                        .setSubject(new X500Principal("CN=" + KEY_ALIAS_AMAZE))
-                        .setSerialNumber(BigInteger.TEN)
-                        .setStartDate(start.getTime())
-                        .setEndDate(end.getTime())
-                        .build();
+                .setAlias(KEY_ALIAS_AMAZE)
+                .setSubject(new X500Principal("CN=" + KEY_ALIAS_AMAZE))
+                .setSerialNumber(BigInteger.TEN)
+                .setStartDate(start.getTime())
+                .setEndDate(end.getTime())
+                .build();
 
                 keyPairGenerator.initialize(spec);
                 keyPairGenerator.generateKeyPair();
@@ -585,7 +585,7 @@ public class CryptUtil {
             KeyStore keyStore = KeyStore.getInstance(KEY_STORE_ANDROID);
             keyStore.load(null);
             KeyStore.PrivateKeyEntry keyEntry = (KeyStore.PrivateKeyEntry)
-                    keyStore.getEntry(KEY_ALIAS_AMAZE, null);
+                                                keyStore.getEntry(KEY_ALIAS_AMAZE, null);
             Cipher cipher = Cipher.getInstance(ALGO_RSA, "AndroidOpenSSL");
             cipher.init(Cipher.ENCRYPT_MODE, keyEntry.getCertificate().getPublicKey());
 
@@ -623,7 +623,7 @@ public class CryptUtil {
             KeyStore keyStore = KeyStore.getInstance(KEY_STORE_ANDROID);
             keyStore.load(null);
             KeyStore.PrivateKeyEntry keyEntry = (KeyStore.PrivateKeyEntry)
-                    keyStore.getEntry(KEY_ALIAS_AMAZE, null);
+                                                keyStore.getEntry(KEY_ALIAS_AMAZE, null);
             Cipher cipher = Cipher.getInstance(ALGO_RSA, "AndroidOpenSSL");
             cipher.init(Cipher.DECRYPT_MODE, keyEntry.getPrivateKey());
 

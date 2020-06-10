@@ -40,7 +40,7 @@ public class ZipDecompressor extends Decompressor {
 
     @Override
     public ZipHelperTask changePath(String path, boolean addGoBackItem,
-                           OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
+                                    OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
         return new ZipHelperTask(context, filePath, path, addGoBackItem, onFinish);
     }
 

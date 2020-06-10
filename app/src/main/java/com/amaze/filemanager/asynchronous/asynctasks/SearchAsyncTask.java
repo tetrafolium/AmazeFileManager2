@@ -42,11 +42,11 @@ public class SearchAsyncTask extends AsyncTask<String, HybridFileParcelable, Voi
 
     @Override
     protected void onPreExecute() {
-            /*
-            * Note that we need to check if the callbacks are null in each
-            * method in case they are invoked after the Activity's and
-            * Fragment's onDestroy() method have been called.
-             */
+        /*
+        * Note that we need to check if the callbacks are null in each
+        * method in case they are invoked after the Activity's and
+        * Fragment's onDestroy() method have been called.
+         */
         if (mCallbacks != null) {
             mCallbacks.onPreExecute(mInput);
         }
@@ -158,15 +158,15 @@ public class SearchAsyncTask extends AsyncTask<String, HybridFileParcelable, Voi
 
         for (int i = 0; i < originalString.length(); i++) {
             switch (originalString.charAt(i) + "") {
-                case "*":
-                    stringBuilder.append("\\w*");
-                    break;
-                case "?":
-                    stringBuilder.append("\\w");
-                    break;
-                default:
-                    stringBuilder.append(originalString.charAt(i));
-                    break;
+            case "*":
+                stringBuilder.append("\\w*");
+                break;
+            case "?":
+                stringBuilder.append("\\w");
+                break;
+            default:
+                stringBuilder.append(originalString.charAt(i));
+                break;
             }
         }
 

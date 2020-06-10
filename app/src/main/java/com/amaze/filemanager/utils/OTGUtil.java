@@ -138,10 +138,10 @@ public class OTGUtil {
         for (String deviceName : devices.keySet()) {
             UsbDevice device = devices.get(deviceName);
 
-            for (int i = 0; i < device.getInterfaceCount(); i++){
+            for (int i = 0; i < device.getInterfaceCount(); i++) {
                 if (device.getInterface(i).getInterfaceClass() == UsbConstants.USB_CLASS_MASS_STORAGE) {
                     final @Nullable String serial =
-                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP? device.getSerialNumber():null;
+                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP? device.getSerialNumber():null;
 
                     UsbOtgRepresentation usb = new UsbOtgRepresentation(device.getProductId(), device.getVendorId(), serial);
                     usbOtgRepresentations.add(usb);

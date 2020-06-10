@@ -55,7 +55,7 @@ public class SelectedColorsPreference extends DialogPreference {
     }
 
     public void setColors(int color, int color1, int color2, int color3) {
-        colors = new int[]{color, color1, color2, color3};
+        colors = new int[] {color, color1, color2, color3};
         notifyChanged();
     }
 

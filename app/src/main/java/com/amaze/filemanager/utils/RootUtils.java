@@ -109,7 +109,7 @@ public class RootUtils {
      */
     public static void changePermissions(String filePath, int updatedPermissions, boolean isDirectory,
                                          OnOperationPerform onOperationPerform)
-            throws ShellNotRunningException {
+    throws ShellNotRunningException {
 
         String mountPoint = mountFileSystemRW(filePath);
 
@@ -225,7 +225,7 @@ public class RootUtils {
     }
 
     public static void cat(String sourcePath, String destinationPath)
-            throws ShellNotRunningException {
+    throws ShellNotRunningException {
 
         String mountPoint = mountFileSystemRW(destinationPath);
 
@@ -242,8 +242,8 @@ public class RootUtils {
      * (true, false, false,  true, true, false,  false, false, true) => 0461
      */
     public static int permissionsToOctalString(boolean ur, boolean uw, boolean ux,
-                                               boolean gr, boolean gw, boolean gx,
-                                               boolean or, boolean ow, boolean ox) {
+            boolean gr, boolean gw, boolean gx,
+            boolean or, boolean ow, boolean ox) {
         int u = ((ur ? CHMOD_READ : 0) | (uw ? CHMOD_WRITE : 0) | (ux ? CHMOD_EXECUTE : 0)) << 6;
         int g = ((gr ? CHMOD_READ : 0) | (gw ? CHMOD_WRITE : 0) | (gx ? CHMOD_EXECUTE : 0)) << 3;
         int o = (or ? CHMOD_READ : 0) | (ow ? CHMOD_WRITE : 0) | (ox ? CHMOD_EXECUTE : 0);

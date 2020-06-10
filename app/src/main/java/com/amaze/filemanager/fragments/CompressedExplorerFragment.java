@@ -164,7 +164,7 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
         super.onActivityCreated(savedInstanceState);
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         compressedFile = new File(Uri.parse(getArguments().getString(KEY_PATH)).getPath());
-    
+
         mToolbarContainer = mainActivity.getAppbar().getAppbarLayout();
         mToolbarContainer.setOnTouchListener((view, motionEvent) ->
         {
@@ -179,11 +179,11 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
             stopAnims = false;
             return false;
         });
-    
+
         listView.setVisibility(View.VISIBLE);
         mLayoutManager = new LinearLayoutManager(getActivity());
         listView.setLayoutManager(mLayoutManager);
-    
+
         if(utilsProvider.getAppTheme().equals(AppTheme.DARK))
         {
             rootView.setBackgroundColor(Utils.getColor(getContext(), R.color.holo_dark_background));
@@ -296,7 +296,7 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
             ArrayList<Integer> positions = compressedExplorerAdapter.getCheckedItemPositions();
             ((TextView) v.findViewById(R.id.item_count)).setText(positions.size() + "");
             menu.findItem(R.id.all).setTitle(positions.size() == folder + file ?
-                    R.string.deselect_all : R.string.selectall);
+                                             R.string.deselect_all : R.string.selectall);
 
             return false; // Return false if nothing is done
         }
@@ -304,31 +304,31 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
         // called when the user selects a contextual menu item
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.all:
-                    ArrayList<Integer> positions = compressedExplorerAdapter.getCheckedItemPositions();
-                    boolean shouldDeselectAll = positions.size() != folder + file;
-                    compressedExplorerAdapter.toggleChecked(shouldDeselectAll);
-                    mode.invalidate();
-                    item.setTitle(shouldDeselectAll ? R.string.deselect_all : R.string.selectall);
-                    if(!shouldDeselectAll)
-                    {
-                        selection = false;
-                        mActionMode.finish();
-                        mActionMode = null;
-                    }
-                    return true;
-                case R.id.ex:
-                    Toast.makeText(getActivity(), getString(R.string.extracting), Toast.LENGTH_SHORT).show();
+            case R.id.all:
+                ArrayList<Integer> positions = compressedExplorerAdapter.getCheckedItemPositions();
+                boolean shouldDeselectAll = positions.size() != folder + file;
+                compressedExplorerAdapter.toggleChecked(shouldDeselectAll);
+                mode.invalidate();
+                item.setTitle(shouldDeselectAll ? R.string.deselect_all : R.string.selectall);
+                if(!shouldDeselectAll)
+                {
+                    selection = false;
+                    mActionMode.finish();
+                    mActionMode = null;
+                }
+                return true;
+            case R.id.ex:
+                Toast.makeText(getActivity(), getString(R.string.extracting), Toast.LENGTH_SHORT).show();
 
-                    String[] dirs = new String[compressedExplorerAdapter.getCheckedItemPositions().size()];
-                    for (int i = 0; i < dirs.length; i++) {
-                        dirs[i] = elements.get(compressedExplorerAdapter.getCheckedItemPositions().get(i)).path;
-                    }
+                String[] dirs = new String[compressedExplorerAdapter.getCheckedItemPositions().size()];
+                for (int i = 0; i < dirs.length; i++) {
+                    dirs[i] = elements.get(compressedExplorerAdapter.getCheckedItemPositions().get(i)).path;
+                }
 
-                    decompressor.decompress(compressedFile.getPath(), dirs);
+                decompressor.decompress(compressedFile.getPath(), dirs);
 
-                    mode.finish();
-                    return true;
+                mode.finish();
+                return true;
             }
             return false;
         }
@@ -457,7 +457,7 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
         file = 0;
         for (CompressedObjectParcelable item : items) {
             if(item.type == CompressedObjectParcelable.TYPE_GOBACK) continue;
-            
+
             if (item.directory) folder++;
             else file++;
         }
@@ -502,7 +502,7 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
         return folder == null || folder.isEmpty();
     }
 
-    private void archiveCorruptOrUnsupportedToast(){
+    private void archiveCorruptOrUnsupportedToast() {
         Toast.makeText(getActivity(), getActivity().getString(R.string.archive_unsupported_or_corrupt, compressedFile.getAbsolutePath()), Toast.LENGTH_LONG).show();
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }

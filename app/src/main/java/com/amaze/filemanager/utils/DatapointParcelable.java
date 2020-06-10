@@ -39,9 +39,9 @@ public class DatapointParcelable implements Parcelable {
 
     public final boolean completed, move;
 
-     /**
-     * name of source file being copied
-     */
+    /**
+    * name of source file being copied
+    */
     public final String name;
 
     /**
@@ -102,8 +102,8 @@ public class DatapointParcelable implements Parcelable {
      * @param completed if the operation has finished
      */
     public DatapointParcelable(String name, int amountOfSourceFiles, int sourceProgress,
-                              long totalSize, long byteProgress, long speedRaw, boolean move,
-                              boolean completed) {
+                               long totalSize, long byteProgress, long speedRaw, boolean move,
+                               boolean completed) {
         this.name = name;
         sourceFiles = amountOfSourceFiles;
         this.sourceProgress = sourceProgress;
@@ -136,7 +136,7 @@ public class DatapointParcelable implements Parcelable {
             return new DatapointParcelable[size];
         }
     };
-    
+
     @Override
     public int describeContents() {
         return 0;

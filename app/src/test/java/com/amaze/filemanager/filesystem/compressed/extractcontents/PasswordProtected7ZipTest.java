@@ -14,7 +14,7 @@ public class PasswordProtected7ZipTest extends AbstractExtractorPasswordProtecte
 
     @Override
     protected Class[] expectedRootExceptionClass() {
-        return new Class[]{PasswordRequiredException.class, CorruptedInputException.class};
+        return new Class[] {PasswordRequiredException.class, CorruptedInputException.class};
     }
 
     @Override

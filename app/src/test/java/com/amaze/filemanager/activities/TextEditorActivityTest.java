@@ -42,7 +42,7 @@ public class TextEditorActivityTest {
     private TextView text;
 
     @After
-    public void tearDown(){
+    public void tearDown() {
         AppConfig.getInstance().onTerminate();
     }
 

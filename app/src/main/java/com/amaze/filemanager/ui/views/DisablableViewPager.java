@@ -30,4 +30,5 @@ public class DisablableViewPager extends ViewPager {
 
     public void setPagingEnabled(boolean enabled) {
         this.enabled = enabled;
-    } }
+    }
+}

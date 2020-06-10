@@ -233,7 +233,7 @@ public class CloudStreamSourceTest {
         cs.close();
 
         int n = -1;
-        try{
+        try {
             byte[] buff = new byte[1];
             n = cs.read(buff);
         } catch (IOException ignored) {

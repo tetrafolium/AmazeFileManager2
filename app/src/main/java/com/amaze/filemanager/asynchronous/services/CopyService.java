@@ -104,15 +104,15 @@ public class CopyService extends AbstractProgressiveService {
     public int onStartCommand(Intent intent, int flags, final int startId) {
 
         Bundle b = new Bundle();
-        isRootExplorer = intent.getBooleanExtra(TAG_IS_ROOT_EXPLORER ,false);
+        isRootExplorer = intent.getBooleanExtra(TAG_IS_ROOT_EXPLORER,false);
         ArrayList<HybridFileParcelable> files = intent.getParcelableArrayListExtra(TAG_COPY_SOURCES);
         String targetPath = intent.getStringExtra(TAG_COPY_TARGET);
         int mode = intent.getIntExtra(TAG_COPY_OPEN_MODE, OpenMode.UNKNOWN.ordinal());
         final boolean move = intent.getBooleanExtra(TAG_COPY_MOVE, false);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(c);
         accentColor = ((AppConfig) getApplication()).getUtilsProvider()
-                .getColorPreference()
-                .getCurrentUserColorPreferences(this, sharedPreferences).accent;
+                      .getColorPreference()
+                      .getCurrentUserColorPreferences(this, sharedPreferences).accent;
 
         mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         b.putInt(TAG_COPY_START_ID, startId);
@@ -129,18 +129,18 @@ public class CopyService extends AbstractProgressiveService {
         Intent stopIntent = new Intent(TAG_BROADCAST_COPY_CANCEL);
         PendingIntent stopPendingIntent = PendingIntent.getBroadcast(c, 1234, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Action action = new NotificationCompat.Action(R.drawable.ic_content_copy_white_36dp,
-               getString(R.string.stop_ftp), stopPendingIntent);
+                getString(R.string.stop_ftp), stopPendingIntent);
 
         mBuilder = new NotificationCompat.Builder(c, NotificationConstants.CHANNEL_NORMAL_ID)
-                .setContentIntent(pendingIntent)
-                .setSmallIcon(R.drawable.ic_content_copy_white_36dp)
-                .setCustomContentView(customSmallContentViews)
-                .setCustomBigContentView(customBigContentViews)
-                .setCustomHeadsUpContentView(customSmallContentViews)
-                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
-                .addAction(action)
-                .setOngoing(true)
-                .setColor(accentColor);
+        .setContentIntent(pendingIntent)
+        .setSmallIcon(R.drawable.ic_content_copy_white_36dp)
+        .setCustomContentView(customSmallContentViews)
+        .setCustomBigContentView(customBigContentViews)
+        .setCustomHeadsUpContentView(customSmallContentViews)
+        .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+        .addAction(action)
+        .setOngoing(true)
+        .setColor(accentColor);
 
         // set default notification views text
 
@@ -241,7 +241,7 @@ public class CopyService extends AbstractProgressiveService {
             progressHandler.setTotalSize(totalSize);
 
             progressHandler.setProgressListener((speed) ->
-                publishResults(speed, false, move));
+                                                publishResults(speed, false, move));
 
             watcherUtil = new ServiceWatcherUtil(progressHandler);
 
@@ -359,12 +359,12 @@ public class CopyService extends AbstractProgressiveService {
                                 // the target open mode is not the one we're currently in!
                                 // we're processing the file for cache
                                 hFile = new HybridFile(OpenMode.FILE, targetPath, sourceFiles.get(i).getName(),
-                                        f1.isDirectory());
+                                                       f1.isDirectory());
                             } else {
 
                                 // the target open mode is where we're currently at
                                 hFile = new HybridFile(mode, targetPath, sourceFiles.get(i).getName(),
-                                        f1.isDirectory());
+                                                       f1.isDirectory());
                             }
 
                             if (!progressHandler.getCancelled()) {
@@ -397,7 +397,7 @@ public class CopyService extends AbstractProgressiveService {
                     for (int i = 0; i < sourceFiles.size(); i++) {
                         if (!progressHandler.getCancelled()) {
                             HybridFile hFile = new HybridFile(mode, targetPath, sourceFiles.get(i).getName(),
-                                    sourceFiles.get(i).isDirectory());
+                                                              sourceFiles.get(i).isDirectory());
                             progressHandler.setSourceFilesProcessed(++sourceProgress);
                             progressHandler.setFileName(sourceFiles.get(i).getName());
                             copyRoot(sourceFiles.get(i), hFile, move);
@@ -458,7 +458,7 @@ public class CopyService extends AbstractProgressiveService {
                     if(progressHandler.getCancelled()) return;
                     sourceFile.forEachChildrenFile(c, false, file -> {
                         HybridFile destFile = new HybridFile(targetFile.getMode(), targetFile.getPath(),
-                                file.getName(), file.isDirectory());
+                                                             file.getName(), file.isDirectory());
                         try {
                             copyFiles(file, destFile, progressHandler);
                         } catch (IOException e) {
@@ -491,7 +491,7 @@ public class CopyService extends AbstractProgressiveService {
                 boolean b = true;
                 for (HybridFileParcelable baseFile : baseFiles) {
                     if (!checkFiles(new HybridFile(baseFile.getMode(), baseFile.getPath()),
-                            new HybridFile(hFile2.getMode(), hFile2.getPath() + "/" + (baseFile.getName()))))
+                                    new HybridFile(hFile2.getMode(), hFile2.getPath() + "/" + (baseFile.getName()))))
                         b = false;
                 }
                 return b;

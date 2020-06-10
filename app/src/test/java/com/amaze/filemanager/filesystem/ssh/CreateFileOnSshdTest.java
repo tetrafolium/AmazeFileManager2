@@ -38,12 +38,12 @@ public class CreateFileOnSshdTest extends AbstractSftpServerTest {
     }
 
     @Test
-    public void testCreateFilePermissionDenied() throws Exception{
+    public void testCreateFilePermissionDenied() throws Exception {
         tearDown();
-        createSshServer(new VirtualFileSystemFactory(){
+        createSshServer(new VirtualFileSystemFactory() {
             @Override
             public FileSystem createFileSystem(Session session) throws IOException {
-            return new BlockFileCreationFileSystemProvider().newFileSystem(Paths.get(Environment.getExternalStorageDirectory().getAbsolutePath()), Collections.emptyMap());
+                return new BlockFileCreationFileSystemProvider().newFileSystem(Paths.get(Environment.getExternalStorageDirectory().getAbsolutePath()), Collections.emptyMap());
             }
         });
     }

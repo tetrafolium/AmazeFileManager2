@@ -42,7 +42,7 @@ public class SevenZipDecompressor extends Decompressor {
 
     @Override
     public SevenZipHelperTask changePath(String path, boolean addGoBackItem,
-                                       OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
+                                         OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
         return new SevenZipHelperTask(filePath, path, addGoBackItem, onFinish);
     }
 }

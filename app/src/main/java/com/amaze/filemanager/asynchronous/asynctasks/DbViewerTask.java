@@ -41,11 +41,11 @@ public class DbViewerTask extends AsyncTask<Void, Integer, Void> {
                 .equals(AppTheme.BLACK)) {
 
             htmlInit = "<html><body>" +
-                    "<table border='1' style='width:100%;color:#ffffff'>";
+                       "<table border='1' style='width:100%;color:#ffffff'>";
         } else {
 
             htmlInit = "<html><body>" +
-                    "<table border='1' style='width:100%;color:#000000'>";
+                       "<table border='1' style='width:100%;color:#000000'>";
         }
         stringBuilder.append(htmlInit);
         dbViewerFragment.loadingText.setVisibility(View.VISIBLE);
@@ -108,28 +108,28 @@ public class DbViewerTask extends AsyncTask<Void, Integer, Void> {
                 for (int i = 0; i < temp.length; i++) {
                     int dataType = c.getType(i);
                     switch (dataType) {
-                        case 0:
-                            // #FIELD_TYPE_NULL
-                            temp[i] = null;
-                            break;
-                        case 1:
-                            // #FIELD_TYPE_INTEGER
-                            temp[i] = String.valueOf(c.getInt(i));
-                            break;
-                        case 2:
-                            // #FIELD_TYPE_FLOAT
-                            temp[i] = String.valueOf(c.getFloat(i));
-                            break;
-                        case 3:
-                            // #FIELD_TYPE_STRING
-                            temp[i] = c.getString(i);
-                            break;
-                        case 4:
-                            // #FIELD_TYPE_BLOB
-                            /*byte[] blob = c.getBlob(i);
-                            blobString = new String(blob);*/
-                            temp[i] = "(BLOB)";
-                            break;
+                    case 0:
+                        // #FIELD_TYPE_NULL
+                        temp[i] = null;
+                        break;
+                    case 1:
+                        // #FIELD_TYPE_INTEGER
+                        temp[i] = String.valueOf(c.getInt(i));
+                        break;
+                    case 2:
+                        // #FIELD_TYPE_FLOAT
+                        temp[i] = String.valueOf(c.getFloat(i));
+                        break;
+                    case 3:
+                        // #FIELD_TYPE_STRING
+                        temp[i] = c.getString(i);
+                        break;
+                    case 4:
+                        // #FIELD_TYPE_BLOB
+                        /*byte[] blob = c.getBlob(i);
+                        blobString = new String(blob);*/
+                        temp[i] = "(BLOB)";
+                        break;
                     }
                 }
                 result.add(temp);

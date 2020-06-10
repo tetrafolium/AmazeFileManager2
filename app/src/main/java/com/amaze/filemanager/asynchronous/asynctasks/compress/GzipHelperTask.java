@@ -50,7 +50,7 @@ public class GzipHelperTask extends CompressedHelperTask {
     private String filePath, relativePath;
 
     public GzipHelperTask(Context context, String filePath, String relativePath, boolean goBack,
-                         OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> l) {
+                          OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> l) {
         super(goBack, l);
         this.context = new WeakReference<>(context);
         this.filePath = filePath;
@@ -62,7 +62,7 @@ public class GzipHelperTask extends CompressedHelperTask {
         TarArchiveInputStream tarInputStream = null;
         try {
             tarInputStream = new TarArchiveInputStream(
-                    new GzipCompressorInputStream(new FileInputStream(filePath)));
+                new GzipCompressorInputStream(new FileInputStream(filePath)));
 
             TarArchiveEntry entry;
             while ((entry = tarInputStream.getNextTarEntry()) != null) {
@@ -75,11 +75,11 @@ public class GzipHelperTask extends CompressedHelperTask {
 
                 boolean isInBaseDir = relativePath.equals("") && !name.contains(SEPARATOR);
                 boolean isInRelativeDir = name.contains(SEPARATOR)
-                        && name.substring(0, name.lastIndexOf(SEPARATOR)).equals(relativePath);
+                                          && name.substring(0, name.lastIndexOf(SEPARATOR)).equals(relativePath);
 
                 if (isInBaseDir || isInRelativeDir) {
                     elements.add(new CompressedObjectParcelable(entry.getName(),
-                            entry.getLastModifiedDate().getTime(), entry.getSize(), entry.isDirectory()));
+                                 entry.getLastModifiedDate().getTime(), entry.getSize(), entry.isDirectory()));
                 }
             }
         } catch (IOException e) {

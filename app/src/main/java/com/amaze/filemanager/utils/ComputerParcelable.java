@@ -43,8 +43,8 @@ public class ComputerParcelable implements Parcelable {
 
     public boolean equals(Object obj) {
         return obj instanceof ComputerParcelable
-                && (this == obj || (this.name.equals(((ComputerParcelable) obj).name)
-                && this.addr.equals(((ComputerParcelable) obj).addr)));
+               && (this == obj || (this.name.equals(((ComputerParcelable) obj).name)
+                                   && this.addr.equals(((ComputerParcelable) obj).addr)));
     }
 
     public int hashCode() {

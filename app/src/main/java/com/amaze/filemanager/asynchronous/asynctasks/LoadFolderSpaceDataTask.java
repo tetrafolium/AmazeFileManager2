@@ -46,9 +46,10 @@ public class LoadFolderSpaceDataTask extends AsyncTask<Void, Long, Pair<String, 
         this.appTheme = appTheme;
         this.chart = chart;
         file = f;
-        LEGENDS = new String[]{context.getString(R.string.size), context.getString(R.string.used_by_others), context.getString(R.string.free)};
-        COLORS = new int[]{getColor(c, R.color.piechart_red), getColor(c, R.color.piechart_blue),
-                getColor(c, R.color.piechart_green)};
+        LEGENDS = new String[] {context.getString(R.string.size), context.getString(R.string.used_by_others), context.getString(R.string.free)};
+        COLORS = new int[] {getColor(c, R.color.piechart_red), getColor(c, R.color.piechart_blue),
+                            getColor(c, R.color.piechart_green)
+                           };
     }
 
     @Override
@@ -72,8 +73,8 @@ public class LoadFolderSpaceDataTask extends AsyncTask<Void, Long, Pair<String, 
             long totalSpace = dataArray[0];
 
             List<PieEntry> entries = createEntriesFromArray(
-                    new long[]{dataArray[0], dataArray[1], dataArray[2]},
-                    true);
+                                         new long[] {dataArray[0], dataArray[1], dataArray[2]},
+                                         true);
 
             updateChart(Formatter.formatFileSize(context, totalSpace), entries);
 
@@ -97,8 +98,8 @@ public class LoadFolderSpaceDataTask extends AsyncTask<Void, Long, Pair<String, 
 
     private List<PieEntry> createEntriesFromArray(long[] dataArray, boolean loading) {
         long usedByFolder = dataArray[2],
-                usedByOther = dataArray[0] - dataArray[1] - dataArray[2],
-                freeSpace = dataArray[1];
+             usedByOther = dataArray[0] - dataArray[1] - dataArray[2],
+             freeSpace = dataArray[1];
 
         List<PieEntry> entries = new ArrayList<>();
         entries.add(new PieEntry(usedByFolder, LEGENDS[0], loading? ">":null));

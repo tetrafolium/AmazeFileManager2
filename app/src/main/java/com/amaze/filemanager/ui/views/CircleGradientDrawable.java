@@ -49,7 +49,7 @@ public class CircleGradientDrawable extends GradientDrawable {
         setShape(OVAL);
         setSize(1, 1);
         setStroke(dpToPx(STROKE_WIDTH), (appTheme.equals(AppTheme.DARK) || appTheme.equals(AppTheme.BLACK)) ? Color.parseColor(STROKE_COLOR_DARK)
-                : Color.parseColor(STROKE_COLOR_LIGHT));
+                  : Color.parseColor(STROKE_COLOR_LIGHT));
     }
 
     private int dpToPx(int dp) {

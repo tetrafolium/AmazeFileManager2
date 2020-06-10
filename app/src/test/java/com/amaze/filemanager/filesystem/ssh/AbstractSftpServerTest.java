@@ -44,7 +44,7 @@ public abstract class AbstractSftpServerTest {
     }
 
     @After
-    public void tearDown(){
+    public void tearDown() {
         SshConnectionPool.getInstance().expungeAllConnections();
         if(server != null && server.isOpen())
             server.close(true);

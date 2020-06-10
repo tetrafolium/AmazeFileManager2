@@ -47,15 +47,16 @@ public class ColorPickerDialog extends SelectedColorsPreference {
     /**
      * ONLY add new elements to the end of the array
      */
-    private static final ColorItemPair[] COLORS = new ColorItemPair[]{
-            new ColorItemPair(R.string.defualt,
-                    new int[]{R.color.primary_indigo, R.color.primary_indigo, R.color.primary_pink, R.color.accent_pink}),
-            new ColorItemPair(R.string.orange,
-                    new int[]{R.color.primary_orange, R.color.primary_orange, R.color.primary_deep_orange, R.color.accent_amber}),
-            new ColorItemPair(R.string.blue,
-                    new int[]{R.color.primary_blue, R.color.primary_blue, R.color.primary_deep_purple, R.color.accent_light_blue}),
-            new ColorItemPair(R.string.green,
-                    new int[]{R.color.primary_green, R.color.primary_green, R.color.primary_teal_900, R.color.accent_light_green})};
+    private static final ColorItemPair[] COLORS = new ColorItemPair[] {
+        new ColorItemPair(R.string.defualt,
+                          new int[]{R.color.primary_indigo, R.color.primary_indigo, R.color.primary_pink, R.color.accent_pink}),
+        new ColorItemPair(R.string.orange,
+                          new int[]{R.color.primary_orange, R.color.primary_orange, R.color.primary_deep_orange, R.color.accent_amber}),
+        new ColorItemPair(R.string.blue,
+                          new int[]{R.color.primary_blue, R.color.primary_blue, R.color.primary_deep_purple, R.color.accent_light_blue}),
+        new ColorItemPair(R.string.green,
+                          new int[]{R.color.primary_green, R.color.primary_green, R.color.primary_teal_900, R.color.accent_light_green})
+    };
 
     private SharedPreferences sharedPrefs;
     private ColorPreferenceHelper colorPreferenceHelper;
@@ -101,10 +102,10 @@ public class ColorPickerDialog extends SelectedColorsPreference {
         int accentColor = colorPref.accent;
         if(selectedIndex == NO_DATA) {//if instance was restored the value is already set
             boolean isUsingDefault = sharedPrefs.getInt(PreferencesConstants.PREFERENCE_COLOR_CONFIG, NO_DATA) == NO_DATA
-                    && sharedPrefs.getInt(PreferencesConstants.PREFERENCE_SKIN, R.color.primary_indigo) == R.color.primary_indigo
-                    && sharedPrefs.getInt(PreferencesConstants.PREFERENCE_SKIN_TWO, R.color.primary_indigo) == R.color.primary_indigo
-                    && sharedPrefs.getInt(PreferencesConstants.PREFERENCE_ACCENT, R.color.primary_pink) == R.color.primary_pink
-                    && sharedPrefs.getInt(PreferencesConstants.PREFERENCE_ICON_SKIN, R.color.primary_pink) == R.color.primary_pink;
+                                     && sharedPrefs.getInt(PreferencesConstants.PREFERENCE_SKIN, R.color.primary_indigo) == R.color.primary_indigo
+                                     && sharedPrefs.getInt(PreferencesConstants.PREFERENCE_SKIN_TWO, R.color.primary_indigo) == R.color.primary_indigo
+                                     && sharedPrefs.getInt(PreferencesConstants.PREFERENCE_ACCENT, R.color.primary_pink) == R.color.primary_pink
+                                     && sharedPrefs.getInt(PreferencesConstants.PREFERENCE_ICON_SKIN, R.color.primary_pink) == R.color.primary_pink;
 
             if(isUsingDefault) {
                 sharedPrefs.edit().putInt(PreferencesConstants.PREFERENCE_COLOR_CONFIG, DEFAULT).apply();
@@ -183,10 +184,10 @@ public class ColorPickerDialog extends SelectedColorsPreference {
         radio.setOnClickListener(clickListener);
         if(Build.VERSION.SDK_INT >= 21) {
             ColorStateList colorStateList = new ColorStateList(
-                    new int[][]{
-                            {-android.R.attr.state_enabled}, //disabled
-                            {android.R.attr.state_enabled} //enabled
-                    }, new int[] {accentColor, accentColor}
+            new int[][] {
+                {-android.R.attr.state_enabled}, //disabled
+                {android.R.attr.state_enabled} //enabled
+            }, new int[] {accentColor, accentColor}
             );
             radio.setButtonTintList(colorStateList);
         }
@@ -202,9 +203,9 @@ public class ColorPickerDialog extends SelectedColorsPreference {
 
         // Button views
         ((TextView) window.findViewById(res.getIdentifier("button1", "id", "android")))
-                .setTextColor(accentColor);
+        .setTextColor(accentColor);
         ((TextView) window.findViewById(res.getIdentifier("button2", "id", "android")))
-                .setTextColor(accentColor);
+        .setTextColor(accentColor);
 
     }
 
@@ -217,8 +218,8 @@ public class ColorPickerDialog extends SelectedColorsPreference {
             if(selectedIndex != CUSTOM_INDEX && selectedIndex != RANDOM_INDEX) {
                 colorPreferenceHelper.saveColorPreferences(sharedPrefs,
                         new UserColorPreferences(getColor(selectedIndex, 0),
-                        getColor(selectedIndex, 1), getColor(selectedIndex, 2),
-                        getColor(selectedIndex, 3)));
+                                                 getColor(selectedIndex, 1), getColor(selectedIndex, 2),
+                                                 getColor(selectedIndex, 3)));
             }
 
             listener.onAcceptedConfig();
@@ -291,14 +292,14 @@ public class ColorPickerDialog extends SelectedColorsPreference {
         }
 
         public static final Parcelable.Creator<SavedState> CREATOR =
-                new Parcelable.Creator<SavedState>() {
-                    public SavedState createFromParcel(Parcel in) {
-                        return new SavedState(in);
-                    }
-                    public SavedState[] newArray(int size) {
-                        return new SavedState[size];
-                    }
-                };
+        new Parcelable.Creator<SavedState>() {
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
     }
 
 }

@@ -83,10 +83,10 @@ public class SmbSearchDialog extends DialogFragment {
             public void computerFound(final ComputerParcelable computer) {
                 if (getActivity() != null)
                     getActivity().runOnUiThread(() -> {
-                        if (!computers.contains(computer))
-                            computers.add(computer);
-                        listViewAdapter.notifyDataSetChanged();
-                    });
+                    if (!computers.contains(computer))
+                        computers.add(computer);
+                    listViewAdapter.notifyDataSetChanged();
+                });
             }
 
             @Override
@@ -122,20 +122,20 @@ public class SmbSearchDialog extends DialogFragment {
         public ListViewAdapter(Context context, List<ComputerParcelable> objects) {
             items = new ArrayList<>(objects);
             mInflater = (LayoutInflater) context
-                .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+                        .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         }
 
         @Override
         public ElementViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view;
             switch (viewType) {
-                case VIEW_PROGRESSBAR:
-                    view = mInflater.inflate(R.layout.smb_progress_row, parent, false);
-                    return new ElementViewHolder(view);
-                default:
-                case VIEW_ELEMENT:
-                    view = mInflater.inflate(R.layout.smb_computers_row, parent, false);
-                    return new ElementViewHolder(view);
+            case VIEW_PROGRESSBAR:
+                view = mInflater.inflate(R.layout.smb_progress_row, parent, false);
+                return new ElementViewHolder(view);
+            default:
+            case VIEW_ELEMENT:
+                view = mInflater.inflate(R.layout.smb_computers_row, parent, false);
+                return new ElementViewHolder(view);
             }
         }
 
@@ -155,7 +155,7 @@ public class SmbSearchDialog extends DialogFragment {
                     dismiss();
                     MainActivity mainActivity = (MainActivity) getActivity();
                     mainActivity.showSMBDialog(listViewAdapter.items.get(position).name,
-                        listViewAdapter.items.get(position).addr, false);
+                                               listViewAdapter.items.get(position).addr, false);
                 }
             });
 

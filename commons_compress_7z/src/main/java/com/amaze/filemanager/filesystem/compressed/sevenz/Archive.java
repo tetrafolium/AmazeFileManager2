@@ -40,9 +40,9 @@ class Archive {
     @Override
     public String toString() {
         return "Archive with packed streams starting at offset " + packPos
-            + ", " + lengthOf(packSizes) + " pack sizes, " + lengthOf(packCrcs)
-            + " CRCs, " + lengthOf(folders) + " folders, " + lengthOf(files)
-            + " files and " + streamMap;
+               + ", " + lengthOf(packSizes) + " pack sizes, " + lengthOf(packCrcs)
+               + " CRCs, " + lengthOf(folders) + " folders, " + lengthOf(files)
+               + " files and " + streamMap;
     }
 
     private static String lengthOf(final long[] a) {

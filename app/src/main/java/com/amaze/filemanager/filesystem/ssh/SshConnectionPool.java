@@ -195,7 +195,7 @@ public class SshConnectionPool
             return null;
 
         return create(connInfo.host, connInfo.port, hostKey, connInfo.username, connInfo.password,
-                keyPair.get());
+                      keyPair.get());
     }
 
     private SSHClient create(@NonNull String host, int port, @NonNull String hostKey,
@@ -242,7 +242,7 @@ public class SshConnectionPool
         final String password;
 
         //FIXME: Crude assumption
-        ConnectionInfo(@NonNull String url){
+        ConnectionInfo(@NonNull String url) {
             if(!url.startsWith(SSH_URI_PREFIX))
                 throw new IllegalArgumentException("Argument is not a SSH URI: " + url);
 

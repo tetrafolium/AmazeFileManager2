@@ -53,7 +53,7 @@ public class SevenZipHelperTask extends CompressedHelperTask {
     private boolean paused = false;
 
     public SevenZipHelperTask(String filePath, String relativePath, boolean goBack,
-                         OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> l) {
+                              OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> l) {
         super(goBack, l);
         this.filePath = filePath;
         this.relativePath = relativePath;
@@ -66,18 +66,18 @@ public class SevenZipHelperTask extends CompressedHelperTask {
 
             try {
                 SevenZFile sevenzFile = (ArchivePasswordCache.getInstance().containsKey(filePath)) ?
-                        new SevenZFile(new File(filePath), ArchivePasswordCache.getInstance().get(filePath).toCharArray()) :
-                        new SevenZFile(new File(filePath));
+                                        new SevenZFile(new File(filePath), ArchivePasswordCache.getInstance().get(filePath).toCharArray()) :
+                                        new SevenZFile(new File(filePath));
 
                 for (SevenZArchiveEntry entry : sevenzFile.getEntries()) {
                     String name = entry.getName();
                     boolean isInBaseDir = relativePath.equals("") && !name.contains(SEPARATOR);
                     boolean isInRelativeDir = name.contains(SEPARATOR)
-                            && name.substring(0, name.lastIndexOf(SEPARATOR)).equals(relativePath);
+                                              && name.substring(0, name.lastIndexOf(SEPARATOR)).equals(relativePath);
 
                     if (isInBaseDir || isInRelativeDir) {
                         elements.add(new CompressedObjectParcelable(entry.getName(),
-                                entry.getLastModifiedDate().getTime(), entry.getSize(), entry.isDirectory()));
+                                     entry.getLastModifiedDate().getTime(), entry.getSize(), entry.isDirectory()));
                     }
                 }
                 paused = false;
@@ -102,16 +102,16 @@ public class SevenZipHelperTask extends CompressedHelperTask {
         {
             ArchivePasswordCache.getInstance().remove(filePath);
             GeneralDialogCreation.showPasswordDialog(AppConfig.getInstance().getMainActivityContext(),
-                (MainActivity)AppConfig.getInstance().getMainActivityContext(),
-                AppConfig.getInstance().getUtilsProvider().getAppTheme(),
-                R.string.archive_password_prompt, R.string.authenticate_password,
-                ((dialog, which) -> {
-                    EditText editText = dialog.getView().findViewById(R.id.singleedittext_input);
-                    String password = editText.getText().toString();
-                    ArchivePasswordCache.getInstance().put(filePath, password);
-                    paused = false;
-                    dialog.dismiss();
-                }), null);
+                    (MainActivity)AppConfig.getInstance().getMainActivityContext(),
+                    AppConfig.getInstance().getUtilsProvider().getAppTheme(),
+                    R.string.archive_password_prompt, R.string.authenticate_password,
+            ((dialog, which) -> {
+                EditText editText = dialog.getView().findViewById(R.id.singleedittext_input);
+                String password = editText.getText().toString();
+                ArchivePasswordCache.getInstance().put(filePath, password);
+                paused = false;
+                dialog.dismiss();
+            }), null);
         }
     }
 

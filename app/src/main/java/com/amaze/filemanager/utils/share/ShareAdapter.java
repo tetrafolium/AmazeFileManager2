@@ -32,7 +32,7 @@ class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> {
     }
 
     ShareAdapter(Context context, ArrayList<Intent> intents, ArrayList<String> labels,
-                        ArrayList<Drawable> arrayList1) {
+                 ArrayList<Drawable> arrayList1) {
         items = new ArrayList<>(intents);
         this.context = context;
         this.labels = labels;

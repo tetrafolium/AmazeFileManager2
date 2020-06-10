@@ -99,7 +99,7 @@ public class MainActivityHelper {
         mat.positiveText(R.string.cancel);
         String content = contextc.getString(R.string.operation_fail_following);
         int k=1;
-        for(HybridFileParcelable s:failedOps){
+        for(HybridFileParcelable s:failedOps) {
             content=content+ "\n" + (k) + ". " + s.getName();
             k++;
         }
@@ -144,10 +144,10 @@ public class MainActivityHelper {
 
             if (!isValidFilename) {
                 return new WarnableTextInputValidator.ReturnState(
-                        WarnableTextInputValidator.ReturnState.STATE_ERROR, R.string.invalid_name);
+                    WarnableTextInputValidator.ReturnState.STATE_ERROR, R.string.invalid_name);
             } else if (text.length() < 1) {
                 return new WarnableTextInputValidator.ReturnState(
-                        WarnableTextInputValidator.ReturnState.STATE_ERROR, R.string.field_empty);
+                    WarnableTextInputValidator.ReturnState.STATE_ERROR, R.string.field_empty);
             }
 
             return new WarnableTextInputValidator.ReturnState();
@@ -171,20 +171,20 @@ public class MainActivityHelper {
             //The redundant equalsIgnoreCase() is needed since ".txt" itself does not end with .txt (i.e. recommended as ".txt.txt"
             if (isValidFilename && text.length() > 0) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mainActivity);
-                if(text.startsWith(".") && !prefs.getBoolean(PreferencesConstants.PREFERENCE_SHOW_HIDDENFILES, false)){
+                if(text.startsWith(".") && !prefs.getBoolean(PreferencesConstants.PREFERENCE_SHOW_HIDDENFILES, false)) {
                     return new WarnableTextInputValidator.ReturnState(
-                            WarnableTextInputValidator.ReturnState.STATE_WARNING, R.string.create_hidden_file_warn);
+                        WarnableTextInputValidator.ReturnState.STATE_WARNING, R.string.create_hidden_file_warn);
                 } else if(!text.toLowerCase().endsWith(NEW_FILE_TXT_EXTENSION)) {
                     return new WarnableTextInputValidator.ReturnState(
-                            WarnableTextInputValidator.ReturnState.STATE_WARNING, R.string.create_file_suggest_txt_extension);
+                               WarnableTextInputValidator.ReturnState.STATE_WARNING, R.string.create_file_suggest_txt_extension);
                 }
             } else {
                 if (!isValidFilename) {
                     return new WarnableTextInputValidator.ReturnState(
-                            WarnableTextInputValidator.ReturnState.STATE_ERROR, R.string.invalid_name);
+                               WarnableTextInputValidator.ReturnState.STATE_ERROR, R.string.invalid_name);
                 } else if (text.length() < 1) {
                     return new WarnableTextInputValidator.ReturnState(
-                            WarnableTextInputValidator.ReturnState.STATE_ERROR, R.string.field_empty);
+                               WarnableTextInputValidator.ReturnState.STATE_ERROR, R.string.field_empty);
                 }
             }
 
@@ -195,13 +195,13 @@ public class MainActivityHelper {
     private void mk(@StringRes int newText, String prefill, final MaterialDialog.SingleButtonCallback onPositiveAction,
                     final WarnableTextInputValidator.OnTextValidate validator) {
         GeneralDialogCreation.showNameDialog(mainActivity,
-            mainActivity.getResources().getString(R.string.entername),
-            prefill,
-            mainActivity.getResources().getString(newText),
-            mainActivity.getResources().getString(R.string.create),
-            mainActivity.getResources().getString(R.string.cancel),
-            null, onPositiveAction, validator)
-            .show();
+                                             mainActivity.getResources().getString(R.string.entername),
+                                             prefill,
+                                             mainActivity.getResources().getString(newText),
+                                             mainActivity.getResources().getString(R.string.create),
+                                             mainActivity.getResources().getString(R.string.cancel),
+                                             null, onPositiveAction, validator)
+        .show();
     }
 
     public void add(int pos) {
@@ -209,44 +209,44 @@ public class MainActivityHelper {
         final String path = ma.getCurrentPath();
 
         switch (pos) {
-            case NEW_FOLDER:
-                mkdir(ma.openMode, path, ma);
-                break;
-            case NEW_FILE:
-                mkfile(ma.openMode, path, ma);
-                break;
-            case NEW_CLOUD:
-                BottomSheetDialogFragment fragment = new CloudSheetFragment();
-                fragment.show(ma.getActivity().getSupportFragmentManager(),
-                        CloudSheetFragment.TAG_FRAGMENT);
-                break;
+        case NEW_FOLDER:
+            mkdir(ma.openMode, path, ma);
+            break;
+        case NEW_FILE:
+            mkfile(ma.openMode, path, ma);
+            break;
+        case NEW_CLOUD:
+            BottomSheetDialogFragment fragment = new CloudSheetFragment();
+            fragment.show(ma.getActivity().getSupportFragmentManager(),
+                          CloudSheetFragment.TAG_FRAGMENT);
+            break;
         }
     }
 
     public String getIntegralNames(String path) {
         String newPath = "";
         switch (Integer.parseInt(path)) {
-            case 0:
-                newPath = mainActivity.getString(R.string.images);
-                break;
-            case 1:
-                newPath = mainActivity.getString(R.string.videos);
-                break;
-            case 2:
-                newPath = mainActivity.getString(R.string.audio);
-                break;
-            case 3:
-                newPath = mainActivity.getString(R.string.documents);
-                break;
-            case 4:
-                newPath = mainActivity.getString(R.string.apks);
-                break;
-            case 5:
-                newPath = mainActivity.getString(R.string.quick);
-                break;
-            case 6:
-                newPath = mainActivity.getString(R.string.recent);
-                break;
+        case 0:
+            newPath = mainActivity.getString(R.string.images);
+            break;
+        case 1:
+            newPath = mainActivity.getString(R.string.videos);
+            break;
+        case 2:
+            newPath = mainActivity.getString(R.string.audio);
+            break;
+        case 3:
+            newPath = mainActivity.getString(R.string.documents);
+            break;
+        case 4:
+            newPath = mainActivity.getString(R.string.apks);
+            break;
+        case 5:
+            newPath = mainActivity.getString(R.string.quick);
+            break;
+        case 6:
+            newPath = mainActivity.getString(R.string.recent);
+            break;
         }
         return newPath;
     }
@@ -263,11 +263,11 @@ public class MainActivityHelper {
         textView.setText(mainActivity.getString(R.string.needsaccesssummary) + path + mainActivity.getString(R.string.needsaccesssummary1));
         ((ImageView) view.findViewById(R.id.icon)).setImageResource(R.drawable.sd_operate_step);
         x.positiveText(R.string.open)
-            .negativeText(R.string.cancel)
-            .positiveColor(accentColor)
-            .negativeColor(accentColor)
-            .onPositive((dialog, which)->triggerStorageAccessFramework())
-            .onNegative((dialog, which)->Toast.makeText(mainActivity, R.string.error, Toast.LENGTH_SHORT).show());
+        .negativeText(R.string.cancel)
+        .positiveColor(accentColor)
+        .negativeColor(accentColor)
+        .onPositive((dialog, which)->triggerStorageAccessFramework())
+        .onNegative((dialog, which)->Toast.makeText(mainActivity, R.string.error, Toast.LENGTH_SHORT).show());
         final MaterialDialog y = x.build();
         y.show();
     }
@@ -280,7 +280,7 @@ public class MainActivityHelper {
     public void rename(OpenMode mode, final String oldPath, final String newPath,
                        final Activity context, boolean rootmode) {
         final Toast toast=Toast.makeText(context, context.getString(R.string.renaming),
-                Toast.LENGTH_SHORT);
+                                         Toast.LENGTH_SHORT);
         toast.show();
         Operations.rename(new HybridFile(mode, oldPath), new HybridFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack() {
             @Override
@@ -288,7 +288,7 @@ public class MainActivityHelper {
                 context.runOnUiThread(() -> {
                     if (toast != null) toast.cancel();
                     Toast.makeText(mainActivity, context.getString(R.string.fileexist),
-                            Toast.LENGTH_SHORT).show();
+                                   Toast.LENGTH_SHORT).show();
                 });
             }
 
@@ -335,7 +335,7 @@ public class MainActivityHelper {
                         }
                     } else
                         Toast.makeText(context, context.getString(R.string.operationunsuccesful),
-                                Toast.LENGTH_SHORT).show();
+                                       Toast.LENGTH_SHORT).show();
                 });
             }
 
@@ -344,7 +344,7 @@ public class MainActivityHelper {
                 context.runOnUiThread(() -> {
                     if (toast != null) toast.cancel();
                     Toast.makeText(context, context.getString(R.string.invalid_name) + ": "
-                            + file.getName(), Toast.LENGTH_LONG).show();
+                                   + file.getName(), Toast.LENGTH_LONG).show();
                 });
             }
         });
@@ -409,7 +409,7 @@ public class MainActivityHelper {
 
     public void mkFile(final HybridFile path, final MainFragment ma) {
         final Toast toast = Toast.makeText(ma.getActivity(), ma.getString(R.string.creatingfile),
-                Toast.LENGTH_SHORT);
+                                           Toast.LENGTH_SHORT);
         toast.show();
         Operations.mkfile(path, ma.getActivity(), mainActivity.isRootExplorer(), new Operations.ErrorCallBack() {
             @Override
@@ -417,7 +417,7 @@ public class MainActivityHelper {
                 ma.getActivity().runOnUiThread(() -> {
                     if (toast != null) toast.cancel();
                     Toast.makeText(mainActivity, mainActivity.getString(R.string.fileexist),
-                            Toast.LENGTH_SHORT).show();
+                                   Toast.LENGTH_SHORT).show();
                     if (ma != null && ma.getActivity() != null) {
                         // retry with dialog prompted again
                         mkfile(file.getMode(), file.getParent(), ma);
@@ -450,7 +450,7 @@ public class MainActivityHelper {
                         ma.updateList();
                     } else {
                         Toast.makeText(ma.getActivity(), ma.getString(R.string.operationunsuccesful),
-                                Toast.LENGTH_SHORT).show();
+                                       Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -460,7 +460,7 @@ public class MainActivityHelper {
                 ma.getActivity().runOnUiThread(() -> {
                     if (toast != null) toast.cancel();
                     Toast.makeText(ma.getActivity(), ma.getString(R.string.invalid_name)
-                            + ": " + file.getName(), Toast.LENGTH_LONG).show();
+                                   + ": " + file.getName(), Toast.LENGTH_LONG).show();
                 });
             }
         });
@@ -468,7 +468,7 @@ public class MainActivityHelper {
 
     public void mkDir(final HybridFile path, final MainFragment ma) {
         final Toast toast = Toast.makeText(ma.getActivity(), ma.getString(R.string.creatingfolder),
-                Toast.LENGTH_SHORT);
+                                           Toast.LENGTH_SHORT);
         toast.show();
         Operations.mkdir(path, ma.getActivity(), mainActivity.isRootExplorer(), new Operations.ErrorCallBack() {
             @Override
@@ -476,7 +476,7 @@ public class MainActivityHelper {
                 ma.getActivity().runOnUiThread(() -> {
                     if (toast != null) toast.cancel();
                     Toast.makeText(mainActivity, mainActivity.getString(R.string.fileexist),
-                            Toast.LENGTH_SHORT).show();
+                                   Toast.LENGTH_SHORT).show();
                     if (ma != null && ma.getActivity() != null) {
                         // retry with dialog prompted again
                         mkdir(file.getMode(), file.getParent(), ma);
@@ -507,7 +507,7 @@ public class MainActivityHelper {
                         ma.updateList();
                     } else {
                         Toast.makeText(ma.getActivity(), ma.getString(R.string.operationunsuccesful),
-                                Toast.LENGTH_SHORT).show();
+                                       Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -518,7 +518,7 @@ public class MainActivityHelper {
 
                     if (toast != null) toast.cancel();
                     Toast.makeText(ma.getActivity(), ma.getString(R.string.invalid_name)
-                            + ": " + file.getName(), Toast.LENGTH_LONG).show();
+                                   + ": " + file.getName(), Toast.LENGTH_LONG).show();
                 });
             }
         });
@@ -574,26 +574,26 @@ public class MainActivityHelper {
 
     public String parseCloudPath(OpenMode serviceType, String path) {
         switch (serviceType) {
-            case DROPBOX:
-                if (path.contains(CloudHandler.CLOUD_PREFIX_DROPBOX)) return path;
-                else
-                    return CloudHandler.CLOUD_PREFIX_DROPBOX
+        case DROPBOX:
+            if (path.contains(CloudHandler.CLOUD_PREFIX_DROPBOX)) return path;
+            else
+                return CloudHandler.CLOUD_PREFIX_DROPBOX
+                       + path.substring(path.indexOf(":") + 1, path.length());
+        case BOX:
+            if (path.contains(CloudHandler.CLOUD_PREFIX_BOX)) return path;
+            else return CloudHandler.CLOUD_PREFIX_BOX
                             + path.substring(path.indexOf(":") + 1, path.length());
-            case BOX:
-                if (path.contains(CloudHandler.CLOUD_PREFIX_BOX)) return path;
-                else return CloudHandler.CLOUD_PREFIX_BOX
-                        + path.substring(path.indexOf(":") + 1, path.length());
-            case GDRIVE:
-                if (path.contains(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE)) return path;
-                else return CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE
-                        + path.substring(path.indexOf(":") + 1, path.length());
-            case ONEDRIVE:
-                if (path.contains(CloudHandler.CLOUD_PREFIX_ONE_DRIVE)) return path;
-                else
-                    return CloudHandler.CLOUD_PREFIX_ONE_DRIVE + path.substring(path.indexOf(":") + 1,
-                            path.length());
-            default:
-                return path;
+        case GDRIVE:
+            if (path.contains(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE)) return path;
+            else return CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE
+                            + path.substring(path.indexOf(":") + 1, path.length());
+        case ONEDRIVE:
+            if (path.contains(CloudHandler.CLOUD_PREFIX_ONE_DRIVE)) return path;
+            else
+                return CloudHandler.CLOUD_PREFIX_ONE_DRIVE + path.substring(path.indexOf(":") + 1,
+                        path.length());
+        default:
+            return path;
         }
     }
 
@@ -615,7 +615,7 @@ public class MainActivityHelper {
         mainActivity.mainFragment = (MainFragment) mainActivity.getTabFragment().getCurrentTabFragment();
         FragmentManager fm = mainActivity.getSupportFragmentManager();
         SearchWorkerFragment fragment =
-                (SearchWorkerFragment) fm.findFragmentByTag(MainActivity.TAG_ASYNC_HELPER);
+            (SearchWorkerFragment) fm.findFragmentByTag(MainActivity.TAG_ASYNC_HELPER);
 
         if (fragment != null) {
             if (fragment.mSearchAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
@@ -625,8 +625,8 @@ public class MainActivityHelper {
         }
 
         addSearchFragment(fm, new SearchWorkerFragment(), fpath, query, ma.openMode, mainActivity.isRootExplorer(),
-                sharedPrefs.getBoolean(SearchWorkerFragment.KEY_REGEX, false),
-                sharedPrefs.getBoolean(SearchWorkerFragment.KEY_REGEX_MATCHES, false));
+                          sharedPrefs.getBoolean(SearchWorkerFragment.KEY_REGEX, false),
+                          sharedPrefs.getBoolean(SearchWorkerFragment.KEY_REGEX_MATCHES, false));
     }
 
     /**

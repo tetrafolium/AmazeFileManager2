@@ -103,7 +103,7 @@ public abstract class AbstractProgressiveService extends Service implements Serv
             if (ServiceWatcherUtil.state != ServiceWatcherUtil.ServiceWatcherInteractionInterface.STATE_HALTED) {
 
                 String written = Formatter.formatFileSize(this, writtenSize) + "/" +
-                        Formatter.formatFileSize(this, totalSize);
+                                 Formatter.formatFileSize(this, totalSize);
                 getNotificationCustomViewBig().setTextViewText(R.id.notification_service_textView_filename_big, fileName);
                 getNotificationCustomViewSmall().setTextViewText(R.id.notification_service_textView_filename_small, fileName);
                 getNotificationCustomViewBig().setTextViewText(R.id.notification_service_textView_written_big, written);

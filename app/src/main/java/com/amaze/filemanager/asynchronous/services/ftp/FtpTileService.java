@@ -46,7 +46,7 @@ public class FtpTileService extends TileService {
 
     @Override
     public void onClick() {
-        unlockAndRun(()->{
+        unlockAndRun(()-> {
             if (FtpService.isRunning()) {
                 getApplicationContext().sendBroadcast(new Intent(FtpService.ACTION_STOP_FTPSERVER).setPackage(getPackageName()));
             } else {

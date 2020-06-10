@@ -51,7 +51,7 @@ import static com.amaze.filemanager.fragments.preference_fragments.PreferencesCo
  *         on 2/8/2017, at 23:31.
  */
 
-public class BottomBar implements View.OnTouchListener{
+public class BottomBar implements View.OnTouchListener {
     private static final int PATH_ANIM_START_DELAY = 0;
     private static final int PATH_ANIM_END_DELAY = 0;
 
@@ -205,7 +205,7 @@ public class BottomBar implements View.OnTouchListener{
 
             View view = new View(mainActivity);
             LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(
-                    appbar.getToolbar().getContentInsetLeft(), LinearLayout.LayoutParams.WRAP_CONTENT);
+                appbar.getToolbar().getContentInsetLeft(), LinearLayout.LayoutParams.WRAP_CONTENT);
             view.setLayoutParams(params1);
             buttons.addView(view);
 
@@ -301,26 +301,26 @@ public class BottomBar implements View.OnTouchListener{
         MainActivityHelper mainActivityHelper = mainActivity.mainActivityHelper;
 
         switch (openmode) {
-            case SFTP:
-                newPath = mainActivityHelper.parseSftpPath(news);
-                break;
-            case SMB:
-                newPath = mainActivityHelper.parseSmbPath(news);
-                break;
-            case OTG:
-                newPath = mainActivityHelper.parseOTGPath(news);
-                break;
-            case CUSTOM:
-                newPath = mainActivityHelper.getIntegralNames(news);
-                break;
-            case DROPBOX:
-            case BOX:
-            case ONEDRIVE:
-            case GDRIVE:
-                newPath = mainActivityHelper.parseCloudPath(openmode, news);
-                break;
-            default:
-                newPath = news;
+        case SFTP:
+            newPath = mainActivityHelper.parseSftpPath(news);
+            break;
+        case SMB:
+            newPath = mainActivityHelper.parseSmbPath(news);
+            break;
+        case OTG:
+            newPath = mainActivityHelper.parseOTGPath(news);
+            break;
+        case CUSTOM:
+            newPath = mainActivityHelper.getIntegralNames(news);
+            break;
+        case DROPBOX:
+        case BOX:
+        case ONEDRIVE:
+        case GDRIVE:
+            newPath = mainActivityHelper.parseCloudPath(openmode, news);
+            break;
+        default:
+            newPath = news;
         }
 
         if (!results) {

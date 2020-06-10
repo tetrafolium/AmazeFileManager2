@@ -81,14 +81,14 @@ public class ServiceWatcherUtil {
 
                 if (position == progressHandler.getWrittenSize() &&
                         (state != STATE_HALTED
-                                && ++haltCounter >5)) {
+                         && ++haltCounter >5)) {
 
                     // new position is same as the last second position, and halt counter is past threshold
 
                     String writtenSize = Formatter.formatShortFileSize(interactionInterface.getApplicationContext(),
-                            progressHandler.getWrittenSize());
+                                         progressHandler.getWrittenSize());
                     String totalSize = Formatter.formatShortFileSize(interactionInterface.getApplicationContext(),
-                            progressHandler.getTotalSize());
+                                       progressHandler.getTotalSize());
 
                     if (interactionInterface.isDecryptService() && writtenSize.equals(totalSize)) {
                         // workaround for decryption when we have a length retrieved by
@@ -161,22 +161,22 @@ public class ServiceWatcherUtil {
      */
     public static synchronized void runService(final Context context, final Intent intent) {
         switch (pendingIntents.size()) {
-            case 0:
-                context.startService(intent);
-                break;
-            case 1:
-                // initialize waiting handlers
-                pendingIntents.add(intent);
-                postWaiting(context);
-                break;
-            case 2:
-                // to avoid notifying repeatedly
-                pendingIntents.add(intent);
-                notificationManager.notify(NotificationConstants.WAIT_ID, builder.build());
-                break;
-            default:
-                pendingIntents.add(intent);
-                break;
+        case 0:
+            context.startService(intent);
+            break;
+        case 1:
+            // initialize waiting handlers
+            pendingIntents.add(intent);
+            postWaiting(context);
+            break;
+        case 2:
+            // to avoid notifying repeatedly
+            pendingIntents.add(intent);
+            notificationManager.notify(NotificationConstants.WAIT_ID, builder.build());
+            break;
+        default:
+            pendingIntents.add(intent);
+            break;
         }
     }
 
@@ -190,13 +190,13 @@ public class ServiceWatcherUtil {
         waitingHandlerThread.start();
         waitingHandler = new Handler(waitingHandlerThread.getLooper());
         notificationManager = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
+                              context.getSystemService(Context.NOTIFICATION_SERVICE);
         builder = new NotificationCompat.Builder(context, NotificationConstants.CHANNEL_NORMAL_ID)
-                .setContentTitle(context.getString(R.string.waiting_title))
-                .setContentText(context.getString(R.string.waiting_content))
-                .setAutoCancel(false)
-                .setSmallIcon(R.drawable.ic_all_inclusive_white_36dp)
-                .setProgress(0, 0, true);
+        .setContentTitle(context.getString(R.string.waiting_title))
+        .setContentText(context.getString(R.string.waiting_content))
+        .setAutoCancel(false)
+        .setSmallIcon(R.drawable.ic_all_inclusive_white_36dp)
+        .setProgress(0, 0, true);
 
         NotificationConstants.setMetadata(context, builder, NotificationConstants.TYPE_NORMAL);
 

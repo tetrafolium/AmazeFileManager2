@@ -14,7 +14,7 @@ public class CryptUtilTest {
 
     private Context context;
 
-    public void setUp(){
+    public void setUp() {
         context = InstrumentationRegistry.getTargetContext();
     }
 

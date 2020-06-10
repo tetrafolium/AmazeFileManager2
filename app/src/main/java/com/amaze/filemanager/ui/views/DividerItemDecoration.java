@@ -16,8 +16,8 @@ import com.amaze.filemanager.adapters.RecyclerAdapter;
  */
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
-    private static final int[] ATTRS = new int[]{
-            android.R.attr.listDivider
+    private static final int[] ATTRS = new int[] {
+        android.R.attr.listDivider
     };
 
     private Drawable mDivider;

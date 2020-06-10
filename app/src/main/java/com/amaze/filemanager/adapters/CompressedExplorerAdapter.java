@@ -192,17 +192,17 @@ public class CompressedExplorerAdapter extends RecyclerView.Adapter<CompressedIt
         }
 
         boolean enableMarquee = sharedPrefs.getBoolean(
-                PreferencesConstants.PREFERENCE_ENABLE_MARQUEE_FILENAME, true);
+                                    PreferencesConstants.PREFERENCE_ENABLE_MARQUEE_FILENAME, true);
         holder.txtTitle.setEllipsize(enableMarquee ?
-                TextUtils.TruncateAt.MARQUEE :
-                TextUtils.TruncateAt.MIDDLE);
+                                     TextUtils.TruncateAt.MARQUEE :
+                                     TextUtils.TruncateAt.MIDDLE);
 
         final CompressedObjectParcelable rowItem = items.get(position);
         GradientDrawable gradientDrawable = (GradientDrawable) holder.genericIcon.getBackground();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             holder.checkImageView.setBackground(new CircleGradientDrawable(compressedExplorerFragment.accentColor,
-                    utilsProvider.getAppTheme(), compressedExplorerFragment.getResources().getDisplayMetrics()));
+                                                utilsProvider.getAppTheme(), compressedExplorerFragment.getResources().getDisplayMetrics()));
         } else
             holder.checkImageView.setBackgroundDrawable(new CircleGradientDrawable(compressedExplorerFragment.accentColor,
                     utilsProvider.getAppTheme(), compressedExplorerFragment.getResources().getDisplayMetrics()));
@@ -228,7 +228,7 @@ public class CompressedExplorerAdapter extends RecyclerView.Adapter<CompressedIt
                 holder.txtTitle.setText(rowItem.path.substring(rowItem.path.lastIndexOf("/") + 1));
                 if (compressedExplorerFragment.coloriseIcons) {
                     ColorUtils.colorizeIcons(context, rowItem.filetype, gradientDrawable,
-                            compressedExplorerFragment.iconskin);
+                                             compressedExplorerFragment.iconskin);
                 } else gradientDrawable.setColor(compressedExplorerFragment.iconskin);
             }
         }
@@ -273,7 +273,7 @@ public class CompressedExplorerAdapter extends RecyclerView.Adapter<CompressedIt
 
                         String fileName = CompressedHelper.getFileName(compressedExplorerFragment.compressedFile.getName());
                         String archiveCacheDirPath = compressedExplorerFragment.getActivity().getExternalCacheDir().getPath() +
-                                CompressedHelper.SEPARATOR + fileName;
+                                                     CompressedHelper.SEPARATOR + fileName;
 
                         HybridFileParcelable file = new HybridFileParcelable(archiveCacheDirPath
                                 + CompressedHelper.SEPARATOR
@@ -285,10 +285,10 @@ public class CompressedExplorerAdapter extends RecyclerView.Adapter<CompressedIt
                         compressedExplorerFragment.isOpen = true;
 
                         Toast.makeText(compressedExplorerFragment.getContext(),
-                                compressedExplorerFragment.getContext().getString(R.string.please_wait),
-                                Toast.LENGTH_SHORT).show();
+                                       compressedExplorerFragment.getContext().getString(R.string.please_wait),
+                                       Toast.LENGTH_SHORT).show();
                         decompressor.decompress(compressedExplorerFragment.getActivity().getExternalCacheDir().getPath(),
-                                new String[]{rowItem.path});
+                                                new String[] {rowItem.path});
                     }
                 }
             }
@@ -311,7 +311,7 @@ public class CompressedExplorerAdapter extends RecyclerView.Adapter<CompressedIt
     public void onViewAttachedToWindow(CompressedItemViewHolder holder) {
         super.onViewAttachedToWindow(holder);
         boolean enableMarqueeFilename = sharedPrefs.getBoolean(
-                PreferencesConstants.PREFERENCE_ENABLE_MARQUEE_FILENAME, true);
+                                            PreferencesConstants.PREFERENCE_ENABLE_MARQUEE_FILENAME, true);
         if (enableMarqueeFilename) {
             AnimUtils.marqueeAfterDelay(2000, holder.txtTitle);
         }

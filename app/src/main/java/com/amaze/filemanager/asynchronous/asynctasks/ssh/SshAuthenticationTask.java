@@ -148,18 +148,18 @@ public class SshAuthenticationTask extends AsyncTask<Void, Void, AsyncTaskResult
             if(SocketException.class.isAssignableFrom(result.exception.getClass())
                     || SocketTimeoutException.class.isAssignableFrom(result.exception.getClass())) {
                 Toast.makeText(AppConfig.getInstance(),
-                        AppConfig.getInstance().getResources().getString(R.string.ssh_connect_failed,
-                                hostname, port, result.exception.getLocalizedMessage()),
-                        Toast.LENGTH_LONG).show();
+                               AppConfig.getInstance().getResources().getString(R.string.ssh_connect_failed,
+                                       hostname, port, result.exception.getLocalizedMessage()),
+                               Toast.LENGTH_LONG).show();
             }
             else if(TransportException.class.isAssignableFrom(result.exception.getClass()))
             {
                 DisconnectReason disconnectReason = TransportException.class.cast(result.exception).getDisconnectReason();
                 if(DisconnectReason.HOST_KEY_NOT_VERIFIABLE.equals(disconnectReason)) {
                     new AlertDialog.Builder(AppConfig.getInstance().getMainActivityContext())
-                            .setTitle(R.string.ssh_connect_failed_host_key_changed_title)
-                            .setMessage(R.string.ssh_connect_failed_host_key_changed_message)
-                            .setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss()).show();
+                    .setTitle(R.string.ssh_connect_failed_host_key_changed_title)
+                    .setMessage(R.string.ssh_connect_failed_host_key_changed_message)
+                    .setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss()).show();
                 }
             }
             else if(password != null) {

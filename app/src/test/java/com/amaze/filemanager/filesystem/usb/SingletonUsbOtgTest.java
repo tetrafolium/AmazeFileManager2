@@ -42,6 +42,6 @@ public class SingletonUsbOtgTest {
         Uri rootAfter = SingletonUsbOtg.getInstance().getUsbOtgRoot();
 
         assertEquals("Uris are different: (before:) " + rootBefore + " (after:) " + rootAfter,
-                rootBefore, rootAfter);
+                     rootBefore, rootAfter);
     }
 }

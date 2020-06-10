@@ -43,7 +43,7 @@ public class RarDecompressor extends Decompressor {
 
     @Override
     public RarHelperTask changePath(String path, boolean addGoBackItem,
-                                       OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
+                                    OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
         return new RarHelperTask(filePath, path, addGoBackItem, onFinish);
     }
 

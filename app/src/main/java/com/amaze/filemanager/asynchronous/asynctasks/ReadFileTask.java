@@ -56,43 +56,43 @@ public class ReadFileTask extends AsyncTask<Void, Void, ReadFileTask.ReturnedVal
             InputStream inputStream = null;
 
             switch (fileAbstraction.scheme) {
-                case EditableFileAbstraction.SCHEME_CONTENT:
-                    if(fileAbstraction.uri == null) throw new NullPointerException("Something went really wrong!");
+            case EditableFileAbstraction.SCHEME_CONTENT:
+                if(fileAbstraction.uri == null) throw new NullPointerException("Something went really wrong!");
 
-                    inputStream = contentResolver.openInputStream(fileAbstraction.uri);
-                    break;
-                case EditableFileAbstraction.SCHEME_FILE:
-                    final HybridFileParcelable hybridFileParcelable = fileAbstraction.hybridFileParcelable;
-                    if(hybridFileParcelable == null) throw new NullPointerException("Something went really wrong!");
+                inputStream = contentResolver.openInputStream(fileAbstraction.uri);
+                break;
+            case EditableFileAbstraction.SCHEME_FILE:
+                final HybridFileParcelable hybridFileParcelable = fileAbstraction.hybridFileParcelable;
+                if(hybridFileParcelable == null) throw new NullPointerException("Something went really wrong!");
 
-                    File file = hybridFileParcelable.getFile();
+                File file = hybridFileParcelable.getFile();
 
-                    if (!file.canWrite() && isRootExplorer) {
-                        // try loading stream associated using root
-                        try {
-                            cachedFile = new File(externalCacheDir, hybridFileParcelable.getName());
-                            // creating a cache file
-                            RootUtils.copy(hybridFileParcelable.getPath(), cachedFile.getPath());
+                if (!file.canWrite() && isRootExplorer) {
+                    // try loading stream associated using root
+                    try {
+                        cachedFile = new File(externalCacheDir, hybridFileParcelable.getName());
+                        // creating a cache file
+                        RootUtils.copy(hybridFileParcelable.getPath(), cachedFile.getPath());
 
-                            inputStream = new FileInputStream(cachedFile);
-                        } catch (ShellNotRunningException e) {
-                            e.printStackTrace();
-                            inputStream = null;
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                            inputStream = null;
-                        }
-                    } else if (file.canRead()) {
-                        // readable file in filesystem
-                        try {
-                            inputStream = new FileInputStream(hybridFileParcelable.getPath());
-                        } catch (FileNotFoundException e) {
-                            inputStream = null;
-                        }
+                        inputStream = new FileInputStream(cachedFile);
+                    } catch (ShellNotRunningException e) {
+                        e.printStackTrace();
+                        inputStream = null;
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                        inputStream = null;
                     }
-                    break;
-                default:
-                    throw new IllegalArgumentException("The scheme for '" + fileAbstraction.scheme + "' cannot be processed!");
+                } else if (file.canRead()) {
+                    // readable file in filesystem
+                    try {
+                        inputStream = new FileInputStream(hybridFileParcelable.getPath());
+                    } catch (FileNotFoundException e) {
+                        inputStream = null;
+                    }
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("The scheme for '" + fileAbstraction.scheme + "' cannot be processed!");
             }
 
 

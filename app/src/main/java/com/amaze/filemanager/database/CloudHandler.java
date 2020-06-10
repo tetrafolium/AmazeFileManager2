@@ -49,22 +49,22 @@ public class CloudHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String CREATE_TAB_TABLE = "CREATE TABLE " + TabHandler.TABLE_TAB + "("
-                + TabHandler.COLUMN_TAB_NO + " INTEGER PRIMARY KEY,"
-                + TabHandler.COLUMN_PATH + " TEXT,"
-                + TabHandler.COLUMN_HOME + " TEXT" +
-                ")";
+                                  + TabHandler.COLUMN_TAB_NO + " INTEGER PRIMARY KEY,"
+                                  + TabHandler.COLUMN_PATH + " TEXT,"
+                                  + TabHandler.COLUMN_HOME + " TEXT" +
+                                  ")";
 
         String CREATE_TABLE_ENCRYPTED = "CREATE TABLE " + TabHandler.TABLE_ENCRYPTED + "("
-                + TabHandler.COLUMN_ENCRYPTED_ID + " INTEGER PRIMARY KEY,"
-                + TabHandler.COLUMN_ENCRYPTED_PATH + " TEXT,"
-                + TabHandler.COLUMN_ENCRYPTED_PASSWORD + " TEXT"
-                + ")";
+                                        + TabHandler.COLUMN_ENCRYPTED_ID + " INTEGER PRIMARY KEY,"
+                                        + TabHandler.COLUMN_ENCRYPTED_PATH + " TEXT,"
+                                        + TabHandler.COLUMN_ENCRYPTED_PASSWORD + " TEXT"
+                                        + ")";
 
         String CREATE_TABLE_CLOUD = "CREATE TABLE " + CloudHandler.TABLE_CLOUD_PERSIST + "("
-                + CloudHandler.COLUMN_CLOUD_ID
-                + " INTEGER PRIMARY KEY,"
-                + CloudHandler.COLUMN_CLOUD_SERVICE + " INTEGER,"
-                + CloudHandler.COLUMN_CLOUD_PERSIST + " TEXT" + ")";
+                                    + CloudHandler.COLUMN_CLOUD_ID
+                                    + " INTEGER PRIMARY KEY,"
+                                    + CloudHandler.COLUMN_CLOUD_SERVICE + " INTEGER,"
+                                    + CloudHandler.COLUMN_CLOUD_PERSIST + " TEXT" + ")";
 
         db.execSQL(CREATE_TAB_TABLE);
         db.execSQL(CREATE_TABLE_ENCRYPTED);
@@ -92,7 +92,7 @@ public class CloudHandler extends SQLiteOpenHelper {
         try {
 
             contentValues.put(COLUMN_CLOUD_PERSIST, CryptUtil.encryptPassword(context,
-                    cloudEntry.getPersistData()));
+                              cloudEntry.getPersistData()));
         } catch (Exception e) {
             e.printStackTrace();
             // failed to encrypt, revert back to plain
@@ -108,14 +108,14 @@ public class CloudHandler extends SQLiteOpenHelper {
             SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 
             sqLiteDatabase.delete(TABLE_CLOUD_PERSIST, COLUMN_CLOUD_SERVICE + " = ?",
-                    new String[]{serviceType.ordinal() + ""});
+                                  new String[] {serviceType.ordinal() + ""});
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
     }
 
     public void updateEntry(OpenMode serviceType, CloudEntry newCloudEntry)
-            throws CloudPluginException {
+    throws CloudPluginException {
 
         if (!CloudSheetFragment.isCloudProviderAvailable(context))
             throw new CloudPluginException();
@@ -127,7 +127,7 @@ public class CloudHandler extends SQLiteOpenHelper {
         try {
 
             contentValues.put(COLUMN_CLOUD_PERSIST, CryptUtil.encryptPassword(context,
-                    newCloudEntry.getPersistData()));
+                              newCloudEntry.getPersistData()));
         } catch (Exception e) {
             e.printStackTrace();
             // failed to encrypt, revert back to plain
@@ -135,7 +135,7 @@ public class CloudHandler extends SQLiteOpenHelper {
         }
 
         sqLiteDatabase.update(TABLE_CLOUD_PERSIST, contentValues, COLUMN_CLOUD_SERVICE + " = ?",
-                new String[]{serviceType.ordinal() + ""});
+                              new String[] {serviceType.ordinal() + ""});
     }
 
     public CloudEntry findEntry(OpenMode serviceType) throws CloudPluginException {
@@ -144,7 +144,7 @@ public class CloudHandler extends SQLiteOpenHelper {
             throw new CloudPluginException();
 
         String query = "Select * FROM " + TABLE_CLOUD_PERSIST + " WHERE " + COLUMN_CLOUD_SERVICE
-                        + "= \"" + serviceType.ordinal() + "\"";
+                       + "= \"" + serviceType.ordinal() + "\"";
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         CloudEntry cloudEntry = new CloudEntry();

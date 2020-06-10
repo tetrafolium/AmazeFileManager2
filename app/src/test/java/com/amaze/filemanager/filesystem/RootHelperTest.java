@@ -38,15 +38,15 @@ public class RootHelperTest {
     @Before
     public void setUp() throws IOException {
         sysroot.mkdir();
-        for(String s: new String[]{"srv","var","tmp"}){
+        for(String s: new String[] {"srv","var","tmp"}) {
             File subdir = new File(sysroot, s);
             subdir.mkdir();
             Files.createSymbolicLink(Paths.get(new File(Environment.getExternalStorageDirectory(), s).getAbsolutePath()), Paths.get(subdir.getAbsolutePath()));
         }
-        for(String s: new String[]{"bin","lib","usr"}){
+        for(String s: new String[] {"bin","lib","usr"}) {
             new File(Environment.getExternalStorageDirectory(), s).mkdir();
         }
-        for(int i=1;i<=4;i++){
+        for(int i=1; i<=4; i++) {
             File f = new File(Environment.getExternalStorageDirectory(), i+".txt");
             FileOutputStream out = new FileOutputStream(f);
             out.write(i);

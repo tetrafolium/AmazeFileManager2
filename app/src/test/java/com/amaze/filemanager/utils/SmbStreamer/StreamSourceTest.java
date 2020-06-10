@@ -243,7 +243,7 @@ public class StreamSourceTest {
         ss.close();
 
         int n = -1;
-        try{
+        try {
             byte[] buff = new byte[1];
             n = ss.read(buff);
         } catch (IOException ignored) {

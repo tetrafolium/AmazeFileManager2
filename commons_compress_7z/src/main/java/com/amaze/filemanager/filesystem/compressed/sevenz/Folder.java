@@ -106,11 +106,11 @@ class Folder {
     @Override
     public String toString() {
         return "Folder with " + coders.length + " coders, " + totalInputStreams
-            + " input streams, " + totalOutputStreams + " output streams, "
-            + bindPairs.length + " bind pairs, " + packedStreams.length
-            + " packed streams, " + unpackSizes.length + " unpack sizes, "
-            + (hasCrc ? "with CRC " + crc : "without CRC")
-            + " and " + numUnpackSubStreams + " unpack streams";
+               + " input streams, " + totalOutputStreams + " output streams, "
+               + bindPairs.length + " bind pairs, " + packedStreams.length
+               + " packed streams, " + unpackSizes.length + " unpack sizes, "
+               + (hasCrc ? "with CRC " + crc : "without CRC")
+               + " and " + numUnpackSubStreams + " unpack streams";
     }
 }
 

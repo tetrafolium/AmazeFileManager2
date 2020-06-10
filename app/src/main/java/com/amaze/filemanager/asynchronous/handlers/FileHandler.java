@@ -42,27 +42,27 @@ public class FileHandler extends Handler {
         String path = (String) msg.obj;
 
         switch (msg.what) {
-            case CustomFileObserver.GOBACK:
-                main.goBack();
-                break;
-            case CustomFileObserver.NEW_ITEM:
-                HybridFile fileCreated = new HybridFile(main.openMode,
-                        main.getCurrentPath() + "/" + path);
-                main.getElementsList().add(fileCreated.generateLayoutElement(main.getContext(), useThumbs));
-                break;
-            case CustomFileObserver.DELETED_ITEM:
-                for (int i = 0; i < main.getElementsList().size(); i++) {
-                    File currentFile = new File(main.getElementsList().get(i).desc);
+        case CustomFileObserver.GOBACK:
+            main.goBack();
+            break;
+        case CustomFileObserver.NEW_ITEM:
+            HybridFile fileCreated = new HybridFile(main.openMode,
+                                                    main.getCurrentPath() + "/" + path);
+            main.getElementsList().add(fileCreated.generateLayoutElement(main.getContext(), useThumbs));
+            break;
+        case CustomFileObserver.DELETED_ITEM:
+            for (int i = 0; i < main.getElementsList().size(); i++) {
+                File currentFile = new File(main.getElementsList().get(i).desc);
 
-                    if (currentFile.getName().equals(path)) {
-                        main.getElementsList().remove(i);
-                        break;
-                    }
+                if (currentFile.getName().equals(path)) {
+                    main.getElementsList().remove(i);
+                    break;
                 }
-                break;
-            default://Pass along other messages from the UI
-                super.handleMessage(msg);
-                return;
+            }
+            break;
+        default://Pass along other messages from the UI
+            super.handleMessage(msg);
+            return;
         }
 
         if (listView.getVisibility() == View.VISIBLE) {

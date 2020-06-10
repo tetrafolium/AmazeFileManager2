@@ -79,11 +79,11 @@ public class Billing extends RecyclerView.Adapter<RecyclerView.ViewHolder> imple
             SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
             params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP);
             billingClient.querySkuDetailsAsync(params.build(),
-                    (responseCode, skuDetailsList) -> {
-                        // Successfully fetched product details
-                        skuDetails = skuDetailsList;
-                        popProductsList(responseCode, skuDetailsList);
-                    });
+            (responseCode, skuDetailsList) -> {
+                // Successfully fetched product details
+                skuDetails = skuDetailsList;
+                popProductsList(responseCode, skuDetailsList);
+            });
         };
 
         executeServiceRequest(purchaseFlowRequest);
@@ -137,8 +137,8 @@ public class Billing extends RecyclerView.Adapter<RecyclerView.ViewHolder> imple
         public void purchaseItem(SkuDetails skuDetails) {
 
             BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder()
-                    .setSkuDetails(skuDetails)
-                    .build();
+                                                  .setSkuDetails(skuDetails)
+                                                  .build();
             billingClient.launchBillingFlow(activity, billingFlowParams);
         }
 

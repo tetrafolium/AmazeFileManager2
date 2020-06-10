@@ -73,7 +73,7 @@ public abstract class Extractor {
         extractWithFilter((relativePath, isDir) -> true);
     }
 
-    public List<String> getInvalidArchiveEntries(){
+    public List<String> getInvalidArchiveEntries() {
         return invalidArchiveEntries;
     }
 
@@ -90,7 +90,7 @@ public abstract class Extractor {
         boolean isCancelled();
     }
 
-    protected String fixEntryName(String entryName){
+    protected String fixEntryName(String entryName) {
         if(entryName.indexOf('\\') >= 0) {
             return fixEntryName(entryName.replaceAll("\\\\", SEPARATOR));
         } else if(entryName.indexOf(SEPARATOR_CHAR) == 0) {

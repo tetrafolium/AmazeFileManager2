@@ -91,7 +91,7 @@ public class AboutActivity extends BasicActivity implements View.OnClickListener
         switchIcons();
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.about_header);
+                        R.drawable.about_header);
 
         // It will generate colors based on the image in an AsyncTask.
         Palette.from(bitmap).generate(palette -> {
@@ -131,9 +131,9 @@ public class AboutActivity extends BasicActivity implements View.OnClickListener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                break;
+        case android.R.id.home:
+            onBackPressed();
+            break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -152,94 +152,94 @@ public class AboutActivity extends BasicActivity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.relative_layout_version:
-                mCount++;
-                if (mCount >= 5) {
-                    String text = getResources().getString(R.string.easter_egg_title) + " : " + mCount;
+        case R.id.relative_layout_version:
+            mCount++;
+            if (mCount >= 5) {
+                String text = getResources().getString(R.string.easter_egg_title) + " : " + mCount;
 
-                    if(snackbar != null && snackbar.isShown()) {
-                        snackbar.setText(text);
-                    } else {
-                        snackbar = Snackbar.make(v, text, Snackbar.LENGTH_SHORT);
-                    }
-
-                    snackbar.show();
-                    mSharedPref.edit().putInt(KEY_PREF_STUDIO, Integer.parseInt(Integer.toString(mCount) + "000")).apply();
+                if(snackbar != null && snackbar.isShown()) {
+                    snackbar.setText(text);
                 } else {
-                    mSharedPref.edit().putInt(KEY_PREF_STUDIO, 0).apply();
-                }
-                break;
-
-            case R.id.relative_layout_issues:
-                openURL(URL_REPO_ISSUES);
-                break;
-
-            case R.id.relative_layout_changelog:
-                openURL(URL_REPO_CHANGELOG);
-                break;
-
-            case R.id.relative_layout_licenses:
-                LibsBuilder libsBuilder = new LibsBuilder()
-                        .withLibraries("commonscompress", "apachemina", "volley")//Not autodetected for some reason
-                        .withActivityTitle(getString(R.string.libraries))
-                        .withAboutIconShown(true)
-                        .withAboutVersionShownName(true)
-                        .withAboutVersionShownCode(false)
-                        .withAboutDescription(getString(R.string.about_amaze))
-                        .withAboutSpecial1(getString(R.string.license))
-                        .withAboutSpecial1Description(getString(R.string.amaze_license))
-                        .withLicenseShown(true);
-
-                switch(getAppTheme().getSimpleTheme()) {
-                    case LIGHT:
-                        libsBuilder.withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR);
-                        break;
-                    case DARK:
-                        libsBuilder.withActivityStyle(Libs.ActivityStyle.DARK);
-                        break;
-                    case BLACK:
-                        libsBuilder.withActivityTheme(R.style.AboutLibrariesTheme_Black);
-                        break;
+                    snackbar = Snackbar.make(v, text, Snackbar.LENGTH_SHORT);
                 }
 
-                libsBuilder.start(this);
+                snackbar.show();
+                mSharedPref.edit().putInt(KEY_PREF_STUDIO, Integer.parseInt(Integer.toString(mCount) + "000")).apply();
+            } else {
+                mSharedPref.edit().putInt(KEY_PREF_STUDIO, 0).apply();
+            }
+            break;
 
-                break;
+        case R.id.relative_layout_issues:
+            openURL(URL_REPO_ISSUES);
+            break;
 
-            case R.id.text_view_author_1_g_plus:
-                openURL(URL_AUTHOR_1_G_PLUS);
-                break;
+        case R.id.relative_layout_changelog:
+            openURL(URL_REPO_CHANGELOG);
+            break;
 
-            case R.id.text_view_author_2_g_plus:
-                openURL(URL_AUTHOR_2_G_PLUS);
-                break;
+        case R.id.relative_layout_licenses:
+            LibsBuilder libsBuilder = new LibsBuilder()
+            .withLibraries("commonscompress", "apachemina", "volley")//Not autodetected for some reason
+            .withActivityTitle(getString(R.string.libraries))
+            .withAboutIconShown(true)
+            .withAboutVersionShownName(true)
+            .withAboutVersionShownCode(false)
+            .withAboutDescription(getString(R.string.about_amaze))
+            .withAboutSpecial1(getString(R.string.license))
+            .withAboutSpecial1Description(getString(R.string.amaze_license))
+            .withLicenseShown(true);
 
-            case R.id.text_view_developer_1_github:
-                openURL(URL_DEVELOPER1_GITHUB);
+            switch(getAppTheme().getSimpleTheme()) {
+            case LIGHT:
+                libsBuilder.withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR);
                 break;
+            case DARK:
+                libsBuilder.withActivityStyle(Libs.ActivityStyle.DARK);
+                break;
+            case BLACK:
+                libsBuilder.withActivityTheme(R.style.AboutLibrariesTheme_Black);
+                break;
+            }
 
-            case R.id.text_view_developer_2_github:
-                openURL(URL_DEVELOPER2_GITHUB);
-                break;
+            libsBuilder.start(this);
 
-            case R.id.relative_layout_translate:
-                openURL(URL_REPO_TRANSLATE);
-                break;
+            break;
 
-            case R.id.relative_layout_g_plus_community:
-                openURL(URL_REPO_G_PLUS_COMMUNITY);
-                break;
+        case R.id.text_view_author_1_g_plus:
+            openURL(URL_AUTHOR_1_G_PLUS);
+            break;
 
-            case R.id.relative_layout_xda:
-                openURL(URL_REPO_XDA);
-                break;
+        case R.id.text_view_author_2_g_plus:
+            openURL(URL_AUTHOR_2_G_PLUS);
+            break;
 
-            case R.id.relative_layout_rate:
-                openURL(URL_REPO_RATE);
-                break;
-            case R.id.relative_layout_donate:
-                billing = new Billing(this);
-                break;
+        case R.id.text_view_developer_1_github:
+            openURL(URL_DEVELOPER1_GITHUB);
+            break;
+
+        case R.id.text_view_developer_2_github:
+            openURL(URL_DEVELOPER2_GITHUB);
+            break;
+
+        case R.id.relative_layout_translate:
+            openURL(URL_REPO_TRANSLATE);
+            break;
+
+        case R.id.relative_layout_g_plus_community:
+            openURL(URL_REPO_G_PLUS_COMMUNITY);
+            break;
+
+        case R.id.relative_layout_xda:
+            openURL(URL_REPO_XDA);
+            break;
+
+        case R.id.relative_layout_rate:
+            openURL(URL_REPO_RATE);
+            break;
+        case R.id.relative_layout_donate:
+            billing = new Billing(this);
+            break;
         }
     }
 

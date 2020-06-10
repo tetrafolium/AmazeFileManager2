@@ -22,10 +22,10 @@ public class HybridFileParcelableTest {
         filePath = new HybridFileParcelable("/storage/sdcard0/Test1/Test1.txt");
 
         directory = new HybridFileParcelable("/storage/sdcard0/Test2",
-                        "rw", 123456, 654321, true);
+                                             "rw", 123456, 654321, true);
 
         file = new HybridFileParcelable("/storage/sdcard0/Test3/Test3.txt",
-                        "rw", 123456, 654321, false);
+                                        "rw", 123456, 654321, false);
     }
 
     /**
@@ -246,7 +246,7 @@ public class HybridFileParcelableTest {
         parcel.setDataPosition(0);
 
         HybridFileParcelable createdFromParcel =
-                HybridFileParcelable.CREATOR.createFromParcel(parcel);
+            HybridFileParcelable.CREATOR.createFromParcel(parcel);
         assertEquals(file.getDate(), createdFromParcel.getDate());
         assertEquals(file.getLink(), createdFromParcel.getLink());
         assertEquals(file.getMode(), createdFromParcel.getMode());

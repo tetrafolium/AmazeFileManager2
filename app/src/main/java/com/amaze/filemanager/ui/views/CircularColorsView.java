@@ -75,15 +75,16 @@ public class CircularColorsView extends View {
 
         int centerY = getHeight()/2;
         float[] positionX = {getWidth()- diameter - distance - diameter - distance - radius,
-                getWidth() - diameter - distance - radius,
-                getWidth() - radius};
+                             getWidth() - diameter - distance - radius,
+                             getWidth() - radius
+                            };
         semicicleRect.set(positionX[0]- radius, centerY- radius, positionX[0]+ radius, centerY+ radius);
 
         canvas.drawArc(semicicleRect, 90, 180, true, colors[0]);
         canvas.drawArc(semicicleRect, 270, 180, true, colors[1]);
 
         canvas.drawLine(semicicleRect.centerX(), semicicleRect.top, semicicleRect.centerX(),
-                semicicleRect.bottom, dividerPaint);
+                        semicicleRect.bottom, dividerPaint);
 
         canvas.drawCircle(positionX[1], centerY, radius, colors[2]);
         canvas.drawCircle(positionX[2], centerY, radius, colors[3]);

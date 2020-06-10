@@ -46,7 +46,7 @@ public class SshConnectionPoolTest {
     }
 
     @After
-    public void tearDown(){
+    public void tearDown() {
         if(server != null && server.isOpen())
             server.close(true);
     }
@@ -55,24 +55,24 @@ public class SshConnectionPoolTest {
     public void testGetConnectionWithUsernameAndPassword() throws IOException {
         createSshServer("testuser", "testpassword");
         assertNotNull(SshConnectionPool.getInstance().getConnection("127.0.0.1", 22222,
-                SecurityUtils.getFingerprint(hostKeyProvider.getKeyPair().getPublic()),
-                "testuser", "testpassword", null));
+                      SecurityUtils.getFingerprint(hostKeyProvider.getKeyPair().getPublic()),
+                      "testuser", "testpassword", null));
 
         assertNull(SshConnectionPool.getInstance().getConnection("127.0.0.1", 22222,
-                SecurityUtils.getFingerprint(hostKeyProvider.getKeyPair().getPublic()),
-                "invaliduser", "invalidpassword", null));
+                   SecurityUtils.getFingerprint(hostKeyProvider.getKeyPair().getPublic()),
+                   "invaliduser", "invalidpassword", null));
     }
 
     @Test
     public void testGetConnectionWithUsernameAndKey() throws IOException {
         createSshServer("testuser", null);
         assertNotNull(SshConnectionPool.getInstance().getConnection("127.0.0.1", 22222,
-                SecurityUtils.getFingerprint(hostKeyProvider.getKeyPair().getPublic()),
-                "testuser", null, userKeyProvider.getKeyPair()));
+                      SecurityUtils.getFingerprint(hostKeyProvider.getKeyPair().getPublic()),
+                      "testuser", null, userKeyProvider.getKeyPair()));
 
         assertNull(SshConnectionPool.getInstance().getConnection("127.0.0.1", 22222,
-                SecurityUtils.getFingerprint(hostKeyProvider.getKeyPair().getPublic()),
-                "invaliduser", null, userKeyProvider.getKeyPair()));
+                   SecurityUtils.getFingerprint(hostKeyProvider.getKeyPair().getPublic()),
+                   "invaliduser", null, userKeyProvider.getKeyPair()));
     }
 
     @Test
@@ -205,19 +205,19 @@ public class SshConnectionPoolTest {
         utilsHandler.onCreate(utilsHandler.getWritableDatabase());
 
         String privateKeyContents = null;
-        if(privateKey != null){
+        if(privateKey != null) {
             StringWriter writer = new StringWriter();
             JcaPEMWriter jw = new JcaPEMWriter(writer);
             try {
                 jw.writeObject(userKeyProvider.getKeyPair().getPrivate());
                 jw.flush();
                 jw.close();
-            } catch(IOException shallNeverHappen){}
+            } catch(IOException shallNeverHappen) {}
             privateKeyContents = writer.toString();
         }
 
         StringBuilder fullUri = new StringBuilder()
-            .append("ssh://").append(validUsername);
+        .append("ssh://").append(validUsername);
 
         if(validPassword != null)
             fullUri.append(':').append(validPassword);

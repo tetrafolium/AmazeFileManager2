@@ -208,8 +208,8 @@ public class FtpService extends Service implements Runnable {
                 trustManagerFactory.init(keyStore);
 
                 fac.setSslConfiguration(new DefaultSslConfiguration(keyManagerFactory,
-                        trustManagerFactory, ClientAuth.WANT, "TLS",
-                        null, "ftpserver"));
+                                        trustManagerFactory, ClientAuth.WANT, "TLS",
+                                        null, "ftpserver"));
                 fac.setImplicitSsl(true);
             } catch (GeneralSecurityException | IOException e) {
                 preferences.edit().putBoolean(KEY_PREFERENCE_SECURE, false).apply();
@@ -257,11 +257,11 @@ public class FtpService extends Service implements Runnable {
         Intent restartService = new Intent(getApplicationContext(), this.getClass());
         restartService.setPackage(getPackageName());
         PendingIntent restartServicePI = PendingIntent.getService(
-                getApplicationContext(), 1, restartService, PendingIntent.FLAG_ONE_SHOT);
+                                             getApplicationContext(), 1, restartService, PendingIntent.FLAG_ONE_SHOT);
         AlarmManager alarmService = (AlarmManager) getApplicationContext()
-                .getSystemService(Context.ALARM_SERVICE);
+                                    .getSystemService(Context.ALARM_SERVICE);
         alarmService.set(AlarmManager.ELAPSED_REALTIME,
-                SystemClock.elapsedRealtime() + 2000, restartServicePI);
+                         SystemClock.elapsedRealtime() + 2000, restartServicePI);
     }
 
     public static boolean isRunning() {
@@ -270,10 +270,10 @@ public class FtpService extends Service implements Runnable {
 
     public static boolean isConnectedToLocalNetwork(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
+                                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
         boolean connected = ni != null && ni.isConnected()
-                && (ni.getType() & (ConnectivityManager.TYPE_WIFI | ConnectivityManager.TYPE_ETHERNET)) != 0;
+                            && (ni.getType() & (ConnectivityManager.TYPE_WIFI | ConnectivityManager.TYPE_ETHERNET)) != 0;
         if (!connected) {
             try {
                 for (NetworkInterface netInterface : Collections.list(NetworkInterface
@@ -291,10 +291,10 @@ public class FtpService extends Service implements Runnable {
 
     public static boolean isConnectedToWifi(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
+                                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
         return ni != null && ni.isConnected()
-                && ni.getType() == ConnectivityManager.TYPE_WIFI;
+               && ni.getType() == ConnectivityManager.TYPE_WIFI;
     }
 
     public static boolean isEnabledWifiHotspot(Context context) {

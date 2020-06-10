@@ -14,14 +14,14 @@ import static org.junit.Assert.assertTrue;
 public class SshClientUtilTest {
 
     @Test
-    public void testEncryptDecryptUriWithNoPassword(){
+    public void testEncryptDecryptUriWithNoPassword() {
         String uri = "ssh://testuser@127.0.0.1:22";
         assertEquals(uri, SshClientUtils.encryptSshPathAsNecessary(uri));
         assertEquals(uri, SshClientUtils.decryptSshPathAsNecessary(uri));
     }
 
     @Test
-    public void testEncryptDecryptPasswordWithMinusSign1(){
+    public void testEncryptDecryptPasswordWithMinusSign1() {
         String uri = "ssh://testuser:abcd-efgh@127.0.0.1:22";
         String result = SshClientUtils.encryptSshPathAsNecessary(uri);
         assertTrue(result.contains("ssh://testuser:"));
@@ -31,7 +31,7 @@ public class SshClientUtilTest {
     }
 
     @Test
-    public void testEncryptDecryptPasswordWithMinusSign2(){
+    public void testEncryptDecryptPasswordWithMinusSign2() {
         String uri = "ssh://testuser:---------------@127.0.0.1:22";
         String result = SshClientUtils.encryptSshPathAsNecessary(uri);
         assertTrue(result.contains("ssh://testuser:"));
@@ -41,7 +41,7 @@ public class SshClientUtilTest {
     }
 
     @Test
-    public void testEncryptDecryptPasswordWithMinusSign3(){
+    public void testEncryptDecryptPasswordWithMinusSign3() {
         String uri = "ssh://testuser:--agdiuhdpost15@127.0.0.1:22";
         String result = SshClientUtils.encryptSshPathAsNecessary(uri);
         assertTrue(result.contains("ssh://testuser:"));
@@ -51,7 +51,7 @@ public class SshClientUtilTest {
     }
 
     @Test
-    public void testEncryptDecryptPasswordWithMinusSign4(){
+    public void testEncryptDecryptPasswordWithMinusSign4() {
         String uri = "ssh://testuser:t-h-i-s-i-s-p-a-s-s-w-o-r-d-@127.0.0.1:22";
         String result = SshClientUtils.encryptSshPathAsNecessary(uri);
         assertTrue(result.contains("ssh://testuser:"));

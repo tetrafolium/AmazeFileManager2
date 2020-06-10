@@ -187,7 +187,7 @@ public class Operations {
                 }
                 return null;
             }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     }
 
@@ -241,7 +241,7 @@ public class Operations {
                         byte[] tempBytes = new byte[0];
                         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(tempBytes);
                         cloudStorageDropbox.upload(CloudUtil.stripPath(OpenMode.DROPBOX, file.getPath()),
-                                byteArrayInputStream, 0l, true);
+                                                   byteArrayInputStream, 0l, true);
                         errorCallBack.done(file, true);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -253,7 +253,7 @@ public class Operations {
                         byte[] tempBytes = new byte[0];
                         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(tempBytes);
                         cloudStorageBox.upload(CloudUtil.stripPath(OpenMode.BOX, file.getPath()),
-                                byteArrayInputStream, 0l, true);
+                                               byteArrayInputStream, 0l, true);
                         errorCallBack.done(file, true);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -265,7 +265,7 @@ public class Operations {
                         byte[] tempBytes = new byte[0];
                         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(tempBytes);
                         cloudStorageOneDrive.upload(CloudUtil.stripPath(OpenMode.ONEDRIVE, file.getPath()),
-                                byteArrayInputStream, 0l, true);
+                                                    byteArrayInputStream, 0l, true);
                         errorCallBack.done(file, true);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -277,7 +277,7 @@ public class Operations {
                         byte[] tempBytes = new byte[0];
                         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(tempBytes);
                         cloudStorageGdrive.upload(CloudUtil.stripPath(OpenMode.GDRIVE, file.getPath()),
-                                byteArrayInputStream, 0l, true);
+                                                  byteArrayInputStream, 0l, true);
                         errorCallBack.done(file, true);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -292,7 +292,7 @@ public class Operations {
                     DocumentFile parentDirectory = OTGUtil.getDocumentFile(file.getParent(), context, false);
                     if (parentDirectory.isDirectory()) {
                         parentDirectory.createFile(file.getName(context).substring(file.getName().lastIndexOf(".")),
-                                file.getName(context));
+                                                   file.getName(context));
                         errorCallBack.done(file, true);
                     } else errorCallBack.done(file, false);
                     return null;
@@ -326,7 +326,7 @@ public class Operations {
                 }
                 return null;
             }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public static void rename(final HybridFile oldFile, final HybridFile newFile, final boolean rootMode,
@@ -372,7 +372,7 @@ public class Operations {
                         public <Void> Void execute(@NonNull SFTPClient client) {
                             try {
                                 client.rename(SshClientUtils.extractRemotePathFrom(oldFile.getPath()),
-                                        SshClientUtils.extractRemotePathFrom(newFile.getPath()));
+                                              SshClientUtils.extractRemotePathFrom(newFile.getPath()));
                                 errorCallBack.done(newFile, true);
                             } catch(IOException e) {
                                 e.printStackTrace();
@@ -385,7 +385,7 @@ public class Operations {
                     CloudStorage cloudStorageDropbox = dataUtils.getAccount(OpenMode.DROPBOX);
                     try {
                         cloudStorageDropbox.move(CloudUtil.stripPath(OpenMode.DROPBOX, oldFile.getPath()),
-                                CloudUtil.stripPath(OpenMode.DROPBOX, newFile.getPath()));
+                                                 CloudUtil.stripPath(OpenMode.DROPBOX, newFile.getPath()));
                         errorCallBack.done(newFile, true);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -395,7 +395,7 @@ public class Operations {
                     CloudStorage cloudStorageBox = dataUtils.getAccount(OpenMode.BOX);
                     try {
                         cloudStorageBox.move(CloudUtil.stripPath(OpenMode.BOX, oldFile.getPath()),
-                                CloudUtil.stripPath(OpenMode.BOX, newFile.getPath()));
+                                             CloudUtil.stripPath(OpenMode.BOX, newFile.getPath()));
                         errorCallBack.done(newFile, true);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -405,7 +405,7 @@ public class Operations {
                     CloudStorage cloudStorageOneDrive = dataUtils.getAccount(OpenMode.ONEDRIVE);
                     try {
                         cloudStorageOneDrive.move(CloudUtil.stripPath(OpenMode.ONEDRIVE, oldFile.getPath()),
-                                CloudUtil.stripPath(OpenMode.ONEDRIVE, newFile.getPath()));
+                                                  CloudUtil.stripPath(OpenMode.ONEDRIVE, newFile.getPath()));
                         errorCallBack.done(newFile, true);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -415,7 +415,7 @@ public class Operations {
                     CloudStorage cloudStorageGdrive = dataUtils.getAccount(OpenMode.GDRIVE);
                     try {
                         cloudStorageGdrive.move(CloudUtil.stripPath(OpenMode.GDRIVE, oldFile.getPath()),
-                                CloudUtil.stripPath(OpenMode.GDRIVE, newFile.getPath()));
+                                                CloudUtil.stripPath(OpenMode.GDRIVE, newFile.getPath()));
                         errorCallBack.done(newFile, true);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -435,41 +435,41 @@ public class Operations {
                     File file = new File(oldFile.getPath());
                     File file1 = new File(newFile.getPath());
                     switch (oldFile.getMode()) {
-                        case FILE:
-                            int mode = checkFolder(file.getParentFile(), context);
-                            if (mode == 2) {
-                                errorCallBack.launchSAF(oldFile, newFile);
-                            } else if (mode == 1 || mode == 0) {
-                                try {
-                                    FileUtil.renameFolder(file, file1, context);
-                                } catch (ShellNotRunningException e) {
-                                    e.printStackTrace();
-                                }
-                                boolean a = !file.exists() && file1.exists();
-                                if (!a && rootMode) {
-                                    try {
-                                        RootUtils.rename(file.getPath(), file1.getPath());
-                                    } catch (ShellNotRunningException e) {
-                                        e.printStackTrace();
-                                    }
-                                    oldFile.setMode(OpenMode.ROOT);
-                                    newFile.setMode(OpenMode.ROOT);
-                                    a = !file.exists() && file1.exists();
-                                }
-                                errorCallBack.done(newFile, a);
-                                return null;
-                            }
-                            break;
-                        case ROOT:
+                    case FILE:
+                        int mode = checkFolder(file.getParentFile(), context);
+                        if (mode == 2) {
+                            errorCallBack.launchSAF(oldFile, newFile);
+                        } else if (mode == 1 || mode == 0) {
                             try {
-                                RootUtils.rename(file.getPath(), file1.getPath());
+                                FileUtil.renameFolder(file, file1, context);
                             } catch (ShellNotRunningException e) {
                                 e.printStackTrace();
                             }
+                            boolean a = !file.exists() && file1.exists();
+                            if (!a && rootMode) {
+                                try {
+                                    RootUtils.rename(file.getPath(), file1.getPath());
+                                } catch (ShellNotRunningException e) {
+                                    e.printStackTrace();
+                                }
+                                oldFile.setMode(OpenMode.ROOT);
+                                newFile.setMode(OpenMode.ROOT);
+                                a = !file.exists() && file1.exists();
+                            }
+                            errorCallBack.done(newFile, a);
+                            return null;
+                        }
+                        break;
+                    case ROOT:
+                        try {
+                            RootUtils.rename(file.getPath(), file1.getPath());
+                        } catch (ShellNotRunningException e) {
+                            e.printStackTrace();
+                        }
 
-                            newFile.setMode(OpenMode.ROOT);
-                            errorCallBack.done(newFile, true);
-                            break;
+                        newFile.setMode(OpenMode.ROOT);
+                        errorCallBack.done(newFile, true);
+                        break;
 
                     }
                 }
@@ -484,7 +484,7 @@ public class Operations {
                     FileUtils.scanFile(context, hybridFiles);
                 }
             }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     }
 
@@ -541,14 +541,15 @@ public class Operations {
 
         // TODO: check file name validation only for FAT filesystems
         return !(fileName.contains(ASTERISK) || fileName.contains(BACKWARD_SLASH) ||
-                fileName.contains(COLON) || fileName.contains(FOREWARD_SLASH) ||
-                fileName.contains(GREATER_THAN) || fileName.contains(LESS_THAN) ||
-                fileName.contains(QUESTION_MARK) || fileName.contains(QUOTE));
+                 fileName.contains(COLON) || fileName.contains(FOREWARD_SLASH) ||
+                 fileName.contains(GREATER_THAN) || fileName.contains(LESS_THAN) ||
+                 fileName.contains(QUESTION_MARK) || fileName.contains(QUOTE));
     }
 
     private static boolean isFileSystemFAT(String mountPoint) {
-        String[] args = new String[]{"/bin/bash", "-c", "df -DO_NOT_REPLACE | awk '{print $1,$2,$NF}' | grep \"^"
-                + mountPoint + "\""};
+        String[] args = new String[] {"/bin/bash", "-c", "df -DO_NOT_REPLACE | awk '{print $1,$2,$NF}' | grep \"^"
+                                      + mountPoint + "\""
+                                     };
         try {
             Process proc = new ProcessBuilder(args).start();
             OutputStream outputStream = proc.getOutputStream();

@@ -15,7 +15,7 @@ import com.amaze.filemanager.R;
 import com.amaze.filemanager.ui.dialogs.GeneralDialogCreation;
 
 public class PermissionsActivity extends ThemedActivity
-        implements ActivityCompat.OnRequestPermissionsResultCallback {
+    implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     public static final int PERMISSION_LENGTH = 2;
     public static final int STORAGE_PERMISSION = 0, INSTALL_APK_PERMISSION = 1;
@@ -47,28 +47,28 @@ public class PermissionsActivity extends ThemedActivity
     public boolean checkStoragePermission() {
         // Verify that all required contact permissions have been granted.
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED;
+               == PackageManager.PERMISSION_GRANTED;
     }
 
     public void requestStoragePermission(@NonNull final OnPermissionGranted onPermissionGranted) {
         final MaterialDialog materialDialog = GeneralDialogCreation.showBasicDialog(this,
-                R.string.grant_storage_permission, R.string.grantper, R.string.grant, R.string.cancel);
+                                              R.string.grant_storage_permission, R.string.grantper, R.string.grant, R.string.cancel);
         materialDialog.getActionButton(DialogAction.NEGATIVE).setOnClickListener(v -> finish());
         materialDialog.setCancelable(false);
 
         requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, STORAGE_PERMISSION,
-                materialDialog, onPermissionGranted);
+                          materialDialog, onPermissionGranted);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void requestInstallApkPermission(@NonNull final OnPermissionGranted onPermissionGranted) {
         final MaterialDialog materialDialog = GeneralDialogCreation.showBasicDialog(this,
-                R.string.grant_apkinstall_permission, R.string.grantper, R.string.grant, R.string.cancel);
+                                              R.string.grant_apkinstall_permission, R.string.grantper, R.string.grant, R.string.cancel);
         materialDialog.getActionButton(DialogAction.NEGATIVE).setOnClickListener(v -> materialDialog.dismiss());
         materialDialog.setCancelable(false);
 
         requestPermission(Manifest.permission.REQUEST_INSTALL_PACKAGES, INSTALL_APK_PERMISSION,
-                materialDialog, onPermissionGranted);
+                          materialDialog, onPermissionGranted);
     }
 
     /**
@@ -90,7 +90,7 @@ public class PermissionsActivity extends ThemedActivity
             });
             rationale.show();
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{permission}, code);
+            ActivityCompat.requestPermissions(this, new String[] {permission}, code);
         }
     }
 

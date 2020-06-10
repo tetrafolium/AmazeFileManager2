@@ -16,25 +16,25 @@ import java.util.Random;
 public class ColorPreferenceHelper {
 
     public static final @ColorRes int DEFAULT_PRIMARY_FIRST_TAB = R.color.primary_indigo,
-            DEFAULT_PRIMARY_SECOND_TAB = R.color.primary_indigo,
-            DEFAULT_ACCENT = R.color.primary_pink,
-            DEFAULT_ICON_SKIN = R.color.primary_pink;
+                                      DEFAULT_PRIMARY_SECOND_TAB = R.color.primary_indigo,
+                                      DEFAULT_ACCENT = R.color.primary_pink,
+                                      DEFAULT_ICON_SKIN = R.color.primary_pink;
 
     /**
      * Combinations used when randomizing color selection at startup.
      */
-    private static final @ColorRes int[][] RANDOM_COMBINATIONS = new int[][]{
-            {R.color.primary_brown, R.color.primary_amber, R.color.primary_orange},
-            {R.color.primary_indigo, R.color.primary_pink, R.color.primary_indigo},
-            {R.color.primary_teal, R.color.primary_orange, R.color.primary_teal},
-            {R.color.primary_teal_900, R.color.primary_amber, R.color.primary_orange},
-            {R.color.primary_deep_purple, R.color.primary_pink, R.color.primary_deep_purple},
-            {R.color.primary_blue_grey, R.color.primary_brown, R.color.primary_blue_grey},
-            {R.color.primary_pink, R.color.primary_orange, R.color.primary_pink},
-            {R.color.primary_blue_grey, R.color.primary_red, R.color.primary_blue_grey},
-            {R.color.primary_red, R.color.primary_orange, R.color.primary_red},
-            {R.color.primary_light_blue, R.color.primary_pink, R.color.primary_light_blue},
-            {R.color.primary_cyan, R.color.primary_pink, R.color.primary_cyan}
+    private static final @ColorRes int[][] RANDOM_COMBINATIONS = new int[][] {
+        {R.color.primary_brown, R.color.primary_amber, R.color.primary_orange},
+        {R.color.primary_indigo, R.color.primary_pink, R.color.primary_indigo},
+        {R.color.primary_teal, R.color.primary_orange, R.color.primary_teal},
+        {R.color.primary_teal_900, R.color.primary_amber, R.color.primary_orange},
+        {R.color.primary_deep_purple, R.color.primary_pink, R.color.primary_deep_purple},
+        {R.color.primary_blue_grey, R.color.primary_brown, R.color.primary_blue_grey},
+        {R.color.primary_pink, R.color.primary_orange, R.color.primary_pink},
+        {R.color.primary_blue_grey, R.color.primary_red, R.color.primary_blue_grey},
+        {R.color.primary_red, R.color.primary_orange, R.color.primary_red},
+        {R.color.primary_light_blue, R.color.primary_pink, R.color.primary_light_blue},
+        {R.color.primary_cyan, R.color.primary_pink, R.color.primary_cyan}
     };
 
     /**
@@ -46,7 +46,7 @@ public class ColorPreferenceHelper {
         @ColorRes int[] colorPos = RANDOM_COMBINATIONS[new Random().nextInt(RANDOM_COMBINATIONS.length)];
 
         return new UserColorPreferences(Utils.getColor(c, colorPos[0]), Utils.getColor(c, colorPos[0]),
-                Utils.getColor(c, colorPos[1]), Utils.getColor(c, colorPos[2]));
+                                        Utils.getColor(c, colorPos[1]), Utils.getColor(c, colorPos[2]));
     }
 
     /**
@@ -105,29 +105,29 @@ public class ColorPreferenceHelper {
     }
 
     private static final List<Integer> OLD_SYSTEM_LIST = Arrays.asList(
-            R.color.primary_red,
-            R.color.primary_pink,
-            R.color.primary_purple,
-            R.color.primary_deep_purple,
-            R.color.primary_indigo,
-            R.color.primary_blue,
-            R.color.primary_light_blue,
-            R.color.primary_cyan,
-            R.color.primary_teal,
-            R.color.primary_green,
-            R.color.primary_light_green,
-            R.color.primary_amber,
-            R.color.primary_orange,
-            R.color.primary_deep_orange,
-            R.color.primary_brown,
-            R.color.primary_grey_900,
-            R.color.primary_blue_grey,
-            R.color.primary_teal_900,
-            R.color.accent_pink,
-            R.color.accent_amber,
-            R.color.accent_light_blue,
-            R.color.accent_light_green
-    );
+                R.color.primary_red,
+                R.color.primary_pink,
+                R.color.primary_purple,
+                R.color.primary_deep_purple,
+                R.color.primary_indigo,
+                R.color.primary_blue,
+                R.color.primary_light_blue,
+                R.color.primary_cyan,
+                R.color.primary_teal,
+                R.color.primary_green,
+                R.color.primary_light_green,
+                R.color.primary_amber,
+                R.color.primary_orange,
+                R.color.primary_deep_orange,
+                R.color.primary_brown,
+                R.color.primary_grey_900,
+                R.color.primary_blue_grey,
+                R.color.primary_teal_900,
+                R.color.accent_pink,
+                R.color.accent_amber,
+                R.color.accent_light_blue,
+                R.color.accent_light_green
+            );
 
     private void correctToNewColorsSystem(Context c, SharedPreferences prefs) {
         int tabOne = prefs.getInt(PreferencesConstants.PREFERENCE_SKIN, -1);

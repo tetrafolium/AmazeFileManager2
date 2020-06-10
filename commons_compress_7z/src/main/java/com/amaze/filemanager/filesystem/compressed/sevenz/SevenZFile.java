@@ -185,7 +185,7 @@ public class SevenZFile implements Closeable {
      * @since 1.17
      */
     public SevenZFile(final FileChannel channel, String filename)
-        throws IOException {
+    throws IOException {
         this(channel, filename, null, false);
     }
 
@@ -316,7 +316,7 @@ public class SevenZFile implements Closeable {
 
     private Archive readHeaders(final byte[] password) throws IOException {
         ByteBuffer buf = ByteBuffer.allocate(12 /* signature + 2 bytes version + 4 bytes CRC */)
-            .order(ByteOrder.LITTLE_ENDIAN);
+                         .order(ByteOrder.LITTLE_ENDIAN);
         readFully(buf);
         final byte[] signature = new byte[6];
         buf.get(signature);
@@ -328,7 +328,7 @@ public class SevenZFile implements Closeable {
         final byte archiveVersionMinor = buf.get();
         if (archiveVersionMajor != 0) {
             throw new IOException(String.format("Unsupported 7z version (%d,%d)",
-                    archiveVersionMajor, archiveVersionMinor));
+                                                archiveVersionMajor, archiveVersionMinor));
         }
 
         final long startHeaderCrc = 0xffffFFFFL & buf.getInt();
@@ -368,11 +368,11 @@ public class SevenZFile implements Closeable {
         // using Stream rather than ByteBuffer for the benefit of the
         // built-in CRC check
         try (DataInputStream dataInputStream = new DataInputStream(new CRC32VerifyingInputStream(
-                new BoundedFileChannelInputStream(channel, 20), 20, startHeaderCrc))) {
-             startHeader.nextHeaderOffset = Long.reverseBytes(dataInputStream.readLong());
-             startHeader.nextHeaderSize = Long.reverseBytes(dataInputStream.readLong());
-             startHeader.nextHeaderCrc = 0xffffFFFFL & Integer.reverseBytes(dataInputStream.readInt());
-             return startHeader;
+                        new BoundedFileChannelInputStream(channel, 20), 20, startHeaderCrc))) {
+            startHeader.nextHeaderOffset = Long.reverseBytes(dataInputStream.readLong());
+            startHeader.nextHeaderSize = Long.reverseBytes(dataInputStream.readLong());
+            startHeader.nextHeaderCrc = 0xffffFFFFL & Integer.reverseBytes(dataInputStream.readInt());
+            return startHeader;
         }
     }
 
@@ -423,7 +423,7 @@ public class SevenZFile implements Closeable {
         final Folder folder = archive.folders[0];
         final int firstPackStreamIndex = 0;
         final long folderOffset = SIGNATURE_HEADER_SIZE + archive.packPos +
-                0;
+                                  0;
 
         channel.position(folderOffset);
         InputStream inputStreamStack = new BoundedFileChannelInputStream(channel,
@@ -433,7 +433,7 @@ public class SevenZFile implements Closeable {
                 throw new IOException("Multi input/output stream coders are not yet supported");
             }
             inputStreamStack = Coders.addDecoder(fileName, inputStreamStack, //NOSONAR
-                    folder.getUnpackSizeForCoder(coder), coder, password);
+                                                 folder.getUnpackSizeForCoder(coder), coder, password);
         }
         if (folder.hasCrc) {
             inputStreamStack = new CRC32VerifyingInputStream(inputStreamStack,
@@ -665,7 +665,7 @@ public class SevenZFile implements Closeable {
             // would need to keep looping as above:
             while (moreAlternativeMethods) {
                 throw new IOException("Alternative methods are unsupported, please report. " +
-                        "The reference implementation doesn't support them either.");
+                                      "The reference implementation doesn't support them either.");
             }
         }
         folder.coders = coders;
@@ -755,123 +755,123 @@ public class SevenZFile implements Closeable {
             }
             final long size = readUint64(header);
             switch (propertyType) {
-                case NID.kEmptyStream: {
-                    isEmptyStream = readBits(header, files.length);
-                    break;
+            case NID.kEmptyStream: {
+                isEmptyStream = readBits(header, files.length);
+                break;
+            }
+            case NID.kEmptyFile: {
+                if (isEmptyStream == null) { // protect against NPE
+                    throw new IOException("Header format error: kEmptyStream must appear before kEmptyFile");
                 }
-                case NID.kEmptyFile: {
-                    if (isEmptyStream == null) { // protect against NPE
-                        throw new IOException("Header format error: kEmptyStream must appear before kEmptyFile");
-                    }
-                    isEmptyFile = readBits(header, isEmptyStream.cardinality());
-                    break;
+                isEmptyFile = readBits(header, isEmptyStream.cardinality());
+                break;
+            }
+            case NID.kAnti: {
+                if (isEmptyStream == null) { // protect against NPE
+                    throw new IOException("Header format error: kEmptyStream must appear before kAnti");
                 }
-                case NID.kAnti: {
-                    if (isEmptyStream == null) { // protect against NPE
-                        throw new IOException("Header format error: kEmptyStream must appear before kAnti");
-                    }
-                    isAnti = readBits(header, isEmptyStream.cardinality());
-                    break;
+                isAnti = readBits(header, isEmptyStream.cardinality());
+                break;
+            }
+            case NID.kName: {
+                final int external = getUnsignedByte(header);
+                if (external != 0) {
+                    throw new IOException("Not implemented");
                 }
-                case NID.kName: {
-                    final int external = getUnsignedByte(header);
-                    if (external != 0) {
-                        throw new IOException("Not implemented");
-                    }
-                    if (((size - 1) & 1) != 0) {
-                        throw new IOException("File names length invalid");
-                    }
-                    final byte[] names = new byte[(int)(size - 1)];
-                    header.get(names);
-                    int nextFile = 0;
-                    int nextName = 0;
-                    for (int i = 0; i < names.length; i += 2) {
-                        if (names[i] == 0 && names[i+1] == 0) {
-                            files[nextFile++].setName(new String(names, nextName, i-nextName, CharsetNames.UTF_16LE));
-                            nextName = i + 2;
-                        }
-                    }
-                    if (nextName != names.length || nextFile != files.length) {
-                        throw new IOException("Error parsing file names");
-                    }
-                    break;
+                if (((size - 1) & 1) != 0) {
+                    throw new IOException("File names length invalid");
                 }
-                case NID.kCTime: {
-                    final BitSet timesDefined = readAllOrBits(header, files.length);
-                    final int external = getUnsignedByte(header);
-                    if (external != 0) {
-                        throw new IOException("Unimplemented");
+                final byte[] names = new byte[(int)(size - 1)];
+                header.get(names);
+                int nextFile = 0;
+                int nextName = 0;
+                for (int i = 0; i < names.length; i += 2) {
+                    if (names[i] == 0 && names[i+1] == 0) {
+                        files[nextFile++].setName(new String(names, nextName, i-nextName, CharsetNames.UTF_16LE));
+                        nextName = i + 2;
                     }
-                    for (int i = 0; i < files.length; i++) {
-                        files[i].setHasCreationDate(timesDefined.get(i));
-                        if (files[i].getHasCreationDate()) {
-                            files[i].setCreationDate(header.getLong());
-                        }
-                    }
-                    break;
                 }
-                case NID.kATime: {
-                    final BitSet timesDefined = readAllOrBits(header, files.length);
-                    final int external = getUnsignedByte(header);
-                    if (external != 0) {
-                        throw new IOException("Unimplemented");
-                    }
-                    for (int i = 0; i < files.length; i++) {
-                        files[i].setHasAccessDate(timesDefined.get(i));
-                        if (files[i].getHasAccessDate()) {
-                            files[i].setAccessDate(header.getLong());
-                        }
-                    }
-                    break;
+                if (nextName != names.length || nextFile != files.length) {
+                    throw new IOException("Error parsing file names");
                 }
-                case NID.kMTime: {
-                    final BitSet timesDefined = readAllOrBits(header, files.length);
-                    final int external = getUnsignedByte(header);
-                    if (external != 0) {
-                        throw new IOException("Unimplemented");
-                    }
-                    for (int i = 0; i < files.length; i++) {
-                        files[i].setHasLastModifiedDate(timesDefined.get(i));
-                        if (files[i].getHasLastModifiedDate()) {
-                            files[i].setLastModifiedDate(header.getLong());
-                        }
-                    }
-                    break;
+                break;
+            }
+            case NID.kCTime: {
+                final BitSet timesDefined = readAllOrBits(header, files.length);
+                final int external = getUnsignedByte(header);
+                if (external != 0) {
+                    throw new IOException("Unimplemented");
                 }
-                case NID.kWinAttributes: {
-                    final BitSet attributesDefined = readAllOrBits(header, files.length);
-                    final int external = getUnsignedByte(header);
-                    if (external != 0) {
-                        throw new IOException("Unimplemented");
+                for (int i = 0; i < files.length; i++) {
+                    files[i].setHasCreationDate(timesDefined.get(i));
+                    if (files[i].getHasCreationDate()) {
+                        files[i].setCreationDate(header.getLong());
                     }
-                    for (int i = 0; i < files.length; i++) {
-                        files[i].setHasWindowsAttributes(attributesDefined.get(i));
-                        if (files[i].getHasWindowsAttributes()) {
-                            files[i].setWindowsAttributes(header.getInt());
-                        }
+                }
+                break;
+            }
+            case NID.kATime: {
+                final BitSet timesDefined = readAllOrBits(header, files.length);
+                final int external = getUnsignedByte(header);
+                if (external != 0) {
+                    throw new IOException("Unimplemented");
+                }
+                for (int i = 0; i < files.length; i++) {
+                    files[i].setHasAccessDate(timesDefined.get(i));
+                    if (files[i].getHasAccessDate()) {
+                        files[i].setAccessDate(header.getLong());
                     }
-                    break;
                 }
-                case NID.kStartPos: {
-                    throw new IOException("kStartPos is unsupported, please report");
+                break;
+            }
+            case NID.kMTime: {
+                final BitSet timesDefined = readAllOrBits(header, files.length);
+                final int external = getUnsignedByte(header);
+                if (external != 0) {
+                    throw new IOException("Unimplemented");
                 }
-                case NID.kDummy: {
-                    // 7z 9.20 asserts the content is all zeros and ignores the property
-                    // Compress up to 1.8.1 would throw an exception, now we ignore it (see COMPRESS-287
+                for (int i = 0; i < files.length; i++) {
+                    files[i].setHasLastModifiedDate(timesDefined.get(i));
+                    if (files[i].getHasLastModifiedDate()) {
+                        files[i].setLastModifiedDate(header.getLong());
+                    }
+                }
+                break;
+            }
+            case NID.kWinAttributes: {
+                final BitSet attributesDefined = readAllOrBits(header, files.length);
+                final int external = getUnsignedByte(header);
+                if (external != 0) {
+                    throw new IOException("Unimplemented");
+                }
+                for (int i = 0; i < files.length; i++) {
+                    files[i].setHasWindowsAttributes(attributesDefined.get(i));
+                    if (files[i].getHasWindowsAttributes()) {
+                        files[i].setWindowsAttributes(header.getInt());
+                    }
+                }
+                break;
+            }
+            case NID.kStartPos: {
+                throw new IOException("kStartPos is unsupported, please report");
+            }
+            case NID.kDummy: {
+                // 7z 9.20 asserts the content is all zeros and ignores the property
+                // Compress up to 1.8.1 would throw an exception, now we ignore it (see COMPRESS-287
 
-                    if (skipBytesFully(header, size) < size) {
-                        throw new IOException("Incomplete kDummy property");
-                    }
-                    break;
+                if (skipBytesFully(header, size) < size) {
+                    throw new IOException("Incomplete kDummy property");
                 }
+                break;
+            }
 
-                default: {
-                    // Compress up to 1.8.1 would throw an exception, now we ignore it (see COMPRESS-287
-                    if (skipBytesFully(header, size) < size) {
-                        throw new IOException("Incomplete property of type " + propertyType);
-                    }
-                    break;
+            default: {
+                // Compress up to 1.8.1 would throw an exception, now we ignore it (see COMPRESS-287
+                if (skipBytesFully(header, size) < size) {
+                    throw new IOException("Incomplete property of type " + propertyType);
                 }
+                break;
+            }
             }
         }
         int nonEmptyFileCounter = 0;
@@ -979,7 +979,7 @@ public class SevenZFile implements Closeable {
             final Folder folder = archive.folders[folderIndex];
             final int firstPackStreamIndex = archive.streamMap.folderFirstPackStreamIndex[folderIndex];
             final long folderOffset = SIGNATURE_HEADER_SIZE + archive.packPos +
-                    archive.streamMap.packStreamOffsets[firstPackStreamIndex];
+                                      archive.streamMap.packStreamOffsets[firstPackStreamIndex];
             currentFolderInputStream = buildDecoderStack(folder, folderOffset, firstPackStreamIndex, file);
         }
 
@@ -992,11 +992,11 @@ public class SevenZFile implements Closeable {
     }
 
     private InputStream buildDecoderStack(final Folder folder, final long folderOffset,
-                final int firstPackStreamIndex, final SevenZArchiveEntry entry) throws IOException {
+                                          final int firstPackStreamIndex, final SevenZArchiveEntry entry) throws IOException {
         channel.position(folderOffset);
         InputStream inputStreamStack = new FilterInputStream(new BufferedInputStream(
-              new BoundedFileChannelInputStream(channel,
-                  archive.packSizes[firstPackStreamIndex]))) {
+                    new BoundedFileChannelInputStream(channel,
+        archive.packSizes[firstPackStreamIndex]))) {
             @Override
             public int read() throws IOException {
                 final int r = in.read();
@@ -1028,14 +1028,14 @@ public class SevenZFile implements Closeable {
             }
             final SevenZMethod method = SevenZMethod.byId(coder.decompressionMethodId);
             inputStreamStack = Coders.addDecoder(fileName, inputStreamStack,
-                    folder.getUnpackSizeForCoder(coder), coder, password);
+                                                 folder.getUnpackSizeForCoder(coder), coder, password);
             methods.addFirst(new SevenZMethodConfiguration(method,
-                     Coders.findByMethod(method).getOptionsFromCoder(coder, inputStreamStack)));
+                             Coders.findByMethod(method).getOptionsFromCoder(coder, inputStreamStack)));
         }
         entry.setContentMethods(methods);
         if (folder.hasCrc) {
             return new CRC32VerifyingInputStream(inputStreamStack,
-                    folder.getUnpackSize(), folder.crc);
+                                                 folder.getUnpackSize(), folder.crc);
         }
         return inputStreamStack;
     }
@@ -1189,7 +1189,7 @@ public class SevenZFile implements Closeable {
 
     @Override
     public String toString() {
-      return archive.toString();
+        return archive.toString();
     }
 
     private static final CharsetEncoder PASSWORD_ENCODER = Charset.forName("UTF-16LE").newEncoder();

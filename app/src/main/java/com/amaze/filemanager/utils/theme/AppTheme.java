@@ -32,15 +32,15 @@ public enum AppTheme {
      */
     public static AppTheme getTheme(int index) {
         switch (index) {
-            default:
-            case LIGHT_INDEX:
-                return LIGHT;
-            case DARK_INDEX:
-                return DARK;
-            case TIME_INDEX:
-                return TIMED;
-            case BLACK_INDEX:
-                return BLACK;
+        default:
+        case LIGHT_INDEX:
+            return LIGHT;
+        case DARK_INDEX:
+            return DARK;
+        case TIME_INDEX:
+            return TIMED;
+        case BLACK_INDEX:
+            return BLACK;
         }
     }
 
@@ -49,19 +49,19 @@ public enum AppTheme {
      */
     public Theme getMaterialDialogTheme() {
         switch (id) {
-            default:
-            case LIGHT_INDEX:
-                return Theme.LIGHT;
-            case DARK_INDEX:
-            case BLACK_INDEX:
+        default:
+        case LIGHT_INDEX:
+            return Theme.LIGHT;
+        case DARK_INDEX:
+        case BLACK_INDEX:
+            return Theme.DARK;
+        case TIME_INDEX:
+            int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+            if (hour <= 6 || hour >= 18) {
                 return Theme.DARK;
-            case TIME_INDEX:
-                int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-                if (hour <= 6 || hour >= 18) {
-                    return Theme.DARK;
-                } else {
-                    return Theme.LIGHT;
-                }
+            } else {
+                return Theme.LIGHT;
+            }
         }
     }
 
@@ -72,20 +72,20 @@ public enum AppTheme {
      */
     public AppTheme getSimpleTheme() {
         switch (id) {
-            default:
-            case LIGHT_INDEX:
-                return LIGHT;
-            case DARK_INDEX:
+        default:
+        case LIGHT_INDEX:
+            return LIGHT;
+        case DARK_INDEX:
+            return DARK;
+        case TIME_INDEX:
+            int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+            if (hour <= 6 || hour >= 18) {
                 return DARK;
-            case TIME_INDEX:
-                int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-                if (hour <= 6 || hour >= 18) {
-                    return DARK;
-                } else {
-                    return LIGHT;
-                }
-            case BLACK_INDEX:
-                return BLACK;
+            } else {
+                return LIGHT;
+            }
+        case BLACK_INDEX:
+            return BLACK;
         }
     }
 

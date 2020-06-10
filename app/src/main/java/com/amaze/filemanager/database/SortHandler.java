@@ -54,9 +54,9 @@ public class SortHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_TABLE_SORT = "CREATE TABLE " + TABLE_SORT + "("
-                + COLUMN_SORT_PATH
-                + " TEXT PRIMARY KEY,"
-                + COLUMN_SORT_TYPE + " INTEGER" + ")";
+                                   + COLUMN_SORT_PATH
+                                   + " TEXT PRIMARY KEY,"
+                                   + COLUMN_SORT_TYPE + " INTEGER" + ")";
 
         db.execSQL(CREATE_TABLE_SORT);
     }
@@ -81,7 +81,7 @@ public class SortHandler extends SQLiteOpenHelper {
     public void clear(String path) {
         try {
             SQLiteDatabase sqLiteDatabase = getWritableDatabase();
-            sqLiteDatabase.delete(TABLE_SORT, COLUMN_SORT_PATH + " = ?", new String[]{path});
+            sqLiteDatabase.delete(TABLE_SORT, COLUMN_SORT_PATH + " = ?", new String[] {path});
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
@@ -98,7 +98,7 @@ public class SortHandler extends SQLiteOpenHelper {
         contentValues.put(COLUMN_SORT_TYPE, newSort.type);
 
         sqLiteDatabase.update(TABLE_SORT, contentValues, COLUMN_SORT_PATH + " = ?",
-                new String[]{oldSort.path});
+                              new String[] {oldSort.path});
     }
 
     @Nullable
@@ -108,7 +108,7 @@ public class SortHandler extends SQLiteOpenHelper {
         }
 
         String query = "Select * FROM " + TABLE_SORT + " WHERE " + COLUMN_SORT_PATH
-                + "= \"" + path + "\"";
+                       + "= \"" + path + "\"";
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         Sort sort;

@@ -82,11 +82,11 @@ public class RarExtractor extends Extractor {
     }
 
     private void extractEntry(@NonNull final Context context, Archive zipFile, FileHeader entry, String outputDir)
-            throws RarException, IOException {
+    throws RarException, IOException {
         String name = fixEntryName(entry.getFileNameString()).replaceAll("\\\\", CompressedHelper.SEPARATOR);
         File outputFile = new File(outputDir, name);
 
-        if (!outputFile.getCanonicalPath().startsWith(outputDir)){
+        if (!outputFile.getCanonicalPath().startsWith(outputDir)) {
             throw new IOException("Incorrect RAR FileHeader path!");
         }
 
@@ -100,9 +100,9 @@ public class RarExtractor extends Extractor {
         }
         //	Log.i("Amaze", "Extracting: " + entry);
         BufferedInputStream inputStream = new BufferedInputStream(
-                zipFile.getInputStream(entry));
+            zipFile.getInputStream(entry));
         BufferedOutputStream outputStream = new BufferedOutputStream(
-                FileUtil.getOutputStream(outputFile, context));
+            FileUtil.getOutputStream(outputFile, context));
         try {
             int len;
             byte buf[] = new byte[GenericCopyUtil.DEFAULT_BUFFER_SIZE];

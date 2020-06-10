@@ -99,7 +99,7 @@ public class SmbConnectDialog extends DialogFragment {
         emptyName = getString(R.string.cantbeempty,getString(R.string.connectionname) );
         invalidDomain = getString(R.string.invalid,getString(R.string.domain));
         invalidUsername = getString(R.string.invalid,getString(R.string.username).toLowerCase());
-        if(getActivity() instanceof SmbConnectionListener){
+        if(getActivity() instanceof SmbConnectionListener) {
             smbConnectionListener=(SmbConnectionListener)getActivity();
         }
         final SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(context);
@@ -224,11 +224,11 @@ public class SmbConnectDialog extends DialogFragment {
             String sDomain = domain.getText().toString();
             String username = user.getText().toString();
             TextInputLayout firstInvalidField  = null;
-            if(con_nam==null || con_nam.length()==0){
+            if(con_nam==null || con_nam.length()==0) {
                 connectionTIL.setError(emptyName);
                 firstInvalidField = connectionTIL;
             }
-            if(ipa==null || ipa.length()==0){
+            if(ipa==null || ipa.length()==0) {
                 ipTIL.setError(emptyAddress);
                 if(firstInvalidField == null)
                     firstInvalidField = ipTIL;
@@ -258,15 +258,16 @@ public class SmbConnectDialog extends DialogFragment {
                 String useraw = user.getText().toString();
                 String useru = useraw.replaceAll(" ", "\\ ");
                 String passp = pass.getText().toString();
-                smbFile = createSMBPath(new String[]{ipa, useru, passp,domaind}, false);
+                smbFile = createSMBPath(new String[] {ipa, useru, passp,domaind}, false);
             }
 
             if (smbFile == null)
                 return;
 
             try {
-                s = new String[]{conName.getText().toString(), SmbUtil.getSmbEncryptedPath(getActivity(),
-                            smbFile.getPath())};
+                s = new String[] {conName.getText().toString(), SmbUtil.getSmbEncryptedPath(getActivity(),
+                                  smbFile.getPath())
+                                 };
             } catch (GeneralSecurityException | IOException e) {
                 e.printStackTrace();
                 Toast.makeText(getActivity(), getString(R.string.error), Toast.LENGTH_LONG).show();
@@ -280,7 +281,7 @@ public class SmbConnectDialog extends DialogFragment {
             dismiss();
         });
         ba3.onNegative((dialog, which) -> {
-            if(smbConnectionListener!=null){
+            if(smbConnectionListener!=null) {
                 smbConnectionListener.deleteConnection(name, path);
             }
 
@@ -296,8 +297,8 @@ public class SmbConnectDialog extends DialogFragment {
             String yourPeerIP = auth[0], domain = auth[3];
 
             String path = "smb://"+(android.text.TextUtils.isEmpty(domain) ? ""
-                    :( URLEncoder.encode(domain + ";","UTF-8")) )+ (anonym ? "" :
-                    (URLEncoder.encode(auth[1], "UTF-8") + ":" + URLEncoder.encode(auth[2], "UTF-8") + "@")) + yourPeerIP + "/";
+                                    :( URLEncoder.encode(domain + ";","UTF-8")) )+ (anonym ? "" :
+                                            (URLEncoder.encode(auth[1], "UTF-8") + ":" + URLEncoder.encode(auth[2], "UTF-8") + "@")) + yourPeerIP + "/";
             SmbFile smbFile = new SmbFile(path);
             return smbFile;
         } catch (MalformedURLException e) {
@@ -312,13 +313,13 @@ public class SmbConnectDialog extends DialogFragment {
         int[][] states = new int[3][];
         int[] colors = new int[3];
         int i = 0;
-        states[i] = new int[]{-android.R.attr.state_enabled};
+        states[i] = new int[] {-android.R.attr.state_enabled};
         colors[i] = Color.parseColor("#f6f6f6");
         i++;
-        states[i] = new int[]{-android.R.attr.state_pressed, -android.R.attr.state_focused};
+        states[i] = new int[] {-android.R.attr.state_pressed, -android.R.attr.state_focused};
         colors[i] = Color.parseColor("#666666");
         i++;
-        states[i] = new int[]{};
+        states[i] = new int[] {};
         colors[i] = color;
         return new ColorStateList(states, colors);
     }

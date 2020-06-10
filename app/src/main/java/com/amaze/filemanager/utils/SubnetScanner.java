@@ -83,7 +83,7 @@ public class SubnetScanner extends Thread {
 
     public void run() {
         int ipAddress = ((WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE))
-                .getConnectionInfo().getIpAddress();
+                        .getConnectionInfo().getIpAddress();
         if (ipAddress != 0) {
             tryWithBroadcast();
             String formatIpAddress = Formatter.formatIpAddress(ipAddress);
@@ -190,7 +190,7 @@ public class SubnetScanner extends Thread {
         try {
             this.pool.shutdownNow();
         } catch (Throwable th) {
-            
+
         }
     }
 

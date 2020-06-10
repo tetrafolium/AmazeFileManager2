@@ -77,8 +77,8 @@ public class FastScroller extends FrameLayout {
 
     private void setHandlePosition1(float relativePos) {
         handle.setY(Utils.clamp(
-                0, getHeightMinusPadding() - handle.getHeight(), relativePos * (getHeightMinusPadding() - handle.getHeight()))
-        );
+                        0, getHeightMinusPadding() - handle.getHeight(), relativePos * (getHeightMinusPadding() - handle.getHeight()))
+                   );
 
     }
 
@@ -90,7 +90,7 @@ public class FastScroller extends FrameLayout {
     }
 
     int resolveColor(@NonNull Context context, @AttrRes int i) {
-        TypedArray obtainStyledAttributes = context.obtainStyledAttributes(new int[]{i});
+        TypedArray obtainStyledAttributes = context.obtainStyledAttributes(new int[] {i});
         int color = obtainStyledAttributes.getColor(0, 0);
         obtainStyledAttributes.recycle();
         return color;
@@ -123,7 +123,7 @@ public class FastScroller extends FrameLayout {
     private void invalidateVisibility() {
         if (recyclerView.getAdapter() == null || recyclerView.getAdapter().getItemCount() == 0 || recyclerView.getChildAt(0) == null ||
                 isRecyclerViewScrollable()
-                ) {
+           ) {
             setVisibility(INVISIBLE);
         } else {
             setVisibility(VISIBLE);

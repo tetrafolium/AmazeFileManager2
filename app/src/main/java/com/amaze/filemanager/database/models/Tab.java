@@ -38,7 +38,7 @@ public class Tab {
         this.home = home;
     }
 
-    public String getOriginalPath(boolean savePaths, SharedPreferences sharedPreferences){
+    public String getOriginalPath(boolean savePaths, SharedPreferences sharedPreferences) {
         if(savePaths && FileUtils.isPathAccessible(path, sharedPreferences)) {
             return path;
         } else {

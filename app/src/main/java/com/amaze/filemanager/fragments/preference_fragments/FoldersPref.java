@@ -77,14 +77,14 @@ public class FoldersPref extends PreferenceFragment implements Preference.OnPref
         if (preference instanceof PathSwitchPreference) {
             PathSwitchPreference p = (PathSwitchPreference) preference;
             switch (p.getLastItemClicked()) {
-                case PathSwitchPreference.EDIT:
-                    loadEditDialog((PathSwitchPreference) preference);
-                    break;
-                case PathSwitchPreference.DELETE:
-                    loadDeleteDialog((PathSwitchPreference) preference);
-                    break;
-                default:
-                    break;
+            case PathSwitchPreference.EDIT:
+                loadEditDialog((PathSwitchPreference) preference);
+                break;
+            case PathSwitchPreference.DELETE:
+                loadDeleteDialog((PathSwitchPreference) preference);
+                break;
+            default:
+                break;
             }
         } else if(preference.getKey().equals(PreferencesConstants.PREFERENCE_SHORTCUT)) {
             if(getPreferenceScreen().getPreferenceCount() >= findPreference(PreferencesConstants.PREFERENCE_SHORTCUT).getOrder())
@@ -105,17 +105,17 @@ public class FoldersPref extends PreferenceFragment implements Preference.OnPref
         ((TextInputLayout) v.findViewById(R.id.text_input2)).setHint(getString(R.string.directory));
 
         final AppCompatEditText txtShortcutName = v.findViewById(R.id.text1),
-                txtShortcutPath = v.findViewById(R.id.text2);
+                                txtShortcutPath = v.findViewById(R.id.text2);
 
         final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                .title(R.string.create_shortcut)
-                .theme(activity.getAppTheme().getMaterialDialogTheme())
-                .positiveColor(fab_skin)
-                .positiveText(R.string.create)
-                .negativeColor(fab_skin)
-                .negativeText(android.R.string.cancel)
-                .customView(v, false)
-                .build();
+        .title(R.string.create_shortcut)
+        .theme(activity.getAppTheme().getMaterialDialogTheme())
+        .positiveColor(fab_skin)
+        .positiveText(R.string.create)
+        .negativeColor(fab_skin)
+        .negativeText(android.R.string.cancel)
+        .customView(v, false)
+        .build();
 
         dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
 
@@ -123,24 +123,26 @@ public class FoldersPref extends PreferenceFragment implements Preference.OnPref
         disableButtonIfNotPath(txtShortcutPath, dialog);
 
         dialog.getActionButton(DialogAction.POSITIVE)
-                .setOnClickListener(view -> {
-                    PathSwitchPreference p = new PathSwitchPreference(getActivity());
-                    p.setTitle(txtShortcutName.getText());
-                    p.setSummary(txtShortcutPath.getText());
-                    p.setOnPreferenceClickListener(FoldersPref.this);
+        .setOnClickListener(view -> {
+            PathSwitchPreference p = new PathSwitchPreference(getActivity());
+            p.setTitle(txtShortcutName.getText());
+            p.setSummary(txtShortcutPath.getText());
+            p.setOnPreferenceClickListener(FoldersPref.this);
 
-                    position.put(p, dataUtils.getBooks().size());
-                    getPreferenceScreen().addPreference(p);
+            position.put(p, dataUtils.getBooks().size());
+            getPreferenceScreen().addPreference(p);
 
-                    String[] values = new String[] {txtShortcutName.getText().toString(),
-                            txtShortcutPath.getText().toString()};
+            String[] values = new String[] {
+                txtShortcutName.getText().toString(),
+                txtShortcutPath.getText().toString()
+            };
 
-                    dataUtils.addBook(values);
-                    utilsHandler.saveToDatabase(new OperationData(UtilsHandler.Operation.BOOKMARKS,
-                            txtShortcutName.getText().toString(), txtShortcutPath.getText().toString()));
+            dataUtils.addBook(values);
+            utilsHandler.saveToDatabase(new OperationData(UtilsHandler.Operation.BOOKMARKS,
+                                        txtShortcutName.getText().toString(), txtShortcutPath.getText().toString()));
 
-                    dialog.dismiss();
-                });
+            dialog.dismiss();
+        });
 
         dialog.show();
     }
@@ -154,52 +156,54 @@ public class FoldersPref extends PreferenceFragment implements Preference.OnPref
         ((TextInputLayout) v.findViewById(R.id.text_input2)).setHint(getString(R.string.directory));
 
         final EditText editText1 = v.findViewById(R.id.text1),
-                editText2 = v.findViewById(R.id.text2);
+                       editText2 = v.findViewById(R.id.text2);
         editText1.setText(p.getTitle());
         editText2.setText(p.getSummary());
 
         final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                .title(R.string.edit_shortcut)
-                .theme(activity.getAppTheme().getMaterialDialogTheme())
-                .positiveColor(fab_skin)
-                .positiveText(getString(R.string.edit).toUpperCase())// TODO: 29/4/2017 don't use toUpperCase()
-                .negativeColor(fab_skin)
-                .negativeText(android.R.string.cancel)
-                .customView(v, false)
-                .build();
+        .title(R.string.edit_shortcut)
+        .theme(activity.getAppTheme().getMaterialDialogTheme())
+        .positiveColor(fab_skin)
+        .positiveText(getString(R.string.edit).toUpperCase())// TODO: 29/4/2017 don't use toUpperCase()
+        .negativeColor(fab_skin)
+        .negativeText(android.R.string.cancel)
+        .customView(v, false)
+        .build();
 
         dialog.getActionButton(DialogAction.POSITIVE)
-                .setEnabled(FileUtils.isPathAccessible(editText2.getText().toString(), sharedPrefs));
+        .setEnabled(FileUtils.isPathAccessible(editText2.getText().toString(), sharedPrefs));
 
         disableButtonIfTitleEmpty(editText1, dialog);
         disableButtonIfNotPath(editText2, dialog);
 
         dialog.getActionButton(DialogAction.POSITIVE)
-                .setOnClickListener(view -> {
+        .setOnClickListener(view -> {
 
-                    final String oldName = p.getTitle().toString();
-                    final String oldPath = p.getSummary().toString();
+            final String oldName = p.getTitle().toString();
+            final String oldPath = p.getSummary().toString();
 
 
-                    dataUtils.removeBook(position.get(p));
-                    position.remove(p);
-                    getPreferenceScreen().removePreference(p);
+            dataUtils.removeBook(position.get(p));
+            position.remove(p);
+            getPreferenceScreen().removePreference(p);
 
-                    p.setTitle(editText1.getText());
-                    p.setSummary(editText2.getText());
+            p.setTitle(editText1.getText());
+            p.setSummary(editText2.getText());
 
-                    position.put(p, position.size());
-                    getPreferenceScreen().addPreference(p);
+            position.put(p, position.size());
+            getPreferenceScreen().addPreference(p);
 
-                    String[] values = new String[] {editText1.getText().toString(),
-                            editText2.getText().toString()};
+            String[] values = new String[] {
+                editText1.getText().toString(),
+                editText2.getText().toString()
+            };
 
-                    dataUtils.addBook(values);
-                    AppConfig.runInBackground(() -> utilsHandler.renameBookmark(oldName, oldPath,
-                            editText1.getText().toString(),
-                            editText2.getText().toString()));
-                    dialog.dismiss();
-                });
+            dataUtils.addBook(values);
+            AppConfig.runInBackground(() -> utilsHandler.renameBookmark(oldName, oldPath,
+                                      editText1.getText().toString(),
+                                      editText2.getText().toString()));
+            dialog.dismiss();
+        });
 
         dialog.show();
     }
@@ -208,26 +212,26 @@ public class FoldersPref extends PreferenceFragment implements Preference.OnPref
         int fab_skin = activity.getAccent();
 
         final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                .title(R.string.questiondelete_shortcut)
-                .theme(activity.getAppTheme().getMaterialDialogTheme())
-                .positiveColor(fab_skin)
-                .positiveText(getString(R.string.delete).toUpperCase())// TODO: 29/4/2017 don't use toUpperCase(), 20/9,2017 why not?
-                .negativeColor(fab_skin)
-                .negativeText(android.R.string.cancel)
-                .build();
+        .title(R.string.questiondelete_shortcut)
+        .theme(activity.getAppTheme().getMaterialDialogTheme())
+        .positiveColor(fab_skin)
+        .positiveText(getString(R.string.delete).toUpperCase())// TODO: 29/4/2017 don't use toUpperCase(), 20/9,2017 why not?
+        .negativeColor(fab_skin)
+        .negativeText(android.R.string.cancel)
+        .build();
 
         dialog.getActionButton(DialogAction.POSITIVE)
-                .setOnClickListener(view -> {
+        .setOnClickListener(view -> {
 
-                    dataUtils.removeBook(position.get(p));
+            dataUtils.removeBook(position.get(p));
 
-                    utilsHandler.removeFromDatabase(new OperationData(UtilsHandler.Operation.BOOKMARKS,
-                            p.getTitle().toString(), p.getSummary().toString()));
+            utilsHandler.removeFromDatabase(new OperationData(UtilsHandler.Operation.BOOKMARKS,
+                                            p.getTitle().toString(), p.getSummary().toString()));
 
-                    getPreferenceScreen().removePreference(p);
-                    position.remove(p);
-                    dialog.dismiss();
-                });
+            getPreferenceScreen().removePreference(p);
+            position.remove(p);
+            dialog.dismiss();
+        });
 
         dialog.show();
     }
@@ -237,7 +241,7 @@ public class FoldersPref extends PreferenceFragment implements Preference.OnPref
             @Override
             public void afterTextChanged(Editable s) {
                 dialog.getActionButton(DialogAction.POSITIVE)
-                        .setEnabled(FileUtils.isPathAccessible(s.toString(), sharedPrefs));
+                .setEnabled(FileUtils.isPathAccessible(s.toString(), sharedPrefs));
             }
         });
     }

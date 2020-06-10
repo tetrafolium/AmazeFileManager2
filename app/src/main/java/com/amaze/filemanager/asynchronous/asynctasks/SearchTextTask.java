@@ -65,7 +65,7 @@ public class SearchTextTask extends AsyncTask<Editable, Void, ArrayList<MapEntry
             if (searchSubString.equalsIgnoreCase(params[0].toString())) {
 
                 nodes.add(new MapEntry(new ImmutableEntry<>(i, i + params[0].length()),
-                        lineNumberReader.getLineNumber()));
+                                       lineNumberReader.getLineNumber()));
             }
 
             // comparing and incrementing line number
@@ -88,12 +88,12 @@ public class SearchTextTask extends AsyncTask<Editable, Void, ArrayList<MapEntry
             Map.Entry keyMapEntry = (Map.Entry) mapEntry.getKey();
             if (textEditorActivity.getAppTheme().equals(AppTheme.LIGHT)) {
                 mInput.getText().setSpan(new BackgroundColorSpan(Color.YELLOW),
-                        (Integer) keyMapEntry.getKey(), (Integer) keyMapEntry.getValue(),
-                        Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                                         (Integer) keyMapEntry.getKey(), (Integer) keyMapEntry.getValue(),
+                                         Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             } else {
                 mInput.getText().setSpan(new BackgroundColorSpan(Color.LTGRAY),
-                        (Integer) keyMapEntry.getKey(), (Integer) keyMapEntry.getValue(),
-                        Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                                         (Integer) keyMapEntry.getKey(), (Integer) keyMapEntry.getValue(),
+                                         Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             }
         }
 

@@ -60,38 +60,41 @@ public class WriteFileAbstraction extends AsyncTask<Void, String, Integer> {
             OutputStream outputStream;
 
             switch (fileAbstraction.scheme) {
-                case EditableFileAbstraction.SCHEME_CONTENT:
-                    if(fileAbstraction.uri == null) throw new NullPointerException("Something went really wrong!");
+            case EditableFileAbstraction.SCHEME_CONTENT:
+                if(fileAbstraction.uri == null) throw new NullPointerException("Something went really wrong!");
 
+                try {
+                    outputStream = contentResolver.openOutputStream(fileAbstraction.uri);
+                } catch (RuntimeException e) {
+                    throw new StreamNotFoundException(e);
+                }
+
+                break;
+            case EditableFileAbstraction.SCHEME_FILE:
+                final HybridFileParcelable hybridFileParcelable = fileAbstraction.hybridFileParcelable;
+                if(hybridFileParcelable == null) throw new NullPointerException("Something went really wrong!");
+
+                Context context = this.context.get();
+                if(context == null) {
+                    cancel(true);
+                    return null;
+                }
+                outputStream = FileUtil.getOutputStream(hybridFileParcelable.getFile(), context);
+
+                if (isRootExplorer && outputStream == null) {
+                    // try loading stream associated using root
                     try {
-                        outputStream = contentResolver.openOutputStream(fileAbstraction.uri);
-                    } catch (RuntimeException e) {
-                        throw new StreamNotFoundException(e);
-                    }
-
-                    break;
-                case EditableFileAbstraction.SCHEME_FILE:
-                    final HybridFileParcelable hybridFileParcelable = fileAbstraction.hybridFileParcelable;
-                    if(hybridFileParcelable == null) throw new NullPointerException("Something went really wrong!");
-
-                    Context context = this.context.get();
-                    if(context == null) { cancel(true); return null; }
-                    outputStream = FileUtil.getOutputStream(hybridFileParcelable.getFile(), context);
-
-                    if (isRootExplorer && outputStream == null) {
-                        // try loading stream associated using root
-                        try {
-                            if (cachedFile != null && cachedFile.exists()){
-                                outputStream = new FileOutputStream(cachedFile);
-                            }
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                            outputStream = null;
+                        if (cachedFile != null && cachedFile.exists()) {
+                            outputStream = new FileOutputStream(cachedFile);
                         }
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                        outputStream = null;
                     }
-                    break;
-                default:
-                    throw new IllegalArgumentException("The scheme for '" + fileAbstraction.scheme + "' cannot be processed!");
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("The scheme for '" + fileAbstraction.scheme + "' cannot be processed!");
             }
 
             if(outputStream == null) throw new StreamNotFoundException();

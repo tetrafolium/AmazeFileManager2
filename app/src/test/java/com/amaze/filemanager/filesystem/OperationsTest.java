@@ -161,7 +161,7 @@ public class OperationsTest {
         AtomicBoolean assertFlag = new AtomicBoolean(false);
         Operations.rename(folderHF, folderHF, false, RuntimeEnvironment.application, new AbstractErrorCallback() {
             @Override
-            public void exists(HybridFile file){
+            public void exists(HybridFile file) {
                 assertFlag.set(true);
                 waiter2.countDown();
             }
@@ -204,7 +204,7 @@ public class OperationsTest {
         AtomicBoolean assertFlag = new AtomicBoolean(false);
         Operations.rename(folderHF, folder2HF, false, RuntimeEnvironment.application, new AbstractErrorCallback() {
             @Override
-            public void exists(HybridFile file){
+            public void exists(HybridFile file) {
                 assertFlag.set(true);
                 waiter3.countDown();
             }
@@ -250,7 +250,7 @@ public class OperationsTest {
         AtomicBoolean assertFlag = new AtomicBoolean(false);
         Operations.rename(folder2HF, folder3HF, false, RuntimeEnvironment.application, new AbstractErrorCallback() {
             @Override
-            public void done(HybridFile file, boolean b){
+            public void done(HybridFile file, boolean b) {
                 assertFlag.set(true);
                 waiter3.countDown();
             }

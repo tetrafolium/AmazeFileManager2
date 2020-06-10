@@ -194,7 +194,7 @@ public class DeleteTask extends AsyncTask<ArrayList<HybridFileParcelable>, Strin
     private void delete(final Context context, final String file) {
         final String where = MediaStore.MediaColumns.DATA + "=?";
         final String[] selectionArgs = new String[] {
-                file
+            file
         };
         final ContentResolver contentResolver = context.getContentResolver();
         final Uri filesUri = MediaStore.Files.getContentUri("external");

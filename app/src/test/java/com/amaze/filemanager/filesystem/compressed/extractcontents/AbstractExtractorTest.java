@@ -50,17 +50,17 @@ public abstract class AbstractExtractorTest {
         File extractedArchiveRoot = new File(Environment.getExternalStorageDirectory(), "test-archive");
         if(extractedArchiveRoot.exists()) {
             Files.walk(Paths.get(extractedArchiveRoot.getAbsolutePath()))
-                .map(Path::toFile)
-                .forEach(File::delete);
+            .map(Path::toFile)
+            .forEach(File::delete);
         }
     }
 
     @Test
     public void testFixEntryName() throws Exception {
         Extractor extractor = extractorClass().getConstructor(Context.class, String.class, String.class, Extractor.OnUpdate.class)
-                .newInstance(RuntimeEnvironment.application,
-                        getArchiveFile().getAbsolutePath(),
-                        Environment.getExternalStorageDirectory().getAbsolutePath(), null);
+                              .newInstance(RuntimeEnvironment.application,
+                                           getArchiveFile().getAbsolutePath(),
+                                           Environment.getExternalStorageDirectory().getAbsolutePath(), null);
 
         assertEquals("test.txt", extractor.fixEntryName("test.txt"));
         assertEquals("test.txt", extractor.fixEntryName("/test.txt"));
@@ -88,36 +88,36 @@ public abstract class AbstractExtractorTest {
     protected void doTestExtractFiles() throws Exception {
         CountDownLatch latch = new CountDownLatch(1);
         Extractor extractor = extractorClass().getConstructor(Context.class, String.class, String.class, Extractor.OnUpdate.class)
-                .newInstance(RuntimeEnvironment.application,
-                        getArchiveFile().getAbsolutePath(),
-                        Environment.getExternalStorageDirectory().getAbsolutePath(), new Extractor.OnUpdate() {
+                              .newInstance(RuntimeEnvironment.application,
+                                           getArchiveFile().getAbsolutePath(),
+        Environment.getExternalStorageDirectory().getAbsolutePath(), new Extractor.OnUpdate() {
 
-                            @Override
-                            public void onStart(long totalBytes, String firstEntryName) {
+            @Override
+            public void onStart(long totalBytes, String firstEntryName) {
 
-                            }
+            }
 
-                            @Override
-                            public void onUpdate(String entryPath) {
+            @Override
+            public void onUpdate(String entryPath) {
 
-                            }
+            }
 
-                            @Override
-                            public void onFinish() {
-                                latch.countDown();
-                                try {
-                                    verifyExtractedArchiveContents();
-                                } catch(IOException e) {
-                                    e.printStackTrace();
-                                    fail("Error verifying extracted archive contents");
-                                }
-                            }
+            @Override
+            public void onFinish() {
+                latch.countDown();
+                try {
+                    verifyExtractedArchiveContents();
+                } catch(IOException e) {
+                    e.printStackTrace();
+                    fail("Error verifying extracted archive contents");
+                }
+            }
 
-                            @Override
-                            public boolean isCancelled() {
-                                return false;
-                            }
-                        });
+            @Override
+            public boolean isCancelled() {
+                return false;
+            }
+        });
         extractor.extractEverything();
         latch.await();
     }

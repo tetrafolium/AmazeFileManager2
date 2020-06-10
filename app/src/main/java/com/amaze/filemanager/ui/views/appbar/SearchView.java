@@ -78,7 +78,7 @@ public class SearchView {
             searchViewEditText.setText("");
             searchItem.getLocationOnScreen(searchCoords);
             animator = ViewAnimationUtils.createCircularReveal(searchViewLayout,
-                    searchCoords[0] + 32, searchCoords[1] - 16, START_RADIUS, endRadius);
+                       searchCoords[0] + 32, searchCoords[1] - 16, START_RADIUS, endRadius);
         } else {
             // TODO:ViewAnimationUtils.createCircularReveal
             animator = ObjectAnimator.ofFloat(searchViewLayout, "alpha", 0f, 1f);
@@ -123,7 +123,7 @@ public class SearchView {
             searchViewEditText.setText("");
             searchItem.getLocationOnScreen(searchCoords);
             animator = ViewAnimationUtils.createCircularReveal(searchViewLayout,
-                    searchCoords[0] + 32, searchCoords[1] - 16, startRadius, END_RADIUS);
+                       searchCoords[0] + 32, searchCoords[1] - 16, startRadius, END_RADIUS);
         } else {
             // TODO: ViewAnimationUtils.createCircularReveal
             animator = ObjectAnimator.ofFloat(searchViewLayout, "alpha", 1f, 0f);

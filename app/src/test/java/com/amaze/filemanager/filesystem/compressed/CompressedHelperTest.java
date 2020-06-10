@@ -55,7 +55,9 @@ public class CompressedHelperTest {
             public void onFinish() { }
 
             @Override
-            public boolean isCancelled() { return false; }
+            public boolean isCancelled() {
+                return false;
+            }
         };
     }
 

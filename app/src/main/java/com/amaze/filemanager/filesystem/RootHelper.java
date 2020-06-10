@@ -72,7 +72,7 @@ public class RootHelper {
      * @param cmd the command
      */
     public static void runShellCommandWithCallback(String cmd, Shell.OnCommandResultListener callback)
-            throws ShellNotRunningException {
+    throws ShellNotRunningException {
         if (MainActivity.shellInteractive == null || !MainActivity.shellInteractive.isRunning())
             throw new ShellNotRunningException();
         MainActivity.shellInteractive.addCommand(cmd, 0, callback);
@@ -220,7 +220,7 @@ public class RootHelper {
      * TODO: Avoid parsing ls
      */
     public static boolean isDirectory(String toTest, boolean root, int count)
-            throws ShellNotRunningException {
+    throws ShellNotRunningException {
         File f = new File(toTest);
         String name = f.getName();
         String p = f.getParent();
@@ -269,7 +269,7 @@ public class RootHelper {
      * @deprecated use getFiles()
      */
     public static ArrayList<HybridFileParcelable> getFilesList(String path, boolean root, boolean showHidden,
-                                                               GetModeCallBack getModeCallBack) {
+            GetModeCallBack getModeCallBack) {
         final ArrayList<HybridFileParcelable> files = new ArrayList<>();
         getFiles(path, root, showHidden, getModeCallBack, files::add);
         return files;

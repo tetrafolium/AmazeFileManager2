@@ -79,10 +79,10 @@ public class Utils {
 
     public static void setTint(Context context, CheckBox box, int color) {
         if (Build.VERSION.SDK_INT >= 21) return;
-        ColorStateList sl = new ColorStateList(new int[][]{
-                new int[]{-android.R.attr.state_checked},
-                new int[]{android.R.attr.state_checked}
-        }, new int[]{getColor(context, R.color.grey), color});
+        ColorStateList sl = new ColorStateList(new int[][] {
+                                                   new int[]{-android.R.attr.state_checked},
+                                                   new int[]{android.R.attr.state_checked}
+                                               }, new int[] {getColor(context, R.color.grey), color});
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             box.setButtonTintList(sl);
@@ -178,7 +178,7 @@ public class Utils {
         }
     }
 
-    public static boolean isDeviceInLandScape(Activity activity){
+    public static boolean isDeviceInLandScape(Activity activity) {
         return activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
@@ -189,7 +189,7 @@ public class Utils {
         // iterate through input and keep sanitizing until it's fully injection proof
         String sanitizedInput;
         String sanitizedInputTemp = input;
-        
+
         while (true) {
             sanitizedInput = sanitizeInputOnce(sanitizedInputTemp);
             if (sanitizedInput.equals(sanitizedInputTemp)) break;
@@ -201,9 +201,9 @@ public class Utils {
 
     private static String sanitizeInputOnce(String input) {
         return input.replaceAll(INPUT_INTENT_BLACKLIST_PIPE, "").
-                replaceAll(INPUT_INTENT_BLACKLIST_AMP, "").
-                replaceAll(INPUT_INTENT_BLACKLIST_DOTS, "").
-                replaceAll(INPUT_INTENT_BLACKLIST_COLON, "");
+               replaceAll(INPUT_INTENT_BLACKLIST_AMP, "").
+               replaceAll(INPUT_INTENT_BLACKLIST_DOTS, "").
+               replaceAll(INPUT_INTENT_BLACKLIST_COLON, "");
     }
 
     /**
@@ -211,27 +211,27 @@ public class Utils {
      */
     public static Uri getUriForBaseFile(Context context, HybridFileParcelable baseFile) {
         switch (baseFile.getMode()) {
-            case FILE:
-            case ROOT:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        case FILE:
+        case ROOT:
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
-                    return GenericFileProvider.getUriForFile(context, GenericFileProvider.PROVIDER_NAME,
-                            new File(baseFile.getPath()));
-                } else {
-                    return Uri.fromFile(new File(baseFile.getPath()));
-                }
-            case OTG:
-                return OTGUtil.getDocumentFile(baseFile.getPath(), context, true).getUri();
-            case SMB:
-            case DROPBOX:
-            case GDRIVE:
-            case ONEDRIVE:
-            case BOX:
-                Toast.makeText(context, context.getString(R.string.smb_launch_error),
-                        Toast.LENGTH_LONG).show();
-                return null;
-            default:
-                return null;
+                return GenericFileProvider.getUriForFile(context, GenericFileProvider.PROVIDER_NAME,
+                        new File(baseFile.getPath()));
+            } else {
+                return Uri.fromFile(new File(baseFile.getPath()));
+            }
+        case OTG:
+            return OTGUtil.getDocumentFile(baseFile.getPath(), context, true).getUri();
+        case SMB:
+        case DROPBOX:
+        case GDRIVE:
+        case ONEDRIVE:
+        case BOX:
+            Toast.makeText(context, context.getString(R.string.smb_launch_error),
+                           Toast.LENGTH_LONG).show();
+            return null;
+        default:
+            return null;
         }
     }
 

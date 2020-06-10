@@ -87,7 +87,7 @@ public class PreferencesActivity extends ThemedActivity {
         invalidateToolbarColor();
         invalidateNavBar();
 
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             selectedItem = savedInstanceState.getInt(KEY_CURRENT_FRAG_OPEN, 0);
         } else if(getIntent().getExtras() != null) {
             selectItem(getIntent().getExtras().getInt(KEY_CURRENT_FRAG_OPEN));
@@ -124,27 +124,27 @@ public class PreferencesActivity extends ThemedActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                if(currentFragment.onOptionsItemSelected(item)) return true;
+        case android.R.id.home:
+            if(currentFragment.onOptionsItemSelected(item)) return true;
 
-                if (selectedItem != START_PREFERENCE && restartActivity) {
-                    restartActivity(this);
-                } else if (selectedItem != START_PREFERENCE) {
-                    selectItem(START_PREFERENCE);
-                } else {
-                    Intent in = new Intent(PreferencesActivity.this, MainActivity.class);
-                    in.setAction(Intent.ACTION_MAIN);
-                    in.setAction(Intent.CATEGORY_LAUNCHER);
+            if (selectedItem != START_PREFERENCE && restartActivity) {
+                restartActivity(this);
+            } else if (selectedItem != START_PREFERENCE) {
+                selectItem(START_PREFERENCE);
+            } else {
+                Intent in = new Intent(PreferencesActivity.this, MainActivity.class);
+                in.setAction(Intent.ACTION_MAIN);
+                in.setAction(Intent.CATEGORY_LAUNCHER);
 
-                    final int enter_anim = android.R.anim.fade_in;
-                    final int exit_anim = android.R.anim.fade_out;
-                    Activity activity = this;
-                    activity.overridePendingTransition(enter_anim, exit_anim);
-                    activity.finish();
-                    activity.overridePendingTransition(enter_anim, exit_anim);
-                    activity.startActivity(in);
-                }
-                return true;
+                final int enter_anim = android.R.anim.fade_in;
+                final int exit_anim = android.R.anim.fade_out;
+                Activity activity = this;
+                activity.overridePendingTransition(enter_anim, exit_anim);
+                activity.finish();
+                activity.overridePendingTransition(enter_anim, exit_anim);
+                activity.startActivity(in);
+            }
+            return true;
         }
         return false;
     }
@@ -193,7 +193,7 @@ public class PreferencesActivity extends ThemedActivity {
 
     public void invalidateToolbarColor() {
         @ColorInt int primaryColor = ColorPreferenceHelper.getPrimary(getCurrentColorPreference(),
-                MainActivity.currentTab);
+                                     MainActivity.currentTab);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(primaryColor));
     }
 
@@ -217,7 +217,7 @@ public class PreferencesActivity extends ThemedActivity {
             window.setStatusBarColor(tabStatusColor);
             if (colourednavigation) {
                 window.setNavigationBarColor(tabStatusColor);
-            } else if(window.getNavigationBarColor() != Color.BLACK){
+            } else if(window.getNavigationBarColor() != Color.BLACK) {
                 window.setNavigationBarColor(Color.BLACK);
             }
         }
@@ -251,21 +251,21 @@ public class PreferencesActivity extends ThemedActivity {
     public void selectItem(int item) {
         selectedItem = item;
         switch (item) {
-            case START_PREFERENCE:
-                loadPrefFragment(new PrefFrag(), R.string.setting);
-                break;
-            case COLORS_PREFERENCE:
-                loadPrefFragment(new ColorPref(), R.string.color_title);
-                break;
-            case FOLDERS_PREFERENCE:
-                loadPrefFragment(new FoldersPref(), R.string.sidebarfolders_title);
-                break;
-            case QUICKACCESS_PREFERENCE:
-                loadPrefFragment(new QuickAccessPref(), R.string.sidebarquickaccess_title);
-                break;
-            case ADVANCEDSEARCH_PREFERENCE:
-                loadPrefFragment(new AdvancedSearchPref(), R.string.advanced_search);
-                break;
+        case START_PREFERENCE:
+            loadPrefFragment(new PrefFrag(), R.string.setting);
+            break;
+        case COLORS_PREFERENCE:
+            loadPrefFragment(new ColorPref(), R.string.color_title);
+            break;
+        case FOLDERS_PREFERENCE:
+            loadPrefFragment(new FoldersPref(), R.string.sidebarfolders_title);
+            break;
+        case QUICKACCESS_PREFERENCE:
+            loadPrefFragment(new QuickAccessPref(), R.string.sidebarquickaccess_title);
+            break;
+        case ADVANCEDSEARCH_PREFERENCE:
+            loadPrefFragment(new AdvancedSearchPref(), R.string.advanced_search);
+            break;
         }
     }
 

@@ -132,34 +132,34 @@ public class PemToKeyPairTask extends AsyncTask<Void, IOException, KeyPair>
         textfield.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
         builder.customView(dialogLayout, false)
-                .autoDismiss(false)
-                .title(R.string.ssh_key_prompt_passphrase)
-                .positiveText(R.string.ok)
-                .onPositive(((dialog, which) -> {
-                    this.passwordFinder = new PasswordFinder() {
-                        @Override
-                        public char[] reqPassword(Resource<?> resource) {
-                            return textfield.getText().toString().toCharArray();
-                        }
+        .autoDismiss(false)
+        .title(R.string.ssh_key_prompt_passphrase)
+        .positiveText(R.string.ok)
+        .onPositive(((dialog, which) -> {
+            this.passwordFinder = new PasswordFinder() {
+                @Override
+                public char[] reqPassword(Resource<?> resource) {
+                    return textfield.getText().toString().toCharArray();
+                }
 
-                        @Override
-                        public boolean shouldRetry(Resource<?> resource) {
-                            return false;
-                        }
-                    };
-                    this.paused = false;
-                    dialog.dismiss();
-                })).negativeText(R.string.cancel)
-                .onNegative(((dialog, which) -> {
-                    dialog.dismiss();
-                    toastOnParseError(result);
-                    cancel(true);
-                }));
+                @Override
+                public boolean shouldRetry(Resource<?> resource) {
+                    return false;
+                }
+            };
+            this.paused = false;
+            dialog.dismiss();
+        })).negativeText(R.string.cancel)
+        .onNegative(((dialog, which) -> {
+            dialog.dismiss();
+            toastOnParseError(result);
+            cancel(true);
+        }));
 
         MaterialDialog dialog = builder.show();
 
         new WarnableTextInputValidator(AppConfig.getInstance().getMainActivityContext(), textfield,
-                wilTextfield, dialog.getActionButton(DialogAction.POSITIVE), (text) -> {
+        wilTextfield, dialog.getActionButton(DialogAction.POSITIVE), (text) -> {
             if (text.length() < 1) {
                 return new WarnableTextInputValidator.ReturnState(WarnableTextInputValidator.ReturnState.STATE_ERROR, R.string.field_empty);
             }
@@ -179,10 +179,10 @@ public class PemToKeyPairTask extends AsyncTask<Void, IOException, KeyPair>
         }
     }
 
-    private void toastOnParseError(IOException result){
+    private void toastOnParseError(IOException result) {
         Toast.makeText(AppConfig.getInstance().getMainActivityContext(),
-                AppConfig.getInstance().getResources().getString(R.string.ssh_pem_key_parse_error,
-                        result.getLocalizedMessage()), Toast.LENGTH_LONG).show();
+                       AppConfig.getInstance().getResources().getString(R.string.ssh_pem_key_parse_error,
+                               result.getLocalizedMessage()), Toast.LENGTH_LONG).show();
     }
 
     private abstract class PemToKeyPairConverter {

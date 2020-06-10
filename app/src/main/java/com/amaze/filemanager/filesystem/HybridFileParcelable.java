@@ -74,7 +74,9 @@ public class HybridFileParcelable extends HybridFile implements Parcelable {
         return isDirectory;
     }
 
-    public boolean isHidden(){ return name.startsWith("."); }
+    public boolean isHidden() {
+        return name.startsWith(".");
+    }
 
     public void setDirectory(boolean directory) {
         isDirectory = directory;
@@ -134,11 +136,11 @@ public class HybridFileParcelable extends HybridFile implements Parcelable {
     @Override
     public String toString() {
         return new StringBuilder("HybridFileParcelable, path=[").append(path).append(']')
-                .append(", name=[").append(name).append(']')
-                .append(", size=[").append(size).append(']')
-                .append(", date=[").append(date).append(']')
-                .append(", permission=[").append(permission).append(']')
-                .toString();
+               .append(", name=[").append(name).append(']')
+               .append(", size=[").append(size).append(']')
+               .append(", date=[").append(date).append(']')
+               .append(", permission=[").append(permission).append(']')
+               .toString();
     }
 
     @Override

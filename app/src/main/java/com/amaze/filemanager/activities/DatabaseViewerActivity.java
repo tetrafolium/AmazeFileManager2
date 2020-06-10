@@ -96,9 +96,9 @@ public class DatabaseViewerActivity extends ThemedActivity {
 
         if (SDK_INT >= 21) {
             ActivityManager.TaskDescription taskDescription = new ActivityManager.TaskDescription
-                    ("Amaze",
-                            ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.ic_launcher)).getBitmap(),
-                            primaryColor);
+            ("Amaze",
+             ((BitmapDrawable) ContextCompat.getDrawable(this, R.mipmap.ic_launcher)).getBitmap(),
+             primaryColor);
             setTaskDescription(taskDescription);
         }
 
@@ -163,7 +163,7 @@ public class DatabaseViewerActivity extends ThemedActivity {
 
                 try {
                     RootUtils.copy(pathFile.getPath(),
-                            new File(file1.getPath(), file.getName()).getPath());
+                                   new File(file1.getPath(), file.getName()).getPath());
                     pathFile = new File(file1.getPath(), file.getName());
                 } catch (ShellNotRunningException e) {
                     e.printStackTrace();
@@ -172,7 +172,7 @@ public class DatabaseViewerActivity extends ThemedActivity {
             }
             try {
                 sqLiteDatabase = SQLiteDatabase.openDatabase(pathFile.getPath(), null,
-                        SQLiteDatabase.OPEN_READONLY);
+                                 SQLiteDatabase.OPEN_READONLY);
 
                 c = sqLiteDatabase.rawQuery(
                         "SELECT name FROM sqlite_master WHERE type='table'", null);

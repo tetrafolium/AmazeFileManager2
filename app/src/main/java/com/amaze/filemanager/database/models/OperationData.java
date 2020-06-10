@@ -74,7 +74,7 @@ public class OperationData {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("OperationData type=[").append(type).append("],path=[")
-                .append(path).append("]");
+        .append(path).append("]");
 
         if(!TextUtils.isEmpty(hostKey))
             sb.append(",hostKey=[").append(hostKey).append(']');

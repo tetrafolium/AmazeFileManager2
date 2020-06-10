@@ -106,8 +106,8 @@ public class ZipService extends AbstractProgressiveService {
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         accentColor = ((AppConfig) getApplication()).getUtilsProvider()
-                .getColorPreference()
-                .getCurrentUserColorPreferences(this, sharedPreferences).accent;
+                      .getColorPreference()
+                      .getCurrentUserColorPreferences(this, sharedPreferences).accent;
 
         Intent notificationIntent = new Intent(this, MainActivity.class);
         notificationIntent.putExtra(MainActivity.KEY_INTENT_PROCESS_VIEWER, true);
@@ -118,20 +118,20 @@ public class ZipService extends AbstractProgressiveService {
 
         Intent stopIntent = new Intent(KEY_COMPRESS_BROADCAST_CANCEL);
         PendingIntent stopPendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
-                1234, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                          1234, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Action action = new NotificationCompat.Action(R.drawable.ic_zip_box_grey,
                 getString(R.string.stop_ftp), stopPendingIntent);
 
         mBuilder = new NotificationCompat.Builder(this, NotificationConstants.CHANNEL_NORMAL_ID)
-                .setSmallIcon(R.drawable.ic_zip_box_grey)
-                .setContentIntent(pendingIntent)
-                .setCustomContentView(customSmallContentViews)
-                .setCustomBigContentView(customBigContentViews)
-                .setCustomHeadsUpContentView(customSmallContentViews)
-                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
-                .addAction(action)
-                .setOngoing(true)
-                .setColor(accentColor);
+        .setSmallIcon(R.drawable.ic_zip_box_grey)
+        .setContentIntent(pendingIntent)
+        .setCustomContentView(customSmallContentViews)
+        .setCustomBigContentView(customBigContentViews)
+        .setCustomHeadsUpContentView(customSmallContentViews)
+        .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+        .addAction(action)
+        .setOngoing(true)
+        .setColor(accentColor);
 
         NotificationConstants.setMetadata(this, mBuilder, NotificationConstants.TYPE_NORMAL);
         startForeground(NotificationConstants.ZIP_ID, mBuilder.build());
@@ -219,7 +219,7 @@ public class ZipService extends AbstractProgressiveService {
             progressHandler.setSourceSize(baseFiles.size());
             progressHandler.setTotalSize(totalBytes);
             progressHandler.setProgressListener((speed) ->
-                publishResults(speed, false, false));
+                                                publishResults(speed, false, false));
 
 
             zipService.addFirstDatapoint(baseFiles.get(0).getName(), baseFiles.size(), totalBytes, false);

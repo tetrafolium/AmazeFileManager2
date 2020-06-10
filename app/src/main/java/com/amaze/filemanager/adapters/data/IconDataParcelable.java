@@ -67,14 +67,14 @@ public class IconDataParcelable implements Parcelable {
     }
 
     public static final Parcelable.Creator<IconDataParcelable> CREATOR =
-            new Parcelable.Creator<IconDataParcelable>() {
-                public IconDataParcelable createFromParcel(Parcel in) {
-                    return new IconDataParcelable(in);
-                }
+    new Parcelable.Creator<IconDataParcelable>() {
+        public IconDataParcelable createFromParcel(Parcel in) {
+            return new IconDataParcelable(in);
+        }
 
-                public IconDataParcelable[] newArray(int size) {
-                    return new IconDataParcelable[size];
-                }
-            };
+        public IconDataParcelable[] newArray(int size) {
+            return new IconDataParcelable[size];
+        }
+    };
 
 }

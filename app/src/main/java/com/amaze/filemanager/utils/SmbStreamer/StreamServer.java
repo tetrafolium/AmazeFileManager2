@@ -140,24 +140,24 @@ public abstract class StreamServer {
      * Some HTTP response status codes
      */
     public static final String
-            HTTP_OK = "200 OK",
-            HTTP_PARTIALCONTENT = "206 Partial Content",
-            HTTP_RANGE_NOT_SATISFIABLE = "416 Requested Range Not Satisfiable",
-            HTTP_REDIRECT = "301 Moved Permanently",
-            HTTP_FORBIDDEN = "403 Forbidden",
-            HTTP_NOTFOUND = "404 Not Found",
-            HTTP_BADREQUEST = "400 Bad Request",
-            HTTP_INTERNALERROR = "500 Internal Server Error",
-            HTTP_NOTIMPLEMENTED = "501 Not Implemented";
+    HTTP_OK = "200 OK",
+    HTTP_PARTIALCONTENT = "206 Partial Content",
+    HTTP_RANGE_NOT_SATISFIABLE = "416 Requested Range Not Satisfiable",
+    HTTP_REDIRECT = "301 Moved Permanently",
+    HTTP_FORBIDDEN = "403 Forbidden",
+    HTTP_NOTFOUND = "404 Not Found",
+    HTTP_BADREQUEST = "400 Bad Request",
+    HTTP_INTERNALERROR = "500 Internal Server Error",
+    HTTP_NOTIMPLEMENTED = "501 Not Implemented";
 
     /**
      * Common mime types for dynamic content
      */
     public static final String
-            MIME_PLAINTEXT = "text/plain",
-            MIME_HTML = "text/html",
-            MIME_DEFAULT_BINARY = "application/octet-stream",
-            MIME_XML = "text/xml";
+    MIME_PLAINTEXT = "text/plain",
+    MIME_HTML = "text/html",
+    MIME_DEFAULT_BINARY = "application/octet-stream",
+    MIME_XML = "text/xml";
 
     // ==================================================
     // Socket & server code
@@ -392,7 +392,7 @@ public abstract class StreamServer {
          * java Properties' key - value pairs
          **/
         private void decodeHeader(BufferedReader in, Properties pre, Properties parms, Properties header)
-                throws InterruptedException {
+        throws InterruptedException {
             try {
                 // Read the request line
                 String inLine = in.readLine();
@@ -441,7 +441,7 @@ public abstract class StreamServer {
          * into java Properties' key - value pairs.
          **/
         private void decodeMultipartData(String boundary, byte[] fbuf, BufferedReader in, Properties parms, Properties files)
-                throws InterruptedException {
+        throws InterruptedException {
             try {
                 int[] bpositions = getBoundaryPositions(fbuf, boundary.getBytes());
                 int boundarycount = 1;
@@ -582,16 +582,16 @@ public abstract class StreamServer {
                 for (int i = 0; i < str.length(); i++) {
                     char c = str.charAt(i);
                     switch (c) {
-                        case '+':
-                            sb.append(' ');
-                            break;
-                        case '%':
-                            sb.append((char) Integer.parseInt(str.substring(i + 1, i + 3), 16));
-                            i += 2;
-                            break;
-                        default:
-                            sb.append(c);
-                            break;
+                    case '+':
+                        sb.append(' ');
+                        break;
+                    case '%':
+                        sb.append((char) Integer.parseInt(str.substring(i + 1, i + 3), 16));
+                        i += 2;
+                        break;
+                    default:
+                        sb.append(c);
+                        break;
                     }
                 }
                 return sb.toString();
@@ -609,7 +609,7 @@ public abstract class StreamServer {
          * you might want to replace the Properties with a Hashtable of Vectors or such.
          */
         private void decodeParms(String parms, Properties p)
-                throws InterruptedException {
+        throws InterruptedException {
             if (parms == null)
                 return;
 
@@ -619,7 +619,7 @@ public abstract class StreamServer {
                 int sep = e.indexOf('=');
                 if (sep >= 0)
                     p.put(decodePercent(e.substring(0, sep)).trim(),
-                            decodePercent(e.substring(sep + 1)));
+                          decodePercent(e.substring(sep + 1)));
             }
         }
 
@@ -708,30 +708,30 @@ public abstract class StreamServer {
      * The distribution licence
      */
     private static final String LICENCE =
-            "Copyright (C) 2001,2005-2011 by Jarno Elonen <elonen@iki.fi>\n"+
-                    "and Copyright (C) 2010 by Konstantinos Togias <info@ktogias.gr>\n"+
-                    "\n"+
-                    "Redistribution and use in source and binary forms, with or without\n"+
-                    "modification, are permitted provided that the following conditions\n"+
-                    "are met:\n"+
-                    "\n"+
-                    "Redistributions of source code must retain the above copyright notice,\n"+
-                    "this list of conditions and the following disclaimer. Redistributions in\n"+
-                    "binary form must reproduce the above copyright notice, this list of\n"+
-                    "conditions and the following disclaimer in the documentation and/or other\n"+
-                    "materials provided with the distribution. The name of the author may not\n"+
-                    "be used to endorse or promote products derived from this software without\n"+
-                    "specific prior written permission. \n"+
-                    " \n"+
-                    "THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR\n"+
-                    "IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES\n"+
-                    "OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.\n"+
-                    "IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,\n"+
-                    "INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT\n"+
-                    "NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\n"+
-                    "DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\n"+
-                    "THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n"+
-                    "(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\n"+
-                    "OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.";
+        "Copyright (C) 2001,2005-2011 by Jarno Elonen <elonen@iki.fi>\n"+
+        "and Copyright (C) 2010 by Konstantinos Togias <info@ktogias.gr>\n"+
+        "\n"+
+        "Redistribution and use in source and binary forms, with or without\n"+
+        "modification, are permitted provided that the following conditions\n"+
+        "are met:\n"+
+        "\n"+
+        "Redistributions of source code must retain the above copyright notice,\n"+
+        "this list of conditions and the following disclaimer. Redistributions in\n"+
+        "binary form must reproduce the above copyright notice, this list of\n"+
+        "conditions and the following disclaimer in the documentation and/or other\n"+
+        "materials provided with the distribution. The name of the author may not\n"+
+        "be used to endorse or promote products derived from this software without\n"+
+        "specific prior written permission. \n"+
+        " \n"+
+        "THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR\n"+
+        "IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES\n"+
+        "OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.\n"+
+        "IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,\n"+
+        "INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT\n"+
+        "NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\n"+
+        "DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\n"+
+        "THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n"+
+        "(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\n"+
+        "OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.";
 }
 

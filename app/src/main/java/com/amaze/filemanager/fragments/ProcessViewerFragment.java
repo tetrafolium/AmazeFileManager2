@@ -72,7 +72,7 @@ public class ProcessViewerFragment extends Fragment {
      * to process
      */
     private static final int SERVICE_COPY = 0, SERVICE_EXTRACT = 1, SERVICE_COMPRESS = 2,
-            SERVICE_ENCRYPT = 3, SERVICE_DECRYPT = 4;
+                             SERVICE_ENCRYPT = 3, SERVICE_DECRYPT = 4;
 
     private boolean isInitialized = false;
     private MainActivity mainActivity;
@@ -147,7 +147,7 @@ public class ProcessViewerFragment extends Fragment {
         accentColor = mainActivity.getAccent();
 
         mainActivity.updateViews(new ColorDrawable(MainActivity.currentTab==1 ?
-                skinTwoColor : skin_color));
+                                 skinTwoColor : skin_color));
     }
 
     @Override
@@ -198,32 +198,32 @@ public class ProcessViewerFragment extends Fragment {
             }
 
             addEntry(FileUtils.readableFileSizeFloat(doneBytes),
-                    FileUtils.readableFileSizeFloat(dataPackage.speedRaw));
+                     FileUtils.readableFileSizeFloat(dataPackage.speedRaw));
 
             mProgressFileNameText.setText(name);
 
             Spanned bytesText = Html.fromHtml(getResources().getString(R.string.written)
-                    + " <font color='" + accentColor + "'><i>" + Formatter.formatFileSize(getContext(), doneBytes)
-                    + " </font></i>" + getResources().getString(R.string.out_of) + " <i>"
-                    + Formatter.formatFileSize(getContext(), total) + "</i>");
+                                              + " <font color='" + accentColor + "'><i>" + Formatter.formatFileSize(getContext(), doneBytes)
+                                              + " </font></i>" + getResources().getString(R.string.out_of) + " <i>"
+                                              + Formatter.formatFileSize(getContext(), total) + "</i>");
             mProgressBytesText.setText(bytesText);
 
             Spanned fileProcessedSpan = Html.fromHtml(getResources().getString(R.string.processing_file)
-                    + " <font color='" + accentColor + "'><i>" + (dataPackage.sourceProgress)
-                    + " </font></i>" + getResources().getString(R.string.of) + " <i>"
-                    + dataPackage.sourceFiles + "</i>");
+                                        + " <font color='" + accentColor + "'><i>" + (dataPackage.sourceProgress)
+                                        + " </font></i>" + getResources().getString(R.string.of) + " <i>"
+                                        + dataPackage.sourceFiles + "</i>");
             mProgressFileText.setText(fileProcessedSpan);
 
             Spanned speedSpan = Html.fromHtml(getResources().getString(R.string.current_speed)
-                    + ": <font color='" + accentColor + "'><i>"
-                    + Formatter.formatFileSize(getContext(), dataPackage.speedRaw)
-                    + "/s</font></i>");
+                                              + ": <font color='" + accentColor + "'><i>"
+                                              + Formatter.formatFileSize(getContext(), dataPackage.speedRaw)
+                                              + "/s</font></i>");
             mProgressSpeedText.setText(speedSpan);
 
             Spanned timerSpan = Html.fromHtml(getResources().getString(R.string.service_timer)
-                    + ": <font color='" + accentColor + "'><i>"
-                    + Utils.formatTimer(++looseTimeInSeconds)
-                    + "</font></i>");
+                                              + ": <font color='" + accentColor + "'><i>"
+                                              + Utils.formatTimer(++looseTimeInSeconds)
+                                              + "</font></i>");
 
             mProgressTimer.setText(timerSpan);
 
@@ -236,67 +236,67 @@ public class ProcessViewerFragment extends Fragment {
      */
     private void setupDrawables(int serviceType, boolean isMove) {
         switch (serviceType) {
-            case SERVICE_COPY:
-                if (mainActivity.getAppTheme().equals(AppTheme.DARK) || mainActivity.getAppTheme().equals(AppTheme.BLACK)) {
+        case SERVICE_COPY:
+            if (mainActivity.getAppTheme().equals(AppTheme.DARK) || mainActivity.getAppTheme().equals(AppTheme.BLACK)) {
 
-                    mProgressImage.setImageDrawable(getResources()
-                            .getDrawable(R.drawable.ic_content_copy_white_36dp));
-                } else {
-                    mProgressImage.setImageDrawable(getResources()
-                            .getDrawable(R.drawable.ic_content_copy_grey600_36dp));
-                }
-                mProgressTypeText.setText(isMove ? getResources().getString(R.string.moving)
-                        : getResources().getString(R.string.copying));
-                cancelBroadcast(new Intent(CopyService.TAG_BROADCAST_COPY_CANCEL));
-                break;
-            case SERVICE_EXTRACT:
-                if (mainActivity.getAppTheme().equals(AppTheme.DARK) || mainActivity.getAppTheme().equals(AppTheme.BLACK)) {
+                mProgressImage.setImageDrawable(getResources()
+                                                .getDrawable(R.drawable.ic_content_copy_white_36dp));
+            } else {
+                mProgressImage.setImageDrawable(getResources()
+                                                .getDrawable(R.drawable.ic_content_copy_grey600_36dp));
+            }
+            mProgressTypeText.setText(isMove ? getResources().getString(R.string.moving)
+                                      : getResources().getString(R.string.copying));
+            cancelBroadcast(new Intent(CopyService.TAG_BROADCAST_COPY_CANCEL));
+            break;
+        case SERVICE_EXTRACT:
+            if (mainActivity.getAppTheme().equals(AppTheme.DARK) || mainActivity.getAppTheme().equals(AppTheme.BLACK)) {
 
-                    mProgressImage.setImageDrawable(getResources()
-                            .getDrawable(R.drawable.ic_zip_box_white));
-                } else {
-                    mProgressImage.setImageDrawable(getResources()
-                            .getDrawable(R.drawable.ic_zip_box_grey));
-                }
-                mProgressTypeText.setText(getResources().getString(R.string.extracting));
-                cancelBroadcast(new Intent(ExtractService.TAG_BROADCAST_EXTRACT_CANCEL));
-                break;
-            case SERVICE_COMPRESS:
-                if (mainActivity.getAppTheme().equals(AppTheme.DARK) || mainActivity.getAppTheme().equals(AppTheme.BLACK)) {
+                mProgressImage.setImageDrawable(getResources()
+                                                .getDrawable(R.drawable.ic_zip_box_white));
+            } else {
+                mProgressImage.setImageDrawable(getResources()
+                                                .getDrawable(R.drawable.ic_zip_box_grey));
+            }
+            mProgressTypeText.setText(getResources().getString(R.string.extracting));
+            cancelBroadcast(new Intent(ExtractService.TAG_BROADCAST_EXTRACT_CANCEL));
+            break;
+        case SERVICE_COMPRESS:
+            if (mainActivity.getAppTheme().equals(AppTheme.DARK) || mainActivity.getAppTheme().equals(AppTheme.BLACK)) {
 
-                    mProgressImage.setImageDrawable(getResources()
-                            .getDrawable(R.drawable.ic_zip_box_white));
-                } else {
-                    mProgressImage.setImageDrawable(getResources()
-                            .getDrawable(R.drawable.ic_zip_box_grey));
-                }
-                mProgressTypeText.setText(getResources().getString(R.string.compressing));
-                cancelBroadcast(new Intent(ZipService.KEY_COMPRESS_BROADCAST_CANCEL));
-                break;
-            case SERVICE_ENCRYPT:
-                if (mainActivity.getAppTheme().equals(AppTheme.DARK) || mainActivity.getAppTheme().equals(AppTheme.BLACK)) {
+                mProgressImage.setImageDrawable(getResources()
+                                                .getDrawable(R.drawable.ic_zip_box_white));
+            } else {
+                mProgressImage.setImageDrawable(getResources()
+                                                .getDrawable(R.drawable.ic_zip_box_grey));
+            }
+            mProgressTypeText.setText(getResources().getString(R.string.compressing));
+            cancelBroadcast(new Intent(ZipService.KEY_COMPRESS_BROADCAST_CANCEL));
+            break;
+        case SERVICE_ENCRYPT:
+            if (mainActivity.getAppTheme().equals(AppTheme.DARK) || mainActivity.getAppTheme().equals(AppTheme.BLACK)) {
 
-                    mProgressImage.setImageDrawable(getResources()
-                            .getDrawable(R.drawable.ic_folder_lock_white_36dp));
-                } else {
-                    mProgressImage.setImageDrawable(getResources()
-                            .getDrawable(R.drawable.ic_folder_lock_grey600_36dp));
-                }
-                mProgressTypeText.setText(getResources().getString(R.string.crypt_encrypting));
-                cancelBroadcast(new Intent(EncryptService.TAG_BROADCAST_CRYPT_CANCEL));
-                break;
-            case SERVICE_DECRYPT:
-                if (mainActivity.getAppTheme().equals(AppTheme.DARK) || mainActivity.getAppTheme().equals(AppTheme.BLACK)) {
+                mProgressImage.setImageDrawable(getResources()
+                                                .getDrawable(R.drawable.ic_folder_lock_white_36dp));
+            } else {
+                mProgressImage.setImageDrawable(getResources()
+                                                .getDrawable(R.drawable.ic_folder_lock_grey600_36dp));
+            }
+            mProgressTypeText.setText(getResources().getString(R.string.crypt_encrypting));
+            cancelBroadcast(new Intent(EncryptService.TAG_BROADCAST_CRYPT_CANCEL));
+            break;
+        case SERVICE_DECRYPT:
+            if (mainActivity.getAppTheme().equals(AppTheme.DARK) || mainActivity.getAppTheme().equals(AppTheme.BLACK)) {
 
-                    mProgressImage.setImageDrawable(getResources()
-                            .getDrawable(R.drawable.ic_folder_lock_open_white_36dp));
-                } else {
-                    mProgressImage.setImageDrawable(getResources()
-                            .getDrawable(R.drawable.ic_folder_lock_open_grey600_36dp));
-                }
-                mProgressTypeText.setText(getResources().getString(R.string.crypt_decrypting));
-                cancelBroadcast(new Intent(EncryptService.TAG_BROADCAST_CRYPT_CANCEL));
-                break;
+                mProgressImage.setImageDrawable(getResources()
+                                                .getDrawable(R.drawable.ic_folder_lock_open_white_36dp));
+            } else {
+                mProgressImage.setImageDrawable(getResources()
+                                                .getDrawable(R.drawable.ic_folder_lock_open_grey600_36dp));
+            }
+            mProgressTypeText.setText(getResources().getString(R.string.crypt_decrypting));
+            cancelBroadcast(new Intent(EncryptService.TAG_BROADCAST_CRYPT_CANCEL));
+            break;
         }
     }
 
@@ -307,7 +307,7 @@ public class ProcessViewerFragment extends Fragment {
 
         mCancelButton.setOnClickListener(v -> {
             Toast.makeText(getActivity(),
-                    getResources().getString(R.string.stopping), Toast.LENGTH_LONG).show();
+                           getResources().getString(R.string.stopping), Toast.LENGTH_LONG).show();
             getActivity().sendBroadcast(intent);
             mProgressTypeText.setText(getResources().getString(R.string.cancelled));
             mProgressSpeedText.setText("");
@@ -401,7 +401,7 @@ public class ProcessViewerFragment extends Fragment {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             ObtainableServiceBinder<? extends AbstractProgressiveService> binder =
-                    (ObtainableServiceBinder<? extends AbstractProgressiveService>) service;
+                (ObtainableServiceBinder<? extends AbstractProgressiveService>) service;
             AbstractProgressiveService specificService = binder.getService();
 
             for (int i = 0; i < specificService.getDataPackageSize(); i++) {

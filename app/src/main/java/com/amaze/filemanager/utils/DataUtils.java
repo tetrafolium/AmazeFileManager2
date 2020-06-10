@@ -52,7 +52,7 @@ import java.util.List;
 public class DataUtils {
 
     public static final int DELETE = 0, COPY = 1, MOVE = 2, NEW_FOLDER = 3,
-            RENAME = 4, NEW_FILE = 5, EXTRACT = 6, COMPRESS = 7, SAVE_FILE = 8;
+                            RENAME = 4, NEW_FILE = 5, EXTRACT = 6, COMPRESS = 7, SAVE_FILE = 8;
 
     private ConcurrentRadixTree<VoidValue> hiddenfiles = new ConcurrentRadixTree<>(new DefaultCharArrayNodeFactory());
 
@@ -73,7 +73,7 @@ public class DataUtils {
 
     private DataChangeListener dataChangeListener;
 
-    private DataUtils(){
+    private DataUtils() {
 
     }
 
@@ -122,24 +122,24 @@ public class DataUtils {
         for (CloudStorage storage : accounts) {
 
             switch (serviceType) {
-                case BOX:
-                    if (storage instanceof Box)
-                        return i;
-                    break;
-                case DROPBOX:
-                    if (storage instanceof Dropbox)
-                        return i;
-                    break;
-                case GDRIVE:
-                    if (storage instanceof GoogleDrive)
-                        return i;
-                    break;
-                case ONEDRIVE:
-                    if (storage instanceof OneDrive)
-                        return i;
-                    break;
-                default:
-                    return -1;
+            case BOX:
+                if (storage instanceof Box)
+                    return i;
+                break;
+            case DROPBOX:
+                if (storage instanceof Dropbox)
+                    return i;
+                break;
+            case GDRIVE:
+                if (storage instanceof GoogleDrive)
+                    return i;
+                break;
+            case ONEDRIVE:
+                if (storage instanceof OneDrive)
+                    return i;
+                break;
+            default:
+                return -1;
             }
             i++;
         }
@@ -196,32 +196,32 @@ public class DataUtils {
     public synchronized void removeAccount(OpenMode serviceType) {
         for (CloudStorage storage : accounts) {
             switch (serviceType) {
-                case BOX:
-                    if (storage instanceof Box) {
-                        accounts.remove(storage);
-                        return;
-                    }
-                    break;
-                case DROPBOX:
-                    if (storage instanceof Dropbox) {
-                        accounts.remove(storage);
-                        return;
-                    }
-                    break;
-                case GDRIVE:
-                    if (storage instanceof GoogleDrive) {
-                        accounts.remove(storage);
-                        return;
-                    }
-                    break;
-                case ONEDRIVE:
-                    if (storage instanceof OneDrive) {
-                        accounts.remove(storage);
-                        return;
-                    }
-                    break;
-                default:
+            case BOX:
+                if (storage instanceof Box) {
+                    accounts.remove(storage);
                     return;
+                }
+                break;
+            case DROPBOX:
+                if (storage instanceof Dropbox) {
+                    accounts.remove(storage);
+                    return;
+                }
+                break;
+            case GDRIVE:
+                if (storage instanceof GoogleDrive) {
+                    accounts.remove(storage);
+                    return;
+                }
+                break;
+            case ONEDRIVE:
+                if (storage instanceof OneDrive) {
+                    accounts.remove(storage);
+                    return;
+                }
+                break;
+            default:
+                return;
             }
         }
     }
@@ -331,24 +331,24 @@ public class DataUtils {
     public synchronized CloudStorage getAccount(OpenMode serviceType) {
         for (CloudStorage storage : accounts) {
             switch (serviceType) {
-                case BOX:
-                    if (storage instanceof Box)
-                        return storage;
-                    break;
-                case DROPBOX:
-                    if (storage instanceof Dropbox)
-                        return storage;
-                    break;
-                case GDRIVE:
-                    if (storage instanceof GoogleDrive)
-                        return storage;
-                    break;
-                case ONEDRIVE:
-                    if (storage instanceof OneDrive)
-                        return storage;
-                    break;
-                default:
-                    return null;
+            case BOX:
+                if (storage instanceof Box)
+                    return storage;
+                break;
+            case DROPBOX:
+                if (storage instanceof Dropbox)
+                    return storage;
+                break;
+            case GDRIVE:
+                if (storage instanceof GoogleDrive)
+                    return storage;
+                break;
+            case ONEDRIVE:
+                if (storage instanceof OneDrive)
+                    return storage;
+                break;
+            default:
+                return null;
             }
         }
         return null;

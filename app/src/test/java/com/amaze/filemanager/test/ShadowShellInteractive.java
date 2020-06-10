@@ -26,12 +26,12 @@ import eu.chainfire.libsuperuser.Shell;
 public class ShadowShellInteractive {
 
     @Implementation
-    public boolean isRunning(){
+    public boolean isRunning() {
         return true;
     }
 
     @Implementation
-    public boolean waitForIdle(){
+    public boolean waitForIdle() {
         return true;
     }
 
@@ -46,7 +46,7 @@ public class ShadowShellInteractive {
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), "utf-8"));
         List<String> result = new ArrayList<>();
         String line;
-        while((line = reader.readLine()) != null){
+        while((line = reader.readLine()) != null) {
             result.add(line);
         }
         onCommandResultListener.onCommandResult(exitValue, code, result);

@@ -31,14 +31,14 @@ public class SpecialViewHolder extends RecyclerView.ViewHolder {
         txtTitle = view.findViewById(R.id.text);
 
         switch (type) {
-            case HEADER_FILES:
-                txtTitle.setText(R.string.files);
-                break;
-            case HEADER_FOLDERS:
-                txtTitle.setText(R.string.folders);
-                break;
-            default:
-                throw new IllegalStateException(": " + type);
+        case HEADER_FILES:
+            txtTitle.setText(R.string.files);
+            break;
+        case HEADER_FOLDERS:
+            txtTitle.setText(R.string.folders);
+            break;
+        default:
+            throw new IllegalStateException(": " + type);
         }
 
         //if(utilsProvider.getAppTheme().equals(AppTheme.DARK))

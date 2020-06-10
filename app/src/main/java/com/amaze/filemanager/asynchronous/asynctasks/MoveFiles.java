@@ -89,72 +89,72 @@ public class MoveFiles extends AsyncTask<ArrayList<String>, String, Boolean> {
         destinationSize = destination.getUsableSpace();
 
         switch (mode) {
-            case SMB:
-                for (int i = 0; i < paths.size(); i++) {
-                    for (HybridFileParcelable f : files.get(i)) {
-                        try {
-                            SmbFile source = new SmbFile(f.getPath());
-                            SmbFile dest = new SmbFile(paths.get(i) + "/" + f.getName());
-                            source.renameTo(dest);
-                        } catch (MalformedURLException e) {
-                            e.printStackTrace();
-                            return false;
-                        } catch (SmbException e) {
-                            e.printStackTrace();
-                            return false;
-                        }
+        case SMB:
+            for (int i = 0; i < paths.size(); i++) {
+                for (HybridFileParcelable f : files.get(i)) {
+                    try {
+                        SmbFile source = new SmbFile(f.getPath());
+                        SmbFile dest = new SmbFile(paths.get(i) + "/" + f.getName());
+                        source.renameTo(dest);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                        return false;
+                    } catch (SmbException e) {
+                        e.printStackTrace();
+                        return false;
                     }
                 }
-                break;
-            case FILE:
-                for (int i = 0; i < paths.size(); i++) {
-                    for (HybridFileParcelable f : files.get(i)) {
-                        File dest = new File(paths.get(i) + "/" + f.getName());
-                        File source = new File(f.getPath());
-                        if (!source.renameTo(dest)) {
+            }
+            break;
+        case FILE:
+            for (int i = 0; i < paths.size(); i++) {
+                for (HybridFileParcelable f : files.get(i)) {
+                    File dest = new File(paths.get(i) + "/" + f.getName());
+                    File source = new File(f.getPath());
+                    if (!source.renameTo(dest)) {
 
-                            // check if we have root
-                            if (mainFrag.getMainActivity().isRootExplorer()) {
-                                try {
-                                    if (!RootUtils.rename(f.getPath(), paths.get(i) + "/" + f.getName()))
-                                        return false;
-                                } catch (ShellNotRunningException e) {
-                                    e.printStackTrace();
-                                    return false;
-                                }
-                            } else return false;
-                        }
-                    }
-                }
-                break;
-            case DROPBOX:
-            case BOX:
-            case ONEDRIVE:
-            case GDRIVE:
-                for (int i=0; i<paths.size(); i++) {
-                    for (HybridFileParcelable baseFile : files.get(i)) {
-
-                        DataUtils dataUtils = DataUtils.getInstance();
-
-                        CloudStorage cloudStorage = dataUtils.getAccount(mode);
-                        String targetPath = paths.get(i) + "/" + baseFile.getName();
-                        if (baseFile.getMode() == mode) {
-                            // source and target both in same filesystem, use API method
+                        // check if we have root
+                        if (mainFrag.getMainActivity().isRootExplorer()) {
                             try {
-
-                                cloudStorage.move(CloudUtil.stripPath(mode, baseFile.getPath()),
-                                        CloudUtil.stripPath(mode, targetPath));
-                            } catch (Exception e) {
+                                if (!RootUtils.rename(f.getPath(), paths.get(i) + "/" + f.getName()))
+                                    return false;
+                            } catch (ShellNotRunningException e) {
+                                e.printStackTrace();
                                 return false;
                             }
-                        }  else {
-                            // not in same filesystem, execute service
-                            return false;
-                        }
+                        } else return false;
                     }
                 }
-            default:
-                return false;
+            }
+            break;
+        case DROPBOX:
+        case BOX:
+        case ONEDRIVE:
+        case GDRIVE:
+            for (int i=0; i<paths.size(); i++) {
+                for (HybridFileParcelable baseFile : files.get(i)) {
+
+                    DataUtils dataUtils = DataUtils.getInstance();
+
+                    CloudStorage cloudStorage = dataUtils.getAccount(mode);
+                    String targetPath = paths.get(i) + "/" + baseFile.getName();
+                    if (baseFile.getMode() == mode) {
+                        // source and target both in same filesystem, use API method
+                        try {
+
+                            cloudStorage.move(CloudUtil.stripPath(mode, baseFile.getPath()),
+                                              CloudUtil.stripPath(mode, targetPath));
+                        } catch (Exception e) {
+                            return false;
+                        }
+                    }  else {
+                        // not in same filesystem, execute service
+                        return false;
+                    }
+                }
+            }
+        default:
+            return false;
         }
 
         return true;

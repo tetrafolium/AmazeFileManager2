@@ -20,33 +20,33 @@ public class UtilsHandlerTest {
     private UtilsHandler utilsHandler;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         utilsHandler = new UtilsHandler(InstrumentationRegistry.getTargetContext());
         utilsHandler.onCreate(utilsHandler.getWritableDatabase());
         utilsHandler.getWritableDatabase().execSQL("DELETE FROM sftp;");
     }
 
     @Test
-    public void testEncodeEncryptUri1(){
+    public void testEncodeEncryptUri1() {
         performTest("ssh://test:testP@ssw0rd@127.0.0.1:5460");
     }
 
     @Test
-    public void testEncodeEncryptUri2(){
+    public void testEncodeEncryptUri2() {
         performTest("ssh://test:testP@##word@127.0.0.1:22");
     }
 
     @Test
-    public void testEncodeEncryptUri3(){
+    public void testEncodeEncryptUri3() {
         performTest("ssh://test@example.com:testP@ssw0rd@127.0.0.1:22");
     }
 
     @Test
-    public void testEncodeEncryptUri4(){
+    public void testEncodeEncryptUri4() {
         performTest("ssh://test@example.com:testP@ssw0##$@127.0.0.1:22");
     }
 
-    private void performTest(@NonNull final String origPath){
+    private void performTest(@NonNull final String origPath) {
         String encryptedPath = SshClientUtils.encryptSshPathAsNecessary(origPath);
         utilsHandler.addSsh("Test", encryptedPath, "00:11:22:33:44:55:66:77:88:99:aa:bb:cc:dd:ee:ff", null, null);
 

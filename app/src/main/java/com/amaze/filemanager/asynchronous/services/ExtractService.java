@@ -102,8 +102,8 @@ public class ExtractService extends AbstractProgressiveService {
         mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         accentColor = ((AppConfig) getApplication()).getUtilsProvider()
-                .getColorPreference()
-                .getCurrentUserColorPreferences(this, sharedPreferences).accent;
+                      .getColorPreference()
+                      .getCurrentUserColorPreferences(this, sharedPreferences).accent;
 
         Intent notificationIntent = new Intent(this, MainActivity.class);
         notificationIntent.setAction(Intent.ACTION_MAIN);
@@ -120,16 +120,16 @@ public class ExtractService extends AbstractProgressiveService {
 
         mBuilder = new NotificationCompat.Builder(context, NotificationConstants.CHANNEL_NORMAL_ID);
         mBuilder.setContentIntent(pendingIntent)
-                .setSmallIcon(R.drawable.ic_zip_box_grey)
-                .setContentIntent(pendingIntent)
-                .setCustomContentView(customSmallContentViews)
-                .setCustomBigContentView(customBigContentViews)
-                .setCustomHeadsUpContentView(customSmallContentViews)
-                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
-                .addAction(action)
-                .setAutoCancel(true)
-                .setOngoing(true)
-                .setColor(accentColor);
+        .setSmallIcon(R.drawable.ic_zip_box_grey)
+        .setContentIntent(pendingIntent)
+        .setCustomContentView(customSmallContentViews)
+        .setCustomBigContentView(customBigContentViews)
+        .setCustomHeadsUpContentView(customSmallContentViews)
+        .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+        .addAction(action)
+        .setAutoCancel(true)
+        .setOngoing(true)
+        .setColor(accentColor);
 
         NotificationConstants.setMetadata(getApplicationContext(), mBuilder, NotificationConstants.TYPE_NORMAL);
         startForeground(NotificationConstants.EXTRACT_ID, mBuilder.build());
@@ -140,7 +140,7 @@ public class ExtractService extends AbstractProgressiveService {
         progressHandler.setSourceSize(1);
         progressHandler.setTotalSize(totalSize);
         progressHandler.setProgressListener((speed) ->
-            publishResults(speed, false, false));
+                                            publishResults(speed, false, false));
 
         super.onStartCommand(intent, flags, startId);
         super.progressHalted();
@@ -232,7 +232,7 @@ public class ExtractService extends AbstractProgressiveService {
 
         @Override
         protected Boolean doInBackground(Void... p) {
-            while(!isCancelled()){
+            while(!isCancelled()) {
                 if(paused) continue;
 
                 final ExtractService extractService = this.extractService.get();
@@ -257,41 +257,41 @@ public class ExtractService extends AbstractProgressiveService {
 
                 final Extractor extractor =
                     CompressedHelper.getExtractorInstance(extractService.getApplicationContext(),
-                        f, extractionPath, new Extractor.OnUpdate() {
-                            private int sourceFilesProcessed = 0;
+                f, extractionPath, new Extractor.OnUpdate() {
+                    private int sourceFilesProcessed = 0;
 
-                            @Override
-                            public void onStart(long totalBytes, String firstEntryName) {
-                                // setting total bytes calculated from zip entries
-                                progressHandler.setTotalSize(totalBytes);
+                    @Override
+                    public void onStart(long totalBytes, String firstEntryName) {
+                        // setting total bytes calculated from zip entries
+                        progressHandler.setTotalSize(totalBytes);
 
-                                extractService.addFirstDatapoint(firstEntryName,
-                                        1, totalBytes, false);
+                        extractService.addFirstDatapoint(firstEntryName,
+                                                         1, totalBytes, false);
 
-                                watcherUtil = new ServiceWatcherUtil(progressHandler);
-                                watcherUtil.watch(ExtractService.this);
-                            }
+                        watcherUtil = new ServiceWatcherUtil(progressHandler);
+                        watcherUtil.watch(ExtractService.this);
+                    }
 
-                            @Override
-                            public void onUpdate(String entryPath) {
-                                progressHandler.setFileName(entryPath);
-                                if (entriesToExtract != null) {
-                                    progressHandler.setSourceFilesProcessed(sourceFilesProcessed++);
-                                }
-                            }
+                    @Override
+                    public void onUpdate(String entryPath) {
+                        progressHandler.setFileName(entryPath);
+                        if (entriesToExtract != null) {
+                            progressHandler.setSourceFilesProcessed(sourceFilesProcessed++);
+                        }
+                    }
 
-                            @Override
-                            public void onFinish() {
-                                if (entriesToExtract == null) {
-                                    progressHandler.setSourceFilesProcessed(1);
-                                }
-                            }
+                    @Override
+                    public void onFinish() {
+                        if (entriesToExtract == null) {
+                            progressHandler.setSourceFilesProcessed(1);
+                        }
+                    }
 
-                            @Override
-                            public boolean isCancelled() {
-                                return progressHandler.getCancelled();
-                            }
-                        });
+                    @Override
+                    public boolean isCancelled() {
+                        return progressHandler.getCancelled();
+                    }
+                });
 
                 try {
                     if (entriesToExtract != null) {
@@ -329,23 +329,23 @@ public class ExtractService extends AbstractProgressiveService {
             IOException result = values[0];
             ArchivePasswordCache.getInstance().remove(compressedPath);
             GeneralDialogCreation.showPasswordDialog(AppConfig.getInstance().getMainActivityContext(),
-                (MainActivity)AppConfig.getInstance().getMainActivityContext(),
-                AppConfig.getInstance().getUtilsProvider().getAppTheme(),
-                R.string.archive_password_prompt, R.string.authenticate_password,
-                (dialog, which) -> {
-                    EditText editText = dialog.getView().findViewById(R.id.singleedittext_input);
-                    ArchivePasswordCache.getInstance().put(compressedPath, editText.getText().toString());
-                    this.extractService.get().getDataPackages().clear();
-                    this.paused = false;
-                    dialog.dismiss();
-                }, ((dialog, which) -> {
-                    dialog.dismiss();
-                    toastOnParseError(result);
-                    cancel(true); //This cancels the AsyncTask...
-                    progressHandler.setCancelled(true);
-                    stopSelf(); //and this stops the ExtractService altogether.
-                    this.paused = false;
-                }));
+                    (MainActivity)AppConfig.getInstance().getMainActivityContext(),
+                    AppConfig.getInstance().getUtilsProvider().getAppTheme(),
+                    R.string.archive_password_prompt, R.string.authenticate_password,
+            (dialog, which) -> {
+                EditText editText = dialog.getView().findViewById(R.id.singleedittext_input);
+                ArchivePasswordCache.getInstance().put(compressedPath, editText.getText().toString());
+                this.extractService.get().getDataPackages().clear();
+                this.paused = false;
+                dialog.dismiss();
+            }, ((dialog, which) -> {
+                dialog.dismiss();
+                toastOnParseError(result);
+                cancel(true); //This cancels the AsyncTask...
+                progressHandler.setCancelled(true);
+                stopSelf(); //and this stops the ExtractService altogether.
+                this.paused = false;
+            }));
         }
 
         @Override
@@ -365,10 +365,10 @@ public class ExtractService extends AbstractProgressiveService {
                 AppConfig.toast(extractService, getString(R.string.multiple_invalid_archive_entries));
         }
 
-        private void toastOnParseError(IOException result){
+        private void toastOnParseError(IOException result) {
             Toast.makeText(AppConfig.getInstance().getMainActivityContext(),
-                AppConfig.getInstance().getResources().getString(R.string.cannot_extract_archive,
-                    compressedPath, result.getLocalizedMessage()), Toast.LENGTH_LONG).show();
+                           AppConfig.getInstance().getResources().getString(R.string.cannot_extract_archive,
+                                   compressedPath, result.getLocalizedMessage()), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -379,7 +379,7 @@ public class ExtractService extends AbstractProgressiveService {
     private BroadcastReceiver receiver1 = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-        progressHandler.setCancelled(true);
+            progressHandler.setCancelled(true);
         }
     };
 

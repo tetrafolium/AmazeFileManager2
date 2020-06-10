@@ -62,7 +62,7 @@ public class RenameBookmark extends DialogFragment {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
 
         studiomode = sp.getInt("studio", 0);
-        if (dataUtils.containsBooks(new String[]{title, path}) != -1) {
+        if (dataUtils.containsBooks(new String[] {title, path}) != -1) {
             final MaterialDialog materialDialog;
             String pa = path;
             MaterialDialog.Builder builder = new MaterialDialog.Builder(c);
@@ -140,7 +140,7 @@ public class RenameBookmark extends DialogFragment {
                 if ((i = dataUtils.containsBooks(new String[]{title, path})) != -1) {
                     if (!t.equals(title) && t.length() >= 1) {
                         dataUtils.removeBook(i);
-                        dataUtils.addBook(new String[]{name, t});
+                        dataUtils.addBook(new String[] {name, t});
                         dataUtils.sortBook();
                         if (bookmarkCallback != null) {
                             bookmarkCallback.modify(path, title, t, name);

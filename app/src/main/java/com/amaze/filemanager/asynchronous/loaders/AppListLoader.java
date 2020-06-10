@@ -46,8 +46,8 @@ public class AppListLoader extends AsyncTaskLoader<AppListLoader.AppsDataPair> {
     @Override
     public AppsDataPair loadInBackground() {
         List<ApplicationInfo> apps = packageManager.getInstalledApplications(
-                PackageManager.MATCH_UNINSTALLED_PACKAGES |
-                        PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS);
+                                         PackageManager.MATCH_UNINSTALLED_PACKAGES |
+                                         PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS);
 
         if (apps == null)
             return new AppsDataPair(Collections.emptyList(), Collections.emptyList());
@@ -68,11 +68,11 @@ public class AppListLoader extends AsyncTaskLoader<AppListLoader.AppsDataPair> {
             }
 
             AppDataParcelable elem = new AppDataParcelable(
-                    label == null ? object.packageName : label,
-                    object.sourceDir, object.packageName,
-                    object.flags + "_" + (info!=null ? info.versionName:""),
-                    Formatter.formatFileSize(getContext(), sourceDir.length()),
-                    sourceDir.length(), sourceDir.lastModified());
+                label == null ? object.packageName : label,
+                object.sourceDir, object.packageName,
+                object.flags + "_" + (info!=null ? info.versionName:""),
+                Formatter.formatFileSize(getContext(), sourceDir.length()),
+                sourceDir.length(), sourceDir.lastModified());
 
             mApps.first.add(elem);
 

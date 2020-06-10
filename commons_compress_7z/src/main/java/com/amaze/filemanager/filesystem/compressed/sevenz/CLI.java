@@ -67,7 +67,7 @@ public class CLI {
             private final byte[] buf = new byte[8192];
             @Override
             public void takeAction(final SevenZFile archive, final SevenZArchiveEntry entry)
-                throws IOException {
+            throws IOException {
                 final File outFile = new File(entry.getName());
                 if (entry.isDirectory()) {
                     if (!outFile.isDirectory() && !outFile.mkdirs()) {
@@ -110,7 +110,7 @@ public class CLI {
             return message;
         }
         public abstract void takeAction(SevenZFile archive, SevenZArchiveEntry entry)
-            throws IOException;
+        throws IOException;
     }
 
     public static void main(final String[] args) throws Exception {

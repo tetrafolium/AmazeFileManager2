@@ -76,8 +76,8 @@ public class DecryptService extends AbstractProgressiveService {
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         accentColor = ((AppConfig) getApplication()).getUtilsProvider()
-                .getColorPreference()
-                .getCurrentUserColorPreferences(this, sharedPreferences).accent;
+                      .getColorPreference()
+                      .getCurrentUserColorPreferences(this, sharedPreferences).accent;
 
         OpenMode openMode = OpenMode.values()[intent.getIntExtra(TAG_OPEN_MODE, OpenMode.UNKNOWN.ordinal())];
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -97,13 +97,13 @@ public class DecryptService extends AbstractProgressiveService {
 
         notificationBuilder = new NotificationCompat.Builder(this, NotificationConstants.CHANNEL_NORMAL_ID);
         notificationBuilder.setContentIntent(pendingIntent)
-                .setCustomContentView(customSmallContentViews)
-                .setCustomBigContentView(customBigContentViews)
-                .setCustomHeadsUpContentView(customSmallContentViews)
-                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
-                .addAction(action)
-                .setOngoing(true)
-                .setColor(accentColor);
+        .setCustomContentView(customSmallContentViews)
+        .setCustomBigContentView(customBigContentViews)
+        .setCustomHeadsUpContentView(customSmallContentViews)
+        .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+        .addAction(action)
+        .setOngoing(true)
+        .setColor(accentColor);
 
         decryptPath = intent.getStringExtra(TAG_DECRYPT_PATH);
         notificationBuilder.setSmallIcon(R.drawable.ic_folder_lock_open_white_36dp);
@@ -125,8 +125,8 @@ public class DecryptService extends AbstractProgressiveService {
         @Override
         protected Void doInBackground(Void... params) {
             String baseFileFolder = baseFile.isDirectory()?
-                    baseFile.getPath():
-                    baseFile.getPath().substring(0, baseFile.getPath().lastIndexOf('/'));
+                                    baseFile.getPath():
+                                    baseFile.getPath().substring(0, baseFile.getPath().lastIndexOf('/'));
 
             if (baseFile.isDirectory())  totalSize = baseFile.folderSize(context);
             else totalSize = baseFile.length(context);
@@ -134,7 +134,7 @@ public class DecryptService extends AbstractProgressiveService {
             progressHandler.setSourceSize(1);
             progressHandler.setTotalSize(totalSize);
             progressHandler.setProgressListener((speed) ->
-                publishResults(speed, false, false));
+                                                publishResults(speed, false, false));
             serviceWatcherUtil = new ServiceWatcherUtil(progressHandler);
 
             addFirstDatapoint(baseFile.getName(), 1, totalSize, false);// we're using encrypt as move flag false

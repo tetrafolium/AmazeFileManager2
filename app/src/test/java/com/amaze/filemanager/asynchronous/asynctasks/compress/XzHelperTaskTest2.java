@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 public class XzHelperTaskTest2 extends AbstractCompressedHelperTaskTest {
 
     @Test @Override
-    public void testRoot(){
+    public void testRoot() {
         CompressedHelperTask task = createTask("");
         AsyncTaskResult<ArrayList<CompressedObjectParcelable>> result = task.doInBackground();
         assertEquals(result.result.size(), 1);
@@ -24,7 +24,7 @@ public class XzHelperTaskTest2 extends AbstractCompressedHelperTaskTest {
     }
 
     @Test @Override
-    public void testSublevels(){
+    public void testSublevels() {
         CompressedHelperTask task = createTask("compress");
         AsyncTaskResult<ArrayList<CompressedObjectParcelable>> result = task.doInBackground();
         assertEquals(result.result.size(), 3);
@@ -47,7 +47,7 @@ public class XzHelperTaskTest2 extends AbstractCompressedHelperTaskTest {
     @Override
     protected CompressedHelperTask createTask(String relativePath) {
         return new XzHelperTask(new File(Environment.getExternalStorageDirectory(),
-                "compress.tar.xz").getAbsolutePath(),
-                relativePath, false, (data) -> {});
+                                         "compress.tar.xz").getAbsolutePath(),
+                                relativePath, false, (data) -> {});
     }
 }

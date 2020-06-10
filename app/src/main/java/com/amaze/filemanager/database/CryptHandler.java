@@ -38,9 +38,9 @@ public class CryptHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String CREATE_TABLE_ENCRYPTED = "CREATE TABLE " + TABLE_ENCRYPTED + "("
-                + COLUMN_ENCRYPTED_ID
-                + " INTEGER PRIMARY KEY,"
-                + COLUMN_ENCRYPTED_PATH + " TEXT," + COLUMN_ENCRYPTED_PASSWORD + " TEXT" + ")";
+                                        + COLUMN_ENCRYPTED_ID
+                                        + " INTEGER PRIMARY KEY,"
+                                        + COLUMN_ENCRYPTED_PATH + " TEXT," + COLUMN_ENCRYPTED_PASSWORD + " TEXT" + ")";
 
         db.execSQL(CREATE_TABLE_ENCRYPTED);
     }
@@ -58,7 +58,7 @@ public class CryptHandler extends SQLiteOpenHelper {
         //contentValues.put(COLUMN_ENCRYPTED_ID, encryptedEntry.getId());
         contentValues.put(COLUMN_ENCRYPTED_PATH, encryptedEntry.getPath());
         contentValues.put(COLUMN_ENCRYPTED_PASSWORD, CryptUtil.encryptPassword(context,
-                encryptedEntry.getPassword()));
+                          encryptedEntry.getPassword()));
 
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         sqLiteDatabase.insert(TABLE_ENCRYPTED, null, contentValues);
@@ -67,7 +67,7 @@ public class CryptHandler extends SQLiteOpenHelper {
     public void clear(String path) {
         try {
             SQLiteDatabase sqLiteDatabase = getWritableDatabase();
-            sqLiteDatabase.delete(TABLE_ENCRYPTED, COLUMN_ENCRYPTED_PATH + " = ?", new String[]{path});
+            sqLiteDatabase.delete(TABLE_ENCRYPTED, COLUMN_ENCRYPTED_PATH + " = ?", new String[] {path});
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
@@ -79,15 +79,15 @@ public class CryptHandler extends SQLiteOpenHelper {
         contentValues.put(COLUMN_ENCRYPTED_ID, newEncryptedEntry.getId());
         contentValues.put(COLUMN_ENCRYPTED_PATH, newEncryptedEntry.getPath());
         contentValues.put(COLUMN_ENCRYPTED_PASSWORD, CryptUtil.encryptPassword(context,
-                newEncryptedEntry.getPassword()));
+                          newEncryptedEntry.getPassword()));
 
         sqLiteDatabase.update(TABLE_ENCRYPTED, contentValues, COLUMN_ENCRYPTED_ID + " = ?",
-                new String[]{oldEncryptedEntry.getId() + ""});
+                              new String[] {oldEncryptedEntry.getId() + ""});
     }
 
     public EncryptedEntry findEntry(String path) throws GeneralSecurityException, IOException {
         String query = "Select * FROM " + TABLE_ENCRYPTED + " WHERE " + COLUMN_ENCRYPTED_PATH
-                + "= \"" + path + "\"";
+                       + "= \"" + path + "\"";
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         EncryptedEntry encryptedEntry = new EncryptedEntry();
@@ -118,7 +118,7 @@ public class CryptHandler extends SQLiteOpenHelper {
                 encryptedEntry.setId((cursor.getInt(0)));
                 encryptedEntry.setPath(cursor.getString(1));
                 encryptedEntry.setPassword(CryptUtil.decryptPassword(context,
-                        cursor.getString(2)));
+                                           cursor.getString(2)));
 
                 entryList.add(encryptedEntry);
 

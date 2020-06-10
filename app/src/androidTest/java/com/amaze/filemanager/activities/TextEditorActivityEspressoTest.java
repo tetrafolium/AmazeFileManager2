@@ -38,13 +38,13 @@ public class TextEditorActivityEspressoTest {
     @Test
     public void testOpenFile() throws Exception {
         Intent intent = new Intent(context, TextEditorActivity.class)
-            .setAction(Intent.ACTION_VIEW)
-            .addCategory(Intent.CATEGORY_DEFAULT)
-            .setType("text/plain")
-            .setData(uri);
+        .setAction(Intent.ACTION_VIEW)
+        .addCategory(Intent.CATEGORY_DEFAULT)
+        .setType("text/plain")
+        .setData(uri);
         activityRule.launchActivity(intent);
         CountDownLatch waiter = new CountDownLatch(1);
-        while("".equals(activityRule.getActivity().mInput.getText().toString())){
+        while("".equals(activityRule.getActivity().mInput.getText().toString())) {
             waiter.await();
         }
         waiter.countDown();

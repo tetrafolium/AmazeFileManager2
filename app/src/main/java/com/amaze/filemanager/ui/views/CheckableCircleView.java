@@ -49,7 +49,7 @@ public class CheckableCircleView extends View {
         if(checked) {
             float checkMargin = min*CHECK_MARGIN_PERCENTUAL;
             check.setBounds((int) checkMargin, (int) checkMargin, (int) (getWidth() - checkMargin),
-                    (int) (getHeight() - checkMargin));
+                            (int) (getHeight() - checkMargin));
             check.draw(canvas);
         }
     }

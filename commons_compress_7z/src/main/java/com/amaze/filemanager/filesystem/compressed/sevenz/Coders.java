@@ -47,7 +47,7 @@ class Coders {
     private static final Map<SevenZMethod, CoderBase> CODER_MAP = new HashMap<SevenZMethod, CoderBase>() {
 
         private static final long serialVersionUID = 1664829131806520867L;
-    {
+        {
             put(SevenZMethod.COPY, new CopyDecoder());
             put(SevenZMethod.LZMA, new LZMADecoder());
             put(SevenZMethod.LZMA2, new LZMA2Decoder());
@@ -62,14 +62,15 @@ class Coders {
             put(SevenZMethod.BCJ_ARM_THUMB_FILTER, new BCJDecoder(new ARMThumbOptions()));
             put(SevenZMethod.BCJ_SPARC_FILTER, new BCJDecoder(new SPARCOptions()));
             put(SevenZMethod.DELTA_FILTER, new DeltaDecoder());
-        }};
+        }
+    };
 
     static CoderBase findByMethod(final SevenZMethod method) {
         return CODER_MAP.get(method);
     }
 
     static InputStream addDecoder(final String archiveName, final InputStream is, final long uncompressedLength,
-            final Coder coder, final byte[] password) throws IOException {
+                                  final Coder coder, final byte[] password) throws IOException {
         final CoderBase cb = findByMethod(SevenZMethod.byId(coder.decompressionMethodId));
         if (cb == null) {
             throw new IOException("Unsupported compression method " +
@@ -91,7 +92,7 @@ class Coders {
     static class CopyDecoder extends CoderBase {
         @Override
         InputStream decode(final String archiveName, final InputStream in, final long uncompressedLength,
-                final Coder coder, final byte[] password) throws IOException {
+                           final Coder coder, final byte[] password) throws IOException {
             return in;
         }
         @Override
@@ -108,7 +109,7 @@ class Coders {
 
         @Override
         InputStream decode(final String archiveName, final InputStream in, final long uncompressedLength,
-                final Coder coder, final byte[] password) throws IOException {
+                           final Coder coder, final byte[] password) throws IOException {
             try {
                 return opts.getInputStream(in);
             } catch (final AssertionError e) {
@@ -135,8 +136,8 @@ class Coders {
         @SuppressWarnings("resource") // caller must close the InputStream
         @Override
         InputStream decode(final String archiveName, final InputStream in, final long uncompressedLength,
-                final Coder coder, final byte[] password)
-            throws IOException {
+                           final Coder coder, final byte[] password)
+        throws IOException {
             final Inflater inflater = new Inflater(true);
             // Inflater with nowrap=true has this odd contract for a zero padding
             // byte following the data stream; this used to be zlib's requirement
@@ -144,7 +145,7 @@ class Coders {
             // we comply.
             // https://docs.oracle.com/javase/7/docs/api/java/util/zip/Inflater.html#Inflater(boolean)
             final InflaterInputStream inflaterInputStream = new InflaterInputStream(new SequenceInputStream(in,
-                new ByteArrayInputStream(ONE_ZERO_BYTE)), inflater);
+                    new ByteArrayInputStream(ONE_ZERO_BYTE)), inflater);
             return new DeflateDecoderInputStream(inflaterInputStream, inflater);
         }
         @Override
@@ -155,13 +156,13 @@ class Coders {
             return new DeflateDecoderOutputStream(deflaterOutputStream, deflater);
         }
 
-         static class DeflateDecoderInputStream extends InputStream {
+        static class DeflateDecoderInputStream extends InputStream {
 
-              InflaterInputStream inflaterInputStream;
-              Inflater inflater;
+            InflaterInputStream inflaterInputStream;
+            Inflater inflater;
 
             public DeflateDecoderInputStream(InflaterInputStream inflaterInputStream,
-                Inflater inflater) {
+                                             Inflater inflater) {
                 this.inflaterInputStream = inflaterInputStream;
                 this.inflater = inflater;
             }
@@ -191,13 +192,13 @@ class Coders {
             }
         }
 
-         static class DeflateDecoderOutputStream extends OutputStream {
+        static class DeflateDecoderOutputStream extends OutputStream {
 
-              DeflaterOutputStream deflaterOutputStream;
-              Deflater deflater;
+            DeflaterOutputStream deflaterOutputStream;
+            Deflater deflater;
 
             public DeflateDecoderOutputStream(DeflaterOutputStream deflaterOutputStream,
-                Deflater deflater) {
+                                              Deflater deflater) {
                 this.deflaterOutputStream = deflaterOutputStream;
                 this.deflater = deflater;
             }
@@ -236,8 +237,8 @@ class Coders {
         @SuppressWarnings("resource") // caller must close the InputStream
         @Override
         InputStream decode(final String archiveName, final InputStream in, final long uncompressedLength,
-                final Coder coder, final byte[] password)
-            throws IOException {
+                           final Coder coder, final byte[] password)
+        throws IOException {
             return new Deflate64CompressorInputStream(in);
         }
     }
@@ -249,13 +250,13 @@ class Coders {
 
         @Override
         InputStream decode(final String archiveName, final InputStream in, final long uncompressedLength,
-                final Coder coder, final byte[] password)
-                throws IOException {
+                           final Coder coder, final byte[] password)
+        throws IOException {
             return new BZip2CompressorInputStream(in);
         }
         @Override
         OutputStream encode(final OutputStream out, final Object options)
-                throws IOException {
+        throws IOException {
             final int blockSize = numberOptionOrDefault(options, BZip2CompressorOutputStream.MAX_BLOCKSIZE);
             return new BZip2CompressorOutputStream(out, blockSize);
         }

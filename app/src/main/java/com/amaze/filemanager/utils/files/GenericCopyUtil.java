@@ -60,7 +60,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 
 /**
- * 
+ *
  * Base class to handle file copy.
  */
 
@@ -112,7 +112,7 @@ public class GenericCopyUtil {
                 // source is in otg
                 ContentResolver contentResolver = mContext.getContentResolver();
                 DocumentFile documentSourceFile = OTGUtil.getDocumentFile(mSourceFile.getPath(),
-                        mContext, false);
+                                                  mContext, false);
 
                 bufferedInputStream = new BufferedInputStream(contentResolver.openInputStream(documentSourceFile.getUri()), DEFAULT_BUFFER_SIZE);
             } else if (mSourceFile.isSmb()) {
@@ -126,25 +126,25 @@ public class GenericCopyUtil {
                 CloudStorage cloudStorageDropbox = dataUtils.getAccount(OpenMode.DROPBOX);
                 bufferedInputStream = new BufferedInputStream(cloudStorageDropbox
                         .download(CloudUtil.stripPath(OpenMode.DROPBOX,
-                                mSourceFile.getPath())));
+                                                      mSourceFile.getPath())));
             } else if (mSourceFile.isBoxFile()) {
 
                 CloudStorage cloudStorageBox = dataUtils.getAccount(OpenMode.BOX);
                 bufferedInputStream = new BufferedInputStream(cloudStorageBox
                         .download(CloudUtil.stripPath(OpenMode.BOX,
-                                mSourceFile.getPath())));
+                                                      mSourceFile.getPath())));
             } else if (mSourceFile.isGoogleDriveFile()) {
 
                 CloudStorage cloudStorageGdrive = dataUtils.getAccount(OpenMode.GDRIVE);
                 bufferedInputStream = new BufferedInputStream(cloudStorageGdrive
                         .download(CloudUtil.stripPath(OpenMode.GDRIVE,
-                                mSourceFile.getPath())));
+                                                      mSourceFile.getPath())));
             } else if (mSourceFile.isOneDriveFile()) {
 
                 CloudStorage cloudStorageOnedrive = dataUtils.getAccount(OpenMode.ONEDRIVE);
                 bufferedInputStream = new BufferedInputStream(cloudStorageOnedrive
                         .download(CloudUtil.stripPath(OpenMode.ONEDRIVE,
-                                mSourceFile.getPath())));
+                                                      mSourceFile.getPath())));
             } else {
 
                 // source file is neither smb nor otg; getting a channel from direct file instead of stream
@@ -166,7 +166,7 @@ public class GenericCopyUtil {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         ContentResolver contentResolver = mContext.getContentResolver();
                         DocumentFile documentSourceFile = FileUtil.getDocumentFile(file,
-                                mSourceFile.isDirectory(), mContext);
+                                                          mSourceFile.isDirectory(), mContext);
 
                         bufferedInputStream = new BufferedInputStream(contentResolver.openInputStream(documentSourceFile.getUri()), DEFAULT_BUFFER_SIZE);
                     } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
@@ -182,7 +182,7 @@ public class GenericCopyUtil {
                 // target in OTG, obtain streams from DocumentFile Uri's
                 ContentResolver contentResolver = mContext.getContentResolver();
                 DocumentFile documentTargetFile = OTGUtil.getDocumentFile(mTargetFile.getPath(),
-                        mContext, true);
+                                                  mContext, true);
 
                 bufferedOutputStream = new BufferedOutputStream(contentResolver.openOutputStream(documentTargetFile.getUri()), DEFAULT_BUFFER_SIZE);
             } else if (mTargetFile.isSftp()) {
@@ -196,11 +196,11 @@ public class GenericCopyUtil {
                 if (mSourceFile.isDropBoxFile()) {
                     // we're in the same provider, use api method
                     cloudStorageDropbox.copy(CloudUtil.stripPath(OpenMode.DROPBOX, mSourceFile.getPath()),
-                            CloudUtil.stripPath(OpenMode.DROPBOX, mTargetFile.getPath()));
+                                             CloudUtil.stripPath(OpenMode.DROPBOX, mTargetFile.getPath()));
                     return;
                 } else {
                     cloudStorageDropbox.upload(CloudUtil.stripPath(OpenMode.DROPBOX, mTargetFile.getPath()),
-                            bufferedInputStream, mSourceFile.getSize(), true);
+                                               bufferedInputStream, mSourceFile.getSize(), true);
                     return;
                 }
             } else if (mTargetFile.isBoxFile()) {
@@ -210,11 +210,11 @@ public class GenericCopyUtil {
                 if (mSourceFile.isBoxFile()) {
                     // we're in the same provider, use api method
                     cloudStorageBox.copy(CloudUtil.stripPath(OpenMode.BOX, mSourceFile.getPath()),
-                            CloudUtil.stripPath(OpenMode.BOX, mTargetFile.getPath()));
+                                         CloudUtil.stripPath(OpenMode.BOX, mTargetFile.getPath()));
                     return;
                 } else {
                     cloudStorageBox.upload(CloudUtil.stripPath(OpenMode.BOX, mTargetFile.getPath()),
-                            bufferedInputStream, mSourceFile.getSize(), true);
+                                           bufferedInputStream, mSourceFile.getSize(), true);
                     bufferedInputStream.close();
                     return;
                 }
@@ -226,11 +226,11 @@ public class GenericCopyUtil {
                 if (mSourceFile.isGoogleDriveFile()) {
                     // we're in the same provider, use api method
                     cloudStorageGdrive.copy(CloudUtil.stripPath(OpenMode.GDRIVE, mSourceFile.getPath()),
-                            CloudUtil.stripPath(OpenMode.GDRIVE, mTargetFile.getPath()));
+                                            CloudUtil.stripPath(OpenMode.GDRIVE, mTargetFile.getPath()));
                     return;
                 } else {
                     cloudStorageGdrive.upload(CloudUtil.stripPath(OpenMode.GDRIVE, mTargetFile.getPath()),
-                            bufferedInputStream, mSourceFile.getSize(), true);
+                                              bufferedInputStream, mSourceFile.getSize(), true);
                     bufferedInputStream.close();
                     return;
                 }
@@ -241,11 +241,11 @@ public class GenericCopyUtil {
                 if (mSourceFile.isOneDriveFile()) {
                     // we're in the same provider, use api method
                     cloudStorageOnedrive.copy(CloudUtil.stripPath(OpenMode.ONEDRIVE, mSourceFile.getPath()),
-                            CloudUtil.stripPath(OpenMode.ONEDRIVE, mTargetFile.getPath()));
+                                              CloudUtil.stripPath(OpenMode.ONEDRIVE, mTargetFile.getPath()));
                     return;
                 } else {
                     cloudStorageOnedrive.upload(CloudUtil.stripPath(OpenMode.ONEDRIVE, mTargetFile.getPath()),
-                            bufferedInputStream, mSourceFile.getSize(), true);
+                                                bufferedInputStream, mSourceFile.getSize(), true);
                     bufferedInputStream.close();
                     return;
                 }
@@ -264,7 +264,7 @@ public class GenericCopyUtil {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         ContentResolver contentResolver = mContext.getContentResolver();
                         DocumentFile documentTargetFile = FileUtil.getDocumentFile(file,
-                                mTargetFile.isDirectory(mContext), mContext);
+                                                          mTargetFile.isDirectory(mContext), mContext);
 
                         bufferedOutputStream = new BufferedOutputStream(contentResolver
                                 .openOutputStream(documentTargetFile.getUri()), DEFAULT_BUFFER_SIZE);
@@ -340,7 +340,7 @@ public class GenericCopyUtil {
      */
     @VisibleForTesting
     void copyFile(@NonNull BufferedInputStream bufferedInputStream, @NonNull FileChannel outChannel)
-            throws IOException {
+    throws IOException {
         doCopy(Channels.newChannel(bufferedInputStream), outChannel);
     }
 
@@ -353,7 +353,7 @@ public class GenericCopyUtil {
      */
     @VisibleForTesting
     void copyFile(@NonNull FileChannel inChannel, @NonNull FileChannel outChannel)
-            throws IOException {
+    throws IOException {
         //MappedByteBuffer inByteBuffer = inChannel.map(FileChannel.MapMode.READ_ONLY, 0, inChannel.size());
         //MappedByteBuffer outByteBuffer = outChannel.map(FileChannel.MapMode.READ_WRITE, 0, inChannel.size());
         doCopy(inChannel, outChannel);
@@ -370,7 +370,7 @@ public class GenericCopyUtil {
      */
     @VisibleForTesting
     void copyFile(@NonNull BufferedInputStream bufferedInputStream, @NonNull BufferedOutputStream bufferedOutputStream)
-            throws IOException {
+    throws IOException {
         doCopy(Channels.newChannel(bufferedInputStream), Channels.newChannel(bufferedOutputStream));
     }
 
@@ -384,7 +384,7 @@ public class GenericCopyUtil {
      */
     @VisibleForTesting
     void copyFile(@NonNull FileChannel inChannel, @NonNull BufferedOutputStream bufferedOutputStream)
-            throws IOException {
+    throws IOException {
         doCopy(inChannel, Channels.newChannel(bufferedOutputStream));
     }
 

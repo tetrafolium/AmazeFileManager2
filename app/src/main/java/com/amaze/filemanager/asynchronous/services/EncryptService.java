@@ -75,8 +75,8 @@ public class EncryptService extends AbstractProgressiveService {
         targetFilename = intent.getStringExtra(TAG_ENCRYPT_TARGET);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         accentColor = ((AppConfig) getApplication()).getUtilsProvider()
-                .getColorPreference()
-                .getCurrentUserColorPreferences(this, sharedPreferences).accent;
+                      .getColorPreference()
+                      .getCurrentUserColorPreferences(this, sharedPreferences).accent;
 
         OpenMode openMode = OpenMode.values()[intent.getIntExtra(TAG_OPEN_MODE, OpenMode.UNKNOWN.ordinal())];
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -96,14 +96,14 @@ public class EncryptService extends AbstractProgressiveService {
 
         notificationBuilder = new NotificationCompat.Builder(this, NotificationConstants.CHANNEL_NORMAL_ID);
         notificationBuilder.setContentIntent(pendingIntent)
-                .setCustomContentView(customSmallContentViews)
-                .setCustomBigContentView(customBigContentViews)
-                .setCustomHeadsUpContentView(customSmallContentViews)
-                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
-                .addAction(action)
-                .setColor(accentColor)
-                .setOngoing(true)
-                .setSmallIcon(R.drawable.ic_folder_lock_white_36dp);
+        .setCustomContentView(customSmallContentViews)
+        .setCustomBigContentView(customBigContentViews)
+        .setCustomHeadsUpContentView(customSmallContentViews)
+        .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+        .addAction(action)
+        .setColor(accentColor)
+        .setOngoing(true)
+        .setSmallIcon(R.drawable.ic_folder_lock_white_36dp);
 
         NotificationConstants.setMetadata(getApplicationContext(), notificationBuilder, NotificationConstants.TYPE_NORMAL);
 
@@ -178,7 +178,7 @@ public class EncryptService extends AbstractProgressiveService {
             progressHandler.setSourceSize(1);
             progressHandler.setTotalSize(totalSize);
             progressHandler.setProgressListener((speed) ->
-                publishResults(speed, false, false));
+                                                publishResults(speed, false, false));
             serviceWatcherUtil = new ServiceWatcherUtil(progressHandler);
 
             addFirstDatapoint(baseFile.getName(), 1, totalSize, true);// we're using encrypt as move flag false

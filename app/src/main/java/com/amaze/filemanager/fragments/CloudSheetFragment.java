@@ -31,7 +31,7 @@ public class CloudSheetFragment extends BottomSheetDialogFragment implements Vie
 
     private View rootView;
     private LinearLayout mSmbLayout, mScpLayout, mDropboxLayout, mBoxLayout, mGoogleDriveLayout, mOnedriveLayout
-            , mGetCloudLayout;
+    , mGetCloudLayout;
 
     public static final String TAG_FRAGMENT = "cloud_fragment";
 
@@ -102,36 +102,36 @@ public class CloudSheetFragment extends BottomSheetDialogFragment implements Vie
         Log.d(TAG_FRAGMENT, "Clicked: " + v.getId());
 
         switch (v.getId()) {
-            case R.id.linear_layout_smb:
-                dismiss();
-                SmbSearchDialog smbDialog=new SmbSearchDialog();
-                smbDialog.show(getActivity().getFragmentManager(), "tab");
-                return;
-            case R.id.linear_layout_scp:
-                dismiss();
-                SftpConnectDialog sftpConnectDialog = new SftpConnectDialog();
-                Bundle args = new Bundle();
-                args.putBoolean("edit", false);
-                sftpConnectDialog.setArguments(args);
-                sftpConnectDialog.show(getActivity().getFragmentManager(), "tab");
-                return;
-            case R.id.linear_layout_box:
-                ((MainActivity) getActivity()).addConnection(OpenMode.BOX);
-                break;
-            case R.id.linear_layout_dropbox:
-                ((MainActivity) getActivity()).addConnection(OpenMode.DROPBOX);
-                break;
-            case R.id.linear_layout_google_drive:
-                ((MainActivity) getActivity()).addConnection(OpenMode.GDRIVE);
-                break;
-            case R.id.linear_layout_onedrive:
-                ((MainActivity) getActivity()).addConnection(OpenMode.ONEDRIVE);
-                break;
-            case R.id.linear_layout_get_cloud:
-                Intent cloudPluginIntent = new Intent(Intent.ACTION_VIEW);
-                cloudPluginIntent.setData(Uri.parse("market://details?id=com.filemanager.amazecloud"));
-                startActivity(cloudPluginIntent);
-                break;
+        case R.id.linear_layout_smb:
+            dismiss();
+            SmbSearchDialog smbDialog=new SmbSearchDialog();
+            smbDialog.show(getActivity().getFragmentManager(), "tab");
+            return;
+        case R.id.linear_layout_scp:
+            dismiss();
+            SftpConnectDialog sftpConnectDialog = new SftpConnectDialog();
+            Bundle args = new Bundle();
+            args.putBoolean("edit", false);
+            sftpConnectDialog.setArguments(args);
+            sftpConnectDialog.show(getActivity().getFragmentManager(), "tab");
+            return;
+        case R.id.linear_layout_box:
+            ((MainActivity) getActivity()).addConnection(OpenMode.BOX);
+            break;
+        case R.id.linear_layout_dropbox:
+            ((MainActivity) getActivity()).addConnection(OpenMode.DROPBOX);
+            break;
+        case R.id.linear_layout_google_drive:
+            ((MainActivity) getActivity()).addConnection(OpenMode.GDRIVE);
+            break;
+        case R.id.linear_layout_onedrive:
+            ((MainActivity) getActivity()).addConnection(OpenMode.ONEDRIVE);
+            break;
+        case R.id.linear_layout_get_cloud:
+            Intent cloudPluginIntent = new Intent(Intent.ACTION_VIEW);
+            cloudPluginIntent.setData(Uri.parse("market://details?id=com.filemanager.amazecloud"));
+            startActivity(cloudPluginIntent);
+            break;
         }
 
         // dismiss this sheet dialog

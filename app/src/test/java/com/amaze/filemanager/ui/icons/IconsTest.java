@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
 public class IconsTest {
 
     @Before
-    public void setUp(){
+    public void setUp() {
         //By default Robolectric's MimeTypeMap is empty, we need to populate them
         ShadowMimeTypeMap mimeTypeMap = Shadows.shadowOf(MimeTypeMap.getSingleton());
         mimeTypeMap.addExtensionMimeTypMapping("zip", "application/zip");
@@ -30,7 +30,7 @@ public class IconsTest {
     }
 
     @Test
-    public void testReturnArchiveTypes(){
+    public void testReturnArchiveTypes() {
         assertEquals(Icons.COMPRESSED, Icons.getTypeOfFile("archive.zip", false));
         assertEquals(Icons.COMPRESSED, Icons.getTypeOfFile("archive.rar", false));
         assertEquals(Icons.COMPRESSED, Icons.getTypeOfFile("archive.tar", false));

@@ -57,14 +57,14 @@ public class B0rkenZipTest {
     };
 
     @Before
-    public void setUp() throws Exception{
+    public void setUp() throws Exception {
         IOUtils.copy(getClass().getClassLoader().getResourceAsStream("zip-slip.zip"), new FileOutputStream(zipfile1));
         IOUtils.copy(getClass().getClassLoader().getResourceAsStream("zip-slip-win.zip"), new FileOutputStream(zipfile2));
         IOUtils.copy(getClass().getClassLoader().getResourceAsStream("test-slashprefix.zip"), new FileOutputStream(zipfile3));
     }
 
     @Test
-    public void testExtractZipWithWrongPathUnix() throws Exception{
+    public void testExtractZipWithWrongPathUnix() throws Exception {
         Extractor extractor = new ZipExtractor(RuntimeEnvironment.application, zipfile1.getAbsolutePath(), Environment.getExternalStorageDirectory().getAbsolutePath(), emptyListener);
         extractor.extractEverything();
         assertEquals(1, extractor.getInvalidArchiveEntries().size());
@@ -72,7 +72,7 @@ public class B0rkenZipTest {
     }
 
     @Test
-    public void testExtractZipWithWrongPathWindows() throws Exception{
+    public void testExtractZipWithWrongPathWindows() throws Exception {
         Extractor extractor = new ZipExtractor(RuntimeEnvironment.application, zipfile2.getAbsolutePath(), Environment.getExternalStorageDirectory().getAbsolutePath(), emptyListener);
         extractor.extractEverything();
         assertEquals(1, extractor.getInvalidArchiveEntries().size());
@@ -80,9 +80,9 @@ public class B0rkenZipTest {
     }
 
     @Test
-    public void testExtractZipWithSlashPrefixEntry() throws Exception{
+    public void testExtractZipWithSlashPrefixEntry() throws Exception {
         Extractor extractor = new ZipExtractor(RuntimeEnvironment.application, zipfile3.getAbsolutePath(), Environment.getExternalStorageDirectory().getAbsolutePath(), emptyListener);
-        extractor.extractFiles(new String[]{"/test.txt"});
+        extractor.extractFiles(new String[] {"/test.txt"});
         assertEquals(0, extractor.getInvalidArchiveEntries().size());
         assertTrue(new File(Environment.getExternalStorageDirectory(), "test.txt").exists());
     }

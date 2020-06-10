@@ -74,7 +74,7 @@ public class RoundedImageView extends ImageView {
      */
     public void setRelativeSize(float width, float height) {
         if(width > 2 || height > 2) throw new UnsupportedOperationException("Can't make image bigger! Accepted values are [2; 0)");
-        this.relativeSize = new float[]{width, height};
+        this.relativeSize = new float[] {width, height};
     }
 
     private boolean isImageAnIcon() {
@@ -85,26 +85,26 @@ public class RoundedImageView extends ImageView {
         Bitmap finalBitmap;
         if (bitmap.getWidth() != radius || bitmap.getHeight() != radius) {
             finalBitmap = Bitmap.createScaledBitmap(bitmap, radius, radius,
-                    false);
+                                                    false);
         } else {
             finalBitmap = bitmap;
         }
 
         Bitmap output = Bitmap.createBitmap(finalBitmap.getWidth(),
-                finalBitmap.getHeight(), Config.ARGB_8888);
+                                            finalBitmap.getHeight(), Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
 
         final Paint paint = new Paint();
         final Rect rect = new Rect(0, 0, finalBitmap.getWidth(),
-                finalBitmap.getHeight());
+                                   finalBitmap.getHeight());
 
         paint.setAntiAlias(true);
         paint.setFilterBitmap(true);
         paint.setDither(true);
         paint.setColor(Utils.getColor(getContext(), R.color.roundedimagepaint));
         canvas.drawCircle(finalBitmap.getWidth() / 2 + 0.7f,
-                finalBitmap.getHeight() / 2 + 0.7f,
-                finalBitmap.getWidth() / 2 + 0.1f, paint);
+                          finalBitmap.getHeight() / 2 + 0.7f,
+                          finalBitmap.getWidth() / 2 + 0.1f, paint);
         paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
         canvas.drawBitmap(finalBitmap, rect, rect, paint);
 

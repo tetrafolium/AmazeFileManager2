@@ -50,7 +50,7 @@ public class Bzip2Extractor extends Extractor {
         long totalBytes = 0;
         ArrayList<TarArchiveEntry> archiveEntries = new ArrayList<>();
         TarArchiveInputStream inputStream = new TarArchiveInputStream(
-                new BZip2CompressorInputStream(new FileInputStream(filePath)));
+            new BZip2CompressorInputStream(new FileInputStream(filePath)));
 
         TarArchiveEntry tarArchiveEntry;
 
@@ -92,7 +92,7 @@ public class Bzip2Extractor extends Extractor {
         }
 
         BufferedOutputStream outputStream = new BufferedOutputStream(
-                FileUtil.getOutputStream(outputFile, context));
+            FileUtil.getOutputStream(outputFile, context));
         try {
             int len;
             byte buf[] = new byte[GenericCopyUtil.DEFAULT_BUFFER_SIZE];

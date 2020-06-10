@@ -69,8 +69,8 @@ public abstract class AbstractExtractorPasswordProtectedArchivesTest extends Abs
 
     protected abstract Class[] expectedRootExceptionClass();
 
-    protected void assertExceptionIsExpected(IOException e) throws IOException{
-        for(Class<? extends Throwable> c : expectedRootExceptionClass()){
+    protected void assertExceptionIsExpected(IOException e) throws IOException {
+        for(Class<? extends Throwable> c : expectedRootExceptionClass()) {
             if(e.getCause() != null ? (c.isAssignableFrom(e.getCause().getClass())) :
                     c.isAssignableFrom(e.getClass()))
                 return;

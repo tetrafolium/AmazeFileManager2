@@ -62,7 +62,7 @@ public class GenericCopyUtilEspressoTest {
     }
 
     //doCopy(ReadableByteChannel in, WritableByteChannel out)
-    private void doTestCopyFile1(int size) throws IOException, NoSuchAlgorithmException{
+    private void doTestCopyFile1(int size) throws IOException, NoSuchAlgorithmException {
         byte[] checksum = DummyFileGenerator.createFile(file1, size);
         copyUtil.doCopy(new FileInputStream(file1).getChannel(), Channels.newChannel(new FileOutputStream(file2)));
         assertEquals(file1.length(), file2.length());
@@ -70,7 +70,7 @@ public class GenericCopyUtilEspressoTest {
     }
 
     //copy(FileChannel in, FileChannel out)
-    private void doTestCopyFile2(int size) throws IOException, NoSuchAlgorithmException{
+    private void doTestCopyFile2(int size) throws IOException, NoSuchAlgorithmException {
         byte[] checksum = DummyFileGenerator.createFile(file1, size);
         copyUtil.copyFile(new FileInputStream(file1).getChannel(), new FileOutputStream(file2).getChannel());
         assertEquals(file1.length(), file2.length());
@@ -78,7 +78,7 @@ public class GenericCopyUtilEspressoTest {
     }
 
     //copy(BufferedInputStream in, BufferedOutputStream out)
-    private void doTestCopyFile3(int size) throws IOException, NoSuchAlgorithmException{
+    private void doTestCopyFile3(int size) throws IOException, NoSuchAlgorithmException {
         byte[] checksum = DummyFileGenerator.createFile(file1, size);
         copyUtil.copyFile(new BufferedInputStream(new FileInputStream(file1)), new BufferedOutputStream(new FileOutputStream(file2)));
         assertEquals(file1.length(), file2.length());

@@ -73,104 +73,104 @@ public class ExtractServiceTest {
     public void tearDown() throws Exception {
         File extractedArchiveRoot = new File(Environment.getExternalStorageDirectory(), "test-archive");
         Files.walk(Paths.get(extractedArchiveRoot.getAbsolutePath()))
-                .map(Path::toFile)
-                .forEach(File::delete);
+        .map(Path::toFile)
+        .forEach(File::delete);
     }
 
     @Test
-    public void testExtractZipSlip(){
+    public void testExtractZipSlip() {
         performTest(zipfile1);
         assertEquals(RuntimeEnvironment.application.getString(R.string.multiple_invalid_archive_entries), ShadowToast.getTextOfLatestToast());
     }
 
     @Test
-    public void testExtractZipSlipWin(){
+    public void testExtractZipSlipWin() {
         performTest(zipfile2);
         assertEquals(RuntimeEnvironment.application.getString(R.string.multiple_invalid_archive_entries), ShadowToast.getTextOfLatestToast());
     }
 
     @Test
-    public void testExtractZipNormal(){
+    public void testExtractZipNormal() {
         performTest(zipfile3);
         assertNull(ShadowToast.getLatestToast());
         assertNull(ShadowToast.getTextOfLatestToast());
     }
 
     @Test
-    public void testExtractRar(){
+    public void testExtractRar() {
         performTest(rarfile);
         assertNull(ShadowToast.getLatestToast());
         assertNull(ShadowToast.getTextOfLatestToast());
     }
 
     @Test
-    public void testExtractTar(){
+    public void testExtractTar() {
         performTest(tarfile);
         assertNull(ShadowToast.getLatestToast());
         assertNull(ShadowToast.getTextOfLatestToast());
     }
 
     @Test
-    public void testExtractTarGz(){
+    public void testExtractTarGz() {
         performTest(tarballfile);
         assertNull(ShadowToast.getLatestToast());
         assertNull(ShadowToast.getTextOfLatestToast());
     }
 
     @Test
-    public void testExtractTarLzma(){
+    public void testExtractTarLzma() {
         performTest(tarLzmafile);
         assertNull(ShadowToast.getLatestToast());
         assertNull(ShadowToast.getTextOfLatestToast());
     }
 
     @Test
-    public void testExtractTarXz(){
+    public void testExtractTarXz() {
         performTest(tarXzfile);
         assertNull(ShadowToast.getLatestToast());
         assertNull(ShadowToast.getTextOfLatestToast());
     }
 
     @Test
-    public void testExtractTarBz2(){
+    public void testExtractTarBz2() {
         performTest(tarBz2file);
         assertNull(ShadowToast.getLatestToast());
         assertNull(ShadowToast.getTextOfLatestToast());
     }
 
     @Test
-    public void testExtract7z(){
+    public void testExtract7z() {
         performTest(sevenZipfile);
         assertNull(ShadowToast.getLatestToast());
         assertNull(ShadowToast.getTextOfLatestToast());
     }
 
     @Test @Ignore("Work isn't finished yet, skipping test")
-    public void testExtractPasswordProtectedZip(){
+    public void testExtractPasswordProtectedZip() {
         performTest(passwordProtectedZipfile);
         assertNull(ShadowToast.getLatestToast());
         assertNull(ShadowToast.getTextOfLatestToast());
     }
 
     @Test @Ignore("Work isn't finished yet, skipping test")
-    public void testExtractPasswordProtected7Zip(){
+    public void testExtractPasswordProtected7Zip() {
         performTest(passwordProtected7Zipfile);
         assertNull(ShadowToast.getLatestToast());
         assertNull(ShadowToast.getTextOfLatestToast());
     }
 
     @Test @Ignore("Work isn't finished yet, skipping test")
-    public void testExtractListPasswordProtected7Zip(){
+    public void testExtractListPasswordProtected7Zip() {
         performTest(listPasswordProtected7Zipfile);
         assertNull(ShadowToast.getLatestToast());
         assertNull(ShadowToast.getTextOfLatestToast());
     }
 
-    private void performTest(@NonNull File archiveFile){
+    private void performTest(@NonNull File archiveFile) {
         Intent intent = new Intent(RuntimeEnvironment.application, ExtractService.class)
-                .putExtra(ExtractService.KEY_PATH_ZIP, archiveFile.getAbsolutePath())
-                .putExtra(ExtractService.KEY_ENTRIES_ZIP, new String[0])
-                .putExtra(ExtractService.KEY_PATH_EXTRACT, new File(Environment.getExternalStorageDirectory(), "test-archive").getAbsolutePath());
+        .putExtra(ExtractService.KEY_PATH_ZIP, archiveFile.getAbsolutePath())
+        .putExtra(ExtractService.KEY_ENTRIES_ZIP, new String[0])
+        .putExtra(ExtractService.KEY_PATH_EXTRACT, new File(Environment.getExternalStorageDirectory(), "test-archive").getAbsolutePath());
         service.onStartCommand(intent,0, 0);
     }
 }

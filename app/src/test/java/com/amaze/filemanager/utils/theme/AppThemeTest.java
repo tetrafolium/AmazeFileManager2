@@ -98,27 +98,27 @@ public class AppThemeTest {
     public void getIdLIGHTTest() {
         int index = 0;
         AppTheme apptheme = AppTheme.getTheme(index);
-        assertEquals(index , apptheme.getId()) ;
+        assertEquals(index, apptheme.getId()) ;
     }
 
     @Test
     public void getIdDARKTest() {
         int index = 1;
         AppTheme apptheme = AppTheme.getTheme(index);
-        assertEquals(index , apptheme.getId()) ;
+        assertEquals(index, apptheme.getId()) ;
     }
 
     @Test
     public void getIdTIMEDTest() {
         int index = 2;
         AppTheme apptheme = AppTheme.getTheme(index);
-        assertEquals(index , apptheme.getId()) ;
+        assertEquals(index, apptheme.getId()) ;
     }
 
     @Test
     public void getIdBLACKTest() {
         int index = 3;
         AppTheme apptheme = AppTheme.getTheme(index);
-        assertEquals(index , apptheme.getId()) ;
+        assertEquals(index, apptheme.getId()) ;
     }
 }

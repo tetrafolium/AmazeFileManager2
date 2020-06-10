@@ -101,7 +101,7 @@ public class PrepareCopyTask extends AsyncTask<ArrayList<HybridFileParcelable>, 
                 || openMode == OpenMode.GDRIVE
                 || openMode == OpenMode.ONEDRIVE
                 || openMode == OpenMode.ROOT
-                ) {
+           ) {
             // no helper method for OTG to determine storage space
             return null;
         }
@@ -148,7 +148,7 @@ public class PrepareCopyTask extends AsyncTask<ArrayList<HybridFileParcelable>, 
                 || openMode == OpenMode.BOX
                 || openMode == OpenMode.ONEDRIVE
                 || openMode == OpenMode.ROOT
-                ) {
+           ) {
 
             startService(filesToCopy, path, openMode);
         } else {
@@ -180,7 +180,7 @@ public class PrepareCopyTask extends AsyncTask<ArrayList<HybridFileParcelable>, 
         int accentColor = mainActivity.getAccent();
         final MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(context);
         LayoutInflater layoutInflater =
-                (LayoutInflater) mainActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            (LayoutInflater) mainActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.copy_dialog, null);
         dialogBuilder.customView(view, true);
 
@@ -302,7 +302,7 @@ public class PrepareCopyTask extends AsyncTask<ArrayList<HybridFileParcelable>, 
                     }
                 } else {
                     new MoveFiles(filesToCopyPerFolder, mainFrag, context, openMode)
-                            .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, paths);
+                    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, paths);
                 }
             }
         } else {
@@ -330,8 +330,8 @@ public class PrepareCopyTask extends AsyncTask<ArrayList<HybridFileParcelable>, 
                     deleteCopiedFolder.add(new File(conflictingFiles.get(i).getPath()));
 
                     nextNodes.add(new CopyNode(path + "/"
-                            + conflictingFiles.get(i).getName(),
-                            conflictingFiles.get(i).listFiles(context, rootMode)));
+                                               + conflictingFiles.get(i).getName(),
+                                               conflictingFiles.get(i).listFiles(context, rootMode)));
 
                     filesToCopy.remove(filesToCopy.indexOf(conflictingFiles.get(i)));
                     conflictingFiles.remove(i);

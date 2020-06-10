@@ -52,7 +52,7 @@ public class CompressedObjectParcelable implements Parcelable {
         this.size = size;
         this.filetype = Icons.getTypeOfFile(path, directory);
         this.iconData = new IconDataParcelable(IconDataParcelable.IMAGE_RES,
-                Icons.loadMimeIcon(path, directory));
+                                               Icons.loadMimeIcon(path, directory));
     }
 
     /**
@@ -88,15 +88,15 @@ public class CompressedObjectParcelable implements Parcelable {
     }
 
     public static final Parcelable.Creator<CompressedObjectParcelable> CREATOR =
-            new Parcelable.Creator<CompressedObjectParcelable>() {
-                public CompressedObjectParcelable createFromParcel(Parcel in) {
-                    return new CompressedObjectParcelable(in);
-                }
+    new Parcelable.Creator<CompressedObjectParcelable>() {
+        public CompressedObjectParcelable createFromParcel(Parcel in) {
+            return new CompressedObjectParcelable(in);
+        }
 
-                public CompressedObjectParcelable[] newArray(int size) {
-                    return new CompressedObjectParcelable[size];
-                }
-            };
+        public CompressedObjectParcelable[] newArray(int size) {
+            return new CompressedObjectParcelable[size];
+        }
+    };
 
     private CompressedObjectParcelable(Parcel im) {
         type = im.readInt();
@@ -152,9 +152,9 @@ public class CompressedObjectParcelable implements Parcelable {
         if(obj instanceof CompressedObjectParcelable) {
             CompressedObjectParcelable otherObj = (CompressedObjectParcelable)obj;
             return name.equals(otherObj.name)
-                    && type == otherObj.type
-                    && directory == otherObj.directory
-                    && size == otherObj.size;
+                   && type == otherObj.type
+                   && directory == otherObj.directory
+                   && size == otherObj.size;
         } else
             return false;
     }

@@ -55,9 +55,9 @@ public final class MimeTypes {
     static {
 
 
-		/*
+        /*
          * ================= MIME TYPES ====================
-		 */
+         */
         MIME_TYPES.put("asm", "text/x-asm");
         MIME_TYPES.put("json", "application/json");
         MIME_TYPES.put("js", "application/javascript");
@@ -159,7 +159,7 @@ public final class MimeTypes {
         // mapping extension to system mime types
         if (extension != null && !extension.isEmpty()) {
             final String extensionLowerCase = extension.toLowerCase(Locale
-                    .getDefault());
+                                              .getDefault());
             final MimeTypeMap mime = MimeTypeMap.getSingleton();
             type = mime.getMimeTypeFromExtension(extensionLowerCase);
             if (type == null) {

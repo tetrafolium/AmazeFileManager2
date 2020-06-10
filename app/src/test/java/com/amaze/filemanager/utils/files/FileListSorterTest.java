@@ -171,7 +171,7 @@ public class FileListSorterTest {
                 "symlink", "101", 124L, true,
                 "1234", false,false, OpenMode.UNKNOWN);
 
-        assertThat(fileListSorter.compare(file1, file2) , greaterThan(0));
+        assertThat(fileListSorter.compare(file1, file2), greaterThan(0));
     }
 
     /**

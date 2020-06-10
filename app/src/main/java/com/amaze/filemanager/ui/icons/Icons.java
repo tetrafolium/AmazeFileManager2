@@ -29,8 +29,8 @@ import java.util.HashMap;
 public class Icons {
     public static final int NOT_KNOWN = -1;
     public static final int APK = 0, AUDIO = 1, CERTIFICATE = 2, CODE = 3, COMPRESSED = 4,
-            CONTACT = 5, EVENTS = 6, FONT = 7, IMAGE = 8, PDF = 9, PRESENTATION = 10,
-            SPREADSHEETS = 11, DOCUMENTS = 12, TEXT = 13, VIDEO = 14, ENCRYPTED = 15, GIF = 16;
+                            CONTACT = 5, EVENTS = 6, FONT = 7, IMAGE = 8, PDF = 9, PRESENTATION = 10,
+                            SPREADSHEETS = 11, DOCUMENTS = 12, TEXT = 13, VIDEO = 14, ENCRYPTED = 15, GIF = 16;
 
     // construct a with an approximation of the capacity
     private static HashMap<String, Integer> sMimeIconIds = new HashMap<>(1 + (int)(114 / 0.75));
@@ -49,11 +49,11 @@ public class Icons {
     static {
         putKeys(APK,
                 "application/vnd.android.package-archive"
-        );
+               );
         putKeys(AUDIO,
                 "application/ogg",
                 "application/x-flac"
-        );
+               );
         putKeys(CERTIFICATE,
                 "application/pgp-keys",
                 "application/pgp-signature",
@@ -65,7 +65,7 @@ public class Icons {
                 "application/x-pkcs7-certificates",
                 "application/x-pkcs7-mime",
                 "application/x-pkcs7-signature"
-        );
+               );
         putKeys(CODE,
                 "application/rdf+xml",
                 "application/rss+xml",
@@ -95,7 +95,7 @@ public class Icons {
                 "application/xml",
                 "text/javascript",
                 "application/x-javascript"
-        );
+               );
         putKeys(COMPRESSED,
                 "application/mac-binhex40",
                 "application/rar",
@@ -119,21 +119,21 @@ public class Icons {
                 "application/x-lzma",
                 "application/x-xz",
                 "application/x-bzip2"
-        );
+               );
         putKeys(CONTACT,
                 "text/x-vcard",
                 "text/vcard"
-        );
+               );
         putKeys(EVENTS,
                 "text/calendar",
                 "text/x-vcalendar"
-        );
+               );
         putKeys(FONT,
                 "application/x-font",
                 "application/font-woff",
                 "application/x-font-woff",
                 "application/x-font-ttf"
-        );
+               );
         putKeys(IMAGE,
                 "application/vnd.oasis.opendocument.graphics",
                 "application/vnd.oasis.opendocument.graphics-template",
@@ -143,10 +143,10 @@ public class Icons {
                 "application/vnd.sun.xml.draw.template",
                 "image/jpeg",
                 "image/png"
-        );
+               );
         putKeys(PDF,
                 "application/pdf"
-        );
+               );
         putKeys(PRESENTATION,
                 "application/vnd.ms-powerpoint",
                 "application/vnd.openxmlformats-officedocument.presentationml.presentation",
@@ -157,7 +157,7 @@ public class Icons {
                 "application/vnd.sun.xml.impress.template",
                 "application/x-kpresenter",
                 "application/vnd.oasis.opendocument.presentation"
-        );
+               );
         putKeys(SPREADSHEETS,
                 "application/vnd.oasis.opendocument.spreadsheet",
                 "application/vnd.oasis.opendocument.spreadsheet-template",
@@ -169,7 +169,7 @@ public class Icons {
                 "application/vnd.sun.xml.calc.template",
                 "application/x-kspread",
                 "text/comma-separated-values"
-        );
+               );
         putKeys(DOCUMENTS,
                 "application/msword",
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -186,17 +186,17 @@ public class Icons {
                 "application/x-abiword",
                 "application/x-kword",
                 "text/markdown"
-        );
+               );
         putKeys(TEXT,
                 "text/plain"
-        );
+               );
         putKeys(VIDEO,
                 "application/x-quicktimeplayer",
                 "application/x-shockwave-flash"
-        );
+               );
         putKeys(ENCRYPTED,
                 "application/octet-stream"
-        );
+               );
     }
 
     public static @DrawableRes int loadMimeIcon(String path, boolean isDirectory) {
@@ -206,31 +206,31 @@ public class Icons {
         int type = getTypeOfFile(path, isDirectory);
 
         switch (type) {
-            case APK:
-                return R.drawable.ic_doc_apk_white;
-            case AUDIO:
-                return R.drawable.ic_doc_audio_am;
-            case IMAGE:
-                return R.drawable.ic_doc_image;
-            case TEXT:
-                return R.drawable.ic_doc_text_am;
-            case VIDEO:
-                return R.drawable.ic_doc_video_am;
-            case PDF:
-                return R.drawable.ic_doc_pdf;
-            case CERTIFICATE:
-                return R.drawable.ic_doc_certificate;
-            case CODE:
-                return R.drawable.ic_doc_codes;
-            case FONT: //
-                return R.drawable.ic_doc_font;
-            case ENCRYPTED:
-                return R.drawable.ic_folder_lock_white_36dp;
-            default:
-                if(isDirectory) return R.drawable.ic_grid_folder_new;
-                else {
-                    return R.drawable.ic_doc_generic_am;
-                }
+        case APK:
+            return R.drawable.ic_doc_apk_white;
+        case AUDIO:
+            return R.drawable.ic_doc_audio_am;
+        case IMAGE:
+            return R.drawable.ic_doc_image;
+        case TEXT:
+            return R.drawable.ic_doc_text_am;
+        case VIDEO:
+            return R.drawable.ic_doc_video_am;
+        case PDF:
+            return R.drawable.ic_doc_pdf;
+        case CERTIFICATE:
+            return R.drawable.ic_doc_certificate;
+        case CODE:
+            return R.drawable.ic_doc_codes;
+        case FONT: //
+            return R.drawable.ic_doc_font;
+        case ENCRYPTED:
+            return R.drawable.ic_folder_lock_white_36dp;
+        default:
+            if(isDirectory) return R.drawable.ic_grid_folder_new;
+            else {
+                return R.drawable.ic_doc_generic_am;
+            }
         }
     }
 

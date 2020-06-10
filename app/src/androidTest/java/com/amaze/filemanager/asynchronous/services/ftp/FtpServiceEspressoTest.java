@@ -58,9 +58,9 @@ public class FtpServiceEspressoTest {
     @Test
     public void testFtpService() throws IOException {
         PreferenceManager.getDefaultSharedPreferences(service).edit()
-                .putBoolean(FtpService.KEY_PREFERENCE_SECURE, false).commit();
+        .putBoolean(FtpService.KEY_PREFERENCE_SECURE, false).commit();
         service.onStartCommand(new Intent(FtpService.ACTION_START_FTPSERVER)
-                .putExtra(FtpService.TAG_STARTED_BY_TILE, false), 0, 0);
+                               .putExtra(FtpService.TAG_STARTED_BY_TILE, false), 0, 0);
         assertTrue(FtpService.isRunning());
         waitForServer();
 
@@ -73,9 +73,9 @@ public class FtpServiceEspressoTest {
     @Test
     public void testSecureFtpService() throws IOException {
         PreferenceManager.getDefaultSharedPreferences(service).edit()
-                .putBoolean(FtpService.KEY_PREFERENCE_SECURE, true).commit();
+        .putBoolean(FtpService.KEY_PREFERENCE_SECURE, true).commit();
         service.onStartCommand(new Intent(FtpService.ACTION_START_FTPSERVER)
-                .putExtra(FtpService.TAG_STARTED_BY_TILE, false), 0, 0);
+                               .putExtra(FtpService.TAG_STARTED_BY_TILE, false), 0, 0);
         assertTrue(FtpService.isRunning());
         waitForServer();
 
@@ -92,7 +92,7 @@ public class FtpServiceEspressoTest {
         FTPFile[] files = ftpClient.listFiles();
         assertNotNull(files);
         assertTrue("No files found on device? It is also possible that app doesn't have permission to access storage, which may occur on broken Android emulators",
-                files.length > 0);
+                   files.length > 0);
         boolean downloadFolderExists = false;
         for (FTPFile f : files) {
             if (f.getName().equalsIgnoreCase("download"))
@@ -102,7 +102,7 @@ public class FtpServiceEspressoTest {
         ftpClient.disconnect();
 
         assertTrue("Download folder not found on device. Either storage is not available, or something is really wrong with FtpService. Check logcat.",
-                downloadFolderExists);
+                   downloadFolderExists);
     }
 
     private void testUploadWith(FTPClient ftpClient) throws IOException {
@@ -191,9 +191,9 @@ public class FtpServiceEspressoTest {
         // Trick borrowed from org.robolectric.android.controller.ServiceController
         Class activityThreadClazz = Class.forName("android.app.ActivityThread");
         Method attach = Service.class.getDeclaredMethod("attach", Context.class,
-                activityThreadClazz, String.class, IBinder.class, Application.class, Object.class);
+                        activityThreadClazz, String.class, IBinder.class, Application.class, Object.class);
         attach.invoke(service, InstrumentationRegistry.getTargetContext(),
-                null, service.getClass().getSimpleName(), null, null, null);
+                      null, service.getClass().getSimpleName(), null, null, null);
         return service;
     }
 
@@ -203,7 +203,7 @@ public class FtpServiceEspressoTest {
             Socket socket = new Socket();
             try {
                 socket.connect(new InetSocketAddress(InetAddress.getLocalHost(),
-                        FtpService.DEFAULT_PORT));
+                                                     FtpService.DEFAULT_PORT));
                 socket.close();
                 available = true;
             } catch (SocketException e) {

@@ -53,7 +53,7 @@ public class GzipExtractor extends Extractor {
         long totalBytes = 0;
         ArrayList<TarArchiveEntry> archiveEntries = new ArrayList<>();
         TarArchiveInputStream inputStream = new TarArchiveInputStream(
-                new GzipCompressorInputStream(new FileInputStream(filePath)));
+            new GzipCompressorInputStream(new FileInputStream(filePath)));
 
         TarArchiveEntry tarArchiveEntry;
 
@@ -90,7 +90,7 @@ public class GzipExtractor extends Extractor {
                               TarArchiveEntry entry, String outputDir) throws IOException {
 
         File outputFile = new File(outputDir, fixEntryName(entry.getName()));
-        if (!outputFile.getCanonicalPath().startsWith(outputDir)){
+        if (!outputFile.getCanonicalPath().startsWith(outputDir)) {
             throw new IOException("Incorrect ZipEntry path!");
         }
 
@@ -104,7 +104,7 @@ public class GzipExtractor extends Extractor {
         }
 
         BufferedOutputStream outputStream = new BufferedOutputStream(
-                FileUtil.getOutputStream(outputFile, context));
+            FileUtil.getOutputStream(outputFile, context));
         try {
             int len;
             byte buf[] = new byte[GenericCopyUtil.DEFAULT_BUFFER_SIZE];

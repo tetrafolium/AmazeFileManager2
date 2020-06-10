@@ -57,14 +57,14 @@ public class LayoutElementParcelable implements Parcelable {
 
     public LayoutElementParcelable(@NonNull Context c, boolean isBack, String goback, boolean showThumbs) {
         this(c,true, new File("..").getName(), "..", "", "", goback, 0,
-                false, "", true, showThumbs, OpenMode.UNKNOWN);
+             false, "", true, showThumbs, OpenMode.UNKNOWN);
     }
 
     public LayoutElementParcelable(@NonNull Context c, String path, String permissions, String symlink,
                                    String size, long longSize,boolean header, String date,
                                    boolean isDirectory, boolean useThumbs, OpenMode openMode) {
         this(c, new File(path).getName(), path, permissions, symlink, size, longSize, header,
-                date, isDirectory, useThumbs, openMode);
+             date, isDirectory, useThumbs, openMode);
     }
 
     public LayoutElementParcelable(@NonNull Context c, String title, String path, String permissions,
@@ -81,24 +81,24 @@ public class LayoutElementParcelable implements Parcelable {
         this.mode = openMode;
         if(useThumbs) {
             switch (mode) {
-                case SMB:
-                case SFTP:
-                case DROPBOX:
-                case GDRIVE:
-                case ONEDRIVE:
-                case BOX:
-                    if (!isDirectory && (filetype == Icons.IMAGE || filetype == Icons.VIDEO || filetype == Icons.APK)) {
-                        this.iconData = new IconDataParcelable(IconDataParcelable.IMAGE_FROMCLOUD, path, fallbackIcon);
-                    } else {
-                        this.iconData = new IconDataParcelable(IconDataParcelable.IMAGE_RES, fallbackIcon);
-                    }
-                    break;
-                default:
-                    if (filetype == Icons.IMAGE || filetype == Icons.VIDEO || filetype == Icons.APK) {
-                        this.iconData = new IconDataParcelable(IconDataParcelable.IMAGE_FROMFILE, path, fallbackIcon);
-                    } else {
-                        this.iconData = new IconDataParcelable(IconDataParcelable.IMAGE_RES, fallbackIcon);
-                    }
+            case SMB:
+            case SFTP:
+            case DROPBOX:
+            case GDRIVE:
+            case ONEDRIVE:
+            case BOX:
+                if (!isDirectory && (filetype == Icons.IMAGE || filetype == Icons.VIDEO || filetype == Icons.APK)) {
+                    this.iconData = new IconDataParcelable(IconDataParcelable.IMAGE_FROMCLOUD, path, fallbackIcon);
+                } else {
+                    this.iconData = new IconDataParcelable(IconDataParcelable.IMAGE_RES, fallbackIcon);
+                }
+                break;
+            default:
+                if (filetype == Icons.IMAGE || filetype == Icons.VIDEO || filetype == Icons.APK) {
+                    this.iconData = new IconDataParcelable(IconDataParcelable.IMAGE_FROMFILE, path, fallbackIcon);
+                } else {
+                    this.iconData = new IconDataParcelable(IconDataParcelable.IMAGE_RES, fallbackIcon);
+                }
             }
         } else {
             this.iconData = new IconDataParcelable(IconDataParcelable.IMAGE_RES, fallbackIcon);
@@ -189,14 +189,14 @@ public class LayoutElementParcelable implements Parcelable {
     }
 
     public static final Parcelable.Creator<LayoutElementParcelable> CREATOR =
-            new Parcelable.Creator<LayoutElementParcelable>() {
-                public LayoutElementParcelable createFromParcel(Parcel in) {
-                    return new LayoutElementParcelable(in);
-                }
+    new Parcelable.Creator<LayoutElementParcelable>() {
+        public LayoutElementParcelable createFromParcel(Parcel in) {
+            return new LayoutElementParcelable(in);
+        }
 
-                public LayoutElementParcelable[] newArray(int size) {
-                    return new LayoutElementParcelable[size];
-                }
-            };
+        public LayoutElementParcelable[] newArray(int size) {
+            return new LayoutElementParcelable[size];
+        }
+    };
 
 }

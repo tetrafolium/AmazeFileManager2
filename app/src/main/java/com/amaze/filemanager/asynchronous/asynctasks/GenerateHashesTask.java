@@ -101,13 +101,13 @@ public class GenerateHashesTask extends AsyncTask<Void, String, String[]> {
             mMD5LinearLayout.setOnLongClickListener(v -> {
                 FileUtils.copyToClipboard(context, hashes[0]);
                 Toast.makeText(context, context.getResources().getString(R.string.md5).toUpperCase() + " " +
-                        context.getResources().getString(R.string.properties_copied_clipboard), Toast.LENGTH_SHORT).show();
+                               context.getResources().getString(R.string.properties_copied_clipboard), Toast.LENGTH_SHORT).show();
                 return false;
             });
             mSHA256LinearLayout.setOnLongClickListener(v -> {
                 FileUtils.copyToClipboard(context, hashes[1]);
                 Toast.makeText(context, context.getResources().getString(R.string.hash_sha256) + " " +
-                        context.getResources().getString(R.string.properties_copied_clipboard), Toast.LENGTH_SHORT).show();
+                               context.getResources().getString(R.string.properties_copied_clipboard), Toast.LENGTH_SHORT).show();
                 return false;
             });
         } else {

@@ -47,8 +47,8 @@ public class SevenZipExtractor extends Extractor {
     protected void extractWithFilter(@NonNull Filter filter) throws IOException {
         long totalBytes = 0;
         SevenZFile sevenzFile = (ArchivePasswordCache.getInstance().containsKey(filePath)) ?
-                new SevenZFile(new File(filePath), ArchivePasswordCache.getInstance().get(filePath).toCharArray()) :
-                new SevenZFile(new File(filePath));
+                                new SevenZFile(new File(filePath), ArchivePasswordCache.getInstance().get(filePath).toCharArray()) :
+                                new SevenZFile(new File(filePath));
 
         ArrayList<SevenZArchiveEntry> arrayList = new ArrayList<>();
 
@@ -74,11 +74,11 @@ public class SevenZipExtractor extends Extractor {
             }
         }
         sevenzFile.close();
-        listener.onFinish(); 
+        listener.onFinish();
     }
 
     private void extractEntry(@NonNull final Context context, SevenZFile sevenzFile, SevenZArchiveEntry entry, String outputDir)
-            throws IOException {
+    throws IOException {
         String name = entry.getName();
 
         if (entry.isDirectory()) {
@@ -91,8 +91,8 @@ public class SevenZipExtractor extends Extractor {
         }
 
         BufferedOutputStream outputStream = new BufferedOutputStream(
-                FileUtil.getOutputStream(outputFile, context));
- 
+            FileUtil.getOutputStream(outputFile, context));
+
         byte[] content = new byte[GenericCopyUtil.DEFAULT_BUFFER_SIZE];
         long progress=0;
         try {
@@ -100,7 +100,7 @@ public class SevenZipExtractor extends Extractor {
                 int length;
                 int bytesLeft = Long.valueOf(entry.getSize()-progress).intValue();
                 length = sevenzFile.read(content, 0,
-                        bytesLeft>GenericCopyUtil.DEFAULT_BUFFER_SIZE ? GenericCopyUtil.DEFAULT_BUFFER_SIZE : bytesLeft);
+                                         bytesLeft>GenericCopyUtil.DEFAULT_BUFFER_SIZE ? GenericCopyUtil.DEFAULT_BUFFER_SIZE : bytesLeft);
                 outputStream.write(content, 0, length);
                 ServiceWatcherUtil.position+=length;
                 progress+=length;

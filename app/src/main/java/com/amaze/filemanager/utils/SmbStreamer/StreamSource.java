@@ -95,15 +95,15 @@ public class StreamSource extends RandomAccessStream {
             e.printStackTrace();
         }
     }
-    public String getMimeType(){
+    public String getMimeType() {
         return mime;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public SmbFile getFile(){
+    public SmbFile getFile() {
         return file;
     }
 

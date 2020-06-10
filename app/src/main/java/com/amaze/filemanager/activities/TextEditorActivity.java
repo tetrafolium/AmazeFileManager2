@@ -137,7 +137,7 @@ public class TextEditorActivity extends ThemedActivity implements TextWatcher, V
         setSupportActionBar(toolbar);
 
         @ColorInt int primaryColor = ColorPreferenceHelper.getPrimary(getCurrentColorPreference(),
-                MainActivity.currentTab);
+                                     MainActivity.currentTab);
 
         toolbar.setBackgroundColor(primaryColor);
         searchViewLayout.setBackgroundColor(primaryColor);
@@ -232,18 +232,18 @@ public class TextEditorActivity extends ThemedActivity implements TextWatcher, V
     private void checkUnsavedChanges() {
         if (mOriginal != null && mInput.isShown() && !mOriginal.equals(mInput.getText().toString())) {
             new MaterialDialog.Builder(this)
-                    .title(R.string.unsavedchanges)
-                    .content(R.string.unsavedchangesdesc)
-                    .positiveText(R.string.yes)
-                    .negativeText(R.string.no)
-                    .positiveColor(getAccent())
-                    .negativeColor(getAccent())
-                    .onPositive((dialog, which) -> {
-                        saveFile(mInput.getText().toString());
-                        finish();
-                    })
-                    .onNegative((dialog, which) -> finish())
-                    .build().show();
+            .title(R.string.unsavedchanges)
+            .content(R.string.unsavedchangesdesc)
+            .positiveText(R.string.yes)
+            .negativeText(R.string.no)
+            .positiveColor(getAccent())
+            .negativeColor(getAccent())
+            .onPositive((dialog, which) -> {
+                saveFile(mInput.getText().toString());
+                finish();
+            })
+            .onNegative((dialog, which) -> finish())
+            .build().show();
         } else {
             finish();
         }
@@ -259,24 +259,24 @@ public class TextEditorActivity extends ThemedActivity implements TextWatcher, V
         Toast.makeText(this, R.string.saving, Toast.LENGTH_SHORT).show();
 
         new WriteFileAbstraction(this, getContentResolver(), mFile, editTextString, cacheFile,
-                isRootExplorer(), (errorCode) -> {
-                    switch (errorCode) {
-                        case WriteFileAbstraction.NORMAL:
-                            mOriginal = editTextString;
-                            mModified = false;
-                            invalidateOptionsMenu();
-                            Toast.makeText(getApplicationContext(), getString(R.string.done), Toast.LENGTH_SHORT).show();
-                            break;
-                        case WriteFileAbstraction.EXCEPTION_STREAM_NOT_FOUND:
-                            Toast.makeText(getApplicationContext(), R.string.error_file_not_found, Toast.LENGTH_SHORT).show();
-                            break;
-                        case WriteFileAbstraction.EXCEPTION_IO:
-                            Toast.makeText(getApplicationContext(), R.string.error_io, Toast.LENGTH_SHORT).show();
-                            break;
-                        case WriteFileAbstraction.EXCEPTION_SHELL_NOT_RUNNING:
-                            Toast.makeText(getApplicationContext(), R.string.rootfailure, Toast.LENGTH_SHORT).show();
-                            break;
-                    }
+        isRootExplorer(), (errorCode) -> {
+            switch (errorCode) {
+            case WriteFileAbstraction.NORMAL:
+                mOriginal = editTextString;
+                mModified = false;
+                invalidateOptionsMenu();
+                Toast.makeText(getApplicationContext(), getString(R.string.done), Toast.LENGTH_SHORT).show();
+                break;
+            case WriteFileAbstraction.EXCEPTION_STREAM_NOT_FOUND:
+                Toast.makeText(getApplicationContext(), R.string.error_file_not_found, Toast.LENGTH_SHORT).show();
+                break;
+            case WriteFileAbstraction.EXCEPTION_IO:
+                Toast.makeText(getApplicationContext(), R.string.error_io, Toast.LENGTH_SHORT).show();
+                break;
+            case WriteFileAbstraction.EXCEPTION_SHELL_NOT_RUNNING:
+                Toast.makeText(getApplicationContext(), R.string.rootfailure, Toast.LENGTH_SHORT).show();
+                break;
+            }
         }).execute();
     }
 
@@ -289,47 +289,47 @@ public class TextEditorActivity extends ThemedActivity implements TextWatcher, V
 
         new ReadFileTask(getContentResolver(), mFile, getExternalCacheDir(), isRootExplorer(), (data) -> {
             switch (data.error) {
-                case ReadFileTask.NORMAL:
-                    cacheFile = data.cachedFile;
-                    mOriginal = data.fileContents;
+            case ReadFileTask.NORMAL:
+                cacheFile = data.cachedFile;
+                mOriginal = data.fileContents;
 
-                    try {
-                        mInput.setText(data.fileContents);
+                try {
+                    mInput.setText(data.fileContents);
 
-                        if (mFile.scheme == EditableFileAbstraction.SCHEME_FILE
-                                && getExternalCacheDir() != null
-                                && mFile.hybridFileParcelable.getPath().contains(getExternalCacheDir().getPath())
-                                && cacheFile == null) {
-                            // file in cache, and not a root temporary file
-                            mInput.setInputType(EditorInfo.TYPE_NULL);
-                            mInput.setSingleLine(false);
-                            mInput.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
+                    if (mFile.scheme == EditableFileAbstraction.SCHEME_FILE
+                            && getExternalCacheDir() != null
+                            && mFile.hybridFileParcelable.getPath().contains(getExternalCacheDir().getPath())
+                            && cacheFile == null) {
+                        // file in cache, and not a root temporary file
+                        mInput.setInputType(EditorInfo.TYPE_NULL);
+                        mInput.setSingleLine(false);
+                        mInput.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
 
-                            Snackbar snackbar = Snackbar.make(mInput,
-                                    getResources().getString(R.string.file_read_only), Snackbar.LENGTH_INDEFINITE);
-                            snackbar.setAction(getResources().getString(R.string.got_it).toUpperCase(),
-                                    v -> snackbar.dismiss());
-                            snackbar.show();
-                        }
-
-                        if (data.fileContents.isEmpty()) {
-                            mInput.setHint(R.string.file_empty);
-                        } else {
-                            mInput.setHint(null);
-                        }
-                    } catch (OutOfMemoryError e) {
-                        Toast.makeText(getApplicationContext(), R.string.error, Toast.LENGTH_SHORT).show();
-                        finish();
+                        Snackbar snackbar = Snackbar.make(mInput,
+                                                          getResources().getString(R.string.file_read_only), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.setAction(getResources().getString(R.string.got_it).toUpperCase(),
+                                           v -> snackbar.dismiss());
+                        snackbar.show();
                     }
-                    break;
-                case ReadFileTask.EXCEPTION_STREAM_NOT_FOUND:
-                    Toast.makeText(getApplicationContext(), R.string.error_file_not_found, Toast.LENGTH_SHORT).show();
+
+                    if (data.fileContents.isEmpty()) {
+                        mInput.setHint(R.string.file_empty);
+                    } else {
+                        mInput.setHint(null);
+                    }
+                } catch (OutOfMemoryError e) {
+                    Toast.makeText(getApplicationContext(), R.string.error, Toast.LENGTH_SHORT).show();
                     finish();
-                    break;
-                case ReadFileTask.EXCEPTION_IO:
-                    Toast.makeText(getApplicationContext(), R.string.error_io, Toast.LENGTH_SHORT).show();
-                    finish();
-                    break;
+                }
+                break;
+            case ReadFileTask.EXCEPTION_STREAM_NOT_FOUND:
+                Toast.makeText(getApplicationContext(), R.string.error_file_not_found, Toast.LENGTH_SHORT).show();
+                finish();
+                break;
+            case ReadFileTask.EXCEPTION_IO:
+                Toast.makeText(getApplicationContext(), R.string.error_io, Toast.LENGTH_SHORT).show();
+                finish();
+                break;
             }
         }).execute();
     }
@@ -355,45 +355,45 @@ public class TextEditorActivity extends ThemedActivity implements TextWatcher, V
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                checkUnsavedChanges();
-                break;
-            case R.id.save:
-                // Make sure EditText is visible before saving!
-                saveFile(mInput.getText().toString());
-                break;
-            case R.id.details:
-                if (mFile.scheme == EditableFileAbstraction.SCHEME_FILE
-                        && mFile.hybridFileParcelable.getFile().exists()) {
-                    GeneralDialogCreation.showPropertiesDialogWithoutPermissions(mFile.hybridFileParcelable,
-                            this, getAppTheme());
+        case android.R.id.home:
+            checkUnsavedChanges();
+            break;
+        case R.id.save:
+            // Make sure EditText is visible before saving!
+            saveFile(mInput.getText().toString());
+            break;
+        case R.id.details:
+            if (mFile.scheme == EditableFileAbstraction.SCHEME_FILE
+                    && mFile.hybridFileParcelable.getFile().exists()) {
+                GeneralDialogCreation.showPropertiesDialogWithoutPermissions(mFile.hybridFileParcelable,
+                        this, getAppTheme());
+            } else {
+                Toast.makeText(this, R.string.no_obtainable_info, Toast.LENGTH_SHORT).show();
+            }
+            break;
+        case R.id.openwith:
+            if(mFile.scheme == EditableFileAbstraction.SCHEME_FILE) {
+                File currentFile = mFile.hybridFileParcelable.getFile();
+                if (currentFile.exists()) {
+                    boolean useNewStack = getBoolean(PREFERENCE_TEXTEDITOR_NEWSTACK);
+                    FileUtils.openunknown(currentFile, this, false, useNewStack);
                 } else {
-                    Toast.makeText(this, R.string.no_obtainable_info, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.not_allowed, Toast.LENGTH_SHORT).show();
                 }
-                break;
-            case R.id.openwith:
-                if(mFile.scheme == EditableFileAbstraction.SCHEME_FILE) {
-                    File currentFile = mFile.hybridFileParcelable.getFile();
-                    if (currentFile.exists()) {
-                        boolean useNewStack = getBoolean(PREFERENCE_TEXTEDITOR_NEWSTACK);
-                        FileUtils.openunknown(currentFile, this, false, useNewStack);
-                    } else {
-                        Toast.makeText(this, R.string.not_allowed, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(this, R.string.reopen_from_source, Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case R.id.find:
-                if (searchViewLayout.isShown()) hideSearchView();
-                else revealSearchView();
-                break;
-            case R.id.monofont:
-                item.setChecked(!item.isChecked());
-                mInput.setTypeface(item.isChecked() ? mInputTypefaceMono : mInputTypefaceDefault);
-                break;
-            default:
-                return false;
+            } else {
+                Toast.makeText(this, R.string.reopen_from_source, Toast.LENGTH_SHORT).show();
+            }
+            break;
+        case R.id.find:
+            if (searchViewLayout.isShown()) hideSearchView();
+            else revealSearchView();
+            break;
+        case R.id.monofont:
+            item.setChecked(!item.isChecked());
+            mInput.setTypeface(item.isChecked() ? mInputTypefaceMono : mInputTypefaceDefault);
+            break;
+        default:
+            return false;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -468,7 +468,7 @@ public class TextEditorActivity extends ThemedActivity implements TextWatcher, V
         // FIXME: 2016/11/18   ViewAnimationUtils Compatibility
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             animator = ViewAnimationUtils.createCircularReveal(searchViewLayout, cx, cy,
-                    startRadius, endRadius);
+                       startRadius, endRadius);
         else
             animator = ObjectAnimator.ofFloat(searchViewLayout, "alpha", 0f, 1f);
 
@@ -506,7 +506,7 @@ public class TextEditorActivity extends ThemedActivity implements TextWatcher, V
         // FIXME: 2016/11/18   ViewAnimationUtils Compatibility
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             animator = ViewAnimationUtils.createCircularReveal(searchViewLayout, cx, cy,
-                    startRadius, endRadius);
+                       startRadius, endRadius);
         } else {
             animator = ObjectAnimator.ofFloat(searchViewLayout, "alpha", 0f, 1f);
         }
@@ -528,64 +528,64 @@ public class TextEditorActivity extends ThemedActivity implements TextWatcher, V
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.prev:
-                // upButton
-                if (mCurrent > 0) {
+        case R.id.prev:
+            // upButton
+            if (mCurrent > 0) {
 
-                    // setting older span back before setting new one
+                // setting older span back before setting new one
+                Map.Entry keyValueOld = nodes.get(mCurrent).getKey();
+                if (getAppTheme().equals(AppTheme.LIGHT)) {
+                    mInput.getText().setSpan(new BackgroundColorSpan(Color.YELLOW), (Integer) keyValueOld.getKey(),
+                                             (Integer) keyValueOld.getValue(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                } else {
+                    mInput.getText().setSpan(new BackgroundColorSpan(Color.LTGRAY), (Integer) keyValueOld.getKey(),
+                                             (Integer) keyValueOld.getValue(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                }
+                // highlighting previous element in list
+                Map.Entry keyValueNew = nodes.get(--mCurrent).getKey();
+                mInput.getText().setSpan(new BackgroundColorSpan(Utils.getColor(this, R.color.search_text_highlight)),
+                                         (Integer) keyValueNew.getKey(),
+                                         (Integer) keyValueNew.getValue(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+
+                // scrolling to the highlighted element
+                scrollView.scrollTo(0, (Integer) keyValueNew.getValue()
+                                    + mInput.getLineHeight() + Math.round(mInput.getLineSpacingExtra())
+                                    - getSupportActionBar().getHeight());
+            }
+            break;
+        case R.id.next:
+            // downButton
+            if (mCurrent < nodes.size() - 1) {
+
+                // setting older span back before setting new one
+                if (mCurrent != -1) {
+
                     Map.Entry keyValueOld = nodes.get(mCurrent).getKey();
                     if (getAppTheme().equals(AppTheme.LIGHT)) {
                         mInput.getText().setSpan(new BackgroundColorSpan(Color.YELLOW), (Integer) keyValueOld.getKey(),
-                                (Integer) keyValueOld.getValue(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                                                 (Integer) keyValueOld.getValue(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                     } else {
                         mInput.getText().setSpan(new BackgroundColorSpan(Color.LTGRAY), (Integer) keyValueOld.getKey(),
-                                (Integer) keyValueOld.getValue(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                                                 (Integer) keyValueOld.getValue(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                     }
-                    // highlighting previous element in list
-                    Map.Entry keyValueNew = nodes.get(--mCurrent).getKey();
-                    mInput.getText().setSpan(new BackgroundColorSpan(Utils.getColor(this, R.color.search_text_highlight)),
-                            (Integer) keyValueNew.getKey(),
-                            (Integer) keyValueNew.getValue(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-
-                    // scrolling to the highlighted element
-                    scrollView.scrollTo(0, (Integer) keyValueNew.getValue()
-                            + mInput.getLineHeight() + Math.round(mInput.getLineSpacingExtra())
-                            - getSupportActionBar().getHeight());
                 }
-                break;
-            case R.id.next:
-                // downButton
-                if (mCurrent < nodes.size() - 1) {
 
-                    // setting older span back before setting new one
-                    if (mCurrent != -1) {
+                Map.Entry keyValueNew = nodes.get(++mCurrent).getKey();
+                mInput.getText().setSpan(new BackgroundColorSpan(Utils.getColor(this, R.color.search_text_highlight)),
+                                         (Integer) keyValueNew.getKey(),
+                                         (Integer) keyValueNew.getValue(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
-                        Map.Entry keyValueOld = nodes.get(mCurrent).getKey();
-                        if (getAppTheme().equals(AppTheme.LIGHT)) {
-                            mInput.getText().setSpan(new BackgroundColorSpan(Color.YELLOW), (Integer) keyValueOld.getKey(),
-                                    (Integer) keyValueOld.getValue(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                        } else {
-                            mInput.getText().setSpan(new BackgroundColorSpan(Color.LTGRAY), (Integer) keyValueOld.getKey(),
-                                    (Integer) keyValueOld.getValue(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                        }
-                    }
-
-                    Map.Entry keyValueNew = nodes.get(++mCurrent).getKey();
-                    mInput.getText().setSpan(new BackgroundColorSpan(Utils.getColor(this, R.color.search_text_highlight)),
-                            (Integer) keyValueNew.getKey(),
-                            (Integer) keyValueNew.getValue(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-
-                    // scrolling to the highlighted element
-                    scrollView.scrollTo(0, (Integer) keyValueNew.getValue()
-                            + mInput.getLineHeight() + Math.round(mInput.getLineSpacingExtra())
-                            - getSupportActionBar().getHeight());
-                }
-                break;
-            case R.id.close:
-                // closeButton
-                findViewById(R.id.searchview).setVisibility(View.GONE);
-                cleanSpans();
-                break;
+                // scrolling to the highlighted element
+                scrollView.scrollTo(0, (Integer) keyValueNew.getValue()
+                                    + mInput.getLineHeight() + Math.round(mInput.getLineSpacingExtra())
+                                    - getSupportActionBar().getHeight());
+            }
+            break;
+        case R.id.close:
+            // closeButton
+            findViewById(R.id.searchview).setVisibility(View.GONE);
+            cleanSpans();
+            break;
         }
     }
 
@@ -597,7 +597,7 @@ public class TextEditorActivity extends ThemedActivity implements TextWatcher, V
 
         // clearing textView spans
         BackgroundColorSpan[] colorSpans = mInput.getText().getSpans(0,
-                mInput.length(), BackgroundColorSpan.class);
+                                           mInput.length(), BackgroundColorSpan.class);
         for (BackgroundColorSpan colorSpan : colorSpans) {
             mInput.getText().removeSpan(colorSpan);
         }

@@ -42,7 +42,7 @@ import java.util.List;
  * Created by Arpit on 15-12-2014.
  */
 public class TabFragment extends Fragment
-        implements ViewPager.OnPageChangeListener {
+    implements ViewPager.OnPageChangeListener {
 
     public List<Fragment> fragments = new ArrayList<>();
     public ScreenSlidePagerAdapter mSectionsPagerAdapter;

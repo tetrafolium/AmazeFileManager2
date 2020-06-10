@@ -49,7 +49,7 @@ public class ColorAdapter extends ArrayAdapter<Integer> implements AdapterView.O
             colorView = (CheckableCircleView) convertView;
         } else {
             colorView = (CheckableCircleView) inflater.inflate(R.layout.dialog_grid_item, parent,
-                    false);
+                        false);
         }
 
         @ColorInt int color = Utils.getColor(getContext(), getColorResAt(position));

@@ -60,14 +60,14 @@ public abstract class DummyFileGenerator {
         MessageDigest md = null;
         try {
             md = MessageDigest.getInstance("SHA-1");
-        } catch(NoSuchAlgorithmException shouldNeverHappen){
+        } catch(NoSuchAlgorithmException shouldNeverHappen) {
             throw new IOException("SHA-1 implementation not found");
         }
 
         FileOutputStream out = new FileOutputStream(destFile);
         DigestOutputStream dout = new DigestOutputStream(out, md);
         int count = 0;
-        for(int i=size; i>=0; i-=DEFAULT_BUFFER_SIZE, count+=DEFAULT_BUFFER_SIZE){
+        for(int i=size; i>=0; i-=DEFAULT_BUFFER_SIZE, count+=DEFAULT_BUFFER_SIZE) {
             byte[] bytes = new byte[i > DEFAULT_BUFFER_SIZE ? DEFAULT_BUFFER_SIZE : i];
             rand.nextBytes(bytes);
             dout.write(bytes);

@@ -54,7 +54,7 @@ public class ShadowCryptUtil {
      * Helper method to encrypt plain text password
      */
     private static String aesEncryptPassword(String plainTextPassword)
-            throws GeneralSecurityException {
+    throws GeneralSecurityException {
 
         Cipher cipher = Cipher.getInstance(ALGO_AES, "BC");
         GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(128, IV.getBytes());

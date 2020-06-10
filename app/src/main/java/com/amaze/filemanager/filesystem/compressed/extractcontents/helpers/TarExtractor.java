@@ -89,7 +89,7 @@ public class TarExtractor extends Extractor {
                               TarArchiveEntry entry, String outputDir) throws IOException {
         File outputFile = new File(outputDir, fixEntryName(entry.getName()));
 
-        if (!outputFile.getCanonicalPath().startsWith(outputDir)){
+        if (!outputFile.getCanonicalPath().startsWith(outputDir)) {
             throw new IOException("Incorrect TarArchiveEntry path!");
         }
 
@@ -103,7 +103,7 @@ public class TarExtractor extends Extractor {
         }
 
         BufferedOutputStream outputStream = new BufferedOutputStream(
-                FileUtil.getOutputStream(outputFile, context));
+            FileUtil.getOutputStream(outputFile, context));
         try {
             int len;
             byte buf[] = new byte[GenericCopyUtil.DEFAULT_BUFFER_SIZE];

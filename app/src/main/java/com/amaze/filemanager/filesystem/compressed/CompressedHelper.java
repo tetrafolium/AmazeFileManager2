@@ -74,7 +74,7 @@ public abstract class CompressedHelper {
      * To add compatibility with other compressed file types edit this method
      */
     public static Extractor getExtractorInstance(@NonNull Context context, @NonNull File file, @NonNull String outputPath,
-                                                 @NonNull Extractor.OnUpdate listener) {
+            @NonNull Extractor.OnUpdate listener) {
         Extractor extractor;
         String type = getExtension(file.getPath());
 
@@ -151,27 +151,27 @@ public abstract class CompressedHelper {
             return compressedName.substring(0, compressedName.lastIndexOf("."));
         } else if (isGzippedTar(compressedName) || isXzippedTar(compressedName) || isLzippedTar(compressedName) || isBzippedTar(compressedName)) {
             return compressedName.substring(0,
-                    Utils.nthToLastCharIndex(2, compressedName, '.'));
+                                            Utils.nthToLastCharIndex(2, compressedName, '.'));
         } else {
             return compressedName;
         }
     }
 
-    public static final boolean isEntryPathValid(String entryPath){
+    public static final boolean isEntryPathValid(String entryPath) {
         return !entryPath.startsWith("..\\") && !entryPath.startsWith("../") && !entryPath.equals("..");
     }
 
     private static boolean isZip(String type) {
         return type.endsWith(fileExtensionZip) || type.endsWith(fileExtensionJar)
-                || type.endsWith(fileExtensionApk);
+               || type.endsWith(fileExtensionApk);
     }
 
     private static boolean isTar(String type) {
-         return type.endsWith(fileExtensionTar);
+        return type.endsWith(fileExtensionTar);
     }
 
     private static boolean isGzippedTar(String type) {
-         return type.endsWith(fileExtensionGzipTarLong) || type.endsWith(fileExtensionGzipTarShort);
+        return type.endsWith(fileExtensionGzipTarLong) || type.endsWith(fileExtensionGzipTarShort);
     }
 
     private static boolean isBzippedTar(String type) {
@@ -181,7 +181,7 @@ public abstract class CompressedHelper {
     private static boolean isRar(String type) {
         return type.endsWith(fileExtensionRar);
     }
-    
+
     private static boolean is7zip(String type) {
         return type.endsWith(fileExtension7zip);
     }

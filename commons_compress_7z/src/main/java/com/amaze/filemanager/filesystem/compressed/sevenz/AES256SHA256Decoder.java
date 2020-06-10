@@ -32,7 +32,7 @@ import org.apache.commons.compress.PasswordRequiredException;
 class AES256SHA256Decoder extends CoderBase {
     @Override
     InputStream decode(final String archiveName, final InputStream in, final long uncompressedLength,
-            final Coder coder, final byte[] passwordBytes) throws IOException {
+                       final Coder coder, final byte[] passwordBytes) throws IOException {
         return new InputStream() {
             private boolean isInitialized = false;
             private CipherInputStream cipherInputStream = null;
@@ -69,7 +69,7 @@ class AES256SHA256Decoder extends CoderBase {
                         digest = MessageDigest.getInstance("SHA-256");
                     } catch (final NoSuchAlgorithmException noSuchAlgorithmException) {
                         throw new IOException("SHA-256 is unsupported by your Java implementation",
-                            noSuchAlgorithmException);
+                                              noSuchAlgorithmException);
                     }
                     final byte[] extra = new byte[8];
                     for (long j = 0; j < (1L << numCyclesPower); j++) {
@@ -95,9 +95,9 @@ class AES256SHA256Decoder extends CoderBase {
                     return cipherInputStream;
                 } catch (final GeneralSecurityException generalSecurityException) {
                     throw new IOException("Decryption error " +
-                        "(do you have the JCE Unlimited Strength Jurisdiction Policy Files installed?)",
-                        generalSecurityException);
-                    }
+                                          "(do you have the JCE Unlimited Strength Jurisdiction Policy Files installed?)",
+                                          generalSecurityException);
+                }
             }
 
             @Override

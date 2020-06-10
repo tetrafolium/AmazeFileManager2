@@ -47,9 +47,9 @@ public class UsbOtgTest {
         }
 
         assertTrue("No usb storage, known storages: '" +
-                TextUtils.join("', '", storageDirectories) +
-                "'",
-                hasOtgStorage);
+                   TextUtils.join("', '", storageDirectories) +
+                   "'",
+                   hasOtgStorage);
     }
 
 }

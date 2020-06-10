@@ -56,7 +56,7 @@ public class CloudUtil {
      * @deprecated use getCloudFiles()
      */
     public static ArrayList<HybridFileParcelable> listFiles(String path, CloudStorage cloudStorage,
-                                                            OpenMode openMode) throws CloudPluginException {
+            OpenMode openMode) throws CloudPluginException {
         final ArrayList<HybridFileParcelable> baseFiles = new ArrayList<>();
         getCloudFiles(path, cloudStorage, openMode, baseFiles::add);
         return baseFiles;
@@ -68,11 +68,11 @@ public class CloudUtil {
         try {
             for (CloudMetaData cloudMetaData : cloudStorage.getChildren(strippedPath)) {
                 HybridFileParcelable baseFile = new HybridFileParcelable(
-                        path + "/" + cloudMetaData.getName(),
-                        "",
-                        (cloudMetaData.getModifiedAt() == null) ? 0l : cloudMetaData.getModifiedAt(),
-                        cloudMetaData.getSize(),
-                        cloudMetaData.getFolder());
+                    path + "/" + cloudMetaData.getName(),
+                    "",
+                    (cloudMetaData.getModifiedAt() == null) ? 0l : cloudMetaData.getModifiedAt(),
+                    cloudMetaData.getSize(),
+                    cloudMetaData.getFolder());
                 baseFile.setName(cloudMetaData.getName());
                 baseFile.setMode(openMode);
                 fileFoundCallback.onFileFound(baseFile);
@@ -89,44 +89,44 @@ public class CloudUtil {
     public static String stripPath(OpenMode openMode, String path) {
         String strippedPath = path;
         switch (openMode) {
-            case DROPBOX:
-                if (path.equals(CloudHandler.CLOUD_PREFIX_DROPBOX + "/")) {
-                    // we're at root, just replace the prefix
-                    strippedPath = path.replace(CloudHandler.CLOUD_PREFIX_DROPBOX, "");
-                } else {
-                    // we're not at root, replace prefix + /
-                    strippedPath = path.replace(CloudHandler.CLOUD_PREFIX_DROPBOX + "/", "");
-                }
-                break;
-            case BOX:
-                if (path.equals(CloudHandler.CLOUD_PREFIX_BOX + "/")) {
-                    // we're at root, just replace the prefix
-                    strippedPath = path.replace(CloudHandler.CLOUD_PREFIX_BOX, "");
-                } else {
-                    // we're not at root, replace prefix + /
-                    strippedPath = path.replace(CloudHandler.CLOUD_PREFIX_BOX + "/", "");
-                }
-                break;
-            case ONEDRIVE:
-                if (path.equals(CloudHandler.CLOUD_PREFIX_ONE_DRIVE + "/")) {
-                    // we're at root, just replace the prefix
-                    strippedPath = path.replace(CloudHandler.CLOUD_PREFIX_ONE_DRIVE, "");
-                } else {
-                    // we're not at root, replace prefix + /
-                    strippedPath = path.replace(CloudHandler.CLOUD_PREFIX_ONE_DRIVE + "/", "");
-                }
-                break;
-            case GDRIVE:
-                if (path.equals(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE + "/")) {
-                    // we're at root, just replace the prefix
-                    strippedPath = path.replace(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE, "");
-                } else {
-                    // we're not at root, replace prefix + /
-                    strippedPath = path.replace(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE + "/", "");
-                }
-                break;
-            default:
-                break;
+        case DROPBOX:
+            if (path.equals(CloudHandler.CLOUD_PREFIX_DROPBOX + "/")) {
+                // we're at root, just replace the prefix
+                strippedPath = path.replace(CloudHandler.CLOUD_PREFIX_DROPBOX, "");
+            } else {
+                // we're not at root, replace prefix + /
+                strippedPath = path.replace(CloudHandler.CLOUD_PREFIX_DROPBOX + "/", "");
+            }
+            break;
+        case BOX:
+            if (path.equals(CloudHandler.CLOUD_PREFIX_BOX + "/")) {
+                // we're at root, just replace the prefix
+                strippedPath = path.replace(CloudHandler.CLOUD_PREFIX_BOX, "");
+            } else {
+                // we're not at root, replace prefix + /
+                strippedPath = path.replace(CloudHandler.CLOUD_PREFIX_BOX + "/", "");
+            }
+            break;
+        case ONEDRIVE:
+            if (path.equals(CloudHandler.CLOUD_PREFIX_ONE_DRIVE + "/")) {
+                // we're at root, just replace the prefix
+                strippedPath = path.replace(CloudHandler.CLOUD_PREFIX_ONE_DRIVE, "");
+            } else {
+                // we're not at root, replace prefix + /
+                strippedPath = path.replace(CloudHandler.CLOUD_PREFIX_ONE_DRIVE + "/", "");
+            }
+            break;
+        case GDRIVE:
+            if (path.equals(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE + "/")) {
+                // we're at root, just replace the prefix
+                strippedPath = path.replace(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE, "");
+            } else {
+                // we're not at root, replace prefix + /
+                strippedPath = path.replace(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE + "/", "");
+            }
+            break;
+        default:
+            break;
         }
         return strippedPath;
     }
@@ -149,8 +149,8 @@ public class CloudUtil {
                             activity.startActivity(i);
                         else
                             Toast.makeText(activity,
-                                    activity.getString(R.string.smb_launch_error),
-                                    Toast.LENGTH_SHORT).show();
+                                           activity.getString(R.string.smb_launch_error),
+                                           Toast.LENGTH_SHORT).show();
                     } catch (ActivityNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -240,12 +240,12 @@ public class CloudUtil {
                 if (!aBoolean) {
                     // delete account and create a new one
                     Toast.makeText(mainActivity, mainActivity.getResources()
-                            .getString(R.string.cloud_token_lost), Toast.LENGTH_LONG).show();
+                                   .getString(R.string.cloud_token_lost), Toast.LENGTH_LONG).show();
                     mainActivity.deleteConnection(serviceType);
                     mainActivity.addConnection(serviceType);
                 }
             }
-        }.execute(path);
+        } .execute(path);
     }
 
     /**
@@ -261,71 +261,71 @@ public class CloudUtil {
         DataUtils dataUtils = DataUtils.getInstance();
 
         switch (hybridFile.getMode()) {
-            case SFTP:
-                inputStream = SshClientUtils.execute(new SFtpClientTemplate(hybridFile.getPath(), false) {
-                    @Override
-                    public InputStream execute(final SFTPClient client) throws IOException {
-                        final RemoteFile rf = client.open(SshClientUtils.extractRemotePathFrom(hybridFile.getPath()));
-                        return rf. new RemoteFileInputStream(){
-                            @Override
-                            public void close() throws IOException {
-                                try
-                                {
-                                    super.close();
-                                }
-                                finally
-                                {
-                                    rf.close();
-                                    client.close();
-                                }
+        case SFTP:
+            inputStream = SshClientUtils.execute(new SFtpClientTemplate(hybridFile.getPath(), false) {
+                @Override
+                public InputStream execute(final SFTPClient client) throws IOException {
+                    final RemoteFile rf = client.open(SshClientUtils.extractRemotePathFrom(hybridFile.getPath()));
+                    return rf. new RemoteFileInputStream() {
+                        @Override
+                        public void close() throws IOException {
+                            try
+                            {
+                                super.close();
                             }
-                        };
-                    }
-                });
-                break;
-            case SMB:
-                try {
-                    inputStream = new SmbFile(hybridFile.getPath()).getInputStream();
-                } catch (IOException e) {
-                    inputStream = null;
-                    e.printStackTrace();
+                            finally
+                            {
+                                rf.close();
+                                client.close();
+                            }
+                        }
+                    };
                 }
-                break;
-            case OTG:
-                ContentResolver contentResolver = context.getContentResolver();
-                DocumentFile documentSourceFile = OTGUtil.getDocumentFile(hybridFile.getPath(),
-                        context, false);
-                try {
-                    inputStream = contentResolver.openInputStream(documentSourceFile.getUri());
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    inputStream = null;
-                }
-                break;
-            case DROPBOX:
-                CloudStorage cloudStorageDropbox = dataUtils.getAccount(OpenMode.DROPBOX);
-                inputStream = cloudStorageDropbox.getThumbnail(CloudUtil.stripPath(OpenMode.DROPBOX, hybridFile.getPath()));
-                break;
-            case BOX:
-                CloudStorage cloudStorageBox = dataUtils.getAccount(OpenMode.BOX);
-                inputStream = cloudStorageBox.getThumbnail(CloudUtil.stripPath(OpenMode.BOX, hybridFile.getPath()));
-                break;
-            case GDRIVE:
-                CloudStorage cloudStorageGDrive = dataUtils.getAccount(OpenMode.GDRIVE);
-                inputStream = cloudStorageGDrive.getThumbnail(CloudUtil.stripPath(OpenMode.GDRIVE, hybridFile.getPath()));
-                break;
-            case ONEDRIVE:
-                CloudStorage cloudStorageOneDrive = dataUtils.getAccount(OpenMode.ONEDRIVE);
-                inputStream = cloudStorageOneDrive.getThumbnail(CloudUtil.stripPath(OpenMode.ONEDRIVE, hybridFile.getPath()));
-                break;
-            default:
-                try {
-                    inputStream = new FileInputStream(hybridFile.getPath());
-                } catch (FileNotFoundException e) {
-                    inputStream = null;
-                    e.printStackTrace();
-                }
-                break;
+            });
+            break;
+        case SMB:
+            try {
+                inputStream = new SmbFile(hybridFile.getPath()).getInputStream();
+            } catch (IOException e) {
+                inputStream = null;
+                e.printStackTrace();
+            }
+            break;
+        case OTG:
+            ContentResolver contentResolver = context.getContentResolver();
+            DocumentFile documentSourceFile = OTGUtil.getDocumentFile(hybridFile.getPath(),
+                                              context, false);
+            try {
+                inputStream = contentResolver.openInputStream(documentSourceFile.getUri());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                inputStream = null;
+            }
+            break;
+        case DROPBOX:
+            CloudStorage cloudStorageDropbox = dataUtils.getAccount(OpenMode.DROPBOX);
+            inputStream = cloudStorageDropbox.getThumbnail(CloudUtil.stripPath(OpenMode.DROPBOX, hybridFile.getPath()));
+            break;
+        case BOX:
+            CloudStorage cloudStorageBox = dataUtils.getAccount(OpenMode.BOX);
+            inputStream = cloudStorageBox.getThumbnail(CloudUtil.stripPath(OpenMode.BOX, hybridFile.getPath()));
+            break;
+        case GDRIVE:
+            CloudStorage cloudStorageGDrive = dataUtils.getAccount(OpenMode.GDRIVE);
+            inputStream = cloudStorageGDrive.getThumbnail(CloudUtil.stripPath(OpenMode.GDRIVE, hybridFile.getPath()));
+            break;
+        case ONEDRIVE:
+            CloudStorage cloudStorageOneDrive = dataUtils.getAccount(OpenMode.ONEDRIVE);
+            inputStream = cloudStorageOneDrive.getThumbnail(CloudUtil.stripPath(OpenMode.ONEDRIVE, hybridFile.getPath()));
+            break;
+        default:
+            try {
+                inputStream = new FileInputStream(hybridFile.getPath());
+            } catch (FileNotFoundException e) {
+                inputStream = null;
+                e.printStackTrace();
+            }
+            break;
         }
         return inputStream;
     }

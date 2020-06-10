@@ -26,7 +26,7 @@ public class ListFilesOnSshdTest extends AbstractSftpServerTest {
 
     @Test
     public void testNormalListDirs() throws InterruptedException {
-        for(String s: new String[]{"sysroot","srv","var","tmp","bin","lib","usr"}){
+        for(String s: new String[] {"sysroot","srv","var","tmp","bin","lib","usr"}) {
             new File(Environment.getExternalStorageDirectory(), s).mkdir();
         }
         performVerify();
@@ -36,22 +36,22 @@ public class ListFilesOnSshdTest extends AbstractSftpServerTest {
     public void testListDirsAndSymlinks() throws Exception {
         File sysroot = new File(Environment.getExternalStorageDirectory(), "sysroot");
         sysroot.mkdir();
-        for(String s: new String[]{"srv","var","tmp"}){
+        for(String s: new String[] {"srv","var","tmp"}) {
             File subdir = new File(sysroot, s);
             subdir.mkdir();
             Files.createSymbolicLink(Paths.get(new File(Environment.getExternalStorageDirectory(), s).getAbsolutePath()), Paths.get(subdir.getAbsolutePath()));
         }
-        for(String s: new String[]{"bin","lib","usr"}){
+        for(String s: new String[] {"bin","lib","usr"}) {
             new File(Environment.getExternalStorageDirectory(), s).mkdir();
         }
         performVerify();
     }
 
-    private void performVerify() throws InterruptedException{
+    private void performVerify() throws InterruptedException {
         List<String> result = new ArrayList<>();
         HybridFile file = new HybridFile(OpenMode.SFTP, "ssh://testuser:testpassword@127.0.0.1:22222");
         CountDownLatch waiter = new CountDownLatch(7);
-        file.forEachChildrenFile(RuntimeEnvironment.application, false, (fileFound)->{
+        file.forEachChildrenFile(RuntimeEnvironment.application, false, (fileFound)-> {
             assertTrue(fileFound.getPath() + " not seen as directory", fileFound.isDirectory());
             result.add(fileFound.getName());
             waiter.countDown();
@@ -65,15 +65,15 @@ public class ListFilesOnSshdTest extends AbstractSftpServerTest {
     public void testListDirsAndFilesAndSymlinks() throws Exception {
         File sysroot = new File(Environment.getExternalStorageDirectory(), "sysroot");
         sysroot.mkdir();
-        for(String s: new String[]{"srv","var","tmp"}){
+        for(String s: new String[] {"srv","var","tmp"}) {
             File subdir = new File(sysroot, s);
             subdir.mkdir();
             Files.createSymbolicLink(Paths.get(new File(Environment.getExternalStorageDirectory(), s).getAbsolutePath()), Paths.get(subdir.getAbsolutePath()));
         }
-        for(String s: new String[]{"bin","lib","usr"}){
+        for(String s: new String[] {"bin","lib","usr"}) {
             new File(Environment.getExternalStorageDirectory(), s).mkdir();
         }
-        for(int i=1;i<=4;i++){
+        for(int i=1; i<=4; i++) {
             File f = new File(Environment.getExternalStorageDirectory(), i+".txt");
             FileOutputStream out = new FileOutputStream(f);
             out.write(i);
@@ -83,7 +83,7 @@ public class ListFilesOnSshdTest extends AbstractSftpServerTest {
         List<String> dirs = new ArrayList<>(), files = new ArrayList<>();
         HybridFile file = new HybridFile(OpenMode.SFTP, "ssh://testuser:testpassword@127.0.0.1:22222");
         CountDownLatch waiter = new CountDownLatch(15);
-        file.forEachChildrenFile(RuntimeEnvironment.application, false, (fileFound)->{
+        file.forEachChildrenFile(RuntimeEnvironment.application, false, (fileFound)-> {
             if(!fileFound.getName().endsWith(".txt")) {
                 assertTrue(fileFound.getPath() + " not seen as directory", fileFound.isDirectory());
                 dirs.add(fileFound.getName());

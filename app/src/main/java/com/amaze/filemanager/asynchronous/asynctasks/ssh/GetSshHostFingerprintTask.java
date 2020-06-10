@@ -110,7 +110,7 @@ public class GetSshHostFingerprintTask extends AsyncTask<Void, Void, AsyncTaskRe
     @Override
     protected void onPreExecute() {
         progressDialog = ProgressDialog.show(AppConfig.getInstance().getMainActivityContext(),
-                "", AppConfig.getInstance().getResources().getString(R.string.processing));
+                                             "", AppConfig.getInstance().getResources().getString(R.string.processing));
     }
 
     @Override
@@ -121,9 +121,9 @@ public class GetSshHostFingerprintTask extends AsyncTask<Void, Void, AsyncTaskRe
             if(SocketException.class.isAssignableFrom(result.exception.getClass())
                     || SocketTimeoutException.class.isAssignableFrom(result.exception.getClass())) {
                 Toast.makeText(AppConfig.getInstance(),
-                        AppConfig.getInstance().getResources().getString(R.string.ssh_connect_failed,
-                                hostname, port, result.exception.getLocalizedMessage()),
-                        Toast.LENGTH_LONG).show();
+                               AppConfig.getInstance().getResources().getString(R.string.ssh_connect_failed,
+                                       hostname, port, result.exception.getLocalizedMessage()),
+                               Toast.LENGTH_LONG).show();
             }
         } else {
             callback.onResult(result);

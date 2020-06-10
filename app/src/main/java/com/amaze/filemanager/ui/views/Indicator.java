@@ -42,7 +42,7 @@ import java.util.Arrays;
  * An ink inspired widget for indicating pages in a {@link ViewPager}.
  */
 public class Indicator extends View implements ViewPager.OnPageChangeListener,
-        View.OnAttachStateChangeListener {
+    View.OnAttachStateChangeListener {
 
     // defaults
     private static final int DEFAULT_DOT_SIZE = 8;                      // dp
@@ -127,22 +127,22 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
 
         // Load attributes
         final TypedArray a = getContext().obtainStyledAttributes(
-                attrs, R.styleable.Indicator, defStyle, 0);
+                                 attrs, R.styleable.Indicator, defStyle, 0);
 
         dotDiameter = a.getDimensionPixelSize(R.styleable.Indicator_dotDiameter,
-                DEFAULT_DOT_SIZE * density);
+                                              DEFAULT_DOT_SIZE * density);
         dotRadius = dotDiameter / 2;
         halfDotRadius = dotRadius / 2;
         gap = a.getDimensionPixelSize(R.styleable.Indicator_dotGap,
-                DEFAULT_GAP * density);
+                                      DEFAULT_GAP * density);
         animDuration = (long) a.getInteger(R.styleable.Indicator_animationDuration,
-                DEFAULT_ANIM_DURATION);
+                                           DEFAULT_ANIM_DURATION);
         animHalfDuration = animDuration / 2;
         selectedColour = a.getColor(R.styleable.Indicator_currentPageIndicatorColor,
-                DEFAULT_SELECTED_COLOUR);
+                                    DEFAULT_SELECTED_COLOUR);
         // half transparent accent color
         unselectedColour = Color.argb(80, Color.red(selectedColour),
-                Color.green(selectedColour), Color.blue(selectedColour));
+                                      Color.green(selectedColour), Color.blue(selectedColour));
 
         a.recycle();
 
@@ -268,29 +268,29 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
         int desiredHeight = getDesiredHeight();
         int height;
         switch (MeasureSpec.getMode(heightMeasureSpec)) {
-            case MeasureSpec.EXACTLY:
-                height = MeasureSpec.getSize(heightMeasureSpec);
-                break;
-            case MeasureSpec.AT_MOST:
-                height = Math.min(desiredHeight, MeasureSpec.getSize(heightMeasureSpec));
-                break;
-            default: // MeasureSpec.UNSPECIFIED
-                height = desiredHeight;
-                break;
+        case MeasureSpec.EXACTLY:
+            height = MeasureSpec.getSize(heightMeasureSpec);
+            break;
+        case MeasureSpec.AT_MOST:
+            height = Math.min(desiredHeight, MeasureSpec.getSize(heightMeasureSpec));
+            break;
+        default: // MeasureSpec.UNSPECIFIED
+            height = desiredHeight;
+            break;
         }
 
         int desiredWidth = getDesiredWidth();
         int width;
         switch (MeasureSpec.getMode(widthMeasureSpec)) {
-            case MeasureSpec.EXACTLY:
-                width = MeasureSpec.getSize(widthMeasureSpec);
-                break;
-            case MeasureSpec.AT_MOST:
-                width = Math.min(desiredWidth, MeasureSpec.getSize(widthMeasureSpec));
-                break;
-            default: // MeasureSpec.UNSPECIFIED
-                width = desiredWidth;
-                break;
+        case MeasureSpec.EXACTLY:
+            width = MeasureSpec.getSize(widthMeasureSpec);
+            break;
+        case MeasureSpec.AT_MOST:
+            width = Math.min(desiredWidth, MeasureSpec.getSize(widthMeasureSpec));
+            break;
+        default: // MeasureSpec.UNSPECIFIED
+            width = desiredWidth;
+            break;
         }
         setMeasuredDimension(width, height);
         calculateDotPositions(width, height);
@@ -333,10 +333,10 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
         for (int page = 0; page < pageCount; page++) {
             int nextXIndex = page == pageCount - 1 ? page : page + 1;
             combinedUnselectedPath.op(getUnselectedPath(page,
-                    dotCenterX[page],
-                    dotCenterX[nextXIndex],
-                    page == pageCount - 1 ? INVALID_FRACTION : joiningFractions[page],
-                    dotRevealFractions[page]), Path.Op.UNION);
+                                      dotCenterX[page],
+                                      dotCenterX[nextXIndex],
+                                      page == pageCount - 1 ? INVALID_FRACTION : joiningFractions[page],
+                                      dotRevealFractions[page]), Path.Op.UNION);
         }
         // draw any retreating joins
         if (retreatingJoinX1 != INVALID_FRACTION) {
@@ -402,8 +402,8 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
             controlX2 = endX1;
             controlY2 = endY1 - halfDotRadius;
             unselectedDotLeftPath.cubicTo(controlX1, controlY1,
-                    controlX2, controlY2,
-                    endX1, endY1);
+                                          controlX2, controlY2,
+                                          endX1, endY1);
 
             // cubic back to the bottom center
             endX2 = centerX;
@@ -413,8 +413,8 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
             controlX2 = centerX + halfDotRadius;
             controlY2 = dotBottomY;
             unselectedDotLeftPath.cubicTo(controlX1, controlY1,
-                    controlX2, controlY2,
-                    endX2, endY2);
+                                          controlX2, controlY2,
+                                          endX2, endY2);
 
             unselectedDotPath.op(unselectedDotLeftPath, Path.Op.UNION);
 
@@ -436,8 +436,8 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
             controlX2 = endX1;
             controlY2 = endY1 - halfDotRadius;
             unselectedDotRightPath.cubicTo(controlX1, controlY1,
-                    controlX2, controlY2,
-                    endX1, endY1);
+                                           controlX2, controlY2,
+                                           endX1, endY1);
 
             // cubic back to the bottom center
             endX2 = nextCenterX;
@@ -447,8 +447,8 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
             controlX2 = endX2 - halfDotRadius;
             controlY2 = dotBottomY;
             unselectedDotRightPath.cubicTo(controlX1, controlY1,
-                    controlX2, controlY2,
-                    endX2, endY2);
+                                           controlX2, controlY2,
+                                           endX2, endY2);
             unselectedDotPath.op(unselectedDotRightPath, Path.Op.UNION);
         }
 
@@ -475,8 +475,8 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
             controlX2 = endX1 - ((1 - adjustedFraction) * dotRadius);
             controlY2 = endY1;
             unselectedDotPath.cubicTo(controlX1, controlY1,
-                    controlX2, controlY2,
-                    endX1, endY1);
+                                      controlX2, controlY2,
+                                      endX1, endY1);
 
             // bezier to the top right of the join
             endX2 = nextCenterX;
@@ -486,8 +486,8 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
             controlX2 = endX1 + (adjustedFraction * dotRadius);
             controlY2 = dotTopY;
             unselectedDotPath.cubicTo(controlX1, controlY1,
-                    controlX2, controlY2,
-                    endX2, endY2);
+                                      controlX2, controlY2,
+                                      endX2, endY2);
 
             // semi-circle to the bottom right
             rectF.set(nextCenterX - dotRadius, dotTopY, nextCenterX + dotRadius, dotBottomY);
@@ -501,8 +501,8 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
             controlX2 = endX1 + ((1 - adjustedFraction) * dotRadius);
             controlY2 = endY1;
             unselectedDotPath.cubicTo(controlX1, controlY1,
-                    controlX2, controlY2,
-                    endX1, endY1);
+                                      controlX2, controlY2,
+                                      endX1, endY1);
 
             // bezier back to the start point in the bottom left
             endX2 = centerX;
@@ -512,8 +512,8 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
             controlX2 = endX1 - (adjustedFraction * dotRadius);
             controlY2 = endY2;
             unselectedDotPath.cubicTo(controlX1, controlY1,
-                    controlX2, controlY2,
-                    endX2, endY2);
+                                      controlX2, controlY2,
+                                      endX2, endY2);
         }
         if (joiningFraction == 1 && retreatingJoinX1 == INVALID_FRACTION) {
 
@@ -532,7 +532,7 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
 
             // case #6 – previously hidden dot revealing
             unselectedDotPath.addCircle(centerX, dotCenterY, dotRevealFraction * dotRadius,
-                    Path.Direction.CW);
+                                        Path.Direction.CW);
         }
 
         return unselectedDotPath;
@@ -578,7 +578,7 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
     }
 
     private ValueAnimator createMoveSelectedAnimator(
-            final float moveTo, int was, int now, int steps) {
+        final float moveTo, int was, int now, int steps) {
 
         // create the actual move animator
         ValueAnimator moveSelected = ValueAnimator.ofFloat(selectedDotX, moveTo);
@@ -586,8 +586,8 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
         // also set up a pending retreat anim – this starts when the move is 75% complete
         retreatAnimation = new PendingRetreatAnimator(was, now, steps,
                 now > was ?
-                        new RightwardStartPredicate(moveTo - ((moveTo - selectedDotX) * 0.25f)) :
-                        new LeftwardStartPredicate(moveTo + ((selectedDotX - moveTo) * 0.25f)));
+                new RightwardStartPredicate(moveTo - ((moveTo - selectedDotX) * 0.25f)) :
+                new LeftwardStartPredicate(moveTo + ((selectedDotX - moveTo) * 0.25f)));
         retreatAnimation.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -688,13 +688,13 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
             // travelling in.  Also look at the current selected dot position, i.e. we're moving on
             // before a prior anim has finished.
             final float initialX1 = now > was ? Math.min(dotCenterX[was], selectedDotX) - dotRadius
-                    : dotCenterX[now] - dotRadius;
+                                    : dotCenterX[now] - dotRadius;
             final float finalX1 = now > was ? dotCenterX[now] - dotRadius
-                    : dotCenterX[now] - dotRadius;
+                                  : dotCenterX[now] - dotRadius;
             final float initialX2 = now > was ? dotCenterX[now] + dotRadius
-                    : Math.max(dotCenterX[was], selectedDotX) + dotRadius;
+                                    : Math.max(dotCenterX[was], selectedDotX) + dotRadius;
             final float finalX2 = now > was ? dotCenterX[now] + dotRadius
-                    : dotCenterX[now] + dotRadius;
+                                  : dotCenterX[now] + dotRadius;
 
             revealAnimations = new PendingRevealAnimator[steps];
             // hold on to the indexes of the dots that will be hidden by the retreat so that
@@ -776,7 +776,7 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
             addUpdateListener(valueAnimator -> {
                 // todo avoid autoboxing
                 setDotRevealFraction(PendingRevealAnimator.this.dot,
-                        (Float) valueAnimator.getAnimatedValue());
+                                     (Float) valueAnimator.getAnimatedValue());
             });
             addListener(new AnimatorListenerAdapter() {
                 @Override

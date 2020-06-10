@@ -46,7 +46,7 @@ public class MediaStoreHack {
     private static final String ALBUM_ART_URI = "content://media/external/audio/albumart";
 
     private static final String[] ALBUM_PROJECTION = {
-            BaseColumns._ID, MediaStore.Audio.AlbumColumns.ALBUM_ID, "media_type"
+        BaseColumns._ID, MediaStore.Audio.AlbumColumns.ALBUM_ID, "media_type"
     };
 
     /**
@@ -55,8 +55,8 @@ public class MediaStoreHack {
      */
     public static boolean delete(final Context context, final File file) {
         final String where = MediaStore.MediaColumns.DATA + "=?";
-        final String[] selectionArgs = new String[]{
-                file.getAbsolutePath()
+        final String[] selectionArgs = new String[] {
+            file.getAbsolutePath()
         };
         final ContentResolver contentResolver = context.getContentResolver();
         final Uri filesUri = MediaStore.Files.getContentUri("external");
@@ -81,8 +81,8 @@ public class MediaStoreHack {
     getInputStream(final Context context, final File file, final long size) {
         try {
             final String where = MediaStore.MediaColumns.DATA + "=?";
-            final String[] selectionArgs = new String[]{
-                    file.getAbsolutePath()
+            final String[] selectionArgs = new String[] {
+                file.getAbsolutePath()
             };
             final ContentResolver contentResolver = context.getContentResolver();
             final Uri filesUri = MediaStore.Files.getContentUri("external");
@@ -113,8 +113,8 @@ public class MediaStoreHack {
         ContentResolver resolver = context.getContentResolver();
 
         Cursor filecursor = resolver.query(MediaStore.Files.getContentUri("external"),
-                new String[]{BaseColumns._ID}, MediaStore.MediaColumns.DATA + " = ?",
-                new String[]{path}, MediaStore.MediaColumns.DATE_ADDED + " desc");
+                                           new String[] {BaseColumns._ID}, MediaStore.MediaColumns.DATA + " = ?",
+                                           new String[] {path}, MediaStore.MediaColumns.DATE_ADDED + " desc");
         filecursor.moveToFirst();
 
         if (filecursor.isAfterLast()) {
@@ -125,7 +125,7 @@ public class MediaStoreHack {
         } else {
             int imageId = filecursor.getInt(filecursor.getColumnIndex(BaseColumns._ID));
             Uri uri = MediaStore.Files.getContentUri("external").buildUpon().appendPath(
-                    Integer.toString(imageId)).build();
+                          Integer.toString(imageId)).build();
             filecursor.close();
             return uri;
         }
@@ -145,11 +145,11 @@ public class MediaStoreHack {
         }
         final Uri filesUri = MediaStore.Files.getContentUri("external");
         final String[] selectionArgs = {
-                temporaryTrack.getAbsolutePath()
+            temporaryTrack.getAbsolutePath()
         };
         final ContentResolver contentResolver = context.getContentResolver();
         Cursor cursor = contentResolver.query(filesUri, ALBUM_PROJECTION,
-                MediaStore.MediaColumns.DATA + "=?", selectionArgs, null);
+                                              MediaStore.MediaColumns.DATA + "=?", selectionArgs, null);
         if (cursor == null || !cursor.moveToFirst()) {
             if (cursor != null) {
                 cursor.close();
@@ -164,7 +164,7 @@ public class MediaStoreHack {
             contentResolver.insert(filesUri, values);
         }
         cursor = contentResolver.query(filesUri, ALBUM_PROJECTION, MediaStore.MediaColumns.DATA
-                + "=?", selectionArgs, null);
+                                       + "=?", selectionArgs, null);
         if (cursor == null) {
             return 0;
         }
@@ -190,7 +190,7 @@ public class MediaStoreHack {
             contentResolver.update(filesUri, values, BaseColumns._ID + "=" + id, null);
         }
         cursor = contentResolver.query(filesUri, ALBUM_PROJECTION, MediaStore.MediaColumns.DATA
-                + "=?", selectionArgs, null);
+                                       + "=?", selectionArgs, null);
         if (cursor == null) {
             return 0;
         }

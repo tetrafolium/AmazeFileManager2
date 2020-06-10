@@ -53,11 +53,11 @@ public class ArchivePasswordCache implements Map<String, String> {
      */
     private Map<String, String> entries;
 
-    private ArchivePasswordCache(){
+    private ArchivePasswordCache() {
         this.entries = new HashMap<>();
     }
 
-    private static class ArchivePasswordCacheHolder{
+    private static class ArchivePasswordCacheHolder {
         private static final ArchivePasswordCache INSTANCE = new ArchivePasswordCache();
     }
 

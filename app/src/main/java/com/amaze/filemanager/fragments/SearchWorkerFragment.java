@@ -56,7 +56,7 @@ public class SearchWorkerFragment extends Fragment {
         boolean isMatchesEnabled = getArguments().getBoolean(KEY_REGEX_MATCHES);
 
         mSearchAsyncTask = new SearchAsyncTask(getActivity(), mCallbacks, mInput, mOpenMode,
-                mRootMode, isRegexEnabled, isMatchesEnabled);
+                                               mRootMode, isRegexEnabled, isMatchesEnabled);
         mSearchAsyncTask.execute(mPath);
     }
 

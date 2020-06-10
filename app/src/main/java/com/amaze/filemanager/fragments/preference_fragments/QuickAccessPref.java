@@ -26,7 +26,8 @@ public class QuickAccessPref extends PreferenceFragment implements Preference.On
 
     public static final String KEY = "quick access array";
     public static final String[] KEYS = {"fastaccess", "recent", "image", "video", "audio",
-            "documents", "apks"};
+                                         "documents", "apks"
+                                        };
     public static final Boolean[] DEFAULT = {TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE};
     private static Map<String, Integer> prefPos = new HashMap<>();
     static {

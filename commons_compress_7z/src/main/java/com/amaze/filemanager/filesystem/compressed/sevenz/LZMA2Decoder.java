@@ -33,7 +33,7 @@ class LZMA2Decoder extends CoderBase {
 
     @Override
     InputStream decode(final String archiveName, final InputStream in, final long uncompressedLength,
-            final Coder coder, final byte[] password) throws IOException {
+                       final Coder coder, final byte[] password) throws IOException {
         try {
             final int dictionarySize = getDictionarySize(coder);
             return new LZMA2InputStream(in, dictionarySize);
@@ -44,7 +44,7 @@ class LZMA2Decoder extends CoderBase {
 
     @Override
     OutputStream encode(final OutputStream out, final Object opts)
-        throws IOException {
+    throws IOException {
         final LZMA2Options options = getOptions(opts);
         final FinishableOutputStream wrapped = new FinishableWrapperOutputStream(out);
         return options.getOutputStream(wrapped);
@@ -56,8 +56,8 @@ class LZMA2Decoder extends CoderBase {
         final int lead = Integer.numberOfLeadingZeros(dictSize);
         final int secondBit = (dictSize >>> (30 - lead)) - 2;
         return new byte[] {
-            (byte) ((19 - lead) * 2 + secondBit)
-        };
+                   (byte) ((19 - lead) * 2 + secondBit)
+               };
     }
 
     @Override

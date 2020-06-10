@@ -50,7 +50,7 @@ public class HiddenAdapter extends RecyclerView.Adapter<HiddenViewHolder> {
     @Override
     public HiddenViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater mInflater = (LayoutInflater) c
-                .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+                                   .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         View view = mInflater.inflate(R.layout.bookmarkrow, parent, false);
 
         return new HiddenViewHolder(view);

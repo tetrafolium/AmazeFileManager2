@@ -128,7 +128,7 @@ public class AppConfig extends GlideApplication {
                     super.onPostExecute(aVoid);
                     customAsyncCallbacks.onPostExecute(aVoid);
                 }
-            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, customAsyncCallbacks.parameters);
+            } .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, customAsyncCallbacks.parameters);
         }
     }
 
@@ -234,7 +234,7 @@ public class AppConfig extends GlideApplication {
         screenUtils = new ScreenUtils(activity);
     }
 
-    public ScreenUtils getScreenUtils(){
+    public ScreenUtils getScreenUtils() {
         return screenUtils;
     }
 
