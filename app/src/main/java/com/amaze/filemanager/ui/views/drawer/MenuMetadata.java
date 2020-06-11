@@ -7,23 +7,23 @@ package com.amaze.filemanager.ui.views.drawer;
 
 public final class MenuMetadata {
 
-  public static final int ITEM_ENTRY = 1, ITEM_INTENT = 2;
+public static final int ITEM_ENTRY = 1, ITEM_INTENT = 2;
 
-  public final int type;
-  public final String path;
-  public final OnClickListener onClickListener;
+public final int type;
+public final String path;
+public final OnClickListener onClickListener;
 
-  public MenuMetadata(final String path) {
-    this.type = ITEM_ENTRY;
-    this.path = path;
-    this.onClickListener = null;
-  }
+public MenuMetadata(final String path) {
+	this.type = ITEM_ENTRY;
+	this.path = path;
+	this.onClickListener = null;
+}
 
-  public MenuMetadata(final OnClickListener onClickListener) {
-    this.type = ITEM_INTENT;
-    this.onClickListener = onClickListener;
-    this.path = null;
-  }
+public MenuMetadata(final OnClickListener onClickListener) {
+	this.type = ITEM_INTENT;
+	this.onClickListener = onClickListener;
+	this.path = null;
+}
 
-  public interface OnClickListener { void onClick(); }
+public interface OnClickListener { void onClick(); }
 }

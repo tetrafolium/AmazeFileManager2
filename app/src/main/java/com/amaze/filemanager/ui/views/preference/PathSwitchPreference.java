@@ -14,42 +14,46 @@ import com.amaze.filemanager.R;
 
 public class PathSwitchPreference extends Preference {
 
-  public static final int EDIT = 0, DELETE = 1;
+public static final int EDIT = 0, DELETE = 1;
 
-  private int lastItemClicked = -1;
+private int lastItemClicked = -1;
 
-  public PathSwitchPreference(final Context context) { super(context); }
+public PathSwitchPreference(final Context context) {
+	super(context);
+}
 
-  @Override
-  protected View onCreateView(final ViewGroup parent) {
-    setWidgetLayoutResource(R.layout.namepathswitch_preference);
-    return super.onCreateView(parent);
-  }
+@Override
+protected View onCreateView(final ViewGroup parent) {
+	setWidgetLayoutResource(R.layout.namepathswitch_preference);
+	return super.onCreateView(parent);
+}
 
-  @Override
-  protected void onBindView(final View view) {
-    setListener(view, R.id.edit, EDIT);
-    setListener(view, R.id.delete, DELETE);
+@Override
+protected void onBindView(final View view) {
+	setListener(view, R.id.edit, EDIT);
+	setListener(view, R.id.delete, DELETE);
 
-    view.setOnClickListener(null);
+	view.setOnClickListener(null);
 
-    super.onBindView(
-        view); // Keep this before things that need changing what's on screen
-  }
+	super.onBindView(
+		view); // Keep this before things that need changing what's on screen
+}
 
-  public int getLastItemClicked() { return lastItemClicked; }
+public int getLastItemClicked() {
+	return lastItemClicked;
+}
 
-  private View.OnClickListener setListener(final View v, final @IdRes int id,
-                                           final int elem) {
-    final PathSwitchPreference t = this;
+private View.OnClickListener setListener(final View v, final @IdRes int id,
+                                         final int elem) {
+	final PathSwitchPreference t = this;
 
-    View.OnClickListener l = view -> {
-      lastItemClicked = elem;
-      getOnPreferenceClickListener().onPreferenceClick(t);
-    };
+	View.OnClickListener l = view->{
+		lastItemClicked = elem;
+		getOnPreferenceClickListener().onPreferenceClick(t);
+	};
 
-    v.findViewById(id).setOnClickListener(l);
+	v.findViewById(id).setOnClickListener(l);
 
-    return l;
-  }
+	return l;
+}
 }

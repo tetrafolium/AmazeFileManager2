@@ -31,13 +31,15 @@ import java.util.ArrayList;
 
 public class Bzip2Decompressor extends Decompressor {
 
-  public Bzip2Decompressor(final Context context) { super(context); }
+public Bzip2Decompressor(final Context context) {
+	super(context);
+}
 
-  @Override
-  public CompressedHelperTask changePath(
-      final String path, final boolean addGoBackItem,
-      final OnAsyncTaskFinished<
-          AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
-    return new Bzip2HelperTask(filePath, path, addGoBackItem, onFinish);
-  }
+@Override
+public CompressedHelperTask changePath(
+	final String path, final boolean addGoBackItem,
+	final OnAsyncTaskFinished<
+		AsyncTaskResult<ArrayList<CompressedObjectParcelable> > > onFinish) {
+	return new Bzip2HelperTask(filePath, path, addGoBackItem, onFinish);
+}
 }

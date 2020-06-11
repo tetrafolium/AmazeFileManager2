@@ -43,56 +43,56 @@ import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 
 public class GzipHelperTask extends CompressedHelperTask {
 
-  private WeakReference<Context> context;
-  private String filePath, relativePath;
+private WeakReference<Context> context;
+private String filePath, relativePath;
 
-  public GzipHelperTask(
-      final Context context, final String filePath, final String relativePath,
-      final boolean goBack,
-      final OnAsyncTaskFinished<
-          AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> l) {
-    super(goBack, l);
-    this.context = new WeakReference<>(context);
-    this.filePath = filePath;
-    this.relativePath = relativePath;
-  }
+public GzipHelperTask(
+	final Context context, final String filePath, final String relativePath,
+	final boolean goBack,
+	final OnAsyncTaskFinished<
+		AsyncTaskResult<ArrayList<CompressedObjectParcelable> > > l) {
+	super(goBack, l);
+	this.context = new WeakReference<>(context);
+	this.filePath = filePath;
+	this.relativePath = relativePath;
+}
 
-  @Override
-  void addElements(final
-                   @NonNull ArrayList<CompressedObjectParcelable> elements)
-      throws ArchiveException {
-    TarArchiveInputStream tarInputStream = null;
-    try {
-      tarInputStream = new TarArchiveInputStream(
-          new GzipCompressorInputStream(new FileInputStream(filePath)));
+@Override
+void addElements(final
+                 @NonNull ArrayList<CompressedObjectParcelable> elements)
+throws ArchiveException {
+	TarArchiveInputStream tarInputStream = null;
+	try {
+		tarInputStream = new TarArchiveInputStream(
+			new GzipCompressorInputStream(new FileInputStream(filePath)));
 
-      TarArchiveEntry entry;
-      while ((entry = tarInputStream.getNextTarEntry()) != null) {
-        String name = entry.getName();
-        if (!CompressedHelper.isEntryPathValid(name)) {
-          AppConfig.toast(context.get(),
-                          context.get().getString(
-                              R.string.multiple_invalid_archive_entries));
-          continue;
-        }
-        if (name.endsWith(SEPARATOR))
-          name = name.substring(0, name.length() - 1);
+		TarArchiveEntry entry;
+		while ((entry = tarInputStream.getNextTarEntry()) != null) {
+			String name = entry.getName();
+			if (!CompressedHelper.isEntryPathValid(name)) {
+				AppConfig.toast(context.get(),
+				                context.get().getString(
+							R.string.multiple_invalid_archive_entries));
+				continue;
+			}
+			if (name.endsWith(SEPARATOR))
+				name = name.substring(0, name.length() - 1);
 
-        boolean isInBaseDir =
-            relativePath.equals("") && !name.contains(SEPARATOR);
-        boolean isInRelativeDir =
-            name.contains(SEPARATOR) &&
-            name.substring(0, name.lastIndexOf(SEPARATOR)).equals(relativePath);
+			boolean isInBaseDir =
+				relativePath.equals("") && !name.contains(SEPARATOR);
+			boolean isInRelativeDir =
+				name.contains(SEPARATOR) &&
+				name.substring(0, name.lastIndexOf(SEPARATOR)).equals(relativePath);
 
-        if (isInBaseDir || isInRelativeDir) {
-          elements.add(new CompressedObjectParcelable(
-              entry.getName(), entry.getLastModifiedDate().getTime(),
-              entry.getSize(), entry.isDirectory()));
-        }
-      }
-    } catch (IOException e) {
-      throw new ArchiveException(
-          String.format("Tarball archive %s is corrupt", filePath), e);
-    }
-  }
+			if (isInBaseDir || isInRelativeDir) {
+				elements.add(new CompressedObjectParcelable(
+						     entry.getName(), entry.getLastModifiedDate().getTime(),
+						     entry.getSize(), entry.isDirectory()));
+			}
+		}
+	} catch (IOException e) {
+		throw new ArchiveException(
+			      String.format("Tarball archive %s is corrupt", filePath), e);
+	}
+}
 }

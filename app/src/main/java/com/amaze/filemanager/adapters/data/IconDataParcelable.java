@@ -12,70 +12,72 @@ import androidx.annotation.DrawableRes;
  */
 public class IconDataParcelable implements Parcelable {
 
-  public static final int IMAGE_RES = 0, IMAGE_FROMFILE = 1,
-                          IMAGE_FROMCLOUD = 2;
+public static final int IMAGE_RES = 0, IMAGE_FROMFILE = 1,
+                                           IMAGE_FROMCLOUD = 2;
 
-  public final int type;
-  public final String path;
-  public final @DrawableRes int image;
-  public final @DrawableRes int loadingImage;
-  private boolean isImageBroken = false;
+public final int type;
+public final String path;
+public final @DrawableRes int image;
+public final @DrawableRes int loadingImage;
+private boolean isImageBroken = false;
 
-  public IconDataParcelable(final int type, final @DrawableRes int img) {
-    if (type == IMAGE_FROMFILE)
-      throw new IllegalArgumentException();
-    this.type = type;
-    this.image = img;
-    this.loadingImage = -1;
-    this.path = null;
-  }
+public IconDataParcelable(final int type, final @DrawableRes int img) {
+	if (type == IMAGE_FROMFILE)
+		throw new IllegalArgumentException();
+	this.type = type;
+	this.image = img;
+	this.loadingImage = -1;
+	this.path = null;
+}
 
-  public IconDataParcelable(final int type, final String path,
-                            final @DrawableRes int loadingImages) {
-    if (type == IMAGE_RES)
-      throw new IllegalArgumentException();
-    this.type = type;
-    this.path = path;
-    this.loadingImage = loadingImages;
-    this.image = -1;
-  }
+public IconDataParcelable(final int type, final String path,
+                          final @DrawableRes int loadingImages) {
+	if (type == IMAGE_RES)
+		throw new IllegalArgumentException();
+	this.type = type;
+	this.path = path;
+	this.loadingImage = loadingImages;
+	this.image = -1;
+}
 
-  public boolean isImageBroken() { return isImageBroken; }
+public boolean isImageBroken() {
+	return isImageBroken;
+}
 
-  public void setImageBroken(final boolean imageBroken) {
-    isImageBroken = imageBroken;
-  }
+public void setImageBroken(final boolean imageBroken) {
+	isImageBroken = imageBroken;
+}
 
-  @Override
-  public int describeContents() {
-    return 0;
-  }
+@Override
+public int describeContents() {
+	return 0;
+}
 
-  @Override
-  public void writeToParcel(final Parcel parcel, final int i) {
-    parcel.writeInt(type);
-    parcel.writeString(path);
-    parcel.writeInt(image);
-    parcel.writeInt(loadingImage);
-    parcel.writeInt(isImageBroken ? 1 : 0);
-  }
+@Override
+public void writeToParcel(final Parcel parcel, final int i) {
+	parcel.writeInt(type);
+	parcel.writeString(path);
+	parcel.writeInt(image);
+	parcel.writeInt(loadingImage);
+	parcel.writeInt(isImageBroken ? 1 : 0);
+}
 
-  public IconDataParcelable(final Parcel im) {
-    type = im.readInt();
-    path = im.readString();
-    image = im.readInt();
-    loadingImage = im.readInt();
-    isImageBroken = im.readInt() == 1;
-  }
+public IconDataParcelable(final Parcel im) {
+	type = im.readInt();
+	path = im.readString();
+	image = im.readInt();
+	loadingImage = im.readInt();
+	isImageBroken = im.readInt() == 1;
+}
 
-  public static final Parcelable.Creator<IconDataParcelable> CREATOR =
-      new Parcelable.Creator<IconDataParcelable>() {
-        public IconDataParcelable createFromParcel(final Parcel in) {
-          return new IconDataParcelable(in);
-        }
+public static final Parcelable.Creator<IconDataParcelable> CREATOR =
+	new Parcelable.Creator<IconDataParcelable>() {
+	public IconDataParcelable createFromParcel(final Parcel in) {
+		return new IconDataParcelable(in);
+	}
 
-        public IconDataParcelable[] newArray(final int size) {
-          return new IconDataParcelable[size];
-        }
-      };
+	public IconDataParcelable[] newArray(final int size) {
+		return new IconDataParcelable[size];
+	}
+};
 }

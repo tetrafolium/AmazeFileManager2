@@ -72,337 +72,337 @@ import net.schmizz.sshj.common.SecurityUtils;
  * SSH/SFTP connection setup dialog.
  */
 public class SftpConnectDialog extends DialogFragment {
-  private static final String TAG = "SftpConnectDialog";
+private static final String TAG = "SftpConnectDialog";
 
-  // Idiotic code
-  // FIXME: agree code on
-  private static final int SELECT_PEM_INTENT = 0x01010101;
+// Idiotic code
+// FIXME: agree code on
+private static final int SELECT_PEM_INTENT = 0x01010101;
 
-  private UtilitiesProvider utilsProvider;
+private UtilitiesProvider utilsProvider;
 
-  private UtilsHandler utilsHandler;
+private UtilsHandler utilsHandler;
 
-  private Context context;
+private Context context;
 
-  private Uri selectedPem = null;
+private Uri selectedPem = null;
 
-  private KeyPair selectedParsedKeyPair = null;
+private KeyPair selectedParsedKeyPair = null;
 
-  private String selectedParsedKeyPairName = null;
+private String selectedParsedKeyPairName = null;
 
-  @Override
-  public void onCreate(final Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    utilsProvider = AppConfig.getInstance().getUtilsProvider();
-    utilsHandler = AppConfig.getInstance().getUtilsHandler();
-  }
+@Override
+public void onCreate(final Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	utilsProvider = AppConfig.getInstance().getUtilsProvider();
+	utilsHandler = AppConfig.getInstance().getUtilsHandler();
+}
 
-  @Override
-  public Dialog onCreateDialog(final Bundle savedInstanceState) {
-    context = getActivity();
-    final boolean edit = getArguments().getBoolean("edit", false);
-    final View v2 =
-        getActivity().getLayoutInflater().inflate(R.layout.sftp_dialog, null);
-    final EditText connectionET = v2.findViewById(R.id.connectionET);
-    final EditText addressET = v2.findViewById(R.id.ipET);
-    final EditText portET = v2.findViewById(R.id.portET);
-    final EditText usernameET = v2.findViewById(R.id.usernameET);
-    final EditText passwordET = v2.findViewById(R.id.passwordET);
-    final Button selectPemBTN = v2.findViewById(R.id.selectPemBTN);
+@Override
+public Dialog onCreateDialog(final Bundle savedInstanceState) {
+	context = getActivity();
+	final boolean edit = getArguments().getBoolean("edit", false);
+	final View v2 =
+		getActivity().getLayoutInflater().inflate(R.layout.sftp_dialog, null);
+	final EditText connectionET = v2.findViewById(R.id.connectionET);
+	final EditText addressET = v2.findViewById(R.id.ipET);
+	final EditText portET = v2.findViewById(R.id.portET);
+	final EditText usernameET = v2.findViewById(R.id.usernameET);
+	final EditText passwordET = v2.findViewById(R.id.passwordET);
+	final Button selectPemBTN = v2.findViewById(R.id.selectPemBTN);
 
-    // If it's new connection setup, set some default values
-    // Otherwise, use given Bundle instance for filling in the blanks
-    if (!edit) {
-      connectionET.setText(R.string.scp_con);
-      portET.setText(Integer.toString(SshConnectionPool.SSH_DEFAULT_PORT));
-    } else {
-      connectionET.setText(getArguments().getString("name"));
-      addressET.setText(getArguments().getString("address"));
-      portET.setText(getArguments().getString("port"));
-      usernameET.setText(getArguments().getString("username"));
-      if (getArguments().getBoolean("hasPassword")) {
-        passwordET.setHint(R.string.password_unchanged);
-      } else {
-        selectedParsedKeyPairName = getArguments().getString("keypairName");
-        selectPemBTN.setText(selectedParsedKeyPairName);
-      }
-    }
+	// If it's new connection setup, set some default values
+	// Otherwise, use given Bundle instance for filling in the blanks
+	if (!edit) {
+		connectionET.setText(R.string.scp_con);
+		portET.setText(Integer.toString(SshConnectionPool.SSH_DEFAULT_PORT));
+	} else {
+		connectionET.setText(getArguments().getString("name"));
+		addressET.setText(getArguments().getString("address"));
+		portET.setText(getArguments().getString("port"));
+		usernameET.setText(getArguments().getString("username"));
+		if (getArguments().getBoolean("hasPassword")) {
+			passwordET.setHint(R.string.password_unchanged);
+		} else {
+			selectedParsedKeyPairName = getArguments().getString("keypairName");
+			selectPemBTN.setText(selectedParsedKeyPairName);
+		}
+	}
 
-    // For convenience, so I don't need to press backspace all the time
-    portET.setOnFocusChangeListener((v, hasFocus) -> {
-      if (hasFocus)
-        portET.selectAll();
-    });
+	// For convenience, so I don't need to press backspace all the time
+	portET.setOnFocusChangeListener((v, hasFocus)->{
+			if (hasFocus)
+				portET.selectAll();
+		});
 
-    int accentColor = ((ThemedActivity)getActivity()).getAccent();
+	int accentColor = ((ThemedActivity)getActivity()).getAccent();
 
-    // Use system provided action to get Uri to PEM.
-    // If MaterialDialog.Builder can be upgraded we may use their file selection
-    // dialog too
-    selectPemBTN.setOnClickListener(v -> {
-      Intent intent =
-          new Intent().setType("*/*").setAction(Intent.ACTION_GET_CONTENT);
+	// Use system provided action to get Uri to PEM.
+	// If MaterialDialog.Builder can be upgraded we may use their file selection
+	// dialog too
+	selectPemBTN.setOnClickListener(v->{
+			Intent intent =
+				new Intent().setType("*/*").setAction(Intent.ACTION_GET_CONTENT);
 
-      startActivityForResult(intent, SELECT_PEM_INTENT);
-    });
+			startActivityForResult(intent, SELECT_PEM_INTENT);
+		});
 
-    // Define action for buttons
-    final MaterialDialog.Builder dialogBuilder =
-        new MaterialDialog.Builder(context);
-    dialogBuilder.title((R.string.scp_con));
-    dialogBuilder.autoDismiss(false);
-    dialogBuilder.customView(v2, true);
-    dialogBuilder.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
-    dialogBuilder.negativeText(R.string.cancel);
-    dialogBuilder.positiveText(edit ? R.string.update : R.string.create);
-    dialogBuilder.positiveColor(accentColor);
-    dialogBuilder.negativeColor(accentColor);
-    dialogBuilder.neutralColor(accentColor);
-    dialogBuilder
-        .onPositive((dialog, which) -> {
-          final String connectionName = connectionET.getText().toString();
-          final String hostname = addressET.getText().toString();
-          final int port = Integer.parseInt(portET.getText().toString());
-          final String username = usernameET.getText().toString();
-          final String password = passwordET.getText() != null
-                                      ? passwordET.getText().toString()
-                                      : null;
+	// Define action for buttons
+	final MaterialDialog.Builder dialogBuilder =
+		new MaterialDialog.Builder(context);
+	dialogBuilder.title((R.string.scp_con));
+	dialogBuilder.autoDismiss(false);
+	dialogBuilder.customView(v2, true);
+	dialogBuilder.theme(utilsProvider.getAppTheme().getMaterialDialogTheme());
+	dialogBuilder.negativeText(R.string.cancel);
+	dialogBuilder.positiveText(edit ? R.string.update : R.string.create);
+	dialogBuilder.positiveColor(accentColor);
+	dialogBuilder.negativeColor(accentColor);
+	dialogBuilder.neutralColor(accentColor);
+	dialogBuilder
+	.onPositive((dialog, which)->{
+			final String connectionName = connectionET.getText().toString();
+			final String hostname = addressET.getText().toString();
+			final int port = Integer.parseInt(portET.getText().toString());
+			final String username = usernameET.getText().toString();
+			final String password = passwordET.getText() != null
+			              ? passwordET.getText().toString()
+			              : null;
 
-          String sshHostKey = utilsHandler.getSshHostKey(deriveSftpPathFrom(
-              hostname, port, username, password, selectedParsedKeyPair));
+			String sshHostKey = utilsHandler.getSshHostKey(deriveSftpPathFrom(
+									       hostname, port, username, password, selectedParsedKeyPair));
 
-          if (sshHostKey != null) {
-            authenticateAndSaveSetup(
-                connectionName, hostname, port, sshHostKey, username, password,
-                selectedParsedKeyPairName, selectedParsedKeyPair, edit);
-          } else {
-            new GetSshHostFingerprintTask(hostname, port, taskResult -> {
-              PublicKey hostKey = taskResult.result;
-              if (hostKey != null) {
-                final String hostKeyFingerprint =
-                    SecurityUtils.getFingerprint(hostKey);
-                StringBuilder sb = new StringBuilder(hostname);
-                if (port != SshConnectionPool.SSH_DEFAULT_PORT && port > 0)
-                  sb.append(':').append(port);
+			if (sshHostKey != null) {
+			        authenticateAndSaveSetup(
+					connectionName, hostname, port, sshHostKey, username, password,
+					selectedParsedKeyPairName, selectedParsedKeyPair, edit);
+			} else {
+			        new GetSshHostFingerprintTask(hostname, port, taskResult->{
+					PublicKey hostKey = taskResult.result;
+					if (hostKey != null) {
+					        final String hostKeyFingerprint =
+							SecurityUtils.getFingerprint(hostKey);
+					        StringBuilder sb = new StringBuilder(hostname);
+					        if (port != SshConnectionPool.SSH_DEFAULT_PORT && port > 0)
+							sb.append(':').append(port);
 
-                final String hostAndPort = sb.toString();
+					        final String hostAndPort = sb.toString();
 
-                new AlertDialog.Builder(context)
-                    .setTitle(R.string.ssh_host_key_verification_prompt_title)
-                    .setMessage(getString(
-                        R.string.ssh_host_key_verification_prompt, hostAndPort,
-                        hostKey.getAlgorithm(), hostKeyFingerprint))
-                    .setCancelable(true)
-                    .setPositiveButton(R.string.yes,
-                                       (dialog1, which1) -> {
-                                         // This closes the host fingerprint
-                                         // verification dialog
-                                         dialog1.dismiss();
-                                         if (authenticateAndSaveSetup(
-                                                 connectionName, hostname, port,
-                                                 hostKeyFingerprint, username,
-                                                 password,
-                                                 selectedParsedKeyPairName,
-                                                 selectedParsedKeyPair, edit)) {
-                                           dialog1.dismiss();
-                                           Log.d(TAG, "Saved setup");
-                                           dismiss();
-                                         }
-                                       })
-                    .setNegativeButton(R.string.no,
-                                       (dialog1, which1) -> dialog1.dismiss())
-                    .show();
-              }
-            }).execute();
-          }
-        })
-        .onNegative((dialog, which) -> dialog.dismiss());
+					        new AlertDialog.Builder(context)
+					        .setTitle(R.string.ssh_host_key_verification_prompt_title)
+					        .setMessage(getString(
+								    R.string.ssh_host_key_verification_prompt, hostAndPort,
+								    hostKey.getAlgorithm(), hostKeyFingerprint))
+					        .setCancelable(true)
+					        .setPositiveButton(R.string.yes,
+					                           (dialog1, which1)->{
+							// This closes the host fingerprint
+							// verification dialog
+							dialog1.dismiss();
+							if (authenticateAndSaveSetup(
+								    connectionName, hostname, port,
+								    hostKeyFingerprint, username,
+								    password,
+								    selectedParsedKeyPairName,
+								    selectedParsedKeyPair, edit)) {
+							        dialog1.dismiss();
+							        Log.d(TAG, "Saved setup");
+							        dismiss();
+							}
+						})
+					        .setNegativeButton(R.string.no,
+					                           (dialog1, which1)->dialog1.dismiss())
+					        .show();
+					}
+				}).execute();
+			}
+		})
+	.onNegative((dialog, which)->dialog.dismiss());
 
-    // If we are editing connection settings, give new actions for neutral and
-    // negative buttons
-    if (edit) {
-      dialogBuilder.negativeText(R.string.delete)
-          .onNegative((dialog, which) -> {
-            final String connectionName = connectionET.getText().toString();
-            final String hostname = addressET.getText().toString();
-            final int port = Integer.parseInt(portET.getText().toString());
-            final String username = usernameET.getText().toString();
+	// If we are editing connection settings, give new actions for neutral and
+	// negative buttons
+	if (edit) {
+		dialogBuilder.negativeText(R.string.delete)
+		.onNegative((dialog, which)->{
+				final String connectionName = connectionET.getText().toString();
+				final String hostname = addressET.getText().toString();
+				final int port = Integer.parseInt(portET.getText().toString());
+				final String username = usernameET.getText().toString();
 
-            final String path =
-                deriveSftpPathFrom(hostname, port, username,
-                                   getArguments().getString("password", null),
-                                   selectedParsedKeyPair);
-            int i = DataUtils.getInstance().containsServer(
-                new String[] {connectionName, path});
+				final String path =
+					deriveSftpPathFrom(hostname, port, username,
+					                   getArguments().getString("password", null),
+					                   selectedParsedKeyPair);
+				int i = DataUtils.getInstance().containsServer(
+					new String[] {connectionName, path});
 
-            if (i != -1) {
-              DataUtils.getInstance().removeServer(i);
+				if (i != -1) {
+				        DataUtils.getInstance().removeServer(i);
 
-              AppConfig.runInBackground(() -> {
-                utilsHandler.removeFromDatabase(
-                    new OperationData(UtilsHandler.Operation.SFTP, path,
-                                      connectionName, null, null, null));
-              });
-              ((MainActivity)getActivity()).getDrawer().refreshDrawer();
-            }
-            dialog.dismiss();
-          })
-          .neutralText(R.string.cancel)
-          .onNeutral((dialog, which) -> dialog.dismiss());
-    }
+				        AppConfig.runInBackground(()->{
+						utilsHandler.removeFromDatabase(
+							new OperationData(UtilsHandler.Operation.SFTP, path,
+							                  connectionName, null, null, null));
+					});
+				        ((MainActivity)getActivity()).getDrawer().refreshDrawer();
+				}
+				dialog.dismiss();
+			})
+		.neutralText(R.string.cancel)
+		.onNeutral((dialog, which)->dialog.dismiss());
+	}
 
-    MaterialDialog dialog = dialogBuilder.build();
+	MaterialDialog dialog = dialogBuilder.build();
 
-    // Some validations to make sure the Create/Update button is clickable only
-    // when required setting values are given
-    final View okBTN = dialog.getActionButton(DialogAction.POSITIVE);
-    if (!edit)
-      okBTN.setEnabled(false);
+	// Some validations to make sure the Create/Update button is clickable only
+	// when required setting values are given
+	final View okBTN = dialog.getActionButton(DialogAction.POSITIVE);
+	if (!edit)
+		okBTN.setEnabled(false);
 
-    TextWatcher validator = new SimpleTextWatcher() {
-      @Override
-      public void afterTextChanged(final Editable s) {
-        int port = portET.getText().toString().length() > 0
-                       ? Integer.parseInt(portET.getText().toString())
-                       : -1;
-        okBTN.setEnabled((connectionET.getText().length() > 0 &&
-                          addressET.getText().length() > 0 && port > 0 &&
-                          port < 65536 && usernameET.getText().length() > 0 &&
-                          (passwordET.getText().length() > 0 ||
-                           selectedParsedKeyPair != null)));
-      }
-    };
+	TextWatcher validator = new SimpleTextWatcher() {
+		@Override
+		public void afterTextChanged(final Editable s) {
+			int port = portET.getText().toString().length() > 0
+		       ? Integer.parseInt(portET.getText().toString())
+		       : -1;
+			okBTN.setEnabled((connectionET.getText().length() > 0 &&
+			                  addressET.getText().length() > 0 && port > 0 &&
+			                  port < 65536 && usernameET.getText().length() > 0 &&
+			                  (passwordET.getText().length() > 0 ||
+			                   selectedParsedKeyPair != null)));
+		}
+	};
 
-    addressET.addTextChangedListener(validator);
-    portET.addTextChangedListener(validator);
-    usernameET.addTextChangedListener(validator);
-    passwordET.addTextChangedListener(validator);
+	addressET.addTextChangedListener(validator);
+	portET.addTextChangedListener(validator);
+	usernameET.addTextChangedListener(validator);
+	passwordET.addTextChangedListener(validator);
 
-    return dialog;
-  }
+	return dialog;
+}
 
-  /**
-   * Set the PEM key for authentication when the Intent to browse file returned.
-   */
-  @Override
-  public void onActivityResult(final int requestCode, final int resultCode,
-                               final Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    if (SELECT_PEM_INTENT == requestCode && Activity.RESULT_OK == resultCode) {
-      selectedPem = data.getData();
+/**
+ * Set the PEM key for authentication when the Intent to browse file returned.
+ */
+@Override
+public void onActivityResult(final int requestCode, final int resultCode,
+                             final Intent data) {
+	super.onActivityResult(requestCode, resultCode, data);
+	if (SELECT_PEM_INTENT == requestCode && Activity.RESULT_OK == resultCode) {
+		selectedPem = data.getData();
 
-      try {
-        InputStream selectedKeyContent =
-            context.getContentResolver().openInputStream(selectedPem);
-        new PemToKeyPairTask(selectedKeyContent, result -> {
-          selectedParsedKeyPair = result;
-          selectedParsedKeyPairName =
-              selectedPem.getLastPathSegment().substring(
-                  selectedPem.getLastPathSegment().indexOf('/') + 1);
-          MDButton okBTN = ((MaterialDialog)getDialog())
-                               .getActionButton(DialogAction.POSITIVE);
-          okBTN.setEnabled(okBTN.isEnabled() || true);
+		try {
+			InputStream selectedKeyContent =
+				context.getContentResolver().openInputStream(selectedPem);
+			new PemToKeyPairTask(selectedKeyContent, result->{
+					selectedParsedKeyPair = result;
+					selectedParsedKeyPairName =
+						selectedPem.getLastPathSegment().substring(
+							selectedPem.getLastPathSegment().indexOf('/') + 1);
+					MDButton okBTN = ((MaterialDialog)getDialog())
+					                 .getActionButton(DialogAction.POSITIVE);
+					okBTN.setEnabled(okBTN.isEnabled() || true);
 
-          Button selectPemBTN = getDialog().findViewById(R.id.selectPemBTN);
-          selectPemBTN.setText(selectedParsedKeyPairName);
-        }).execute();
+					Button selectPemBTN = getDialog().findViewById(R.id.selectPemBTN);
+					selectPemBTN.setText(selectedParsedKeyPairName);
+				}).execute();
 
-      } catch (FileNotFoundException e) {
-        Log.e(TAG, "File not found", e);
-      } catch (IOException shouldNotHappen) {
-      }
-    }
-  }
+		} catch (FileNotFoundException e) {
+			Log.e(TAG, "File not found", e);
+		} catch (IOException shouldNotHappen) {
+		}
+	}
+}
 
-  private boolean authenticateAndSaveSetup(
-      final String connectionName, final String hostname, final int port,
-      final String hostKeyFingerprint, final String username,
-      final String password, final String selectedParsedKeyPairName,
-      final KeyPair selectedParsedKeyPair, final boolean isEdit) {
+private boolean authenticateAndSaveSetup(
+	final String connectionName, final String hostname, final int port,
+	final String hostKeyFingerprint, final String username,
+	final String password, final String selectedParsedKeyPairName,
+	final KeyPair selectedParsedKeyPair, final boolean isEdit) {
 
-    if (isEdit)
-      password = getArguments().getString("password", null);
+	if (isEdit)
+		password = getArguments().getString("password", null);
 
-    final String path = deriveSftpPathFrom(hostname, port, username, password,
-                                           selectedParsedKeyPair);
+	final String path = deriveSftpPathFrom(hostname, port, username, password,
+	                                       selectedParsedKeyPair);
 
-    final String encryptedPath = SshClientUtils.encryptSshPathAsNecessary(path);
+	final String encryptedPath = SshClientUtils.encryptSshPathAsNecessary(path);
 
-    if (!isEdit) {
-      try {
-        SSHClient result = SshConnectionPool.getInstance().getConnection(
-            hostname, port, hostKeyFingerprint, username, password,
-            selectedParsedKeyPair);
+	if (!isEdit) {
+		try {
+			SSHClient result = SshConnectionPool.getInstance().getConnection(
+				hostname, port, hostKeyFingerprint, username, password,
+				selectedParsedKeyPair);
 
-        if (result != null) {
+			if (result != null) {
 
-          if (DataUtils.getInstance().containsServer(path) == -1) {
-            DataUtils.getInstance().addServer(
-                new String[] {connectionName, path});
-            ((MainActivity)getActivity()).getDrawer().refreshDrawer();
+				if (DataUtils.getInstance().containsServer(path) == -1) {
+					DataUtils.getInstance().addServer(
+						new String[] {connectionName, path});
+					((MainActivity)getActivity()).getDrawer().refreshDrawer();
 
-            utilsHandler.saveToDatabase(
-                new OperationData(UtilsHandler.Operation.SFTP, encryptedPath,
-                                  connectionName, hostKeyFingerprint,
-                                  selectedParsedKeyPairName, getPemContents()));
+					utilsHandler.saveToDatabase(
+						new OperationData(UtilsHandler.Operation.SFTP, encryptedPath,
+						                  connectionName, hostKeyFingerprint,
+						                  selectedParsedKeyPairName, getPemContents()));
 
-            MainFragment ma =
-                ((MainActivity)getActivity()).getCurrentMainFragment();
-            ma.loadlist(path, false, OpenMode.SFTP);
-            dismiss();
+					MainFragment ma =
+						((MainActivity)getActivity()).getCurrentMainFragment();
+					ma.loadlist(path, false, OpenMode.SFTP);
+					dismiss();
 
-          } else {
-            Snackbar
-                .make(getActivity().findViewById(R.id.content_frame),
-                      getString(R.string.connection_exists),
-                      Snackbar.LENGTH_SHORT)
-                .show();
-            dismiss();
-          }
-          return true;
-        } else {
-          return false;
-        }
-      } catch (Exception e) {
-        e.printStackTrace();
-        return false;
-      }
-    } else {
-      DataUtils.getInstance().removeServer(
-          DataUtils.getInstance().containsServer(path));
-      DataUtils.getInstance().addServer(new String[] {connectionName, path});
-      Collections.sort(DataUtils.getInstance().getServers(), new BookSorter());
-      ((MainActivity)getActivity()).getDrawer().refreshDrawer();
+				} else {
+					Snackbar
+					.make(getActivity().findViewById(R.id.content_frame),
+					      getString(R.string.connection_exists),
+					      Snackbar.LENGTH_SHORT)
+					.show();
+					dismiss();
+				}
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	} else {
+		DataUtils.getInstance().removeServer(
+			DataUtils.getInstance().containsServer(path));
+		DataUtils.getInstance().addServer(new String[] {connectionName, path});
+		Collections.sort(DataUtils.getInstance().getServers(), new BookSorter());
+		((MainActivity)getActivity()).getDrawer().refreshDrawer();
 
-      AppConfig.runInBackground(() -> {
-        utilsHandler.updateSsh(connectionName, getArguments().getString("name"),
-                               encryptedPath, selectedParsedKeyPairName,
-                               getPemContents());
-      });
+		AppConfig.runInBackground(()->{
+				utilsHandler.updateSsh(connectionName, getArguments().getString("name"),
+				                       encryptedPath, selectedParsedKeyPairName,
+				                       getPemContents());
+			});
 
-      dismiss();
-      return true;
-    }
-  }
+		dismiss();
+		return true;
+	}
+}
 
-  // Read the PEM content from InputStream to String.
-  private String getPemContents() {
-    if (selectedPem == null)
-      return null;
+// Read the PEM content from InputStream to String.
+private String getPemContents() {
+	if (selectedPem == null)
+		return null;
 
-    try {
-      BufferedReader reader = new BufferedReader(new InputStreamReader(
-          context.getContentResolver().openInputStream(selectedPem)));
-      StringBuilder sb = new StringBuilder();
-      for (String line = reader.readLine(); line != null;
-           line = reader.readLine()) {
-        sb.append(line).append("\n");
-      }
-      return sb.toString();
-    } catch (FileNotFoundException e) {
-      return null;
-    } catch (IOException e) {
-      return null;
-    }
-  }
+	try {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(
+								   context.getContentResolver().openInputStream(selectedPem)));
+		StringBuilder sb = new StringBuilder();
+		for (String line = reader.readLine(); line != null;
+		     line = reader.readLine()) {
+			sb.append(line).append("\n");
+		}
+		return sb.toString();
+	} catch (FileNotFoundException e) {
+		return null;
+	} catch (IOException e) {
+		return null;
+	}
+}
 }

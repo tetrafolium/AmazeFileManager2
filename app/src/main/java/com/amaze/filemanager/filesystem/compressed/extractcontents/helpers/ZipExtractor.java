@@ -42,104 +42,104 @@ import net.lingala.zip4j.model.FileHeader;
 
 public class ZipExtractor extends Extractor {
 
-  public ZipExtractor(final @NonNull Context context,
-                      final @NonNull String filePath,
-                      final @NonNull String outputPath,
-                      final @NonNull OnUpdate listener) {
-    super(context, filePath, outputPath, listener);
-  }
+public ZipExtractor(final @NonNull Context context,
+                    final @NonNull String filePath,
+                    final @NonNull String outputPath,
+                    final @NonNull OnUpdate listener) {
+	super(context, filePath, outputPath, listener);
+}
 
-  @Override
-  protected void extractWithFilter(final @NonNull Filter filter)
-      throws IOException {
-    long totalBytes = 0;
-    List<FileHeader> entriesToExtract = new ArrayList<>();
-    try {
-      ZipFile zipfile = new ZipFile(filePath);
-      if (ArchivePasswordCache.getInstance().containsKey(filePath)) {
-        zipfile.setPassword(ArchivePasswordCache.getInstance().get(filePath));
-      }
+@Override
+protected void extractWithFilter(final @NonNull Filter filter)
+throws IOException {
+	long totalBytes = 0;
+	List<FileHeader> entriesToExtract = new ArrayList<>();
+	try {
+		ZipFile zipfile = new ZipFile(filePath);
+		if (ArchivePasswordCache.getInstance().containsKey(filePath)) {
+			zipfile.setPassword(ArchivePasswordCache.getInstance().get(filePath));
+		}
 
-      // iterating archive elements to find file names that are to be extracted
-      for (Object obj : zipfile.getFileHeaders()) {
-        FileHeader fileHeader = (FileHeader)obj;
+		// iterating archive elements to find file names that are to be extracted
+		for (Object obj : zipfile.getFileHeaders()) {
+			FileHeader fileHeader = (FileHeader)obj;
 
-        if (CompressedHelper.isEntryPathValid(fileHeader.getFileName())) {
-          if (filter.shouldExtract(fileHeader.getFileName(),
-                                   fileHeader.isDirectory())) {
-            entriesToExtract.add(fileHeader);
-            totalBytes += fileHeader.getUncompressedSize();
-          }
-        } else {
-          invalidArchiveEntries.add(fileHeader.getFileName());
-        }
-      }
+			if (CompressedHelper.isEntryPathValid(fileHeader.getFileName())) {
+				if (filter.shouldExtract(fileHeader.getFileName(),
+				                         fileHeader.isDirectory())) {
+					entriesToExtract.add(fileHeader);
+					totalBytes += fileHeader.getUncompressedSize();
+				}
+			} else {
+				invalidArchiveEntries.add(fileHeader.getFileName());
+			}
+		}
 
-      listener.onStart(totalBytes, entriesToExtract.get(0).getFileName());
+		listener.onStart(totalBytes, entriesToExtract.get(0).getFileName());
 
-      for (FileHeader entry : entriesToExtract) {
-        if (!listener.isCancelled()) {
-          listener.onUpdate(entry.getFileName());
-          extractEntry(context, zipfile, entry, outputPath);
-        }
-      }
-      listener.onFinish();
-    } catch (ZipException e) {
-      throw new IOException(e);
-    }
-  }
+		for (FileHeader entry : entriesToExtract) {
+			if (!listener.isCancelled()) {
+				listener.onUpdate(entry.getFileName());
+				extractEntry(context, zipfile, entry, outputPath);
+			}
+		}
+		listener.onFinish();
+	} catch (ZipException e) {
+		throw new IOException(e);
+	}
+}
 
-  /**
-   * Method extracts {@link FileHeader} from {@link ZipFile}
-   *
-   * @param zipFile   zip file from which entriesToExtract are to be extracted
-   * @param entry     zip entry that is to be extracted
-   * @param outputDir output directory
-   */
-  private void extractEntry(@NonNull final Context context,
-                            final ZipFile zipFile, final FileHeader entry,
-                            final String outputDir)
-      throws IOException, ZipException {
-    final File outputFile =
-        new File(outputDir, fixEntryName(entry.getFileName()));
+/**
+ * Method extracts {@link FileHeader} from {@link ZipFile}
+ *
+ * @param zipFile   zip file from which entriesToExtract are to be extracted
+ * @param entry     zip entry that is to be extracted
+ * @param outputDir output directory
+ */
+private void extractEntry(@NonNull final Context context,
+                          final ZipFile zipFile, final FileHeader entry,
+                          final String outputDir)
+throws IOException, ZipException {
+	final File outputFile =
+		new File(outputDir, fixEntryName(entry.getFileName()));
 
-    if (ArchivePasswordCache.getInstance().containsKey(filePath))
-      entry.setPassword(
-          ArchivePasswordCache.getInstance().get(filePath).toCharArray());
+	if (ArchivePasswordCache.getInstance().containsKey(filePath))
+		entry.setPassword(
+			ArchivePasswordCache.getInstance().get(filePath).toCharArray());
 
-    if (!outputFile.getCanonicalPath().startsWith(outputDir)) {
-      throw new IOException("Incorrect ZipEntry path!");
-    }
+	if (!outputFile.getCanonicalPath().startsWith(outputDir)) {
+		throw new IOException("Incorrect ZipEntry path!");
+	}
 
-    if (entry.isDirectory()) {
-      // zip entry is a directory, return after creating new directory
-      FileUtil.mkdir(outputFile, context);
-      return;
-    }
+	if (entry.isDirectory()) {
+		// zip entry is a directory, return after creating new directory
+		FileUtil.mkdir(outputFile, context);
+		return;
+	}
 
-    if (!outputFile.getParentFile().exists()) {
-      // creating directory if not already exists
-      FileUtil.mkdir(outputFile.getParentFile(), context);
-    }
+	if (!outputFile.getParentFile().exists()) {
+		// creating directory if not already exists
+		FileUtil.mkdir(outputFile.getParentFile(), context);
+	}
 
-    BufferedInputStream inputStream =
-        new BufferedInputStream(zipFile.getInputStream(entry));
-    BufferedOutputStream outputStream =
-        new BufferedOutputStream(FileUtil.getOutputStream(outputFile, context));
+	BufferedInputStream inputStream =
+		new BufferedInputStream(zipFile.getInputStream(entry));
+	BufferedOutputStream outputStream =
+		new BufferedOutputStream(FileUtil.getOutputStream(outputFile, context));
 
-    try {
-      int len;
-      byte buf[] = new byte[GenericCopyUtil.DEFAULT_BUFFER_SIZE];
-      while ((len = inputStream.read(buf)) != -1) {
-        if (!listener.isCancelled()) {
-          outputStream.write(buf, 0, len);
-          ServiceWatcherUtil.position += len;
-        } else
-          break;
-      }
-    } finally {
-      outputStream.close();
-      inputStream.close();
-    }
-  }
+	try {
+		int len;
+		byte buf[] = new byte[GenericCopyUtil.DEFAULT_BUFFER_SIZE];
+		while ((len = inputStream.read(buf)) != -1) {
+			if (!listener.isCancelled()) {
+				outputStream.write(buf, 0, len);
+				ServiceWatcherUtil.position += len;
+			} else
+				break;
+		}
+	} finally {
+		outputStream.close();
+		inputStream.close();
+	}
+}
 }

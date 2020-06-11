@@ -22,155 +22,157 @@ import com.amaze.filemanager.utils.Utils;
  */
 public class RoundedImageView extends ImageView {
 
-  private static final float BACKGROUND_CIRCLE_MARGIN_PERCENTUAL = 0.015f;
+private static final float BACKGROUND_CIRCLE_MARGIN_PERCENTUAL = 0.015f;
 
-  private float[] relativeSize = null;
-  private Paint background = new Paint();
+private float[] relativeSize = null;
+private Paint background = new Paint();
 
-  public RoundedImageView(final Context ctx, final AttributeSet attrs) {
-    super(ctx, attrs);
+public RoundedImageView(final Context ctx, final AttributeSet attrs) {
+	super(ctx, attrs);
 
-    background.setColor(Color.TRANSPARENT);
-    background.setAntiAlias(true);
-  }
+	background.setColor(Color.TRANSPARENT);
+	background.setAntiAlias(true);
+}
 
-  @Override
-  protected void onDraw(final Canvas canvas) {
-    if (getDrawable() == null || getWidth() == 0 || getHeight() == 0)
-      return;
+@Override
+protected void onDraw(final Canvas canvas) {
+	if (getDrawable() == null || getWidth() == 0 || getHeight() == 0)
+		return;
 
-    Drawable drawable = getDrawable();
-    int w = getWidth(), h = getHeight();
+	Drawable drawable = getDrawable();
+	int w = getWidth(), h = getHeight();
 
-    if (!isImageAnIcon()) {
-      Bitmap b = drawableToBitmap(drawable);
-      Bitmap bitmap = b.copy(Bitmap.Config.ARGB_8888, true);
+	if (!isImageAnIcon()) {
+		Bitmap b = drawableToBitmap(drawable);
+		Bitmap bitmap = b.copy(Bitmap.Config.ARGB_8888, true);
 
-      Bitmap roundBitmap = getRoundedCroppedBitmap(bitmap, w);
-      canvas.drawBitmap(roundBitmap, 0, 0, null);
-    } else {
-      float min = Math.min(w, h);
-      float backgroundCircleMargin = min * BACKGROUND_CIRCLE_MARGIN_PERCENTUAL;
-      float radius = min / 2f - backgroundCircleMargin * 2;
-      Bitmap bitmap = drawableToBitmapRelative(drawable, radius);
+		Bitmap roundBitmap = getRoundedCroppedBitmap(bitmap, w);
+		canvas.drawBitmap(roundBitmap, 0, 0, null);
+	} else {
+		float min = Math.min(w, h);
+		float backgroundCircleMargin = min * BACKGROUND_CIRCLE_MARGIN_PERCENTUAL;
+		float radius = min / 2f - backgroundCircleMargin * 2;
+		Bitmap bitmap = drawableToBitmapRelative(drawable, radius);
 
-      canvas.drawCircle(w / 2, h / 2, radius, background);
-      canvas.drawBitmap(bitmap, w / 2 - bitmap.getWidth() / 2,
-                        h / 2 - bitmap.getHeight() / 2, null);
-    }
-  }
+		canvas.drawCircle(w / 2, h / 2, radius, background);
+		canvas.drawBitmap(bitmap, w / 2 - bitmap.getWidth() / 2,
+		                  h / 2 - bitmap.getHeight() / 2, null);
+	}
+}
 
-  @Override
-  public void setBackgroundColor(final int color) {
-    background.setColor(color);
-  }
+@Override
+public void setBackgroundColor(final int color) {
+	background.setColor(color);
+}
 
-  /**
-   * Prevents vectors from getting bigger than their intended size. You MUST NOT
-   * provide bigger dimensions than the view!
-   *
-   * The size is relative to the smallest between width and height
-   */
-  public void setRelativeSize(final float width, final float height) {
-    if (width > 2 || height > 2)
-      throw new UnsupportedOperationException(
-          "Can't make image bigger! Accepted values are [2; 0)");
-    this.relativeSize = new float[] {width, height};
-  }
+/**
+ * Prevents vectors from getting bigger than their intended size. You MUST NOT
+ * provide bigger dimensions than the view!
+ *
+ * The size is relative to the smallest between width and height
+ */
+public void setRelativeSize(final float width, final float height) {
+	if (width > 2 || height > 2)
+		throw new UnsupportedOperationException(
+			      "Can't make image bigger! Accepted values are [2; 0)");
+	this.relativeSize = new float[] {width, height};
+}
 
-  private boolean isImageAnIcon() { return relativeSize != null; }
+private boolean isImageAnIcon() {
+	return relativeSize != null;
+}
 
-  public Bitmap getRoundedCroppedBitmap(final Bitmap bitmap, final int radius) {
-    Bitmap finalBitmap;
-    if (bitmap.getWidth() != radius || bitmap.getHeight() != radius) {
-      finalBitmap = Bitmap.createScaledBitmap(bitmap, radius, radius, false);
-    } else {
-      finalBitmap = bitmap;
-    }
+public Bitmap getRoundedCroppedBitmap(final Bitmap bitmap, final int radius) {
+	Bitmap finalBitmap;
+	if (bitmap.getWidth() != radius || bitmap.getHeight() != radius) {
+		finalBitmap = Bitmap.createScaledBitmap(bitmap, radius, radius, false);
+	} else {
+		finalBitmap = bitmap;
+	}
 
-    Bitmap output = Bitmap.createBitmap(
-        finalBitmap.getWidth(), finalBitmap.getHeight(), Config.ARGB_8888);
-    Canvas canvas = new Canvas(output);
+	Bitmap output = Bitmap.createBitmap(
+		finalBitmap.getWidth(), finalBitmap.getHeight(), Config.ARGB_8888);
+	Canvas canvas = new Canvas(output);
 
-    final Paint paint = new Paint();
-    final Rect rect =
-        new Rect(0, 0, finalBitmap.getWidth(), finalBitmap.getHeight());
+	final Paint paint = new Paint();
+	final Rect rect =
+		new Rect(0, 0, finalBitmap.getWidth(), finalBitmap.getHeight());
 
-    paint.setAntiAlias(true);
-    paint.setFilterBitmap(true);
-    paint.setDither(true);
-    paint.setColor(Utils.getColor(getContext(), R.color.roundedimagepaint));
-    canvas.drawCircle(finalBitmap.getWidth() / 2 + 0.7f,
-                      finalBitmap.getHeight() / 2 + 0.7f,
-                      finalBitmap.getWidth() / 2 + 0.1f, paint);
-    paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-    canvas.drawBitmap(finalBitmap, rect, rect, paint);
+	paint.setAntiAlias(true);
+	paint.setFilterBitmap(true);
+	paint.setDither(true);
+	paint.setColor(Utils.getColor(getContext(), R.color.roundedimagepaint));
+	canvas.drawCircle(finalBitmap.getWidth() / 2 + 0.7f,
+	                  finalBitmap.getHeight() / 2 + 0.7f,
+	                  finalBitmap.getWidth() / 2 + 0.1f, paint);
+	paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+	canvas.drawBitmap(finalBitmap, rect, rect, paint);
 
-    return output;
-  }
+	return output;
+}
 
-  /**
-   * Converts a {@link Drawable} to {@link Bitmap}
-   * A drawable can be drawn on a {@link Canvas} and a Canvas can be backed by a
-   * Bitmap. Hence the conversion
-   */
-  public Bitmap drawableToBitmap(final Drawable drawable) {
-    Bitmap bitmap;
+/**
+ * Converts a {@link Drawable} to {@link Bitmap}
+ * A drawable can be drawn on a {@link Canvas} and a Canvas can be backed by a
+ * Bitmap. Hence the conversion
+ */
+public Bitmap drawableToBitmap(final Drawable drawable) {
+	Bitmap bitmap;
 
-    if (!isImageAnIcon() && drawable instanceof BitmapDrawable) {
-      BitmapDrawable bitmapDrawable = (BitmapDrawable)drawable;
-      if (bitmapDrawable.getBitmap() != null) {
-        return bitmapDrawable.getBitmap();
-      }
-    }
+	if (!isImageAnIcon() && drawable instanceof BitmapDrawable) {
+		BitmapDrawable bitmapDrawable = (BitmapDrawable)drawable;
+		if (bitmapDrawable.getBitmap() != null) {
+			return bitmapDrawable.getBitmap();
+		}
+	}
 
-    if (drawable.getIntrinsicWidth() <= 0 ||
-        drawable.getIntrinsicHeight() <= 0) {
-      bitmap = Bitmap.createBitmap(
-          1, 1,
-          Bitmap.Config
-              .ARGB_8888); // Single color bitmap will be created of 1x1 pixel
-    } else {
-      bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
-                                   drawable.getIntrinsicHeight(),
-                                   Bitmap.Config.ARGB_8888);
-    }
-    Canvas canvas = new Canvas(bitmap);
-    drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-    drawable.draw(canvas);
-    return bitmap;
-  }
+	if (drawable.getIntrinsicWidth() <= 0 ||
+	    drawable.getIntrinsicHeight() <= 0) {
+		bitmap = Bitmap.createBitmap(
+			1, 1,
+			Bitmap.Config
+			.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+	} else {
+		bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+		                             drawable.getIntrinsicHeight(),
+		                             Bitmap.Config.ARGB_8888);
+	}
+	Canvas canvas = new Canvas(bitmap);
+	drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+	drawable.draw(canvas);
+	return bitmap;
+}
 
-  /**
-   * Converts a {@link Drawable} to {@link Bitmap}
-   * A drawable can be drawn on a {@link Canvas} and a Canvas can be backed by a
-   * Bitmap. Hence the conversion
-   */
-  public Bitmap drawableToBitmapRelative(final Drawable drawable,
-                                         final float radius) {
-    Bitmap bitmap;
+/**
+ * Converts a {@link Drawable} to {@link Bitmap}
+ * A drawable can be drawn on a {@link Canvas} and a Canvas can be backed by a
+ * Bitmap. Hence the conversion
+ */
+public Bitmap drawableToBitmapRelative(final Drawable drawable,
+                                       final float radius) {
+	Bitmap bitmap;
 
-    if (!isImageAnIcon() && drawable instanceof BitmapDrawable) {
-      BitmapDrawable bitmapDrawable = (BitmapDrawable)drawable;
-      if (bitmapDrawable.getBitmap() != null) {
-        return bitmapDrawable.getBitmap();
-      }
-    }
+	if (!isImageAnIcon() && drawable instanceof BitmapDrawable) {
+		BitmapDrawable bitmapDrawable = (BitmapDrawable)drawable;
+		if (bitmapDrawable.getBitmap() != null) {
+			return bitmapDrawable.getBitmap();
+		}
+	}
 
-    int sizeW = (int)(radius * relativeSize[0]);
-    int sizeH = (int)(radius * relativeSize[1]);
+	int sizeW = (int)(radius * relativeSize[0]);
+	int sizeH = (int)(radius * relativeSize[1]);
 
-    if (drawable.getIntrinsicWidth() <= 0 ||
-        drawable.getIntrinsicHeight() <= 0) {
-      throw new IllegalStateException(
-          "Solid colors cannot be represented as images! Use RoundedImageView.setBackgroundColor()");
-    } else {
-      bitmap = Bitmap.createBitmap(sizeW, sizeH, Bitmap.Config.ARGB_8888);
-    }
+	if (drawable.getIntrinsicWidth() <= 0 ||
+	    drawable.getIntrinsicHeight() <= 0) {
+		throw new IllegalStateException(
+			      "Solid colors cannot be represented as images! Use RoundedImageView.setBackgroundColor()");
+	} else {
+		bitmap = Bitmap.createBitmap(sizeW, sizeH, Bitmap.Config.ARGB_8888);
+	}
 
-    Canvas canvas = new Canvas(bitmap);
-    drawable.setBounds(0, 0, sizeW, sizeH);
-    drawable.draw(canvas);
-    return bitmap;
-  }
+	Canvas canvas = new Canvas(bitmap);
+	drawable.setBounds(0, 0, sizeW, sizeH);
+	drawable.draw(canvas);
+	return bitmap;
+}
 }

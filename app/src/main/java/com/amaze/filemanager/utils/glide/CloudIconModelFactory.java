@@ -11,20 +11,21 @@ import com.bumptech.glide.load.model.MultiModelLoaderFactory;
  */
 
 public class CloudIconModelFactory
-    implements ModelLoaderFactory<String, Bitmap> {
+	implements ModelLoaderFactory<String, Bitmap> {
 
-  private Context context;
+private Context context;
 
-  public CloudIconModelFactory(final Context context) {
-    this.context = context;
-  }
+public CloudIconModelFactory(final Context context) {
+	this.context = context;
+}
 
-  @Override
-  public ModelLoader<String, Bitmap>
-  build(final MultiModelLoaderFactory multiFactory) {
-    return new CloudIconModelLoader(context);
-  }
+@Override
+public ModelLoader<String, Bitmap>
+build(final MultiModelLoaderFactory multiFactory) {
+	return new CloudIconModelLoader(context);
+}
 
-  @Override
-  public void teardown() {}
+@Override
+public void teardown() {
+}
 }

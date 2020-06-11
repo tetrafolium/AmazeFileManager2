@@ -12,20 +12,21 @@ import com.bumptech.glide.load.model.MultiModelLoaderFactory;
  */
 
 public class ApkImageModelLoaderFactory
-    implements ModelLoaderFactory<String, Drawable> {
+	implements ModelLoaderFactory<String, Drawable> {
 
-  private PackageManager packageManager;
+private PackageManager packageManager;
 
-  public ApkImageModelLoaderFactory(final PackageManager packageManager) {
-    this.packageManager = packageManager;
-  }
+public ApkImageModelLoaderFactory(final PackageManager packageManager) {
+	this.packageManager = packageManager;
+}
 
-  @Override
-  public ModelLoader<String, Drawable>
-  build(final MultiModelLoaderFactory multiFactory) {
-    return new ApkImageModelLoader(packageManager);
-  }
+@Override
+public ModelLoader<String, Drawable>
+build(final MultiModelLoaderFactory multiFactory) {
+	return new ApkImageModelLoader(packageManager);
+}
 
-  @Override
-  public void teardown() {}
+@Override
+public void teardown() {
+}
 }

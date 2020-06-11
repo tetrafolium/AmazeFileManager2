@@ -10,23 +10,23 @@ import android.util.Log;
 
 public class FtpReceiver extends BroadcastReceiver {
 
-  static final String TAG = FtpReceiver.class.getSimpleName();
+static final String TAG = FtpReceiver.class.getSimpleName();
 
-  @Override
-  public void onReceive(final Context context, final Intent intent) {
-    Log.v(TAG, "Received: " + intent.getAction());
+@Override
+public void onReceive(final Context context, final Intent intent) {
+	Log.v(TAG, "Received: " + intent.getAction());
 
-    try {
-      Intent service = new Intent(context, FtpService.class);
-      service.putExtras(intent);
-      if (intent.getAction().equals(FtpService.ACTION_START_FTPSERVER) &&
-          !FtpService.isRunning()) {
-        context.startService(service);
-      } else if (intent.getAction().equals(FtpService.ACTION_STOP_FTPSERVER)) {
-        context.stopService(service);
-      }
-    } catch (Exception e) {
-      Log.e(TAG, "Failed to start/stop on intent " + e.getMessage());
-    }
-  }
+	try {
+		Intent service = new Intent(context, FtpService.class);
+		service.putExtras(intent);
+		if (intent.getAction().equals(FtpService.ACTION_START_FTPSERVER) &&
+		    !FtpService.isRunning()) {
+			context.startService(service);
+		} else if (intent.getAction().equals(FtpService.ACTION_STOP_FTPSERVER)) {
+			context.stopService(service);
+		}
+	} catch (Exception e) {
+		Log.e(TAG, "Failed to start/stop on intent " + e.getMessage());
+	}
+}
 }

@@ -15,23 +15,25 @@ import org.robolectric.annotation.Implements;
 @Implements(SmbFile.class)
 public class ShadowSmbFile {
 
-  private File file = null;
+private File file = null;
 
-  @Implementation
-  public void __constructor__(final URL url,
-                              final NtlmPasswordAuthentication auth) {
-    // intentionally empty
-  }
+@Implementation
+public void __constructor__(final URL url,
+                            final NtlmPasswordAuthentication auth) {
+	// intentionally empty
+}
 
-  public void setFile(final File file) { this.file = file; }
+public void setFile(final File file) {
+	this.file = file;
+}
 
-  @Implementation
-  public InputStream getInputStream() throws IOException {
-    return new FileInputStream(file);
-  }
+@Implementation
+public InputStream getInputStream() throws IOException {
+	return new FileInputStream(file);
+}
 
-  @Implementation
-  public long length() throws SmbException {
-    return file.length();
-  }
+@Implementation
+public long length() throws SmbException {
+	return file.length();
+}
 }

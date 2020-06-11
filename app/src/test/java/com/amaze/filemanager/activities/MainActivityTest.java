@@ -13,15 +13,15 @@ import org.robolectric.shadows.multidex.ShadowMultiDex;
 @Config(constants = BuildConfig.class, shadows = {ShadowMultiDex.class})
 public class MainActivityTest {
 
-  @Test
-  public void testMainActivity() {
-    ActivityController<MainActivity> controller =
-        Robolectric.buildActivity(MainActivity.class)
-            .create()
-            .start()
-            .resume()
-            .visible()
-            .pause()
-            .destroy();
-  }
+@Test
+public void testMainActivity() {
+	ActivityController<MainActivity> controller =
+		Robolectric.buildActivity(MainActivity.class)
+		.create()
+		.start()
+		.resume()
+		.visible()
+		.pause()
+		.destroy();
+}
 }

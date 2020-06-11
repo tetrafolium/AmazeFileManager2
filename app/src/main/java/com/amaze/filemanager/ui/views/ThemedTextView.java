@@ -16,13 +16,13 @@ import com.amaze.filemanager.utils.theme.AppTheme;
 
 public class ThemedTextView extends TextView {
 
-  public ThemedTextView(final Context context, final AttributeSet attrs) {
-    super(context, attrs);
-    if (((MainActivity)context).getAppTheme().equals(AppTheme.LIGHT)) {
-      setTextColor(Utils.getColor(getContext(), android.R.color.black));
-    } else if (((MainActivity)context).getAppTheme().equals(AppTheme.DARK) ||
-               ((MainActivity)context).getAppTheme().equals(AppTheme.BLACK)) {
-      setTextColor(Utils.getColor(getContext(), android.R.color.white));
-    }
-  }
+public ThemedTextView(final Context context, final AttributeSet attrs) {
+	super(context, attrs);
+	if (((MainActivity)context).getAppTheme().equals(AppTheme.LIGHT)) {
+		setTextColor(Utils.getColor(getContext(), android.R.color.black));
+	} else if (((MainActivity)context).getAppTheme().equals(AppTheme.DARK) ||
+	           ((MainActivity)context).getAppTheme().equals(AppTheme.BLACK)) {
+		setTextColor(Utils.getColor(getContext(), android.R.color.white));
+	}
+}
 }

@@ -8,34 +8,38 @@ import com.android.volley.toolbox.ImageLoader;
  * Created by vishal on 7/6/16.
  */
 public class LruBitmapCache
-    extends LruCache<String, Bitmap> implements ImageLoader.ImageCache {
-  /**
-   * @param maxSize for caches that do not override {@link #sizeOf}, this is
-   *                the maximum number of entries in the cache. For all other
-   * caches, this is the maximum sum of the sizes of the entries in this cache.
-   */
-  public LruBitmapCache(final int maxSize) { super(maxSize); }
+	extends LruCache<String, Bitmap> implements ImageLoader.ImageCache {
+/**
+ * @param maxSize for caches that do not override {@link #sizeOf}, this is
+ *                the maximum number of entries in the cache. For all other
+ * caches, this is the maximum sum of the sizes of the entries in this cache.
+ */
+public LruBitmapCache(final int maxSize) {
+	super(maxSize);
+}
 
-  public LruBitmapCache() { this(getDefaultCacheSize()); }
+public LruBitmapCache() {
+	this(getDefaultCacheSize());
+}
 
-  private static int getDefaultCacheSize() {
-    int memory = (int)(Runtime.getRuntime().maxMemory() / 1024);
-    return memory / 8;
-  }
+private static int getDefaultCacheSize() {
+	int memory = (int)(Runtime.getRuntime().maxMemory() / 1024);
+	return memory / 8;
+}
 
-  @Override
-  public Bitmap getBitmap(final String url) {
-    return get(url);
-  }
+@Override
+public Bitmap getBitmap(final String url) {
+	return get(url);
+}
 
-  @Override
-  public void putBitmap(final String url, final Bitmap bitmap) {
-    put(url, bitmap);
-  }
+@Override
+public void putBitmap(final String url, final Bitmap bitmap) {
+	put(url, bitmap);
+}
 
-  @Override
-  protected int sizeOf(final String key, final Bitmap value) {
+@Override
+protected int sizeOf(final String key, final Bitmap value) {
 
-    return value.getByteCount();
-  }
+	return value.getByteCount();
+}
 }

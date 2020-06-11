@@ -21,44 +21,45 @@ import java.util.Map;
  */
 
 public class QuickAccessPref
-    extends PreferenceFragment implements Preference.OnPreferenceClickListener {
+	extends PreferenceFragment implements Preference.OnPreferenceClickListener {
 
-  public static final String KEY = "quick access array";
-  public static final String[] KEYS = {
-      "fastaccess", "recent", "image", "video", "audio", "documents", "apks"};
-  public static final Boolean[] DEFAULT = {TRUE, TRUE, TRUE, TRUE,
-                                           TRUE, TRUE, TRUE};
-  private static Map<String, Integer> prefPos = new HashMap<>();
-  static {
-    Map<String, Integer> mem = new HashMap<>();
-    for (int i = 0; i < KEYS.length; i++)
-      mem.put(KEYS[i], i);
-    prefPos = Collections.unmodifiableMap(mem);
-  }
+public static final String KEY = "quick access array";
+public static final String[] KEYS = {
+	"fastaccess", "recent", "image", "video", "audio", "documents", "apks"
+};
+public static final Boolean[] DEFAULT = {TRUE, TRUE, TRUE, TRUE,
+	                                 TRUE, TRUE, TRUE};
+private static Map<String, Integer> prefPos = new HashMap<>();
+static {
+	Map<String, Integer> mem = new HashMap<>();
+	for (int i = 0; i < KEYS.length; i++)
+		mem.put(KEYS[i], i);
+	prefPos = Collections.unmodifiableMap(mem);
+}
 
-  private SharedPreferences preferences;
-  private Boolean[] currentValue;
+private SharedPreferences preferences;
+private Boolean[] currentValue;
 
-  @Override
-  public void onCreate(final Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+@Override
+public void onCreate(final Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
 
-    // Load the preferences from an XML resource
-    addPreferencesFromResource(R.xml.fastaccess_prefs);
+	// Load the preferences from an XML resource
+	addPreferencesFromResource(R.xml.fastaccess_prefs);
 
-    preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-    currentValue = TinyDB.getBooleanArray(preferences, KEY, DEFAULT);
+	preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+	currentValue = TinyDB.getBooleanArray(preferences, KEY, DEFAULT);
 
-    for (int i = 0; i < getPreferenceScreen().getPreferenceCount(); i++) {
-      getPreferenceScreen().getPreference(i).setOnPreferenceClickListener(this);
-    }
-  }
+	for (int i = 0; i < getPreferenceScreen().getPreferenceCount(); i++) {
+		getPreferenceScreen().getPreference(i).setOnPreferenceClickListener(this);
+	}
+}
 
-  @Override
-  public boolean onPreferenceClick(final Preference preference) {
-    currentValue[prefPos.get(preference.getKey())] =
-        ((SwitchPreference)preference).isChecked();
-    TinyDB.putBooleanArray(preferences, KEY, currentValue);
-    return true;
-  }
+@Override
+public boolean onPreferenceClick(final Preference preference) {
+	currentValue[prefPos.get(preference.getKey())] =
+		((SwitchPreference)preference).isChecked();
+	TinyDB.putBooleanArray(preferences, KEY, currentValue);
+	return true;
+}
 }

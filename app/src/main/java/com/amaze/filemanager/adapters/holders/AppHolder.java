@@ -16,21 +16,21 @@ import com.amaze.filemanager.ui.views.ThemedTextView;
 
 public class AppHolder extends RecyclerView.ViewHolder {
 
-  public final ImageView apkIcon;
-  public final ThemedTextView txtTitle;
-  public final RelativeLayout rl;
-  public final TextView txtDesc;
-  public final ImageButton about;
+public final ImageView apkIcon;
+public final ThemedTextView txtTitle;
+public final RelativeLayout rl;
+public final TextView txtDesc;
+public final ImageButton about;
 
-  public AppHolder(final View view) {
-    super(view);
+public AppHolder(final View view) {
+	super(view);
 
-    txtTitle = view.findViewById(R.id.firstline);
-    apkIcon = view.findViewById(R.id.apk_icon);
-    rl = view.findViewById(R.id.second);
-    txtDesc = view.findViewById(R.id.date);
-    about = view.findViewById(R.id.properties);
+	txtTitle = view.findViewById(R.id.firstline);
+	apkIcon = view.findViewById(R.id.apk_icon);
+	rl = view.findViewById(R.id.second);
+	txtDesc = view.findViewById(R.id.date);
+	about = view.findViewById(R.id.properties);
 
-    apkIcon.setVisibility(View.VISIBLE);
-  }
+	apkIcon.setVisibility(View.VISIBLE);
+}
 }

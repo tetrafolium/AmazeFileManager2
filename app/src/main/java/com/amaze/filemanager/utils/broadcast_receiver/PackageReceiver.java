@@ -15,27 +15,27 @@ import com.amaze.filemanager.asynchronous.loaders.AppListLoader;
 
 public class PackageReceiver extends BroadcastReceiver {
 
-  private AppListLoader listLoader;
+private AppListLoader listLoader;
 
-  public PackageReceiver(final AppListLoader listLoader) {
+public PackageReceiver(final AppListLoader listLoader) {
 
-    this.listLoader = listLoader;
+	this.listLoader = listLoader;
 
-    IntentFilter filter = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);
-    filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
-    filter.addAction(Intent.ACTION_PACKAGE_CHANGED);
-    filter.addDataScheme("package");
-    listLoader.getContext().registerReceiver(this, filter);
+	IntentFilter filter = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);
+	filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+	filter.addAction(Intent.ACTION_PACKAGE_CHANGED);
+	filter.addDataScheme("package");
+	listLoader.getContext().registerReceiver(this, filter);
 
-    // Register for events related to SD card installation
-    IntentFilter sdcardFilter =
-        new IntentFilter(Intent.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE);
-    sdcardFilter.addAction(Intent.ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE);
-    listLoader.getContext().registerReceiver(this, sdcardFilter);
-  }
+	// Register for events related to SD card installation
+	IntentFilter sdcardFilter =
+		new IntentFilter(Intent.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE);
+	sdcardFilter.addAction(Intent.ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE);
+	listLoader.getContext().registerReceiver(this, sdcardFilter);
+}
 
-  @Override
-  public void onReceive(final Context context, final Intent intent) {
-    listLoader.onContentChanged();
-  }
+@Override
+public void onReceive(final Context context, final Intent intent) {
+	listLoader.onContentChanged();
+}
 }

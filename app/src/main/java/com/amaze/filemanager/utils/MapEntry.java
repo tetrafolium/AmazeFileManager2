@@ -8,15 +8,15 @@ package com.amaze.filemanager.utils;
  * typedef ImmutableEntry<ImmutableEntry<Integer, Integer>, Integer> MapEntry
  */
 public class MapEntry
-    extends ImmutableEntry<ImmutableEntry<Integer, Integer>, Integer> {
+	extends ImmutableEntry<ImmutableEntry<Integer, Integer>, Integer> {
 
-  /**
-   * Constructor to provide values to the pair
-   * @param key object of {@link ImmutableEntry} which is another key/value pair
-   * @param value integer object in the pair
-   */
-  public MapEntry(final ImmutableEntry<Integer, Integer> key,
-                  final Integer value) {
-    super(key, value);
-  }
+/**
+ * Constructor to provide values to the pair
+ * @param key object of {@link ImmutableEntry} which is another key/value pair
+ * @param value integer object in the pair
+ */
+public MapEntry(final ImmutableEntry<Integer, Integer> key,
+                final Integer value) {
+	super(key, value);
+}
 }

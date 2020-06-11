@@ -9,37 +9,37 @@ import androidx.annotation.Nullable;
  */
 public class UsbOtgRepresentation {
 
-  public final int productID, vendorID;
-  public final @Nullable String serialNumber;
+public final int productID, vendorID;
+public final @Nullable String serialNumber;
 
-  public UsbOtgRepresentation(final int productID, final int vendorID,
-                              final @Nullable String serialNumber) {
-    this.productID = productID;
-    this.vendorID = vendorID;
-    this.serialNumber = serialNumber;
-  }
+public UsbOtgRepresentation(final int productID, final int vendorID,
+                            final @Nullable String serialNumber) {
+	this.productID = productID;
+	this.vendorID = vendorID;
+	this.serialNumber = serialNumber;
+}
 
-  /**
-   * This does not ensure a device is equal to another!
-   * This tests parameters to know to a certain degree of certanty that a device
-   * is "similar enough" to another one to be the same one.
-   */
-  @Override
-  public boolean equals(final Object obj) {
-    if (!(obj instanceof UsbOtgRepresentation))
-      return false;
+/**
+ * This does not ensure a device is equal to another!
+ * This tests parameters to know to a certain degree of certanty that a device
+ * is "similar enough" to another one to be the same one.
+ */
+@Override
+public boolean equals(final Object obj) {
+	if (!(obj instanceof UsbOtgRepresentation))
+		return false;
 
-    UsbOtgRepresentation other = (UsbOtgRepresentation)obj;
-    return productID == other.productID && vendorID == other.vendorID &&
-        ((serialNumber == null && other.serialNumber == null) ||
-         serialNumber.equals(other.serialNumber));
-  }
+	UsbOtgRepresentation other = (UsbOtgRepresentation)obj;
+	return productID == other.productID && vendorID == other.vendorID &&
+	       ((serialNumber == null && other.serialNumber == null) ||
+	        serialNumber.equals(other.serialNumber));
+}
 
-  @Override
-  public int hashCode() {
-    int result = productID;
-    result = 37 * result + vendorID;
-    result = 37 * result + (serialNumber != null ? serialNumber.hashCode() : 0);
-    return result;
-  }
+@Override
+public int hashCode() {
+	int result = productID;
+	result = 37 * result + vendorID;
+	result = 37 * result + (serialNumber != null ? serialNumber.hashCode() : 0);
+	return result;
+}
 }

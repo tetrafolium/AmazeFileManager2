@@ -19,39 +19,39 @@ import java.util.List;
  */
 
 public class RecyclerPreloadModelProvider
-    implements ListPreloader.PreloadModelProvider<IconDataParcelable> {
+	implements ListPreloader.PreloadModelProvider<IconDataParcelable> {
 
-  private List<IconDataParcelable> urisToLoad;
-  private GlideRequest<Drawable> request;
+private List<IconDataParcelable> urisToLoad;
+private GlideRequest<Drawable> request;
 
-  public RecyclerPreloadModelProvider(final @NonNull Fragment fragment, final
-                                      @NonNull List<IconDataParcelable> uris) {
-    urisToLoad = uris;
-    request = GlideApp.with(fragment).asDrawable().centerCrop();
-  }
+public RecyclerPreloadModelProvider(final @NonNull Fragment fragment, final
+                                    @NonNull List<IconDataParcelable> uris) {
+	urisToLoad = uris;
+	request = GlideApp.with(fragment).asDrawable().centerCrop();
+}
 
-  @Override
-  @NonNull
-  public List<IconDataParcelable> getPreloadItems(final int position) {
-    IconDataParcelable iconData = urisToLoad.get(position);
-    if (iconData == null)
-      return Collections.emptyList();
-    return Collections.singletonList(iconData);
-  }
+@Override
+@NonNull
+public List<IconDataParcelable> getPreloadItems(final int position) {
+	IconDataParcelable iconData = urisToLoad.get(position);
+	if (iconData == null)
+		return Collections.emptyList();
+	return Collections.singletonList(iconData);
+}
 
-  @Override
-  @Nullable
-  public RequestBuilder<Drawable>
-  getPreloadRequestBuilder(final IconDataParcelable iconData) {
-    RequestBuilder<Drawable> requestBuilder;
-    if (iconData.type == IconDataParcelable.IMAGE_FROMFILE) {
-      requestBuilder = request.load(iconData.path);
-    } else if (iconData.type == IconDataParcelable.IMAGE_FROMCLOUD) {
-      requestBuilder =
-          request.load(iconData.path).diskCacheStrategy(DiskCacheStrategy.NONE);
-    } else {
-      requestBuilder = request.load(iconData.image);
-    }
-    return requestBuilder;
-  }
+@Override
+@Nullable
+public RequestBuilder<Drawable>
+getPreloadRequestBuilder(final IconDataParcelable iconData) {
+	RequestBuilder<Drawable> requestBuilder;
+	if (iconData.type == IconDataParcelable.IMAGE_FROMFILE) {
+		requestBuilder = request.load(iconData.path);
+	} else if (iconData.type == IconDataParcelable.IMAGE_FROMCLOUD) {
+		requestBuilder =
+			request.load(iconData.path).diskCacheStrategy(DiskCacheStrategy.NONE);
+	} else {
+		requestBuilder = request.load(iconData.image);
+	}
+	return requestBuilder;
+}
 }

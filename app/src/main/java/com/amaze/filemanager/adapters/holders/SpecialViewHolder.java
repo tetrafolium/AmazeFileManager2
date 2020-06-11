@@ -17,37 +17,37 @@ import com.amaze.filemanager.utils.theme.AppTheme;
  */
 
 public class SpecialViewHolder extends RecyclerView.ViewHolder {
-  public static final int HEADER_FILES = 0, HEADER_FOLDERS = 1;
-  // each data item is just a string in this case
-  public final TextView txtTitle;
-  public final int type;
+public static final int HEADER_FILES = 0, HEADER_FOLDERS = 1;
+// each data item is just a string in this case
+public final TextView txtTitle;
+public final int type;
 
-  public SpecialViewHolder(final Context c, final View view,
-                           final UtilitiesProvider utilsProvider,
-                           final int type) {
-    super(view);
+public SpecialViewHolder(final Context c, final View view,
+                         final UtilitiesProvider utilsProvider,
+                         final int type) {
+	super(view);
 
-    this.type = type;
-    txtTitle = view.findViewById(R.id.text);
+	this.type = type;
+	txtTitle = view.findViewById(R.id.text);
 
-    switch (type) {
-    case HEADER_FILES:
-      txtTitle.setText(R.string.files);
-      break;
-    case HEADER_FOLDERS:
-      txtTitle.setText(R.string.folders);
-      break;
-    default:
-      throw new IllegalStateException(": " + type);
-    }
+	switch (type) {
+	case HEADER_FILES:
+		txtTitle.setText(R.string.files);
+		break;
+	case HEADER_FOLDERS:
+		txtTitle.setText(R.string.folders);
+		break;
+	default:
+		throw new IllegalStateException(": " + type);
+	}
 
-    // if(utilsProvider.getAppTheme().equals(AppTheme.DARK))
-    //    view.setBackgroundResource(R.color.holo_dark_background);
+	// if(utilsProvider.getAppTheme().equals(AppTheme.DARK))
+	//    view.setBackgroundResource(R.color.holo_dark_background);
 
-    if (utilsProvider.getAppTheme().equals(AppTheme.LIGHT)) {
-      txtTitle.setTextColor(Utils.getColor(c, R.color.text_light));
-    } else {
-      txtTitle.setTextColor(Utils.getColor(c, R.color.text_dark));
-    }
-  }
+	if (utilsProvider.getAppTheme().equals(AppTheme.LIGHT)) {
+		txtTitle.setTextColor(Utils.getColor(c, R.color.text_light));
+	} else {
+		txtTitle.setTextColor(Utils.getColor(c, R.color.text_dark));
+	}
+}
 }

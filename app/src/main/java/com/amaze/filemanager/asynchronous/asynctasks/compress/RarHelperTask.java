@@ -40,55 +40,55 @@ import org.apache.commons.compress.archivers.ArchiveException;
 
 public class RarHelperTask extends CompressedHelperTask {
 
-  private String fileLocation;
-  private String relativeDirectory;
+private String fileLocation;
+private String relativeDirectory;
 
-  /**
-   * AsyncTask to load RAR file items.
-   * @param realFileDirectory the location of the zip file
-   * @param dir relativeDirectory to access inside the zip file
-   */
-  public RarHelperTask(
-      final String realFileDirectory, final String dir, final boolean goBack,
-      final OnAsyncTaskFinished<
-          AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> l) {
-    super(goBack, l);
-    fileLocation = realFileDirectory;
-    relativeDirectory = dir;
-  }
+/**
+ * AsyncTask to load RAR file items.
+ * @param realFileDirectory the location of the zip file
+ * @param dir relativeDirectory to access inside the zip file
+ */
+public RarHelperTask(
+	final String realFileDirectory, final String dir, final boolean goBack,
+	final OnAsyncTaskFinished<
+		AsyncTaskResult<ArrayList<CompressedObjectParcelable> > > l) {
+	super(goBack, l);
+	fileLocation = realFileDirectory;
+	relativeDirectory = dir;
+}
 
-  @Override
-  void addElements(final
-                   @NonNull ArrayList<CompressedObjectParcelable> elements)
-      throws ArchiveException {
-    try {
-      Archive zipfile = new Archive(new File(fileLocation));
-      String relativeDirDiffSeparator =
-          relativeDirectory.replace(CompressedHelper.SEPARATOR, "\\");
+@Override
+void addElements(final
+                 @NonNull ArrayList<CompressedObjectParcelable> elements)
+throws ArchiveException {
+	try {
+		Archive zipfile = new Archive(new File(fileLocation));
+		String relativeDirDiffSeparator =
+			relativeDirectory.replace(CompressedHelper.SEPARATOR, "\\");
 
-      for (FileHeader rarArchive : zipfile.getFileHeaders()) {
-        String name =
-            rarArchive.getFileNameString(); // This uses \ as separator, not /
-        if (!CompressedHelper.isEntryPathValid(name)) {
-          continue;
-        }
-        boolean isInBaseDir = (relativeDirDiffSeparator == null ||
-                               relativeDirDiffSeparator.equals("")) &&
-                              !name.contains("\\");
-        boolean isInRelativeDir = relativeDirDiffSeparator != null &&
-                                  name.contains("\\") &&
-                                  name.substring(0, name.lastIndexOf("\\"))
-                                      .equals(relativeDirDiffSeparator);
+		for (FileHeader rarArchive : zipfile.getFileHeaders()) {
+			String name =
+				rarArchive.getFileNameString(); // This uses \ as separator, not /
+			if (!CompressedHelper.isEntryPathValid(name)) {
+				continue;
+			}
+			boolean isInBaseDir = (relativeDirDiffSeparator == null ||
+			                       relativeDirDiffSeparator.equals("")) &&
+			                      !name.contains("\\");
+			boolean isInRelativeDir = relativeDirDiffSeparator != null &&
+			                          name.contains("\\") &&
+			                          name.substring(0, name.lastIndexOf("\\"))
+			                          .equals(relativeDirDiffSeparator);
 
-        if (isInBaseDir || isInRelativeDir) {
-          elements.add(new CompressedObjectParcelable(
-              RarDecompressor.convertName(rarArchive), 0,
-              rarArchive.getDataSize(), rarArchive.isDirectory()));
-        }
-      }
-    } catch (RarException | IOException e) {
-      throw new ArchiveException(
-          String.format("RAR archive %s is corrupt", fileLocation));
-    }
-  }
+			if (isInBaseDir || isInRelativeDir) {
+				elements.add(new CompressedObjectParcelable(
+						     RarDecompressor.convertName(rarArchive), 0,
+						     rarArchive.getDataSize(), rarArchive.isDirectory()));
+			}
+		}
+	} catch (RarException | IOException e) {
+		throw new ArchiveException(
+			      String.format("RAR archive %s is corrupt", fileLocation));
+	}
+}
 }

@@ -11,6 +11,6 @@ import com.amaze.filemanager.BuildConfig;
 
 public class GenericFileProvider extends FileProvider {
 
-  public static final String PROVIDER_NAME =
-      BuildConfig.APPLICATION_ID + ".FILE_PROVIDER";
+public static final String PROVIDER_NAME =
+	BuildConfig.APPLICATION_ID + ".FILE_PROVIDER";
 }

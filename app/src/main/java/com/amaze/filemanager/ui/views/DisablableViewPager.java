@@ -10,24 +10,24 @@ import androidx.viewpager.widget.ViewPager;
  */
 public class DisablableViewPager extends ViewPager {
 
-  private boolean enabled;
+private boolean enabled;
 
-  public DisablableViewPager(final Context context, final AttributeSet attrs) {
-    super(context, attrs);
-    this.enabled = true;
-  }
+public DisablableViewPager(final Context context, final AttributeSet attrs) {
+	super(context, attrs);
+	this.enabled = true;
+}
 
-  @Override
-  public boolean onTouchEvent(final MotionEvent event) {
-    return this.enabled && super.onTouchEvent(event);
-  }
+@Override
+public boolean onTouchEvent(final MotionEvent event) {
+	return this.enabled && super.onTouchEvent(event);
+}
 
-  @Override
-  public boolean onInterceptTouchEvent(final MotionEvent event) {
-    return this.enabled && super.onInterceptTouchEvent(event);
-  }
+@Override
+public boolean onInterceptTouchEvent(final MotionEvent event) {
+	return this.enabled && super.onInterceptTouchEvent(event);
+}
 
-  public void setPagingEnabled(final boolean enabled) {
-    this.enabled = enabled;
-  }
+public void setPagingEnabled(final boolean enabled) {
+	this.enabled = enabled;
+}
 }

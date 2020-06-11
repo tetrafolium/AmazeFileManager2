@@ -11,25 +11,27 @@ import android.widget.ImageButton;
 
 public class ThemedImageButton extends ThemedImageView {
 
-  public ThemedImageButton(final Context context) { super(context); }
+public ThemedImageButton(final Context context) {
+	super(context);
+}
 
-  public ThemedImageButton(final Context context, final AttributeSet attrs) {
-    super(context, attrs);
-  }
+public ThemedImageButton(final Context context, final AttributeSet attrs) {
+	super(context, attrs);
+}
 
-  public ThemedImageButton(final Context context, final AttributeSet attrs,
-                           final int defStyleAttr) {
-    super(context, attrs, defStyleAttr);
-    setFocusable(true);
-  }
+public ThemedImageButton(final Context context, final AttributeSet attrs,
+                         final int defStyleAttr) {
+	super(context, attrs, defStyleAttr);
+	setFocusable(true);
+}
 
-  @Override
-  protected boolean onSetAlpha(final int alpha) {
-    return false;
-  }
+@Override
+protected boolean onSetAlpha(final int alpha) {
+	return false;
+}
 
-  @Override
-  public CharSequence getAccessibilityClassName() {
-    return ImageButton.class.getName();
-  }
+@Override
+public CharSequence getAccessibilityClassName() {
+	return ImageButton.class.getName();
+}
 }

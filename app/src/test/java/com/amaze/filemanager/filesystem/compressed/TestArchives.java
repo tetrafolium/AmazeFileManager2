@@ -11,34 +11,34 @@ import org.robolectric.shadows.ShadowContentResolver;
 
 public abstract class TestArchives {
 
-  private static final String[] ARCHIVE_TYPES = {"tar.gz", "zip", "tar", "rar"};
+private static final String[] ARCHIVE_TYPES = {"tar.gz", "zip", "tar", "rar"};
 
-  private static final ClassLoader classLoader =
-      TestArchives.class.getClassLoader();
+private static final ClassLoader classLoader =
+	TestArchives.class.getClassLoader();
 
-  public static void init(final Context context) {
-    for (String type : ARCHIVE_TYPES) {
-      readArchive(context, type);
-    }
-  }
+public static void init(final Context context) {
+	for (String type : ARCHIVE_TYPES) {
+		readArchive(context, type);
+	}
+}
 
-  public static byte[] readArchive(final String type) throws IOException {
-    return IOUtils.toByteArray(
-        classLoader.getResourceAsStream("test-archive." + type));
-  }
+public static byte[] readArchive(final String type) throws IOException {
+	return IOUtils.toByteArray(
+		classLoader.getResourceAsStream("test-archive." + type));
+}
 
-  private static void readArchive(final Context context, final String type) {
-    try {
-      Uri uri = Uri.parse(
-          "content://foo.bar.test.streamprovider/temp/test-archive." + type);
+private static void readArchive(final Context context, final String type) {
+	try {
+		Uri uri = Uri.parse(
+			"content://foo.bar.test.streamprovider/temp/test-archive." + type);
 
-      ContentResolver contentResolver = context.getContentResolver();
-      ShadowContentResolver shadowContentResolver =
-          Shadows.shadowOf(contentResolver);
-      shadowContentResolver.registerInputStream(
-          uri, new ByteArrayInputStream(readArchive(type)));
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
+		ContentResolver contentResolver = context.getContentResolver();
+		ShadowContentResolver shadowContentResolver =
+			Shadows.shadowOf(contentResolver);
+		shadowContentResolver.registerInputStream(
+			uri, new ByteArrayInputStream(readArchive(type)));
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+}
 }

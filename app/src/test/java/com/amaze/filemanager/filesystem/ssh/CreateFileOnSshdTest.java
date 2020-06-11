@@ -27,25 +27,25 @@ import org.robolectric.shadows.multidex.ShadowMultiDex;
 
 public class CreateFileOnSshdTest extends AbstractSftpServerTest {
 
-  @Test
-  public void testCreateFileNormal() throws Exception {
-    tearDown();
-    createSshServer(new VirtualFileSystemFactory(Paths.get(
-        Environment.getExternalStorageDirectory().getAbsolutePath())));
-  }
+@Test
+public void testCreateFileNormal() throws Exception {
+	tearDown();
+	createSshServer(new VirtualFileSystemFactory(Paths.get(
+							     Environment.getExternalStorageDirectory().getAbsolutePath())));
+}
 
-  @Test
-  public void testCreateFilePermissionDenied() throws Exception {
-    tearDown();
-    createSshServer(new VirtualFileSystemFactory() {
-      @Override
-      public FileSystem createFileSystem(final Session session)
-          throws IOException {
-        return new BlockFileCreationFileSystemProvider().newFileSystem(
-            Paths.get(
-                Environment.getExternalStorageDirectory().getAbsolutePath()),
-            Collections.emptyMap());
-      }
-    });
-  }
+@Test
+public void testCreateFilePermissionDenied() throws Exception {
+	tearDown();
+	createSshServer(new VirtualFileSystemFactory() {
+			@Override
+			public FileSystem createFileSystem(final Session session)
+			throws IOException {
+			        return new BlockFileCreationFileSystemProvider().newFileSystem(
+					Paths.get(
+						Environment.getExternalStorageDirectory().getAbsolutePath()),
+					Collections.emptyMap());
+			}
+		});
+}
 }

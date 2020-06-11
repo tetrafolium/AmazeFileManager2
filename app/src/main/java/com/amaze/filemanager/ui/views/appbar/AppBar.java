@@ -22,51 +22,59 @@ import com.google.android.material.appbar.AppBarLayout;
 
 public class AppBar {
 
-  private int TOOLBAR_START_INSET;
+private int TOOLBAR_START_INSET;
 
-  private Toolbar toolbar;
-  private SearchView searchView;
-  private BottomBar bottomBar;
+private Toolbar toolbar;
+private SearchView searchView;
+private BottomBar bottomBar;
 
-  private AppBarLayout appbarLayout;
+private AppBarLayout appbarLayout;
 
-  public AppBar(final MainActivity a, final SharedPreferences sharedPref,
-                final SearchView.SearchListener searchListener) {
-    toolbar = a.findViewById(R.id.action_bar);
-    searchView = new SearchView(this, a, searchListener);
-    bottomBar = new BottomBar(this, a);
+public AppBar(final MainActivity a, final SharedPreferences sharedPref,
+              final SearchView.SearchListener searchListener) {
+	toolbar = a.findViewById(R.id.action_bar);
+	searchView = new SearchView(this, a, searchListener);
+	bottomBar = new BottomBar(this, a);
 
-    appbarLayout = a.findViewById(R.id.lin);
+	appbarLayout = a.findViewById(R.id.lin);
 
-    if (SDK_INT >= 21)
-      toolbar.setElevation(0);
-    /* For SearchView, see onCreateOptionsMenu(Menu menu)*/
-    TOOLBAR_START_INSET = toolbar.getContentInsetStart();
+	if (SDK_INT >= 21)
+		toolbar.setElevation(0);
+	/* For SearchView, see onCreateOptionsMenu(Menu menu)*/
+	TOOLBAR_START_INSET = toolbar.getContentInsetStart();
 
-    if (!sharedPref.getBoolean(
-            PreferencesConstants.PREFERENCE_INTELLI_HIDE_TOOLBAR, true)) {
-      AppBarLayout.LayoutParams params =
-          (AppBarLayout.LayoutParams)toolbar.getLayoutParams();
-      params.setScrollFlags(0);
-      appbarLayout.setExpanded(true, true);
-    }
-  }
+	if (!sharedPref.getBoolean(
+		    PreferencesConstants.PREFERENCE_INTELLI_HIDE_TOOLBAR, true)) {
+		AppBarLayout.LayoutParams params =
+			(AppBarLayout.LayoutParams)toolbar.getLayoutParams();
+		params.setScrollFlags(0);
+		appbarLayout.setExpanded(true, true);
+	}
+}
 
-  public Toolbar getToolbar() { return toolbar; }
+public Toolbar getToolbar() {
+	return toolbar;
+}
 
-  public SearchView getSearchView() { return searchView; }
+public SearchView getSearchView() {
+	return searchView;
+}
 
-  public BottomBar getBottomBar() { return bottomBar; }
+public BottomBar getBottomBar() {
+	return bottomBar;
+}
 
-  public AppBarLayout getAppbarLayout() { return appbarLayout; }
+public AppBarLayout getAppbarLayout() {
+	return appbarLayout;
+}
 
-  public void setTitle(final String title) {
-    if (toolbar != null)
-      toolbar.setTitle(title);
-  }
+public void setTitle(final String title) {
+	if (toolbar != null)
+		toolbar.setTitle(title);
+}
 
-  public void setTitle(final @StringRes int title) {
-    if (toolbar != null)
-      toolbar.setTitle(title);
-  }
+public void setTitle(final @StringRes int title) {
+	if (toolbar != null)
+		toolbar.setTitle(title);
+}
 }

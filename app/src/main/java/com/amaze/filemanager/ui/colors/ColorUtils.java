@@ -14,37 +14,37 @@ import com.amaze.filemanager.utils.Utils;
 
 public class ColorUtils {
 
-  public static void colorizeIcons(final Context context, final int iconType,
-                                   final GradientDrawable background,
-                                   final @ColorInt int defaultColor) {
-    switch (iconType) {
-    case Icons.VIDEO:
-    case Icons.IMAGE:
-      background.setColor(Utils.getColor(context, R.color.video_item));
-      break;
-    case Icons.AUDIO:
-      background.setColor(Utils.getColor(context, R.color.audio_item));
-      break;
-    case Icons.PDF:
-      background.setColor(Utils.getColor(context, R.color.pdf_item));
-      break;
-    case Icons.CODE:
-      background.setColor(Utils.getColor(context, R.color.code_item));
-      break;
-    case Icons.TEXT:
-      background.setColor(Utils.getColor(context, R.color.text_item));
-      break;
-    case Icons.COMPRESSED:
-      background.setColor(Utils.getColor(context, R.color.archive_item));
-      break;
-    case Icons.APK:
-      background.setColor(Utils.getColor(context, R.color.apk_item));
-      break;
-    case Icons.NOT_KNOWN:
-      background.setColor(Utils.getColor(context, R.color.generic_item));
-    default:
-      background.setColor(defaultColor);
-      break;
-    }
-  }
+public static void colorizeIcons(final Context context, final int iconType,
+                                 final GradientDrawable background,
+                                 final @ColorInt int defaultColor) {
+	switch (iconType) {
+	case Icons.VIDEO:
+	case Icons.IMAGE:
+		background.setColor(Utils.getColor(context, R.color.video_item));
+		break;
+	case Icons.AUDIO:
+		background.setColor(Utils.getColor(context, R.color.audio_item));
+		break;
+	case Icons.PDF:
+		background.setColor(Utils.getColor(context, R.color.pdf_item));
+		break;
+	case Icons.CODE:
+		background.setColor(Utils.getColor(context, R.color.code_item));
+		break;
+	case Icons.TEXT:
+		background.setColor(Utils.getColor(context, R.color.text_item));
+		break;
+	case Icons.COMPRESSED:
+		background.setColor(Utils.getColor(context, R.color.archive_item));
+		break;
+	case Icons.APK:
+		background.setColor(Utils.getColor(context, R.color.apk_item));
+		break;
+	case Icons.NOT_KNOWN:
+		background.setColor(Utils.getColor(context, R.color.generic_item));
+	default:
+		background.setColor(defaultColor);
+		break;
+	}
+}
 }

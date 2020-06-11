@@ -17,54 +17,54 @@ import java.io.InputStream;
 
 public class CloudIconDataFetcher implements DataFetcher<Bitmap> {
 
-  private String path;
-  private Context context;
-  private InputStream inputStream;
-  private int width, height;
+private String path;
+private Context context;
+private InputStream inputStream;
+private int width, height;
 
-  public CloudIconDataFetcher(final Context context, final String path,
-                              final int width, final int height) {
-    this.context = context;
-    this.path = path;
-    this.width = width;
-    this.height = height;
-  }
+public CloudIconDataFetcher(final Context context, final String path,
+                            final int width, final int height) {
+	this.context = context;
+	this.path = path;
+	this.width = width;
+	this.height = height;
+}
 
-  @Override
-  public void loadData(final Priority priority,
-                       final DataCallback<? super Bitmap> callback) {
-    inputStream = CloudUtil.getThumbnailInputStreamForCloud(context, path);
-    BitmapFactory.Options options = new BitmapFactory.Options();
-    options.outWidth = width;
-    options.outHeight = height;
-    Bitmap drawable = BitmapFactory.decodeStream(inputStream, null, options);
-    callback.onDataReady(drawable);
-  }
+@Override
+public void loadData(final Priority priority,
+                     final DataCallback<? super Bitmap> callback) {
+	inputStream = CloudUtil.getThumbnailInputStreamForCloud(context, path);
+	BitmapFactory.Options options = new BitmapFactory.Options();
+	options.outWidth = width;
+	options.outHeight = height;
+	Bitmap drawable = BitmapFactory.decodeStream(inputStream, null, options);
+	callback.onDataReady(drawable);
+}
 
-  @Override
-  public void cleanup() {
-    try {
-      if (inputStream != null)
-        inputStream.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
+@Override
+public void cleanup() {
+	try {
+		if (inputStream != null)
+			inputStream.close();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+}
 
-  @Override
-  public void cancel() {
-    // do nothing
-  }
+@Override
+public void cancel() {
+	// do nothing
+}
 
-  @NonNull
-  @Override
-  public Class<Bitmap> getDataClass() {
-    return Bitmap.class;
-  }
+@NonNull
+@Override
+public Class<Bitmap> getDataClass() {
+	return Bitmap.class;
+}
 
-  @NonNull
-  @Override
-  public DataSource getDataSource() {
-    return DataSource.REMOTE;
-  }
+@NonNull
+@Override
+public DataSource getDataSource() {
+	return DataSource.REMOTE;
+}
 }

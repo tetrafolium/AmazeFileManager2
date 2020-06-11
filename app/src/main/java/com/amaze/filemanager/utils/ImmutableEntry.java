@@ -25,28 +25,28 @@ import java.util.Map;
  * Author: Guava
  */
 public class ImmutableEntry<K, V> implements Map.Entry<K, V> {
-  private final K key;
-  private final V value;
+private final K key;
+private final V value;
 
-  public ImmutableEntry(final @Nullable K key, final @Nullable V value) {
-    this.key = key;
-    this.value = value;
-  }
+public ImmutableEntry(final @Nullable K key, final @Nullable V value) {
+	this.key = key;
+	this.value = value;
+}
 
-  @Nullable
-  @Override
-  public final K getKey() {
-    return key;
-  }
+@Nullable
+@Override
+public final K getKey() {
+	return key;
+}
 
-  @Nullable
-  @Override
-  public final V getValue() {
-    return value;
-  }
+@Nullable
+@Override
+public final V getValue() {
+	return value;
+}
 
-  @Override
-  public final V setValue(final V value) {
-    throw new UnsupportedOperationException();
-  }
+@Override
+public final V setValue(final V value) {
+	throw new UnsupportedOperationException();
+}
 }

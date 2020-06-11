@@ -61,77 +61,77 @@ import net.schmizz.sshj.transport.verification.HostKeyVerifier;
  */
 
 public class GetSshHostFingerprintTask
-    extends AsyncTask<Void, Void, AsyncTaskResult<PublicKey>> {
-  private final String hostname;
-  private final int port;
-  private final AsyncTaskResult.Callback<AsyncTaskResult<PublicKey>> callback;
+	extends AsyncTask<Void, Void, AsyncTaskResult<PublicKey> > {
+private final String hostname;
+private final int port;
+private final AsyncTaskResult.Callback<AsyncTaskResult<PublicKey> > callback;
 
-  private ProgressDialog progressDialog;
+private ProgressDialog progressDialog;
 
-  public GetSshHostFingerprintTask(
-      final @NonNull String hostname, final int port,
-      final AsyncTaskResult.Callback<AsyncTaskResult<PublicKey>> callback) {
-    this.hostname = hostname;
-    this.port = port;
-    this.callback = callback;
-  }
+public GetSshHostFingerprintTask(
+	final @NonNull String hostname, final int port,
+	final AsyncTaskResult.Callback<AsyncTaskResult<PublicKey> > callback) {
+	this.hostname = hostname;
+	this.port = port;
+	this.callback = callback;
+}
 
-  @Override
-  protected AsyncTaskResult<PublicKey> doInBackground(final Void... voids) {
+@Override
+protected AsyncTaskResult<PublicKey> doInBackground(final Void... voids) {
 
-    final AtomicReference<AsyncTaskResult<PublicKey>> holder =
-        new AtomicReference<AsyncTaskResult<PublicKey>>();
-    final CountDownLatch latch = new CountDownLatch(1);
-    final SSHClient sshClient = new SSHClient(new CustomSshJConfig());
-    sshClient.setConnectTimeout(SSH_CONNECT_TIMEOUT);
-    sshClient.addHostKeyVerifier((hostname, port, key) -> {
-      holder.set(new AsyncTaskResult<PublicKey>(key));
-      latch.countDown();
-      return true;
-    });
+	final AtomicReference<AsyncTaskResult<PublicKey> > holder =
+		new AtomicReference<AsyncTaskResult<PublicKey> >();
+	final CountDownLatch latch = new CountDownLatch(1);
+	final SSHClient sshClient = new SSHClient(new CustomSshJConfig());
+	sshClient.setConnectTimeout(SSH_CONNECT_TIMEOUT);
+	sshClient.addHostKeyVerifier((hostname, port, key)->{
+			holder.set(new AsyncTaskResult<PublicKey>(key));
+			latch.countDown();
+			return true;
+		});
 
-    try {
-      sshClient.connect(hostname, port);
-      latch.await();
-    } catch (IOException e) {
-      e.printStackTrace();
-      holder.set(new AsyncTaskResult<PublicKey>(e));
-      latch.countDown();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-      holder.set(new AsyncTaskResult<PublicKey>(e));
-      latch.countDown();
-    } finally {
-      SshClientUtils.tryDisconnect(sshClient);
-      return holder.get();
-    }
-  }
+	try {
+		sshClient.connect(hostname, port);
+		latch.await();
+	} catch (IOException e) {
+		e.printStackTrace();
+		holder.set(new AsyncTaskResult<PublicKey>(e));
+		latch.countDown();
+	} catch (InterruptedException e) {
+		e.printStackTrace();
+		holder.set(new AsyncTaskResult<PublicKey>(e));
+		latch.countDown();
+	} finally {
+		SshClientUtils.tryDisconnect(sshClient);
+		return holder.get();
+	}
+}
 
-  @Override
-  protected void onPreExecute() {
-    progressDialog = ProgressDialog.show(
-        AppConfig.getInstance().getMainActivityContext(), "",
-        AppConfig.getInstance().getResources().getString(R.string.processing));
-  }
+@Override
+protected void onPreExecute() {
+	progressDialog = ProgressDialog.show(
+		AppConfig.getInstance().getMainActivityContext(), "",
+		AppConfig.getInstance().getResources().getString(R.string.processing));
+}
 
-  @Override
-  protected void onPostExecute(final AsyncTaskResult<PublicKey> result) {
-    progressDialog.dismiss();
+@Override
+protected void onPostExecute(final AsyncTaskResult<PublicKey> result) {
+	progressDialog.dismiss();
 
-    if (result.exception != null) {
-      if (SocketException.class.isAssignableFrom(result.exception.getClass()) ||
-          SocketTimeoutException.class.isAssignableFrom(
-              result.exception.getClass())) {
-        Toast
-            .makeText(AppConfig.getInstance(),
-                      AppConfig.getInstance().getResources().getString(
-                          R.string.ssh_connect_failed, hostname, port,
-                          result.exception.getLocalizedMessage()),
-                      Toast.LENGTH_LONG)
-            .show();
-      }
-    } else {
-      callback.onResult(result);
-    }
-  }
+	if (result.exception != null) {
+		if (SocketException.class.isAssignableFrom(result.exception.getClass()) ||
+		    SocketTimeoutException.class.isAssignableFrom(
+			    result.exception.getClass())) {
+			Toast
+			.makeText(AppConfig.getInstance(),
+			          AppConfig.getInstance().getResources().getString(
+					  R.string.ssh_connect_failed, hostname, port,
+					  result.exception.getLocalizedMessage()),
+			          Toast.LENGTH_LONG)
+			.show();
+		}
+	} else {
+		callback.onResult(result);
+	}
+}
 }

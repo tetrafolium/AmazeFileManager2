@@ -4,20 +4,20 @@ import com.amaze.filemanager.filesystem.compressed.extractcontents.helpers.ZipEx
 import net.lingala.zip4j.exception.ZipException;
 
 public class PasswordProtectedZipTest
-    extends AbstractExtractorPasswordProtectedArchivesTest {
+	extends AbstractExtractorPasswordProtectedArchivesTest {
 
-  @Override
-  protected Class<? extends Extractor> extractorClass() {
-    return ZipExtractor.class;
-  }
+@Override
+protected Class<? extends Extractor> extractorClass() {
+	return ZipExtractor.class;
+}
 
-  @Override
-  protected Class[] expectedRootExceptionClass() {
-    return new Class[] {ZipException.class};
-  }
+@Override
+protected Class[] expectedRootExceptionClass() {
+	return new Class[] {ZipException.class};
+}
 
-  @Override
-  protected String getArchiveType() {
-    return "zip";
-  }
+@Override
+protected String getArchiveType() {
+	return "zip";
+}
 }

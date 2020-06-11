@@ -8,19 +8,21 @@ import org.apache.sshd.common.keyprovider.KeyPairProvider;
 
 public class TestKeyProvider implements KeyPairProvider {
 
-  private KeyPair keyPair;
+private KeyPair keyPair;
 
-  public TestKeyProvider() throws Exception {
-    KeyPairGenerator keyPairGenerator =
-        KeyPairGenerator.getInstance("RSA", "BC");
-    keyPairGenerator.initialize(1024, new SecureRandom());
-    keyPair = keyPairGenerator.generateKeyPair();
-  }
+public TestKeyProvider() throws Exception {
+	KeyPairGenerator keyPairGenerator =
+		KeyPairGenerator.getInstance("RSA", "BC");
+	keyPairGenerator.initialize(1024, new SecureRandom());
+	keyPair = keyPairGenerator.generateKeyPair();
+}
 
-  @Override
-  public Iterable<KeyPair> loadKeys() {
-    return Collections.singleton(keyPair);
-  }
+@Override
+public Iterable<KeyPair> loadKeys() {
+	return Collections.singleton(keyPair);
+}
 
-  public KeyPair getKeyPair() { return keyPair; }
+public KeyPair getKeyPair() {
+	return keyPair;
+}
 }

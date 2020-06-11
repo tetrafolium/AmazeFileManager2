@@ -39,45 +39,49 @@ package com.amaze.filemanager.filesystem.compressed.sevenz;
  * @since 1.8
  */
 public class SevenZMethodConfiguration {
-  private final SevenZMethod method;
-  private final Object options;
+private final SevenZMethod method;
+private final Object options;
 
-  /**
-   * Doesn't configure any additional options.
-   * @param method the method to use
-   */
-  public SevenZMethodConfiguration(final SevenZMethod method) {
-    this(method, null);
-  }
+/**
+ * Doesn't configure any additional options.
+ * @param method the method to use
+ */
+public SevenZMethodConfiguration(final SevenZMethod method) {
+	this(method, null);
+}
 
-  /**
-   * Specifies and method plus configuration options.
-   * @param method the method to use
-   * @param options the options to use
-   * @throws IllegalArgumentException if the method doesn't understand the
-   *     options specified.
-   */
-  public SevenZMethodConfiguration(final SevenZMethod method,
-                                   final Object options) {
-    this.method = method;
-    this.options = options;
-    if (options != null &&
-        !Coders.findByMethod(method).canAcceptOptions(options)) {
-      throw new IllegalArgumentException(
-          "The " + method + " method doesn't support options of type " +
-          options.getClass());
-    }
-  }
+/**
+ * Specifies and method plus configuration options.
+ * @param method the method to use
+ * @param options the options to use
+ * @throws IllegalArgumentException if the method doesn't understand the
+ *     options specified.
+ */
+public SevenZMethodConfiguration(final SevenZMethod method,
+                                 final Object options) {
+	this.method = method;
+	this.options = options;
+	if (options != null &&
+	    !Coders.findByMethod(method).canAcceptOptions(options)) {
+		throw new IllegalArgumentException(
+			      "The " + method + " method doesn't support options of type " +
+			      options.getClass());
+	}
+}
 
-  /**
-   * The specified method.
-   * @return the method
-   */
-  public SevenZMethod getMethod() { return method; }
+/**
+ * The specified method.
+ * @return the method
+ */
+public SevenZMethod getMethod() {
+	return method;
+}
 
-  /**
-   * The specified options.
-   * @return the options
-   */
-  public Object getOptions() { return options; }
+/**
+ * The specified options.
+ * @return the options
+ */
+public Object getOptions() {
+	return options;
+}
 }

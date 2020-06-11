@@ -25,102 +25,102 @@ import java.util.Comparator;
 
 public class FileListSorter implements Comparator<LayoutElementParcelable> {
 
-  private int dirsOnTop = 0;
-  private int asc = 1;
-  private int sort = 0;
+private int dirsOnTop = 0;
+private int asc = 1;
+private int sort = 0;
 
-  public FileListSorter(final int dir, final int sort, final int asc) {
-    this.dirsOnTop = dir;
-    this.asc = asc;
-    this.sort = sort;
-  }
+public FileListSorter(final int dir, final int sort, final int asc) {
+	this.dirsOnTop = dir;
+	this.asc = asc;
+	this.sort = sort;
+}
 
-  private boolean isDirectory(final LayoutElementParcelable path) {
-    return path.isDirectory;
-  }
+private boolean isDirectory(final LayoutElementParcelable path) {
+	return path.isDirectory;
+}
 
-  /**
-   * Compares two elements and return negative, zero and positive integer if
-   * first argument is less than, equal to or greater than second
-   */
-  @Override
-  public int compare(final LayoutElementParcelable file1,
-                     final LayoutElementParcelable file2) {
+/**
+ * Compares two elements and return negative, zero and positive integer if
+ * first argument is less than, equal to or greater than second
+ */
+@Override
+public int compare(final LayoutElementParcelable file1,
+                   final LayoutElementParcelable file2) {
 
-    /*File f1;
+	/*File f1;
 
-    if(!file1.hasSymlink()) {
+	   if(!file1.hasSymlink()) {
 
-        f1=new File(file1.getDesc());
-    } else {
-        f1=new File(file1.getSymlink());
-    }
+	    f1=new File(file1.getDesc());
+	   } else {
+	    f1=new File(file1.getSymlink());
+	   }
 
-    File f2;
+	   File f2;
 
-    if(!file2.hasSymlink()) {
+	   if(!file2.hasSymlink()) {
 
-        f2=new File(file2.getDesc());
-    } else {
-        f2=new File(file1.getSymlink());
-    }*/
+	    f2=new File(file2.getDesc());
+	   } else {
+	    f2=new File(file1.getSymlink());
+	   }*/
 
-    if (dirsOnTop == 0) {
-      if (isDirectory(file1) && !isDirectory(file2)) {
-        return -1;
+	if (dirsOnTop == 0) {
+		if (isDirectory(file1) && !isDirectory(file2)) {
+			return -1;
 
-      } else if (isDirectory(file2) && !isDirectory(file1)) {
-        return 1;
-      }
-    } else if (dirsOnTop == 1) {
-      if (isDirectory(file1) && !isDirectory(file2)) {
+		} else if (isDirectory(file2) && !isDirectory(file1)) {
+			return 1;
+		}
+	} else if (dirsOnTop == 1) {
+		if (isDirectory(file1) && !isDirectory(file2)) {
 
-        return 1;
-      } else if (isDirectory(file2) && !isDirectory(file1)) {
-        return -1;
-      }
-    }
+			return 1;
+		} else if (isDirectory(file2) && !isDirectory(file1)) {
+			return -1;
+		}
+	}
 
-    if (sort == 0) {
+	if (sort == 0) {
 
-      // sort by name
-      return asc * file1.title.compareToIgnoreCase(file2.title);
-    } else if (sort == 1) {
+		// sort by name
+		return asc * file1.title.compareToIgnoreCase(file2.title);
+	} else if (sort == 1) {
 
-      // sort by last modified
-      return asc * Long.valueOf(file1.date).compareTo(file2.date);
-    } else if (sort == 2) {
+		// sort by last modified
+		return asc * Long.valueOf(file1.date).compareTo(file2.date);
+	} else if (sort == 2) {
 
-      // sort by size
-      if (!file1.isDirectory && !file2.isDirectory) {
+		// sort by size
+		if (!file1.isDirectory && !file2.isDirectory) {
 
-        return asc * Long.valueOf(file1.longSize).compareTo(file2.longSize);
-      } else {
+			return asc * Long.valueOf(file1.longSize).compareTo(file2.longSize);
+		} else {
 
-        return file1.title.compareToIgnoreCase(file2.title);
-      }
+			return file1.title.compareToIgnoreCase(file2.title);
+		}
 
-    } else if (sort == 3) {
+	} else if (sort == 3) {
 
-      // sort by type
-      if (!file1.isDirectory && !file2.isDirectory) {
+		// sort by type
+		if (!file1.isDirectory && !file2.isDirectory) {
 
-        final String ext_a = getExtension(file1.title);
-        final String ext_b = getExtension(file2.title);
+			final String ext_a = getExtension(file1.title);
+			final String ext_b = getExtension(file2.title);
 
-        final int res = asc * ext_a.compareTo(ext_b);
-        if (res == 0) {
-          return asc * file1.title.compareToIgnoreCase(file2.title);
-        }
-        return res;
-      } else {
-        return file1.title.compareToIgnoreCase(file2.title);
-      }
-    }
-    return 0;
-  }
+			final int res = asc * ext_a.compareTo(ext_b);
+			if (res == 0) {
+				return asc * file1.title.compareToIgnoreCase(file2.title);
+			}
+			return res;
+		} else {
+			return file1.title.compareToIgnoreCase(file2.title);
+		}
+	}
+	return 0;
+}
 
-  private static String getExtension(final String a) {
-    return a.substring(a.lastIndexOf(".") + 1).toLowerCase();
-  }
+private static String getExtension(final String a) {
+	return a.substring(a.lastIndexOf(".") + 1).toLowerCase();
+}
 }

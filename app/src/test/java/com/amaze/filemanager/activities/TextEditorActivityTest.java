@@ -35,78 +35,78 @@ import org.robolectric.shadows.multidex.ShadowMultiDex;
 @Config(constants = BuildConfig.class, shadows = {ShadowMultiDex.class})
 public class TextEditorActivityTest {
 
-  private final String fileContents = "fsdfsdfs";
-  private TextView text;
+private final String fileContents = "fsdfsdfs";
+private TextView text;
 
-  @After
-  public void tearDown() {
-    AppConfig.getInstance().onTerminate();
-  }
+@After
+public void tearDown() {
+	AppConfig.getInstance().onTerminate();
+}
 
-  @Test
-  public void testOpenFileUri() throws IOException {
-    File file = simulateFile();
+@Test
+public void testOpenFileUri() throws IOException {
+	File file = simulateFile();
 
-    Intent intent = new Intent(Intent.ACTION_VIEW);
-    intent.setData(Uri.fromFile(file));
-    generateActivity(intent);
+	Intent intent = new Intent(Intent.ACTION_VIEW);
+	intent.setData(Uri.fromFile(file));
+	generateActivity(intent);
 
-    assertThat(text.getText().toString(), is(fileContents + "\n"));
-  }
+	assertThat(text.getText().toString(), is(fileContents + "\n"));
+}
 
-  @Test
-  public void testOpenContentUri() throws Exception {
-    Uri uri =
-        Uri.parse("content://foo.bar.test.streamprovider/temp/thisisatest.txt");
+@Test
+public void testOpenContentUri() throws Exception {
+	Uri uri =
+		Uri.parse("content://foo.bar.test.streamprovider/temp/thisisatest.txt");
 
-    ContentResolver contentResolver =
-        RuntimeEnvironment.application.getContentResolver();
-    ShadowContentResolver shadowContentResolver =
-        Shadows.shadowOf(contentResolver);
-    shadowContentResolver.registerInputStream(
-        uri, new ByteArrayInputStream(fileContents.getBytes("UTF-8")));
+	ContentResolver contentResolver =
+		RuntimeEnvironment.application.getContentResolver();
+	ShadowContentResolver shadowContentResolver =
+		Shadows.shadowOf(contentResolver);
+	shadowContentResolver.registerInputStream(
+		uri, new ByteArrayInputStream(fileContents.getBytes("UTF-8")));
 
-    Intent intent = new Intent(Intent.ACTION_VIEW);
-    intent.addCategory(Intent.CATEGORY_DEFAULT);
-    intent.setType("text/plain");
-    intent.setData(uri);
+	Intent intent = new Intent(Intent.ACTION_VIEW);
+	intent.addCategory(Intent.CATEGORY_DEFAULT);
+	intent.setType("text/plain");
+	intent.setData(uri);
 
-    generateActivity(intent);
-    assertEquals(fileContents, text.getText().toString().trim());
-  }
+	generateActivity(intent);
+	assertEquals(fileContents, text.getText().toString().trim());
+}
 
-  private void generateActivity(final Intent intent) {
-    ActivityController<TextEditorActivity> controller =
-        Robolectric.buildActivity(TextEditorActivity.class, intent)
-            .create()
-            .start()
-            .visible();
+private void generateActivity(final Intent intent) {
+	ActivityController<TextEditorActivity> controller =
+		Robolectric.buildActivity(TextEditorActivity.class, intent)
+		.create()
+		.start()
+		.visible();
 
-    TextEditorActivity activity = controller.get();
-    text = activity.findViewById(R.id.fname);
-    activity.onDestroy();
-  }
+	TextEditorActivity activity = controller.get();
+	text = activity.findViewById(R.id.fname);
+	activity.onDestroy();
+}
 
-  private File simulateFile() throws IOException {
-    ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
-    File file = new File(Environment.getExternalStorageDirectory(), "text.txt");
+private File simulateFile() throws IOException {
+	ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
+	File file = new File(Environment.getExternalStorageDirectory(), "text.txt");
 
-    file.createNewFile();
+	file.createNewFile();
 
-    if (!file.canWrite())
-      file.setWritable(true);
-    assertThat(file.canWrite(), is(true));
+	if (!file.canWrite())
+		file.setWritable(true);
+	assertThat(file.canWrite(), is(true));
 
-    PrintWriter out = new PrintWriter(file);
-    out.write(fileContents);
-    out.flush();
-    out.close();
+	PrintWriter out = new PrintWriter(file);
+	out.write(fileContents);
+	out.flush();
+	out.close();
 
-    return file;
-  }
+	return file;
+}
 
-  private Uri getFileContentUri(final Context context, final File file) {
-    fail("Cannot create content URI");
-    return null;
-  }
+private Uri getFileContentUri(final Context context, final File file) {
+	fail("Cannot create content URI");
+	return null;
+}
 }

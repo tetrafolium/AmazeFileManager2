@@ -18,33 +18,35 @@ import java.util.List;
  */
 
 public class AppsAdapterPreloadModel
-    implements ListPreloader.PreloadModelProvider<String> {
+	implements ListPreloader.PreloadModelProvider<String> {
 
-  private GlideRequest<Drawable> request;
-  private List<String> items;
+private GlideRequest<Drawable> request;
+private List<String> items;
 
-  public AppsAdapterPreloadModel(final Fragment f) {
-    request = GlideApp.with(f).asDrawable().fitCenter();
-  }
+public AppsAdapterPreloadModel(final Fragment f) {
+	request = GlideApp.with(f).asDrawable().fitCenter();
+}
 
-  public void setItemList(final List<String> items) { this.items = items; }
+public void setItemList(final List<String> items) {
+	this.items = items;
+}
 
-  @NonNull
-  @Override
-  public List<String> getPreloadItems(final int position) {
-    if (items == null)
-      return Collections.emptyList();
-    else
-      return Collections.singletonList(items.get(position));
-  }
+@NonNull
+@Override
+public List<String> getPreloadItems(final int position) {
+	if (items == null)
+		return Collections.emptyList();
+	else
+		return Collections.singletonList(items.get(position));
+}
 
-  @Nullable
-  @Override
-  public RequestBuilder getPreloadRequestBuilder(final String item) {
-    return request.clone().load(item);
-  }
+@Nullable
+@Override
+public RequestBuilder getPreloadRequestBuilder(final String item) {
+	return request.clone().load(item);
+}
 
-  public void loadApkImage(final String item, final ImageView v) {
-    request.load(item).into(v);
-  }
+public void loadApkImage(final String item, final ImageView v) {
+	request.load(item).into(v);
+}
 }

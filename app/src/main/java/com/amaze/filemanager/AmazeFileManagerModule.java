@@ -15,13 +15,13 @@ import com.bumptech.glide.module.AppGlideModule;
  */
 @GlideModule
 public class AmazeFileManagerModule extends AppGlideModule {
-  @Override
-  public void registerComponents(final Context context, final Glide glide,
-                                 final Registry registry) {
-    registry.prepend(
-        String.class, Drawable.class,
-        new ApkImageModelLoaderFactory(context.getPackageManager()));
-    registry.prepend(String.class, Bitmap.class,
-                     new CloudIconModelFactory(context));
-  }
+@Override
+public void registerComponents(final Context context, final Glide glide,
+                               final Registry registry) {
+	registry.prepend(
+		String.class, Drawable.class,
+		new ApkImageModelLoaderFactory(context.getPackageManager()));
+	registry.prepend(String.class, Bitmap.class,
+	                 new CloudIconModelFactory(context));
+}
 }

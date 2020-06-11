@@ -61,193 +61,194 @@ import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
  * @see net.schmizz.sshj.SSHClient#authPublickey(String, KeyProvider...)
  */
 public class PemToKeyPairTask extends AsyncTask<Void, IOException, KeyPair> {
-  private final PemToKeyPairConverter[] converters = {
-      new JcaPemToKeyPairConverter(), new OpenSshPemToKeyPairConverter(),
-      new OpenSshV1PemToKeyPairConverter(),
-      new PuttyPrivateKeyToKeyPairConverter()};
+private final PemToKeyPairConverter[] converters = {
+	new JcaPemToKeyPairConverter(), new OpenSshPemToKeyPairConverter(),
+	new OpenSshV1PemToKeyPairConverter(),
+	new PuttyPrivateKeyToKeyPairConverter()
+};
 
-  private boolean paused = false;
+private boolean paused = false;
 
-  private PasswordFinder passwordFinder;
+private PasswordFinder passwordFinder;
 
-  private String errorMessage;
+private String errorMessage;
 
-  private final byte[] pemFile;
+private final byte[] pemFile;
 
-  private final AsyncTaskResult.Callback<KeyPair> callback;
+private final AsyncTaskResult.Callback<KeyPair> callback;
 
-  public PemToKeyPairTask(final @NonNull InputStream pemFile,
-                          final AsyncTaskResult.Callback<KeyPair> callback)
-      throws IOException {
-    this(IOUtils.readFully(pemFile).toByteArray(), callback);
-  }
+public PemToKeyPairTask(final @NonNull InputStream pemFile,
+                        final AsyncTaskResult.Callback<KeyPair> callback)
+throws IOException {
+	this(IOUtils.readFully(pemFile).toByteArray(), callback);
+}
 
-  public PemToKeyPairTask(final @NonNull String pemContent,
-                          final AsyncTaskResult.Callback<KeyPair> callback) {
-    this(pemContent.getBytes(), callback);
-  }
+public PemToKeyPairTask(final @NonNull String pemContent,
+                        final AsyncTaskResult.Callback<KeyPair> callback) {
+	this(pemContent.getBytes(), callback);
+}
 
-  private PemToKeyPairTask(final @NonNull byte[] pemContent,
-                           final AsyncTaskResult.Callback<KeyPair> callback) {
-    this.pemFile = pemContent;
-    this.callback = callback;
-  }
+private PemToKeyPairTask(final @NonNull byte[] pemContent,
+                         final AsyncTaskResult.Callback<KeyPair> callback) {
+	this.pemFile = pemContent;
+	this.callback = callback;
+}
 
-  @Override
-  protected KeyPair doInBackground(final Void... voids) {
-    while (true) {
-      if (isCancelled())
-        return null;
-      if (paused)
-        continue;
+@Override
+protected KeyPair doInBackground(final Void... voids) {
+	while (true) {
+		if (isCancelled())
+			return null;
+		if (paused)
+			continue;
 
-      for (PemToKeyPairConverter converter : converters) {
-        KeyPair keyPair = converter.convert(new String(pemFile));
-        if (keyPair != null) {
-          paused = false;
-          return keyPair;
-        }
-      }
+		for (PemToKeyPairConverter converter : converters) {
+			KeyPair keyPair = converter.convert(new String(pemFile));
+			if (keyPair != null) {
+				paused = false;
+				return keyPair;
+			}
+		}
 
-      if (this.passwordFinder != null) {
-        this.errorMessage = AppConfig.getInstance().getString(
-            R.string.ssh_key_invalid_passphrase);
-      }
+		if (this.passwordFinder != null) {
+			this.errorMessage = AppConfig.getInstance().getString(
+				R.string.ssh_key_invalid_passphrase);
+		}
 
-      paused = true;
-      publishProgress(
-          new IOException("No converter available to parse selected PEM"));
-    }
-  }
+		paused = true;
+		publishProgress(
+			new IOException("No converter available to parse selected PEM"));
+	}
+}
 
-  @Override
-  protected void onProgressUpdate(final IOException... values) {
-    super.onProgressUpdate(values);
-    if (values.length < 1)
-      return;
+@Override
+protected void onProgressUpdate(final IOException... values) {
+	super.onProgressUpdate(values);
+	if (values.length < 1)
+		return;
 
-    IOException result = values[0];
-    MaterialDialog.Builder builder = new MaterialDialog.Builder(
-        AppConfig.getInstance().getMainActivityContext());
-    View dialogLayout =
-        View.inflate(AppConfig.getInstance().getMainActivityContext(),
-                     R.layout.dialog_singleedittext, null);
-    WarnableTextInputLayout wilTextfield =
-        dialogLayout.findViewById(R.id.singleedittext_warnabletextinputlayout);
-    EditText textfield = dialogLayout.findViewById(R.id.singleedittext_input);
-    textfield.setInputType(InputType.TYPE_CLASS_TEXT |
-                           InputType.TYPE_TEXT_VARIATION_PASSWORD);
+	IOException result = values[0];
+	MaterialDialog.Builder builder = new MaterialDialog.Builder(
+		AppConfig.getInstance().getMainActivityContext());
+	View dialogLayout =
+		View.inflate(AppConfig.getInstance().getMainActivityContext(),
+		             R.layout.dialog_singleedittext, null);
+	WarnableTextInputLayout wilTextfield =
+		dialogLayout.findViewById(R.id.singleedittext_warnabletextinputlayout);
+	EditText textfield = dialogLayout.findViewById(R.id.singleedittext_input);
+	textfield.setInputType(InputType.TYPE_CLASS_TEXT |
+	                       InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
-    builder.customView(dialogLayout, false)
-        .autoDismiss(false)
-        .title(R.string.ssh_key_prompt_passphrase)
-        .positiveText(R.string.ok)
-        .onPositive(((dialog, which) -> {
-          this.passwordFinder = new PasswordFinder() {
-            @Override
-            public char[] reqPassword(final Resource<?> resource) {
-              return textfield.getText().toString().toCharArray();
-            }
+	builder.customView(dialogLayout, false)
+	.autoDismiss(false)
+	.title(R.string.ssh_key_prompt_passphrase)
+	.positiveText(R.string.ok)
+	.onPositive(((dialog, which)->{
+			this.passwordFinder = new PasswordFinder() {
+			        @Override
+			        public char[] reqPassword(final Resource<?> resource) {
+			                return textfield.getText().toString().toCharArray();
+				}
 
-            @Override
-            public boolean shouldRetry(final Resource<?> resource) {
-              return false;
-            }
-          };
-          this.paused = false;
-          dialog.dismiss();
-        }))
-        .negativeText(R.string.cancel)
-        .onNegative(((dialog, which) -> {
-          dialog.dismiss();
-          toastOnParseError(result);
-          cancel(true);
-        }));
+			        @Override
+			        public boolean shouldRetry(final Resource<?> resource) {
+			                return false;
+				}
+			};
+			this.paused = false;
+			dialog.dismiss();
+		}))
+	.negativeText(R.string.cancel)
+	.onNegative(((dialog, which)->{
+			dialog.dismiss();
+			toastOnParseError(result);
+			cancel(true);
+		}));
 
-    MaterialDialog dialog = builder.show();
+	MaterialDialog dialog = builder.show();
 
-    new WarnableTextInputValidator(
-        AppConfig.getInstance().getMainActivityContext(), textfield,
-        wilTextfield, dialog.getActionButton(DialogAction.POSITIVE), (text) -> {
-          if (text.length() < 1) {
-            return new WarnableTextInputValidator.ReturnState(
-                WarnableTextInputValidator.ReturnState.STATE_ERROR,
-                R.string.field_empty);
-          }
-          return new WarnableTextInputValidator.ReturnState();
-        });
+	new WarnableTextInputValidator(
+		AppConfig.getInstance().getMainActivityContext(), textfield,
+		wilTextfield, dialog.getActionButton(DialogAction.POSITIVE), (text)->{
+			if (text.length() < 1) {
+			        return new WarnableTextInputValidator.ReturnState(
+					WarnableTextInputValidator.ReturnState.STATE_ERROR,
+					R.string.field_empty);
+			}
+			return new WarnableTextInputValidator.ReturnState();
+		});
 
-    if (errorMessage != null) {
-      wilTextfield.setError(errorMessage);
-      textfield.selectAll();
-    }
-  }
+	if (errorMessage != null) {
+		wilTextfield.setError(errorMessage);
+		textfield.selectAll();
+	}
+}
 
-  @Override
-  protected void onPostExecute(final KeyPair result) {
-    if (callback != null) {
-      callback.onResult(result);
-    }
-  }
+@Override
+protected void onPostExecute(final KeyPair result) {
+	if (callback != null) {
+		callback.onResult(result);
+	}
+}
 
-  private void toastOnParseError(final IOException result) {
-    Toast
-        .makeText(
-            AppConfig.getInstance().getMainActivityContext(),
-            AppConfig.getInstance().getResources().getString(
-                R.string.ssh_pem_key_parse_error, result.getLocalizedMessage()),
-            Toast.LENGTH_LONG)
-        .show();
-  }
+private void toastOnParseError(final IOException result) {
+	Toast
+	.makeText(
+		AppConfig.getInstance().getMainActivityContext(),
+		AppConfig.getInstance().getResources().getString(
+			R.string.ssh_pem_key_parse_error, result.getLocalizedMessage()),
+		Toast.LENGTH_LONG)
+	.show();
+}
 
-  private abstract class PemToKeyPairConverter {
-    KeyPair convert(final String source) {
-      try {
-        return throwingConvert(source);
-      } catch (Exception e) {
-        e.printStackTrace();
-        return null;
-      }
-    }
+private abstract class PemToKeyPairConverter {
+KeyPair convert(final String source) {
+	try {
+		return throwingConvert(source);
+	} catch (Exception e) {
+		e.printStackTrace();
+		return null;
+	}
+}
 
-    protected abstract KeyPair throwingConvert(String source) throws Exception;
-  }
+protected abstract KeyPair throwingConvert(String source) throws Exception;
+}
 
-  private class JcaPemToKeyPairConverter extends PemToKeyPairConverter {
-    @Override
-    public KeyPair throwingConvert(final String source) throws Exception {
-      PEMParser pemParser = new PEMParser(new StringReader(source));
-      PEMKeyPair keyPair = (PEMKeyPair)pemParser.readObject();
-      JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
-      return converter.getKeyPair(keyPair);
-    }
-  }
+private class JcaPemToKeyPairConverter extends PemToKeyPairConverter {
+@Override
+public KeyPair throwingConvert(final String source) throws Exception {
+	PEMParser pemParser = new PEMParser(new StringReader(source));
+	PEMKeyPair keyPair = (PEMKeyPair)pemParser.readObject();
+	JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
+	return converter.getKeyPair(keyPair);
+}
+}
 
-  private class OpenSshPemToKeyPairConverter extends PemToKeyPairConverter {
-    @Override
-    public KeyPair throwingConvert(final String source) throws Exception {
-      OpenSSHKeyFile converter = new OpenSSHKeyFile();
-      converter.init(new StringReader(source), passwordFinder);
-      return new KeyPair(converter.getPublic(), converter.getPrivate());
-    }
-  }
+private class OpenSshPemToKeyPairConverter extends PemToKeyPairConverter {
+@Override
+public KeyPair throwingConvert(final String source) throws Exception {
+	OpenSSHKeyFile converter = new OpenSSHKeyFile();
+	converter.init(new StringReader(source), passwordFinder);
+	return new KeyPair(converter.getPublic(), converter.getPrivate());
+}
+}
 
-  private class OpenSshV1PemToKeyPairConverter extends PemToKeyPairConverter {
-    @Override
-    public KeyPair throwingConvert(final String source) throws Exception {
-      OpenSSHKeyV1KeyFile converter = new OpenSSHKeyV1KeyFile();
-      converter.init(new StringReader(source), passwordFinder);
-      return new KeyPair(converter.getPublic(), converter.getPrivate());
-    }
-  }
+private class OpenSshV1PemToKeyPairConverter extends PemToKeyPairConverter {
+@Override
+public KeyPair throwingConvert(final String source) throws Exception {
+	OpenSSHKeyV1KeyFile converter = new OpenSSHKeyV1KeyFile();
+	converter.init(new StringReader(source), passwordFinder);
+	return new KeyPair(converter.getPublic(), converter.getPrivate());
+}
+}
 
-  private class PuttyPrivateKeyToKeyPairConverter
-      extends PemToKeyPairConverter {
-    @Override
-    public KeyPair throwingConvert(final String source) throws Exception {
-      PuTTYKeyFile converter = new PuTTYKeyFile();
-      converter.init(new StringReader(source), passwordFinder);
-      return new KeyPair(converter.getPublic(), converter.getPrivate());
-    }
-  }
+private class PuttyPrivateKeyToKeyPairConverter
+	extends PemToKeyPairConverter {
+@Override
+public KeyPair throwingConvert(final String source) throws Exception {
+	PuTTYKeyFile converter = new PuTTYKeyFile();
+	converter.init(new StringReader(source), passwordFinder);
+	return new KeyPair(converter.getPublic(), converter.getPrivate());
+}
+}
 }

@@ -18,58 +18,60 @@ import com.amaze.filemanager.utils.files.EncryptDecryptUtils;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class FingerprintHandler
-    extends FingerprintManager.AuthenticationCallback {
+	extends FingerprintManager.AuthenticationCallback {
 
-  private Context context;
-  private EncryptDecryptUtils
-      .DecryptButtonCallbackInterface decryptButtonCallbackInterface;
-  private Intent decryptIntent;
-  private MaterialDialog materialDialog;
+private Context context;
+private EncryptDecryptUtils
+.DecryptButtonCallbackInterface decryptButtonCallbackInterface;
+private Intent decryptIntent;
+private MaterialDialog materialDialog;
 
-  // Constructor
-  public FingerprintHandler(
-      final Context mContext, final Intent intent,
-      final MaterialDialog materialDialog,
-      final EncryptDecryptUtils
-          .DecryptButtonCallbackInterface decryptButtonCallbackInterface) {
-    context = mContext;
-    this.decryptIntent = intent;
-    this.materialDialog = materialDialog;
-    this.decryptButtonCallbackInterface = decryptButtonCallbackInterface;
-  }
+// Constructor
+public FingerprintHandler(
+	final Context mContext, final Intent intent,
+	final MaterialDialog materialDialog,
+	final EncryptDecryptUtils
+	.DecryptButtonCallbackInterface decryptButtonCallbackInterface) {
+	context = mContext;
+	this.decryptIntent = intent;
+	this.materialDialog = materialDialog;
+	this.decryptButtonCallbackInterface = decryptButtonCallbackInterface;
+}
 
-  @RequiresApi(api = Build.VERSION_CODES.M)
-  public void authenticate(final FingerprintManager manager,
-                           final FingerprintManager.CryptoObject cryptoObject) {
+@RequiresApi(api = Build.VERSION_CODES.M)
+public void authenticate(final FingerprintManager manager,
+                         final FingerprintManager.CryptoObject cryptoObject) {
 
-    CancellationSignal cancellationSignal = new CancellationSignal();
-    if (ActivityCompat.checkSelfPermission(
-            context, Manifest.permission.USE_FINGERPRINT) !=
-        PackageManager.PERMISSION_GRANTED) {
-      return;
-    }
-    manager.authenticate(cryptoObject, cancellationSignal, 0, this, null);
-  }
+	CancellationSignal cancellationSignal = new CancellationSignal();
+	if (ActivityCompat.checkSelfPermission(
+		    context, Manifest.permission.USE_FINGERPRINT) !=
+	    PackageManager.PERMISSION_GRANTED) {
+		return;
+	}
+	manager.authenticate(cryptoObject, cancellationSignal, 0, this, null);
+}
 
-  @Override
-  public void onAuthenticationError(final int errMsgId,
-                                    final CharSequence errString) {}
+@Override
+public void onAuthenticationError(final int errMsgId,
+                                  final CharSequence errString) {
+}
 
-  @Override
-  public void onAuthenticationHelp(final int helpMsgId,
-                                   final CharSequence helpString) {}
+@Override
+public void onAuthenticationHelp(final int helpMsgId,
+                                 final CharSequence helpString) {
+}
 
-  @Override
-  public void onAuthenticationFailed() {
-    materialDialog.cancel();
-    decryptButtonCallbackInterface.failed();
-  }
+@Override
+public void onAuthenticationFailed() {
+	materialDialog.cancel();
+	decryptButtonCallbackInterface.failed();
+}
 
-  @Override
-  public void onAuthenticationSucceeded(
-      final FingerprintManager.AuthenticationResult result) {
+@Override
+public void onAuthenticationSucceeded(
+	final FingerprintManager.AuthenticationResult result) {
 
-    materialDialog.cancel();
-    decryptButtonCallbackInterface.confirm(decryptIntent);
-  }
+	materialDialog.cancel();
+	decryptButtonCallbackInterface.confirm(decryptIntent);
+}
 }

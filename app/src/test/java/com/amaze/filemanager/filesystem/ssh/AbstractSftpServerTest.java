@@ -25,51 +25,51 @@ import org.robolectric.shadows.multidex.ShadowMultiDex;
 @Config(constants = BuildConfig.class, shadows = {ShadowMultiDex.class})
 public abstract class AbstractSftpServerTest {
 
-  protected SshServer server;
+protected SshServer server;
 
-  protected static TestKeyProvider hostKeyProvider;
+protected static TestKeyProvider hostKeyProvider;
 
-  @BeforeClass
-  public static void bootstrap() throws Exception {
-    hostKeyProvider = new TestKeyProvider();
-  }
+@BeforeClass
+public static void bootstrap() throws Exception {
+	hostKeyProvider = new TestKeyProvider();
+}
 
-  @Before
-  public void setUp() throws IOException {
-    createSshServer(new VirtualFileSystemFactory(Paths.get(
-        Environment.getExternalStorageDirectory().getAbsolutePath())));
-    prepareSshConnection();
-  }
+@Before
+public void setUp() throws IOException {
+	createSshServer(new VirtualFileSystemFactory(Paths.get(
+							     Environment.getExternalStorageDirectory().getAbsolutePath())));
+	prepareSshConnection();
+}
 
-  @After
-  public void tearDown() {
-    SshConnectionPool.getInstance().expungeAllConnections();
-    if (server != null && server.isOpen())
-      server.close(true);
-  }
+@After
+public void tearDown() {
+	SshConnectionPool.getInstance().expungeAllConnections();
+	if (server != null && server.isOpen())
+		server.close(true);
+}
 
-  protected final void prepareSshConnection() {
-    String hostFingerprint =
-        KeyUtils.getFingerPrint(hostKeyProvider.getKeyPair().getPublic());
-    SshConnectionPool.getInstance().getConnection(
-        "127.0.0.1", 22222, hostFingerprint, "testuser", "testpassword", null);
-  }
+protected final void prepareSshConnection() {
+	String hostFingerprint =
+		KeyUtils.getFingerPrint(hostKeyProvider.getKeyPair().getPublic());
+	SshConnectionPool.getInstance().getConnection(
+		"127.0.0.1", 22222, hostFingerprint, "testuser", "testpassword", null);
+}
 
-  protected final void
-  createSshServer(final FileSystemFactory fileSystemFactory)
-      throws IOException {
-    server = SshServer.setUpDefaultServer();
+protected final void
+createSshServer(final FileSystemFactory fileSystemFactory)
+throws IOException {
+	server = SshServer.setUpDefaultServer();
 
-    server.setFileSystemFactory(fileSystemFactory);
-    server.setPublickeyAuthenticator(AcceptAllPublickeyAuthenticator.INSTANCE);
-    server.setPort(22222);
-    server.setHost("127.0.0.1");
-    server.setKeyPairProvider(hostKeyProvider);
-    server.setCommandFactory(new ScpCommandFactory());
-    server.setSubsystemFactories(Arrays.asList(new SftpSubsystemFactory()));
-    server.setPasswordAuthenticator((
-        (username, password, session)
-            -> username.equals("testuser") && password.equals("testpassword")));
-    server.start();
-  }
+	server.setFileSystemFactory(fileSystemFactory);
+	server.setPublickeyAuthenticator(AcceptAllPublickeyAuthenticator.INSTANCE);
+	server.setPort(22222);
+	server.setHost("127.0.0.1");
+	server.setKeyPairProvider(hostKeyProvider);
+	server.setCommandFactory(new ScpCommandFactory());
+	server.setSubsystemFactories(Arrays.asList(new SftpSubsystemFactory()));
+	server.setPasswordAuthenticator((
+						(username, password, session)
+						->username.equals("testuser") && password.equals("testpassword")));
+	server.start();
+}
 }

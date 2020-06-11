@@ -11,11 +11,11 @@ import com.amaze.filemanager.R;
 
 public class AdvancedSearchPref extends PreferenceFragment {
 
-  @Override
-  public void onCreate(final Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+@Override
+public void onCreate(final Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
 
-    // Load the preferences from an XML resource
-    addPreferencesFromResource(R.xml.advancedsearch_prefs);
-  }
+	// Load the preferences from an XML resource
+	addPreferencesFromResource(R.xml.advancedsearch_prefs);
+}
 }

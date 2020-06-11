@@ -26,34 +26,34 @@ import org.robolectric.annotation.Implements;
 @Implements(Shell.Interactive.class)
 public class ShadowShellInteractive {
 
-  @Implementation
-  public boolean isRunning() {
-    return true;
-  }
+@Implementation
+public boolean isRunning() {
+	return true;
+}
 
-  @Implementation
-  public boolean waitForIdle() {
-    return true;
-  }
+@Implementation
+public boolean waitForIdle() {
+	return true;
+}
 
-  @Implementation
-  public void
-  addCommand(final String command, final int code,
-             final Shell.OnCommandResultListener onCommandResultListener)
-      throws IOException, InterruptedException {
-    ProcessBuilder pb = new ProcessBuilder("/bin/sh", "-c", command);
-    pb.environment().put("LC_ALL", "en_US.utf8");
-    pb.environment().put("LANG", "en_US.utf8");
-    pb.environment().put("TIME_STYLE", "long-iso");
-    Process process = pb.start();
-    int exitValue = process.waitFor();
-    BufferedReader reader = new BufferedReader(
-        new InputStreamReader(process.getInputStream(), "utf-8"));
-    List<String> result = new ArrayList<>();
-    String line;
-    while ((line = reader.readLine()) != null) {
-      result.add(line);
-    }
-    onCommandResultListener.onCommandResult(exitValue, code, result);
-  }
+@Implementation
+public void
+addCommand(final String command, final int code,
+           final Shell.OnCommandResultListener onCommandResultListener)
+throws IOException, InterruptedException {
+	ProcessBuilder pb = new ProcessBuilder("/bin/sh", "-c", command);
+	pb.environment().put("LC_ALL", "en_US.utf8");
+	pb.environment().put("LANG", "en_US.utf8");
+	pb.environment().put("TIME_STYLE", "long-iso");
+	Process process = pb.start();
+	int exitValue = process.waitFor();
+	BufferedReader reader = new BufferedReader(
+		new InputStreamReader(process.getInputStream(), "utf-8"));
+	List<String> result = new ArrayList<>();
+	String line;
+	while ((line = reader.readLine()) != null) {
+		result.add(line);
+	}
+	onCommandResultListener.onCommandResult(exitValue, code, result);
+}
 }

@@ -13,17 +13,17 @@ import com.amaze.filemanager.R;
  */
 
 public class HiddenViewHolder extends RecyclerView.ViewHolder {
-  public final ImageButton image;
-  public final TextView txtTitle;
-  public final TextView txtDesc;
-  public final LinearLayout row;
+public final ImageButton image;
+public final TextView txtTitle;
+public final TextView txtDesc;
+public final LinearLayout row;
 
-  public HiddenViewHolder(final View view) {
-    super(view);
+public HiddenViewHolder(final View view) {
+	super(view);
 
-    txtTitle = view.findViewById(R.id.text1);
-    image = view.findViewById(R.id.delete_button);
-    txtDesc = view.findViewById(R.id.text2);
-    row = view.findViewById(R.id.bookmarkrow);
-  }
+	txtTitle = view.findViewById(R.id.text1);
+	image = view.findViewById(R.id.delete_button);
+	txtDesc = view.findViewById(R.id.text2);
+	row = view.findViewById(R.id.bookmarkrow);
+}
 }

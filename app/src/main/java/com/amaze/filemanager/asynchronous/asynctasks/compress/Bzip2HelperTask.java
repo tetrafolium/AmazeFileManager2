@@ -37,47 +37,47 @@ import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 
 public class Bzip2HelperTask extends CompressedHelperTask {
 
-  private String filePath, relativePath;
+private String filePath, relativePath;
 
-  public Bzip2HelperTask(
-      final String filePath, final String relativePath, final boolean goBack,
-      final OnAsyncTaskFinished<
-          AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> l) {
-    super(goBack, l);
-    this.filePath = filePath;
-    this.relativePath = relativePath;
-  }
+public Bzip2HelperTask(
+	final String filePath, final String relativePath, final boolean goBack,
+	final OnAsyncTaskFinished<
+		AsyncTaskResult<ArrayList<CompressedObjectParcelable> > > l) {
+	super(goBack, l);
+	this.filePath = filePath;
+	this.relativePath = relativePath;
+}
 
-  @Override
-  void addElements(final
-                   @NonNull ArrayList<CompressedObjectParcelable> elements)
-      throws ArchiveException {
-    TarArchiveInputStream tarInputStream = null;
-    try {
-      tarInputStream = new TarArchiveInputStream(
-          new BZip2CompressorInputStream(new FileInputStream(filePath)));
+@Override
+void addElements(final
+                 @NonNull ArrayList<CompressedObjectParcelable> elements)
+throws ArchiveException {
+	TarArchiveInputStream tarInputStream = null;
+	try {
+		tarInputStream = new TarArchiveInputStream(
+			new BZip2CompressorInputStream(new FileInputStream(filePath)));
 
-      TarArchiveEntry entry;
-      while ((entry = tarInputStream.getNextTarEntry()) != null) {
-        String name = entry.getName();
-        if (name.endsWith(SEPARATOR))
-          name = name.substring(0, name.length() - 1);
+		TarArchiveEntry entry;
+		while ((entry = tarInputStream.getNextTarEntry()) != null) {
+			String name = entry.getName();
+			if (name.endsWith(SEPARATOR))
+				name = name.substring(0, name.length() - 1);
 
-        boolean isInBaseDir =
-            relativePath.equals("") && !name.contains(SEPARATOR);
-        boolean isInRelativeDir =
-            name.contains(SEPARATOR) &&
-            name.substring(0, name.lastIndexOf(SEPARATOR)).equals(relativePath);
+			boolean isInBaseDir =
+				relativePath.equals("") && !name.contains(SEPARATOR);
+			boolean isInRelativeDir =
+				name.contains(SEPARATOR) &&
+				name.substring(0, name.lastIndexOf(SEPARATOR)).equals(relativePath);
 
-        if (isInBaseDir || isInRelativeDir) {
-          elements.add(new CompressedObjectParcelable(
-              entry.getName(), entry.getLastModifiedDate().getTime(),
-              entry.getSize(), entry.isDirectory()));
-        }
-      }
-    } catch (IOException e) {
-      throw new ArchiveException(
-          String.format("Bzip2 archive %s is corrupt", filePath), e);
-    }
-  }
+			if (isInBaseDir || isInRelativeDir) {
+				elements.add(new CompressedObjectParcelable(
+						     entry.getName(), entry.getLastModifiedDate().getTime(),
+						     entry.getSize(), entry.isDirectory()));
+			}
+		}
+	} catch (IOException e) {
+		throw new ArchiveException(
+			      String.format("Bzip2 archive %s is corrupt", filePath), e);
+	}
+}
 }

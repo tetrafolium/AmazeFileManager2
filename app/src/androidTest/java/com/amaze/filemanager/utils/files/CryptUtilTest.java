@@ -11,14 +11,16 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public class CryptUtilTest {
 
-  private Context context;
+private Context context;
 
-  public void setUp() { context = InstrumentationRegistry.getTargetContext(); }
+public void setUp() {
+	context = InstrumentationRegistry.getTargetContext();
+}
 
-  @Test
-  public void testEncryptDecrypt() throws Exception {
-    String password = "hackme";
-    String encrypted = CryptUtil.encryptPassword(context, password);
-    assertEquals(password, CryptUtil.decryptPassword(context, encrypted));
-  }
+@Test
+public void testEncryptDecrypt() throws Exception {
+	String password = "hackme";
+	String encrypted = CryptUtil.encryptPassword(context, password);
+	assertEquals(password, CryptUtil.decryptPassword(context, encrypted));
+}
 }

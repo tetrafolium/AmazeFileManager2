@@ -10,9 +10,13 @@ import android.os.Binder;
 
 public class ObtainableServiceBinder<T extends Service> extends Binder {
 
-  private final T service;
+private final T service;
 
-  public ObtainableServiceBinder(final T service) { this.service = service; }
+public ObtainableServiceBinder(final T service) {
+	this.service = service;
+}
 
-  public T getService() { return service; }
+public T getService() {
+	return service;
+}
 }

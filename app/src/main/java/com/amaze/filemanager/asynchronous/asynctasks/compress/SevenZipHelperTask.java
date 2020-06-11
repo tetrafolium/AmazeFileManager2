@@ -46,88 +46,88 @@ import org.tukaani.xz.CorruptedInputException;
 
 public class SevenZipHelperTask extends CompressedHelperTask {
 
-  private String filePath, relativePath;
+private String filePath, relativePath;
 
-  private boolean paused = false;
+private boolean paused = false;
 
-  public SevenZipHelperTask(
-      final String filePath, final String relativePath, final boolean goBack,
-      final OnAsyncTaskFinished<
-          AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> l) {
-    super(goBack, l);
-    this.filePath = filePath;
-    this.relativePath = relativePath;
-  }
+public SevenZipHelperTask(
+	final String filePath, final String relativePath, final boolean goBack,
+	final OnAsyncTaskFinished<
+		AsyncTaskResult<ArrayList<CompressedObjectParcelable> > > l) {
+	super(goBack, l);
+	this.filePath = filePath;
+	this.relativePath = relativePath;
+}
 
-  @Override
-  void addElements(final
-                   @NonNull ArrayList<CompressedObjectParcelable> elements)
-      throws ArchiveException {
-    while (true) {
-      if (paused)
-        continue;
+@Override
+void addElements(final
+                 @NonNull ArrayList<CompressedObjectParcelable> elements)
+throws ArchiveException {
+	while (true) {
+		if (paused)
+			continue;
 
-      try {
-        SevenZFile sevenzFile =
-            (ArchivePasswordCache.getInstance().containsKey(filePath))
-                ? new SevenZFile(new File(filePath),
-                                 ArchivePasswordCache.getInstance()
-                                     .get(filePath)
-                                     .toCharArray())
-                : new SevenZFile(new File(filePath));
+		try {
+			SevenZFile sevenzFile =
+				(ArchivePasswordCache.getInstance().containsKey(filePath))
+		? new SevenZFile(new File(filePath),
+				 ArchivePasswordCache.getInstance()
+				 .get(filePath)
+				 .toCharArray())
+		: new SevenZFile(new File(filePath));
 
-        for (SevenZArchiveEntry entry : sevenzFile.getEntries()) {
-          String name = entry.getName();
-          boolean isInBaseDir =
-              relativePath.equals("") && !name.contains(SEPARATOR);
-          boolean isInRelativeDir =
-              name.contains(SEPARATOR) &&
-              name.substring(0, name.lastIndexOf(SEPARATOR))
-                  .equals(relativePath);
+			for (SevenZArchiveEntry entry : sevenzFile.getEntries()) {
+				String name = entry.getName();
+				boolean isInBaseDir =
+					relativePath.equals("") && !name.contains(SEPARATOR);
+				boolean isInRelativeDir =
+					name.contains(SEPARATOR) &&
+					name.substring(0, name.lastIndexOf(SEPARATOR))
+					.equals(relativePath);
 
-          if (isInBaseDir || isInRelativeDir) {
-            elements.add(new CompressedObjectParcelable(
-                entry.getName(), entry.getLastModifiedDate().getTime(),
-                entry.getSize(), entry.isDirectory()));
-          }
-        }
-        paused = false;
-        break;
-      } catch (PasswordRequiredException e) {
-        paused = true;
-        publishProgress(e);
-      } catch (IOException e) {
-        throw new ArchiveException(
-            String.format("7zip archive %s is corrupt", filePath));
-      }
-    }
-  }
+				if (isInBaseDir || isInRelativeDir) {
+					elements.add(new CompressedObjectParcelable(
+							     entry.getName(), entry.getLastModifiedDate().getTime(),
+							     entry.getSize(), entry.isDirectory()));
+				}
+			}
+			paused = false;
+			break;
+		} catch (PasswordRequiredException e) {
+			paused = true;
+			publishProgress(e);
+		} catch (IOException e) {
+			throw new ArchiveException(
+				      String.format("7zip archive %s is corrupt", filePath));
+		}
+	}
+}
 
-  @Override
-  protected void onProgressUpdate(final IOException... values) {
-    super.onProgressUpdate(values);
-    if (values.length < 1)
-      return;
+@Override
+protected void onProgressUpdate(final IOException... values) {
+	super.onProgressUpdate(values);
+	if (values.length < 1)
+		return;
 
-    IOException result = values[0];
-    // We only handle PasswordRequiredException here.
-    if (result instanceof PasswordRequiredException ||
-        result instanceof CorruptedInputException) {
-      ArchivePasswordCache.getInstance().remove(filePath);
-      GeneralDialogCreation.showPasswordDialog(
-          AppConfig.getInstance().getMainActivityContext(),
-          (MainActivity)AppConfig.getInstance().getMainActivityContext(),
-          AppConfig.getInstance().getUtilsProvider().getAppTheme(),
-          R.string.archive_password_prompt, R.string.authenticate_password,
-          ((dialog, which) -> {
-            EditText editText =
-                dialog.getView().findViewById(R.id.singleedittext_input);
-            String password = editText.getText().toString();
-            ArchivePasswordCache.getInstance().put(filePath, password);
-            paused = false;
-            dialog.dismiss();
-          }),
-          null);
-    }
-  }
+	IOException result = values[0];
+	// We only handle PasswordRequiredException here.
+	if (result instanceof PasswordRequiredException ||
+	    result instanceof CorruptedInputException) {
+		ArchivePasswordCache.getInstance().remove(filePath);
+		GeneralDialogCreation.showPasswordDialog(
+			AppConfig.getInstance().getMainActivityContext(),
+			(MainActivity)AppConfig.getInstance().getMainActivityContext(),
+			AppConfig.getInstance().getUtilsProvider().getAppTheme(),
+			R.string.archive_password_prompt, R.string.authenticate_password,
+			((dialog, which)->{
+				EditText editText =
+					dialog.getView().findViewById(R.id.singleedittext_input);
+				String password = editText.getText().toString();
+				ArchivePasswordCache.getInstance().put(filePath, password);
+				paused = false;
+				dialog.dismiss();
+			}),
+			null);
+	}
+}
 }

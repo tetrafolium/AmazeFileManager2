@@ -14,56 +14,56 @@ import java.security.GeneralSecurityException;
 
 public class SmbUtil {
 
-  /**
-   * Parse path to decrypt smb password
-   */
-  public static String getSmbDecryptedPath(final Context context,
-                                           final String path)
-      throws GeneralSecurityException, IOException {
-    if (!(path.contains(":") && path.contains("@"))) {
-      // smb path doesn't have any credentials
-      return path;
-    }
+/**
+ * Parse path to decrypt smb password
+ */
+public static String getSmbDecryptedPath(final Context context,
+                                         final String path)
+throws GeneralSecurityException, IOException {
+	if (!(path.contains(":") && path.contains("@"))) {
+		// smb path doesn't have any credentials
+		return path;
+	}
 
-    StringBuilder buffer = new StringBuilder();
+	StringBuilder buffer = new StringBuilder();
 
-    buffer.append(path.substring(0, path.indexOf(":", 4) + 1));
-    String encryptedPassword =
-        path.substring(path.indexOf(":", 4) + 1, path.lastIndexOf("@"));
+	buffer.append(path.substring(0, path.indexOf(":", 4) + 1));
+	String encryptedPassword =
+		path.substring(path.indexOf(":", 4) + 1, path.lastIndexOf("@"));
 
-    if (!TextUtils.isEmpty(encryptedPassword)) {
-      String decryptedPassword =
-          CryptUtil.decryptPassword(context, encryptedPassword);
-      buffer.append(decryptedPassword);
-    }
-    buffer.append(path.substring(path.lastIndexOf("@"), path.length()));
+	if (!TextUtils.isEmpty(encryptedPassword)) {
+		String decryptedPassword =
+			CryptUtil.decryptPassword(context, encryptedPassword);
+		buffer.append(decryptedPassword);
+	}
+	buffer.append(path.substring(path.lastIndexOf("@"), path.length()));
 
-    return buffer.toString();
-  }
+	return buffer.toString();
+}
 
-  /**
-   * Parse path to encrypt smb password
-   */
-  public static String getSmbEncryptedPath(final Context context,
-                                           final String path)
-      throws GeneralSecurityException, IOException {
-    if (!(path.contains(":") && path.contains("@"))) {
-      // smb path doesn't have any credentials
-      return path;
-    }
+/**
+ * Parse path to encrypt smb password
+ */
+public static String getSmbEncryptedPath(final Context context,
+                                         final String path)
+throws GeneralSecurityException, IOException {
+	if (!(path.contains(":") && path.contains("@"))) {
+		// smb path doesn't have any credentials
+		return path;
+	}
 
-    StringBuilder buffer = new StringBuilder();
-    buffer.append(path.substring(0, path.indexOf(":", 4) + 1));
-    String decryptedPassword =
-        path.substring(path.indexOf(":", 4) + 1, path.lastIndexOf("@"));
+	StringBuilder buffer = new StringBuilder();
+	buffer.append(path.substring(0, path.indexOf(":", 4) + 1));
+	String decryptedPassword =
+		path.substring(path.indexOf(":", 4) + 1, path.lastIndexOf("@"));
 
-    if (!TextUtils.isEmpty(decryptedPassword)) {
-      String encryptPassword =
-          CryptUtil.encryptPassword(context, decryptedPassword);
-      buffer.append(encryptPassword);
-    }
-    buffer.append(path.substring(path.lastIndexOf("@"), path.length()));
+	if (!TextUtils.isEmpty(decryptedPassword)) {
+		String encryptPassword =
+			CryptUtil.encryptPassword(context, decryptedPassword);
+		buffer.append(encryptPassword);
+	}
+	buffer.append(path.substring(path.lastIndexOf("@"), path.length()));
 
-    return buffer.toString();
-  }
+	return buffer.toString();
+}
 }

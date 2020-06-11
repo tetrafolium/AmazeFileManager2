@@ -25,60 +25,60 @@ import org.robolectric.RuntimeEnvironment;
 @RunWith(Theories.class)
 public class GenericCopyUtilTest {
 
-  private GenericCopyUtil copyUtil;
+private GenericCopyUtil copyUtil;
 
-  private File file1, file2;
+private File file1, file2;
 
-  public static final @DataPoints int fileSizes[] = {512, 187139366};
+public static final @DataPoints int fileSizes[] = {512, 187139366};
 
-  @Before
-  public void setUp() throws IOException {
-    copyUtil = new GenericCopyUtil(RuntimeEnvironment.application,
-                                   new ProgressHandler());
-    file1 = File.createTempFile("test", "bin");
-    file2 = File.createTempFile("test", "bin");
-    file1.deleteOnExit();
-    file2.deleteOnExit();
-  }
+@Before
+public void setUp() throws IOException {
+	copyUtil = new GenericCopyUtil(RuntimeEnvironment.application,
+	                               new ProgressHandler());
+	file1 = File.createTempFile("test", "bin");
+	file2 = File.createTempFile("test", "bin");
+	file1.deleteOnExit();
+	file2.deleteOnExit();
+}
 
-  @Theory // doCopy(ReadableByteChannel in, WritableByteChannel out)
-  public void testCopyFile1(final int size)
-      throws IOException, NoSuchAlgorithmException {
-    byte[] checksum = DummyFileGenerator.createFile(file1, size);
-    copyUtil.doCopy(new FileInputStream(file1).getChannel(),
-                    Channels.newChannel(new FileOutputStream(file2)));
-    assertEquals(file1.length(), file2.length());
-    assertSha1Equals(checksum, file2);
-  }
+@Theory   // doCopy(ReadableByteChannel in, WritableByteChannel out)
+public void testCopyFile1(final int size)
+throws IOException, NoSuchAlgorithmException {
+	byte[] checksum = DummyFileGenerator.createFile(file1, size);
+	copyUtil.doCopy(new FileInputStream(file1).getChannel(),
+	                Channels.newChannel(new FileOutputStream(file2)));
+	assertEquals(file1.length(), file2.length());
+	assertSha1Equals(checksum, file2);
+}
 
-  @Theory // copy(FileChannel in, FileChannel out)
-  public void testCopyFile2(final int size)
-      throws IOException, NoSuchAlgorithmException {
-    byte[] checksum = DummyFileGenerator.createFile(file1, size);
-    copyUtil.copyFile(new FileInputStream(file1).getChannel(),
-                      new FileOutputStream(file2).getChannel());
-    assertEquals(file1.length(), file2.length());
-    assertSha1Equals(checksum, file2);
-  }
+@Theory   // copy(FileChannel in, FileChannel out)
+public void testCopyFile2(final int size)
+throws IOException, NoSuchAlgorithmException {
+	byte[] checksum = DummyFileGenerator.createFile(file1, size);
+	copyUtil.copyFile(new FileInputStream(file1).getChannel(),
+	                  new FileOutputStream(file2).getChannel());
+	assertEquals(file1.length(), file2.length());
+	assertSha1Equals(checksum, file2);
+}
 
-  @Theory // copy(BufferedInputStream in, BufferedOutputStream out)
-  public void testCopyFile3(final int size)
-      throws IOException, NoSuchAlgorithmException {
-    byte[] checksum = DummyFileGenerator.createFile(file1, size);
-    copyUtil.copyFile(new BufferedInputStream(new FileInputStream(file1)),
-                      new BufferedOutputStream(new FileOutputStream(file2)));
-    assertEquals(file1.length(), file2.length());
-    assertSha1Equals(checksum, file2);
-  }
+@Theory   // copy(BufferedInputStream in, BufferedOutputStream out)
+public void testCopyFile3(final int size)
+throws IOException, NoSuchAlgorithmException {
+	byte[] checksum = DummyFileGenerator.createFile(file1, size);
+	copyUtil.copyFile(new BufferedInputStream(new FileInputStream(file1)),
+	                  new BufferedOutputStream(new FileOutputStream(file2)));
+	assertEquals(file1.length(), file2.length());
+	assertSha1Equals(checksum, file2);
+}
 
-  private void assertSha1Equals(final byte[] expected, final File file)
-      throws NoSuchAlgorithmException, IOException {
-    MessageDigest md = MessageDigest.getInstance("SHA-1");
-    DigestInputStream in = new DigestInputStream(new FileInputStream(file), md);
-    byte[] buffer = new byte[GenericCopyUtil.DEFAULT_BUFFER_SIZE];
-    while (in.read(buffer) > -1) {
-    }
-    in.close();
-    assertArrayEquals(expected, md.digest());
-  }
+private void assertSha1Equals(final byte[] expected, final File file)
+throws NoSuchAlgorithmException, IOException {
+	MessageDigest md = MessageDigest.getInstance("SHA-1");
+	DigestInputStream in = new DigestInputStream(new FileInputStream(file), md);
+	byte[] buffer = new byte[GenericCopyUtil.DEFAULT_BUFFER_SIZE];
+	while (in.read(buffer) > -1) {
+	}
+	in.close();
+	assertArrayEquals(expected, md.digest());
+}
 }

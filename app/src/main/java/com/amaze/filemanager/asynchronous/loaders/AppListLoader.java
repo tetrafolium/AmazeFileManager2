@@ -23,164 +23,165 @@ import java.util.List;
 
 public class AppListLoader extends AsyncTaskLoader<AppListLoader.AppsDataPair> {
 
-  private PackageManager packageManager;
-  private PackageReceiver packageReceiver;
-  private AppsDataPair mApps;
-  private int sortBy, asc;
+private PackageManager packageManager;
+private PackageReceiver packageReceiver;
+private AppsDataPair mApps;
+private int sortBy, asc;
 
-  public AppListLoader(final Context context, final int sortBy, final int asc) {
-    super(context);
+public AppListLoader(final Context context, final int sortBy, final int asc) {
+	super(context);
 
-    this.sortBy = sortBy;
-    this.asc = asc;
+	this.sortBy = sortBy;
+	this.asc = asc;
 
-    /*
-     * using global context because of the fact that loaders are supposed to be
-     * used across fragments and activities
-     */
-    packageManager = getContext().getPackageManager();
-  }
+	/*
+	 * using global context because of the fact that loaders are supposed to be
+	 * used across fragments and activities
+	 */
+	packageManager = getContext().getPackageManager();
+}
 
-  @Override
-  public AppsDataPair loadInBackground() {
-    List<ApplicationInfo> apps = packageManager.getInstalledApplications(
-        PackageManager.MATCH_UNINSTALLED_PACKAGES |
-        PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS);
+@Override
+public AppsDataPair loadInBackground() {
+	List<ApplicationInfo> apps = packageManager.getInstalledApplications(
+		PackageManager.MATCH_UNINSTALLED_PACKAGES |
+		PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS);
 
-    if (apps == null)
-      return new AppsDataPair(Collections.emptyList(), Collections.emptyList());
+	if (apps == null)
+		return new AppsDataPair(Collections.emptyList(), Collections.emptyList());
 
-    mApps = new AppsDataPair(new ArrayList<>(apps.size()),
-                             new ArrayList<>(apps.size()));
+	mApps = new AppsDataPair(new ArrayList<>(apps.size()),
+	                         new ArrayList<>(apps.size()));
 
-    for (ApplicationInfo object : apps) {
-      File sourceDir = new File(object.sourceDir);
+	for (ApplicationInfo object : apps) {
+		File sourceDir = new File(object.sourceDir);
 
-      String label = object.loadLabel(packageManager).toString();
-      PackageInfo info;
+		String label = object.loadLabel(packageManager).toString();
+		PackageInfo info;
 
-      try {
-        info = packageManager.getPackageInfo(object.packageName, 0);
-      } catch (PackageManager.NameNotFoundException e) {
-        e.printStackTrace();
-        info = null;
-      }
+		try {
+			info = packageManager.getPackageInfo(object.packageName, 0);
+		} catch (PackageManager.NameNotFoundException e) {
+			e.printStackTrace();
+			info = null;
+		}
 
-      AppDataParcelable elem = new AppDataParcelable(
-          label == null ? object.packageName : label, object.sourceDir,
-          object.packageName,
-          object.flags + "_" + (info != null ? info.versionName : ""),
-          Formatter.formatFileSize(getContext(), sourceDir.length()),
-          sourceDir.length(), sourceDir.lastModified());
+		AppDataParcelable elem = new AppDataParcelable(
+			label == null ? object.packageName : label, object.sourceDir,
+			object.packageName,
+			object.flags + "_" + (info != null ? info.versionName : ""),
+			Formatter.formatFileSize(getContext(), sourceDir.length()),
+			sourceDir.length(), sourceDir.lastModified());
 
-      mApps.first.add(elem);
+		mApps.first.add(elem);
 
-      Collections.sort(mApps.first,
-                       new AppDataParcelable.AppDataSorter(sortBy, asc));
+		Collections.sort(mApps.first,
+		                 new AppDataParcelable.AppDataSorter(sortBy, asc));
 
-      for (AppDataParcelable p : mApps.first) {
-        mApps.second.add(p.path);
-      }
-    }
+		for (AppDataParcelable p : mApps.first) {
+			mApps.second.add(p.path);
+		}
+	}
 
-    return mApps;
-  }
+	return mApps;
+}
 
-  @Override
-  public void deliverResult(final AppsDataPair data) {
-    
-    if ((isReset()) && (data != null))
-      onReleaseResources(data);
+@Override
+public void deliverResult(final AppsDataPair data) {
 
-    // preserving old data for it to be closed
-    AppsDataPair oldData = mApps;
-    mApps = data;
-    if (isStarted()) {
-      // loader has been started, if we have data, return immediately
-      super.deliverResult(mApps);
-    }
+	if ((isReset()) && (data != null))
+		onReleaseResources(data);
 
-    // releasing older resources as we don't need them now
-    if (oldData != null) {
-      onReleaseResources(oldData); // TODO onReleaseResources() is empty
-    }
-  }
+	// preserving old data for it to be closed
+	AppsDataPair oldData = mApps;
+	mApps = data;
+	if (isStarted()) {
+		// loader has been started, if we have data, return immediately
+		super.deliverResult(mApps);
+	}
 
-  @Override
-  protected void onStartLoading() {
+	// releasing older resources as we don't need them now
+	if (oldData != null) {
+		onReleaseResources(oldData); // TODO onReleaseResources() is empty
+	}
+}
 
-    if (mApps != null) {
-      // we already have the results, load immediately
-      deliverResult(mApps);
-    }
+@Override
+protected void onStartLoading() {
 
-    if (packageReceiver != null) {
-      packageReceiver = new PackageReceiver(this);
-    }
+	if (mApps != null) {
+		// we already have the results, load immediately
+		deliverResult(mApps);
+	}
 
-    boolean didConfigChange =
-        InterestingConfigChange.isConfigChanged(getContext().getResources());
+	if (packageReceiver != null) {
+		packageReceiver = new PackageReceiver(this);
+	}
 
-    if (takeContentChanged() || mApps == null || didConfigChange) {
-      forceLoad();
-    }
-  }
+	boolean didConfigChange =
+		InterestingConfigChange.isConfigChanged(getContext().getResources());
 
-  @Override
-  protected void onStopLoading() {
-    cancelLoad();
-  }
+	if (takeContentChanged() || mApps == null || didConfigChange) {
+		forceLoad();
+	}
+}
 
-  @Override
-  public void onCanceled(final AppsDataPair data) {
-    super.onCanceled(data);
+@Override
+protected void onStopLoading() {
+	cancelLoad();
+}
 
-    onReleaseResources(data); // TODO onReleaseResources() is empty
-  }
+@Override
+public void onCanceled(final AppsDataPair data) {
+	super.onCanceled(data);
 
-  @Override
-  protected void onReset() {
-    super.onReset();
+	onReleaseResources(data); // TODO onReleaseResources() is empty
+}
 
-    onStopLoading();
+@Override
+protected void onReset() {
+	super.onReset();
 
-    // we're free to clear resources
-    if (mApps != null) {
-      onReleaseResources(mApps); // TODO onReleaseResources() is empty
-      mApps = null;
-    }
+	onStopLoading();
 
-    if (packageReceiver != null) {
-      getContext().unregisterReceiver(packageReceiver);
+	// we're free to clear resources
+	if (mApps != null) {
+		onReleaseResources(mApps); // TODO onReleaseResources() is empty
+		mApps = null;
+	}
 
-      packageReceiver = null;
-    }
+	if (packageReceiver != null) {
+		getContext().unregisterReceiver(packageReceiver);
 
-    InterestingConfigChange.recycle();
-  }
+		packageReceiver = null;
+	}
 
-  /**
-   * We would want to release resources here
-   * List is nothing we would want to close
-   */
-  // TODO do something
-  private void onReleaseResources(final AppsDataPair layoutElementList) {}
+	InterestingConfigChange.recycle();
+}
 
-  /**
-   * typedef Pair<List<AppDataParcelable>, List<String>> AppsDataPair
-   */
-  public static class AppsDataPair
-      extends Pair<List<AppDataParcelable>, List<String>> {
+/**
+ * We would want to release resources here
+ * List is nothing we would want to close
+ */
+// TODO do something
+private void onReleaseResources(final AppsDataPair layoutElementList) {
+}
 
-    /**
-     * Constructor for a Pair.
-     *
-     * @param first  the first object in the Pair
-     * @param second the second object in the pair
-     */
-    public AppsDataPair(final List<AppDataParcelable> first,
-                        final List<String> second) {
-      super(first, second);
-    }
-  }
+/**
+ * typedef Pair<List<AppDataParcelable>, List<String>> AppsDataPair
+ */
+public static class AppsDataPair
+	extends Pair<List<AppDataParcelable>, List<String> > {
+
+/**
+ * Constructor for a Pair.
+ *
+ * @param first  the first object in the Pair
+ * @param second the second object in the pair
+ */
+public AppsDataPair(final List<AppDataParcelable> first,
+                    final List<String> second) {
+	super(first, second);
+}
+}
 }

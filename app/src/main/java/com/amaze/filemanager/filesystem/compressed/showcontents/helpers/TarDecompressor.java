@@ -32,13 +32,15 @@ import java.util.ArrayList;
 
 public class TarDecompressor extends Decompressor {
 
-  public TarDecompressor(final Context context) { super(context); }
+public TarDecompressor(final Context context) {
+	super(context);
+}
 
-  @Override
-  public TarHelperTask changePath(
-      final String path, final boolean addGoBackItem,
-      final OnAsyncTaskFinished<
-          AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
-    return new TarHelperTask(filePath, path, addGoBackItem, onFinish);
-  }
+@Override
+public TarHelperTask changePath(
+	final String path, final boolean addGoBackItem,
+	final OnAsyncTaskFinished<
+		AsyncTaskResult<ArrayList<CompressedObjectParcelable> > > onFinish) {
+	return new TarHelperTask(filePath, path, addGoBackItem, onFinish);
+}
 }

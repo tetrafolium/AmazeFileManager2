@@ -44,109 +44,109 @@ import org.apache.commons.compress.archivers.ArchiveException;
 
 public class ZipHelperTask extends CompressedHelperTask {
 
-  private WeakReference<Context> context;
-  private Uri fileLocation;
-  private String relativeDirectory;
+private WeakReference<Context> context;
+private Uri fileLocation;
+private String relativeDirectory;
 
-  /**
-   * AsyncTask to load ZIP file items.
-   * @param realFileDirectory the location of the zip file
-   * @param dir relativeDirectory to access inside the zip file
-   */
-  public ZipHelperTask(
-      final Context c, final String realFileDirectory, final String dir,
-      final boolean goback,
-      final OnAsyncTaskFinished<
-          AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> l) {
-    super(goback, l);
-    context = new WeakReference<>(c);
-    fileLocation = Uri.parse(realFileDirectory);
-    relativeDirectory = dir;
-  }
+/**
+ * AsyncTask to load ZIP file items.
+ * @param realFileDirectory the location of the zip file
+ * @param dir relativeDirectory to access inside the zip file
+ */
+public ZipHelperTask(
+	final Context c, final String realFileDirectory, final String dir,
+	final boolean goback,
+	final OnAsyncTaskFinished<
+		AsyncTaskResult<ArrayList<CompressedObjectParcelable> > > l) {
+	super(goback, l);
+	context = new WeakReference<>(c);
+	fileLocation = Uri.parse(realFileDirectory);
+	relativeDirectory = dir;
+}
 
-  @Override
-  void addElements(final
-                   @NonNull ArrayList<CompressedObjectParcelable> elements)
-      throws ArchiveException {
-    try {
-      ArrayList<CompressedObjectParcelable> wholelist = new ArrayList<>();
+@Override
+void addElements(final
+                 @NonNull ArrayList<CompressedObjectParcelable> elements)
+throws ArchiveException {
+	try {
+		ArrayList<CompressedObjectParcelable> wholelist = new ArrayList<>();
 
-      ZipFile zipfile = new ZipFile(fileLocation.getPath());
-      for (Iterator<FileHeader> headers = zipfile.getFileHeaders().iterator();
-           headers.hasNext();) {
-        FileHeader entry = (FileHeader)headers.next();
-        if (!CompressedHelper.isEntryPathValid(entry.getFileName())) {
-          AppConfig.toast(context.get(),
-                          context.get().getString(
-                              R.string.multiple_invalid_archive_entries));
-          continue;
-        }
-        wholelist.add(new CompressedObjectParcelable(
-            entry.getFileName(), entry.getLastModFileTime(),
-            entry.getUncompressedSize(), entry.isDirectory()));
-      }
+		ZipFile zipfile = new ZipFile(fileLocation.getPath());
+		for (Iterator<FileHeader> headers = zipfile.getFileHeaders().iterator();
+		     headers.hasNext();) {
+			FileHeader entry = (FileHeader)headers.next();
+			if (!CompressedHelper.isEntryPathValid(entry.getFileName())) {
+				AppConfig.toast(context.get(),
+				                context.get().getString(
+							R.string.multiple_invalid_archive_entries));
+				continue;
+			}
+			wholelist.add(new CompressedObjectParcelable(
+					      entry.getFileName(), entry.getLastModFileTime(),
+					      entry.getUncompressedSize(), entry.isDirectory()));
+		}
 
-      ArrayList<String> strings = new ArrayList<>();
+		ArrayList<String> strings = new ArrayList<>();
 
-      for (CompressedObjectParcelable entry : wholelist) {
-        File file = new File(entry.path);
-        if (relativeDirectory == null ||
-            relativeDirectory.trim().length() == 0) {
-          String y = entry.path;
-          if (y.startsWith("/"))
-            y = y.substring(1, y.length());
-          if (file.getParent() == null || file.getParent().length() == 0 ||
-              file.getParent().equals("/")) {
-            if (!strings.contains(y)) {
-              elements.add(new CompressedObjectParcelable(
-                  y, entry.date, entry.size, entry.directory));
-              strings.add(y);
-            }
-          } else {
-            String path = y.substring(0, y.indexOf("/") + 1);
-            if (!strings.contains(path)) {
-              CompressedObjectParcelable zipObj =
-                  new CompressedObjectParcelable(path, entry.date, entry.size,
-                                                 true);
-              strings.add(path);
-              elements.add(zipObj);
-            }
-          }
-        } else {
-          String y = entry.path;
-          if (entry.path.startsWith("/"))
-            y = y.substring(1, y.length());
+		for (CompressedObjectParcelable entry : wholelist) {
+			File file = new File(entry.path);
+			if (relativeDirectory == null ||
+			    relativeDirectory.trim().length() == 0) {
+				String y = entry.path;
+				if (y.startsWith("/"))
+					y = y.substring(1, y.length());
+				if (file.getParent() == null || file.getParent().length() == 0 ||
+				    file.getParent().equals("/")) {
+					if (!strings.contains(y)) {
+						elements.add(new CompressedObjectParcelable(
+								     y, entry.date, entry.size, entry.directory));
+						strings.add(y);
+					}
+				} else {
+					String path = y.substring(0, y.indexOf("/") + 1);
+					if (!strings.contains(path)) {
+						CompressedObjectParcelable zipObj =
+							new CompressedObjectParcelable(path, entry.date, entry.size,
+							                               true);
+						strings.add(path);
+						elements.add(zipObj);
+					}
+				}
+			} else {
+				String y = entry.path;
+				if (entry.path.startsWith("/"))
+					y = y.substring(1, y.length());
 
-          if (file.getParent() != null &&
-              (file.getParent().equals(relativeDirectory) ||
-               file.getParent().equals("/" + relativeDirectory))) {
-            if (!strings.contains(y)) {
-              elements.add(new CompressedObjectParcelable(
-                  y, entry.date, entry.size, entry.directory));
-              strings.add(y);
-            }
-          } else {
-            if (y.startsWith(relativeDirectory + "/") &&
-                y.length() > relativeDirectory.length() + 1) {
-              String path1 =
-                  y.substring(relativeDirectory.length() + 1, y.length());
+				if (file.getParent() != null &&
+				    (file.getParent().equals(relativeDirectory) ||
+				     file.getParent().equals("/" + relativeDirectory))) {
+					if (!strings.contains(y)) {
+						elements.add(new CompressedObjectParcelable(
+								     y, entry.date, entry.size, entry.directory));
+						strings.add(y);
+					}
+				} else {
+					if (y.startsWith(relativeDirectory + "/") &&
+					    y.length() > relativeDirectory.length() + 1) {
+						String path1 =
+							y.substring(relativeDirectory.length() + 1, y.length());
 
-              int index = relativeDirectory.length() + 1 + path1.indexOf("/");
-              String path = y.substring(0, index + 1);
-              if (!strings.contains(path)) {
-                CompressedObjectParcelable zipObj =
-                    new CompressedObjectParcelable(y.substring(0, index + 1),
-                                                   entry.date, entry.size,
-                                                   true);
-                strings.add(path);
-                elements.add(zipObj);
-              }
-            }
-          }
-        }
-      }
-    } catch (ZipException e) {
-      throw new ArchiveException("Zip file is corrupt", e);
-    }
-  }
+						int index = relativeDirectory.length() + 1 + path1.indexOf("/");
+						String path = y.substring(0, index + 1);
+						if (!strings.contains(path)) {
+							CompressedObjectParcelable zipObj =
+								new CompressedObjectParcelable(y.substring(0, index + 1),
+								                               entry.date, entry.size,
+								                               true);
+							strings.add(path);
+							elements.add(zipObj);
+						}
+					}
+				}
+			}
+		}
+	} catch (ZipException e) {
+		throw new ArchiveException("Zip file is corrupt", e);
+	}
+}
 }

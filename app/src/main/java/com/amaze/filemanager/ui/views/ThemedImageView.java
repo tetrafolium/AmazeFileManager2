@@ -16,38 +16,40 @@ import com.amaze.filemanager.utils.theme.AppTheme;
  */
 
 public class ThemedImageView
-    extends androidx.appcompat.widget.AppCompatImageView {
+	extends androidx.appcompat.widget.AppCompatImageView {
 
-  public ThemedImageView(final Context context) { this(context, null, 0); }
+public ThemedImageView(final Context context) {
+	this(context, null, 0);
+}
 
-  public ThemedImageView(final Context context, final AttributeSet attrs) {
-    this(context, attrs, 0);
-  }
+public ThemedImageView(final Context context, final AttributeSet attrs) {
+	this(context, attrs, 0);
+}
 
-  public ThemedImageView(final Context context, final AttributeSet attrs,
-                         final int defStyleAttr) {
-    super(context, attrs, defStyleAttr);
+public ThemedImageView(final Context context, final AttributeSet attrs,
+                       final int defStyleAttr) {
+	super(context, attrs, defStyleAttr);
 
-    BasicActivity a = (BasicActivity)getActivity();
+	BasicActivity a = (BasicActivity)getActivity();
 
-    // dark preference found
-    if (a != null && (a.getAppTheme().equals(AppTheme.DARK) ||
-                      a.getAppTheme().equals(AppTheme.BLACK))) {
-      setColorFilter(Color.argb(255, 255, 255, 255)); // White Tint
-    } else if (a == null) {
-      throw new IllegalStateException(
-          "Could not get activity! Can't show correct icon color!");
-    }
-  }
+	// dark preference found
+	if (a != null && (a.getAppTheme().equals(AppTheme.DARK) ||
+	                  a.getAppTheme().equals(AppTheme.BLACK))) {
+		setColorFilter(Color.argb(255, 255, 255, 255)); // White Tint
+	} else if (a == null) {
+		throw new IllegalStateException(
+			      "Could not get activity! Can't show correct icon color!");
+	}
+}
 
-  private Activity getActivity() {
-    Context context = getContext();
-    while (context instanceof ContextWrapper) {
-      if (context instanceof Activity) {
-        return (Activity)context;
-      }
-      context = ((ContextWrapper)context).getBaseContext();
-    }
-    return null;
-  }
+private Activity getActivity() {
+	Context context = getContext();
+	while (context instanceof ContextWrapper) {
+		if (context instanceof Activity) {
+			return (Activity)context;
+		}
+		context = ((ContextWrapper)context).getBaseContext();
+	}
+	return null;
+}
 }

@@ -47,37 +47,37 @@ import java.util.Random;
 @RestrictTo(RestrictTo.Scope.TESTS)
 public abstract class DummyFileGenerator {
 
-  /**
-   * @param destFile File to be generated with random bytes
-   * @param size file size
-   * @return SHA1 checksum of the generated file, as byte array
-   * @throws IOException in case any I/O error occurred
-   */
-  @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-  @RestrictTo(RestrictTo.Scope.TESTS)
-  public static byte[] createFile(final @NonNull File destFile, final int size)
-      throws IOException {
-    Random rand = new SecureRandom();
-    MessageDigest md = null;
-    try {
-      md = MessageDigest.getInstance("SHA-1");
-    } catch (NoSuchAlgorithmException shouldNeverHappen) {
-      throw new IOException("SHA-1 implementation not found");
-    }
+/**
+ * @param destFile File to be generated with random bytes
+ * @param size file size
+ * @return SHA1 checksum of the generated file, as byte array
+ * @throws IOException in case any I/O error occurred
+ */
+@VisibleForTesting(otherwise = VisibleForTesting.NONE)
+@RestrictTo(RestrictTo.Scope.TESTS)
+public static byte[] createFile(final @NonNull File destFile, final int size)
+throws IOException {
+	Random rand = new SecureRandom();
+	MessageDigest md = null;
+	try {
+		md = MessageDigest.getInstance("SHA-1");
+	} catch (NoSuchAlgorithmException shouldNeverHappen) {
+		throw new IOException("SHA-1 implementation not found");
+	}
 
-    FileOutputStream out = new FileOutputStream(destFile);
-    DigestOutputStream dout = new DigestOutputStream(out, md);
-    int count = 0;
-    for (int i = size; i >= 0;
-         i -= DEFAULT_BUFFER_SIZE, count += DEFAULT_BUFFER_SIZE) {
-      byte[] bytes =
-          new byte[i > DEFAULT_BUFFER_SIZE ? DEFAULT_BUFFER_SIZE : i];
-      rand.nextBytes(bytes);
-      dout.write(bytes);
-    }
-    dout.flush();
-    dout.close();
+	FileOutputStream out = new FileOutputStream(destFile);
+	DigestOutputStream dout = new DigestOutputStream(out, md);
+	int count = 0;
+	for (int i = size; i >= 0;
+	     i -= DEFAULT_BUFFER_SIZE, count += DEFAULT_BUFFER_SIZE) {
+		byte[] bytes =
+			new byte[i > DEFAULT_BUFFER_SIZE ? DEFAULT_BUFFER_SIZE : i];
+		rand.nextBytes(bytes);
+		dout.write(bytes);
+	}
+	dout.flush();
+	dout.close();
 
-    return md.digest();
-  }
+	return md.digest();
+}
 }

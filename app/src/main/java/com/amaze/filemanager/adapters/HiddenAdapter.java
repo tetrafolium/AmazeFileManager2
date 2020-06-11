@@ -27,95 +27,95 @@ import java.util.ArrayList;
  */
 public class HiddenAdapter extends RecyclerView.Adapter<HiddenViewHolder> {
 
-  private SharedPreferences sharedPrefs;
-  private MainFragment context;
-  private Context c;
-  private ArrayList<HybridFile> items;
-  private MaterialDialog materialDialog;
-  private boolean hide;
-  private DataUtils dataUtils = DataUtils.getInstance();
+private SharedPreferences sharedPrefs;
+private MainFragment context;
+private Context c;
+private ArrayList<HybridFile> items;
+private MaterialDialog materialDialog;
+private boolean hide;
+private DataUtils dataUtils = DataUtils.getInstance();
 
-  public HiddenAdapter(final Context context, final MainFragment mainFrag,
-                       final SharedPreferences sharedPreferences,
-                       final ArrayList<HybridFile> items,
-                       final MaterialDialog materialDialog,
-                       final boolean hide) {
-    this.c = context;
-    this.context = mainFrag;
-    sharedPrefs = sharedPreferences;
-    this.items = new ArrayList<>(items);
-    this.hide = hide;
-    this.materialDialog = materialDialog;
-  }
+public HiddenAdapter(final Context context, final MainFragment mainFrag,
+                     final SharedPreferences sharedPreferences,
+                     final ArrayList<HybridFile> items,
+                     final MaterialDialog materialDialog,
+                     final boolean hide) {
+	this.c = context;
+	this.context = mainFrag;
+	sharedPrefs = sharedPreferences;
+	this.items = new ArrayList<>(items);
+	this.hide = hide;
+	this.materialDialog = materialDialog;
+}
 
-  @Override
-  public HiddenViewHolder onCreateViewHolder(final ViewGroup parent,
-                                             final int viewType) {
-    LayoutInflater mInflater =
-        (LayoutInflater)c.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-    View view = mInflater.inflate(R.layout.bookmarkrow, parent, false);
+@Override
+public HiddenViewHolder onCreateViewHolder(final ViewGroup parent,
+                                           final int viewType) {
+	LayoutInflater mInflater =
+		(LayoutInflater)c.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+	View view = mInflater.inflate(R.layout.bookmarkrow, parent, false);
 
-    return new HiddenViewHolder(view);
-  }
+	return new HiddenViewHolder(view);
+}
 
-  @Override
-  public void onBindViewHolder(final HiddenViewHolder holder,
-                               final int position) {
-    HybridFile file = items.get(position);
+@Override
+public void onBindViewHolder(final HiddenViewHolder holder,
+                             final int position) {
+	HybridFile file = items.get(position);
 
-    holder.txtTitle.setText(file.getName());
-    String a = file.getReadablePath(file.getPath());
-    holder.txtDesc.setText(a);
+	holder.txtTitle.setText(file.getName());
+	String a = file.getReadablePath(file.getPath());
+	holder.txtDesc.setText(a);
 
-    if (hide) {
-      holder.image.setVisibility(View.GONE);
-    }
+	if (hide) {
+		holder.image.setVisibility(View.GONE);
+	}
 
-    // TODO: move the listeners to the constructor
-    holder.image.setOnClickListener(view -> {
-      if (!file.isSmb() && file.isDirectory()) {
-        ArrayList<HybridFileParcelable> a1 = new ArrayList<>();
-        HybridFileParcelable baseFile = new HybridFileParcelable(
-            items.get(position).getPath() + "/.nomedia");
-        baseFile.setMode(OpenMode.FILE);
-        a1.add(baseFile);
-        new DeleteTask(c).execute((a1));
-      }
-      dataUtils.removeHiddenFile(items.get(position).getPath());
-      items.remove(items.get(position));
-      notifyDataSetChanged();
-    });
-    holder.row.setOnClickListener(view -> {
-      materialDialog.dismiss();
-      new Thread(() -> {
-        if (file.isDirectory()) {
-          context.getActivity().runOnUiThread(() -> {
-            context.loadlist(file.getPath(), false, OpenMode.UNKNOWN);
-          });
-        } else {
-          if (!file.isSmb()) {
-            context.getActivity().runOnUiThread(() -> {
-              FileUtils.openFile(new File(file.getPath()),
-                                 (MainActivity)context.getActivity(),
-                                 sharedPrefs);
-            });
-          }
-        }
-      }).start();
-    });
-  }
+	// TODO: move the listeners to the constructor
+	holder.image.setOnClickListener(view->{
+			if (!file.isSmb() && file.isDirectory()) {
+			        ArrayList<HybridFileParcelable> a1 = new ArrayList<>();
+			        HybridFileParcelable baseFile = new HybridFileParcelable(
+					items.get(position).getPath() + "/.nomedia");
+			        baseFile.setMode(OpenMode.FILE);
+			        a1.add(baseFile);
+			        new DeleteTask(c).execute((a1));
+			}
+			dataUtils.removeHiddenFile(items.get(position).getPath());
+			items.remove(items.get(position));
+			notifyDataSetChanged();
+		});
+	holder.row.setOnClickListener(view->{
+			materialDialog.dismiss();
+			new Thread(()->{
+				if (file.isDirectory()) {
+				        context.getActivity().runOnUiThread(()->{
+						context.loadlist(file.getPath(), false, OpenMode.UNKNOWN);
+					});
+				} else {
+				        if (!file.isSmb()) {
+				                context.getActivity().runOnUiThread(()->{
+							FileUtils.openFile(new File(file.getPath()),
+							                   (MainActivity)context.getActivity(),
+							                   sharedPrefs);
+						});
+					}
+				}
+			}).start();
+		});
+}
 
-  public void updateDialog(final MaterialDialog dialog) {
-    materialDialog = dialog;
-  }
+public void updateDialog(final MaterialDialog dialog) {
+	materialDialog = dialog;
+}
 
-  @Override
-  public long getItemId(final int position) {
-    return position;
-  }
+@Override
+public long getItemId(final int position) {
+	return position;
+}
 
-  @Override
-  public int getItemCount() {
-    return items.size();
-  }
+@Override
+public int getItemCount() {
+	return items.size();
+}
 }

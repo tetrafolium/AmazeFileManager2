@@ -11,5 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 
 public class EmptyViewHolder extends RecyclerView.ViewHolder {
-  public EmptyViewHolder(final View view) { super(view); }
+public EmptyViewHolder(final View view) {
+	super(view);
+}
 }

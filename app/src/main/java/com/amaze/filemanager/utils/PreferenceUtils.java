@@ -8,25 +8,27 @@ import android.graphics.Color;
  */
 public class PreferenceUtils {
 
-  public static final int DEFAULT_PRIMARY = 4;
-  public static final int DEFAULT_ACCENT = 1;
-  public static final int DEFAULT_ICON = -1;
-  public static final int DEFAULT_CURRENT_TAB = 1;
+public static final int DEFAULT_PRIMARY = 4;
+public static final int DEFAULT_ACCENT = 1;
+public static final int DEFAULT_ICON = -1;
+public static final int DEFAULT_CURRENT_TAB = 1;
 
-  public static int getStatusColor(final String skin) {
-    return darker(Color.parseColor(skin));
-  }
+public static int getStatusColor(final String skin) {
+	return darker(Color.parseColor(skin));
+}
 
-  public static int getStatusColor(final int skin) { return darker(skin); }
+public static int getStatusColor(final int skin) {
+	return darker(skin);
+}
 
-  private static int darker(final int color) {
-    int a = Color.alpha(color);
-    int r = Color.red(color);
-    int g = Color.green(color);
-    int b = Color.blue(color);
+private static int darker(final int color) {
+	int a = Color.alpha(color);
+	int r = Color.red(color);
+	int g = Color.green(color);
+	int b = Color.blue(color);
 
-    return Color.argb(a, Math.max((int)(r * 0.6f), 0),
-                      Math.max((int)(g * 0.6f), 0),
-                      Math.max((int)(b * 0.6f), 0));
-  }
+	return Color.argb(a, Math.max((int)(r * 0.6f), 0),
+	                  Math.max((int)(g * 0.6f), 0),
+	                  Math.max((int)(b * 0.6f), 0));
+}
 }

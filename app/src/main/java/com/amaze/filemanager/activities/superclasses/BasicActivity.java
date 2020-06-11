@@ -11,17 +11,19 @@ import com.amaze.filemanager.utils.theme.AppTheme;
  */
 public class BasicActivity extends AppCompatActivity {
 
-  protected AppConfig getAppConfig() { return (AppConfig)getApplication(); }
+protected AppConfig getAppConfig() {
+	return (AppConfig)getApplication();
+}
 
-  public ColorPreferenceHelper getColorPreference() {
-    return getAppConfig().getUtilsProvider().getColorPreference();
-  }
+public ColorPreferenceHelper getColorPreference() {
+	return getAppConfig().getUtilsProvider().getColorPreference();
+}
 
-  public AppTheme getAppTheme() {
-    return getAppConfig().getUtilsProvider().getAppTheme();
-  }
+public AppTheme getAppTheme() {
+	return getAppConfig().getUtilsProvider().getAppTheme();
+}
 
-  public UtilitiesProvider getUtilsProvider() {
-    return getAppConfig().getUtilsProvider();
-  }
+public UtilitiesProvider getUtilsProvider() {
+	return getAppConfig().getUtilsProvider();
+}
 }
