@@ -9,14 +9,14 @@ public class EncryptedEntry {
     private int _id;
     private String path, password;
 
-    public EncryptedEntry() {}
+    public EncryptedEntry() { }
 
-    public EncryptedEntry(String path, String password) {
+    public EncryptedEntry(final String path, final String password) {
         this.path = path;
         this.password = password;
     }
 
-    public void setId(int _id) {
+    public void setId(final int _id) {
         this._id = _id;
     }
 
@@ -24,7 +24,7 @@ public class EncryptedEntry {
         return this._id;
     }
 
-    public void setPath(String path) {
+    public void setPath(final String path) {
         this.path = path;
     }
 
@@ -32,7 +32,7 @@ public class EncryptedEntry {
         return this.path;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 

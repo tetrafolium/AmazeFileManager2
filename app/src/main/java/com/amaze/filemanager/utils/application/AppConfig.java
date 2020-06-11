@@ -69,7 +69,7 @@ public class AppConfig extends GlideApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);//selector in srcCompat isn't supported without this
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true); //selector in srcCompat isn't supported without this
         sBackgroundHandlerThread = new HandlerThread("app_background");
         mInstance = this;
 
@@ -97,7 +97,7 @@ public class AppConfig extends GlideApplication {
      * this runnable is executed, and {@link #runInBackground(CustomAsyncCallbacks)} in case we need
      * to execute something after execution in background
      */
-    public static void runInBackground(Runnable runnable) {
+    public static void runInBackground(final Runnable runnable) {
         synchronized (sBackgroundHandler) {
             sBackgroundHandler.post(runnable);
         }
@@ -119,12 +119,12 @@ public class AppConfig extends GlideApplication {
                 }
 
                 @Override
-                protected Result doInBackground(Object... params) {
+                protected Result doInBackground(final Object... params) {
                     return customAsyncCallbacks.doInBackground();
                 }
 
                 @Override
-                protected void onPostExecute(Result aVoid) {
+                protected void onPostExecute(final Result aVoid) {
                     super.onPostExecute(aVoid);
                     customAsyncCallbacks.onPostExecute(aVoid);
                 }
@@ -138,13 +138,13 @@ public class AppConfig extends GlideApplication {
     public static abstract class CustomAsyncCallbacks<Params, Result> {
         public final @Nullable Params[] parameters;
 
-        public CustomAsyncCallbacks(@Nullable Params[] params) {
+        public CustomAsyncCallbacks(final @Nullable Params[] params) {
             parameters = params;
         }
 
         public abstract Result doInBackground();
 
-        public void onPostExecute(Result result) { }
+        public void onPostExecute(final Result result) { }
 
         public void onPreExecute() { }
     }
@@ -155,7 +155,7 @@ public class AppConfig extends GlideApplication {
      * @param context Any context belonging to this application
      * @param message The message to show
      */
-    public static void toast(Context context, @StringRes int message) {
+    public static void toast(final Context context, final @StringRes int message) {
         // this is a static method so it is easier to call,
         // as the context checking and casting is done for you
 
@@ -181,7 +181,7 @@ public class AppConfig extends GlideApplication {
      * @param context Any context belonging to this application
      * @param message The message to show
      */
-    public static void toast(Context context, String message) {
+    public static void toast(final Context context, final String message) {
         // this is a static method so it is easier to call,
         // as the context checking and casting is done for you
 
@@ -206,7 +206,7 @@ public class AppConfig extends GlideApplication {
      *
      * @param r Runnable to run
      */
-    public void runInApplicationThread(Runnable r) {
+    public void runInApplicationThread(final Runnable r) {
         mApplicationHandler.post(r);
     }
 
@@ -229,7 +229,7 @@ public class AppConfig extends GlideApplication {
         return mUtilsHandler;
     }
 
-    public void setMainActivityContext(@NonNull Activity activity) {
+    public void setMainActivityContext(final @NonNull Activity activity) {
         mainActivityContext = new WeakReference<>(activity);
         screenUtils = new ScreenUtils(activity);
     }

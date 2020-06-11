@@ -17,13 +17,13 @@ public class CloudIconModelLoader implements ModelLoader<String, Bitmap> {
 
     private Context context;
 
-    public CloudIconModelLoader(Context context) {
+    public CloudIconModelLoader(final Context context) {
         this.context = context;
     }
 
     @Nullable
     @Override
-    public LoadData<Bitmap> buildLoadData(String s, int width, int height, Options options) {
+    public LoadData<Bitmap> buildLoadData(final String s, final int width, final int height, final Options options) {
         // we put key as current time since we're not disk caching the images for cloud,
         // as there is no way to differentiate input streams returned by different cloud services
         // for future instances and they don't expose concrete paths either
@@ -31,7 +31,7 @@ public class CloudIconModelLoader implements ModelLoader<String, Bitmap> {
     }
 
     @Override
-    public boolean handles(String s) {
+    public boolean handles(final String s) {
         return s.startsWith(CloudHandler.CLOUD_PREFIX_BOX)
                || s.startsWith(CloudHandler.CLOUD_PREFIX_DROPBOX)
                || s.startsWith(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE)

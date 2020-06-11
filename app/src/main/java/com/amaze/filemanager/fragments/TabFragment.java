@@ -76,7 +76,7 @@ public class TabFragment extends Fragment
     private ArgbEvaluator evaluator = new ArgbEvaluator();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.tabfragment, container, false);
 
         tabHandler = new TabHandler(getContext());
@@ -107,7 +107,7 @@ public class TabFragment extends Fragment
             MainActivity.currentTab = l;
             List<Tab> tabs1 = tabHandler.getAllTabs();
             int i = tabs1.size();
-            if (i == 0) {// creating tabs in db for the first time, probably the first launch of app
+            if (i == 0) { // creating tabs in db for the first time, probably the first launch of app
                 if (mainActivity.getDrawer().getFirstPath() != null) {
                     addNewTab(1, mainActivity.getDrawer().getFirstPath());
                 } else {
@@ -206,7 +206,7 @@ public class TabFragment extends Fragment
         }
     }
 
-    public void updatepaths(int pos) {
+    public void updatepaths(final int pos) {
         if (tabHandler == null)
             tabHandler = new TabHandler(getActivity());
         int i = 1;
@@ -233,13 +233,13 @@ public class TabFragment extends Fragment
         }
     }
 
-    String parseSmbPath(String a) {
+    String parseSmbPath(final String a) {
         if (a.contains("@"))
             return "smb://" + a.substring(a.indexOf("@") + 1, a.length());
         else return a;
     }
 
-    String parsePathForName(String path, OpenMode openmode) {
+    String parsePathForName(final String path, final OpenMode openmode) {
         Resources resources = getActivity().getResources();
         if ("/".equals(path)) {
             return resources.getString(R.string.rootdirectory);
@@ -255,7 +255,7 @@ public class TabFragment extends Fragment
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
         int i = 0;
 
@@ -274,9 +274,9 @@ public class TabFragment extends Fragment
     }
 
     @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
         MainFragment mainFragment = mainActivity.getCurrentMainFragment();
-        if(mainFragment != null && !mainFragment.selection) {// we do not want to update toolbar colors when ActionMode is activated during the config change
+        if (mainFragment != null && !mainFragment.selection) { // we do not want to update toolbar colors when ActionMode is activated during the config change
             @ColorInt int color = (int) evaluator.evaluate(position + positionOffset, startColor, endColor);
 
             colorDrawable.setColor(color);
@@ -285,7 +285,7 @@ public class TabFragment extends Fragment
     }
 
     @Override
-    public void onPageSelected(int p1) {
+    public void onPageSelected(final int p1) {
         mainActivity.getAppbar().getAppbarLayout().animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
 
         MainActivity.currentTab = p1;
@@ -311,13 +311,13 @@ public class TabFragment extends Fragment
     }
 
     @Override
-    public void onPageScrollStateChanged(int state) {
+    public void onPageScrollStateChanged(final int state) {
         // nothing to do
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
         @Override
-        public int getItemPosition(Object object) {
+        public int getItemPosition(final Object object) {
             int index = fragments.indexOf(object);
             if (index == -1)
                 return POSITION_NONE;
@@ -330,23 +330,23 @@ public class TabFragment extends Fragment
             return fragments.size();
         }
 
-        public ScreenSlidePagerAdapter(FragmentManager fm) {
+        public ScreenSlidePagerAdapter(final FragmentManager fm) {
             super(fm);
         }
 
         @Override
-        public Fragment getItem(int position) {
+        public Fragment getItem(final int position) {
             Fragment f;
             f = fragments.get(position);
             return f;
         }
     }
 
-    private void addNewTab(int num, String path) {
+    private void addNewTab(final int num, final String path) {
         addTab(new Tab(num, path, path), "");
     }
 
-    public void addTab(@NonNull Tab tab, String path) {
+    public void addTab(final @NonNull Tab tab, final String path) {
         Fragment main = new MainFragment();
         Bundle b = new Bundle();
 
@@ -370,13 +370,13 @@ public class TabFragment extends Fragment
         else return null;
     }
 
-    public Fragment getFragmentAtIndex(int pos) {
+    public Fragment getFragmentAtIndex(final int pos) {
         if (fragments.size() == 2 && pos < 2) return fragments.get(pos);
         else return null;
     }
 
     // updating indicator color as per the current viewpager tab
-    void updateIndicator(int index) {
+    void updateIndicator(final int index) {
         if (index != 0 && index != 1) return;
 
         int accentColor = mainActivity.getAccent();

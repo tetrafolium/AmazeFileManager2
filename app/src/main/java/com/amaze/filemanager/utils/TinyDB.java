@@ -39,7 +39,7 @@ public class TinyDB {
      * @param key SharedPreferences key
      * @param array array of Booleans to be added
      */
-    public static void putBooleanArray(SharedPreferences preferences, String key, Boolean[] array) {
+    public static void putBooleanArray(final SharedPreferences preferences, final String key, final Boolean[] array) {
         preferences.edit().putString(key, TextUtils.join(DIVIDER, array)).apply();
     }
 
@@ -48,15 +48,15 @@ public class TinyDB {
      * @param key SharedPreferences key
      * @return Array of Booleans
      */
-    public static Boolean[] getBooleanArray(SharedPreferences preferences, String key, Boolean[] defaultValue) {
+    public static Boolean[] getBooleanArray(final SharedPreferences preferences, final String key, final Boolean[] defaultValue) {
         String prefValue = preferences.getString(key, "");
-        if(prefValue.equals("")) {
+        if (prefValue.equals("")) {
             return defaultValue;
         }
 
         String[] temp = TextUtils.split(prefValue, DIVIDER);
         Boolean[] newArray = new Boolean[temp.length];
-        for(int i = 0; i < temp.length; i++)
+        for (int i = 0; i < temp.length; i++)
             newArray[i] = Boolean.valueOf(temp[i]);
         return newArray;
     }

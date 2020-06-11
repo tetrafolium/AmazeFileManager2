@@ -30,7 +30,7 @@ public enum OpenMode {
      * Generally used to retrieve this type after config change or to send enum as argument
      * @param ordinal the position of enum starting from 0 for first element
      */
-    public static OpenMode getOpenMode(int ordinal) {
+    public static OpenMode getOpenMode(final int ordinal) {
         return OpenMode.values()[ordinal];
     }
 }

@@ -112,15 +112,15 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
     float controlX2;
     float controlY2;
 
-    public Indicator(Context context) {
+    public Indicator(final Context context) {
         this(context, null, 0);
     }
 
-    public Indicator(Context context, AttributeSet attrs) {
+    public Indicator(final Context context, final AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public Indicator(Context context, AttributeSet attrs, int defStyle) {
+    public Indicator(final Context context, final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
 
         final int density = (int) context.getResources().getDisplayMetrics().density;
@@ -162,7 +162,7 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
         addOnAttachStateChangeListener(this);
     }
 
-    public void setViewPager(ViewPager viewPager) {
+    public void setViewPager(final ViewPager viewPager) {
         this.viewPager = viewPager;
         viewPager.addOnPageChangeListener(this);
         setPageCount(viewPager.getAdapter().getCount());
@@ -176,7 +176,7 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
     }
 
     @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
         if (isAttachedToWindow) {
             float fraction = positionOffset;
             int currentPosition = pageChanging ? previousPage : currentPage;
@@ -197,7 +197,7 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
     }
 
     @Override
-    public void onPageSelected(int position) {
+    public void onPageSelected(final int position) {
         if (isAttachedToWindow) {
             // this is the main event we're interested in!
             setSelectedPage(position);
@@ -208,17 +208,17 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
     }
 
     @Override
-    public void onPageScrollStateChanged(int state) {
+    public void onPageScrollStateChanged(final int state) {
         // nothing to do
     }
 
-    private void setPageCount(int pages) {
+    private void setPageCount(final int pages) {
         pageCount = pages;
         resetState();
         requestLayout();
     }
 
-    private void calculateDotPositions(int width, int height) {
+    private void calculateDotPositions(final int width, final int height) {
         int left = getPaddingLeft();
         int top = getPaddingTop();
         int right = width - getPaddingRight();
@@ -245,7 +245,7 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
         } else {
             currentPage = 0;
         }
-        if (dotCenterX != null && dotCenterX.length!=0) {
+        if (dotCenterX != null && dotCenterX.length != 0) {
             selectedDotX = dotCenterX[currentPage];
         } else {
             selectedDotX = 0;
@@ -263,7 +263,7 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
 
         int desiredHeight = getDesiredHeight();
         int height;
@@ -309,23 +309,23 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
     }
 
     @Override
-    public void onViewAttachedToWindow(View view) {
+    public void onViewAttachedToWindow(final View view) {
         isAttachedToWindow = true;
     }
 
     @Override
-    public void onViewDetachedFromWindow(View view) {
+    public void onViewDetachedFromWindow(final View view) {
         isAttachedToWindow = false;
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(final Canvas canvas) {
         if (viewPager == null || pageCount == 0) return;
         drawUnselected(canvas);
         drawSelected(canvas);
     }
 
-    private void drawUnselected(Canvas canvas) {
+    private void drawUnselected(final Canvas canvas) {
 
         combinedUnselectedPath.rewind();
 
@@ -363,11 +363,11 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
      * This function returns a path for the given dot **and any action to it's right** e.g. joining
      * or retreating from it's neighbour
      */
-    private Path getUnselectedPath(int page,
-                                   float centerX,
-                                   float nextCenterX,
-                                   float joiningFraction,
-                                   float dotRevealFraction) {
+    private Path getUnselectedPath(final int page,
+                                   final float centerX,
+                                   final float nextCenterX,
+                                   final float joiningFraction,
+                                   final float dotRevealFraction) {
 
         unselectedDotPath.rewind();
 
@@ -545,11 +545,11 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
         return unselectedDotPath;
     }
 
-    private void drawSelected(Canvas canvas) {
+    private void drawSelected(final Canvas canvas) {
         canvas.drawCircle(selectedDotX, dotCenterY, dotRadius, selectedPaint);
     }
 
-    private void setSelectedPage(int now) {
+    private void setSelectedPage(final int now) {
         if (now == currentPage) return;
 
         pageChanging = true;
@@ -578,19 +578,19 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
     }
 
     private ValueAnimator createMoveSelectedAnimator(
-        final float moveTo, int was, int now, int steps) {
+        final float moveTo, final int was, final int now, final int steps) {
 
         // create the actual move animator
         ValueAnimator moveSelected = ValueAnimator.ofFloat(selectedDotX, moveTo);
 
         // also set up a pending retreat anim – this starts when the move is 75% complete
         retreatAnimation = new PendingRetreatAnimator(was, now, steps,
-                now > was ?
-                new RightwardStartPredicate(moveTo - ((moveTo - selectedDotX) * 0.25f)) :
-                new LeftwardStartPredicate(moveTo + ((selectedDotX - moveTo) * 0.25f)));
+                now > was
+                ? new RightwardStartPredicate(moveTo - ((moveTo - selectedDotX) * 0.25f))
+                : new LeftwardStartPredicate(moveTo + ((selectedDotX - moveTo) * 0.25f)));
         retreatAnimation.addListener(new AnimatorListenerAdapter() {
             @Override
-            public void onAnimationEnd(Animator animation) {
+            public void onAnimationEnd(final Animator animation) {
                 resetState();
                 pageChanging = false;
             }
@@ -603,14 +603,14 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
         });
         moveSelected.addListener(new AnimatorListenerAdapter() {
             @Override
-            public void onAnimationStart(Animator animation) {
+            public void onAnimationStart(final Animator animation) {
                 // set a flag so that we continue to draw the unselected dot in the target position
                 // until the selected dot has finished moving into place
                 selectedDotInPosition = false;
             }
 
             @Override
-            public void onAnimationEnd(Animator animation) {
+            public void onAnimationEnd(final Animator animation) {
                 // set a flag when anim finishes so that we don't draw both selected & unselected
                 // page dots
                 selectedDotInPosition = true;
@@ -624,7 +624,7 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
         return moveSelected;
     }
 
-    private void setJoiningFraction(int leftDot, float fraction) {
+    private void setJoiningFraction(final int leftDot, final float fraction) {
         if (leftDot < joiningFractions.length) {
 
             if (leftDot == 1) {
@@ -641,7 +641,7 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
         postInvalidateOnAnimation();
     }
 
-    private void setDotRevealFraction(int dot, float fraction) {
+    private void setDotRevealFraction(final int dot, final float fraction) {
         dotRevealFractions[dot] = fraction;
         postInvalidateOnAnimation();
     }
@@ -658,13 +658,13 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
         protected boolean hasStarted;
         protected StartPredicate predicate;
 
-        public PendingStartAnimator(StartPredicate predicate) {
+        public PendingStartAnimator(final StartPredicate predicate) {
             super();
             this.predicate = predicate;
             hasStarted = false;
         }
 
-        public void startIfNecessary(float currentValue) {
+        public void startIfNecessary(final float currentValue) {
             if (!hasStarted && predicate.shouldStart(currentValue)) {
                 start();
                 hasStarted = true;
@@ -679,7 +679,7 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
      */
     private class PendingRetreatAnimator extends PendingStartAnimator {
 
-        PendingRetreatAnimator(int was, int now, int steps, StartPredicate predicate) {
+        PendingRetreatAnimator(final int was, final int now, final int steps, final StartPredicate predicate) {
             super(predicate);
             setDuration(animHalfDuration);
             setInterpolator(interpolator);
@@ -739,7 +739,7 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
 
             addListener(new AnimatorListenerAdapter() {
                 @Override
-                public void onAnimationStart(Animator animation) {
+                public void onAnimationStart(final Animator animation) {
                     cancelJoiningAnimations();
                     clearJoiningFractions();
                     // we need to set this so that the dots are hidden until the reveal anim runs
@@ -751,7 +751,7 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
                     postInvalidateOnAnimation();
                 }
                 @Override
-                public void onAnimationEnd(Animator animation) {
+                public void onAnimationEnd(final Animator animation) {
                     retreatingJoinX1 = INVALID_FRACTION;
                     retreatingJoinX2 = INVALID_FRACTION;
                     postInvalidateOnAnimation();
@@ -767,7 +767,7 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
 
         private int dot;
 
-        public PendingRevealAnimator(int dot, StartPredicate predicate) {
+        public PendingRevealAnimator(final int dot, final StartPredicate predicate) {
             super(predicate);
             setFloatValues(MINIMAL_REVEAL, 1f);
             this.dot = dot;
@@ -780,7 +780,7 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
             });
             addListener(new AnimatorListenerAdapter() {
                 @Override
-                public void onAnimationEnd(Animator animation) {
+                public void onAnimationEnd(final Animator animation) {
                     setDotRevealFraction(PendingRevealAnimator.this.dot, 0f);
                     postInvalidateOnAnimation();
                 }
@@ -795,7 +795,7 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
 
         protected float thresholdValue;
 
-        public StartPredicate(float thresholdValue) {
+        public StartPredicate(final float thresholdValue) {
             this.thresholdValue = thresholdValue;
         }
 
@@ -808,11 +808,11 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
      */
     private class RightwardStartPredicate extends StartPredicate {
 
-        public RightwardStartPredicate(float thresholdValue) {
+        public RightwardStartPredicate(final float thresholdValue) {
             super(thresholdValue);
         }
 
-        boolean shouldStart(float currentValue) {
+        boolean shouldStart(final float currentValue) {
             return currentValue > thresholdValue;
         }
     }
@@ -822,11 +822,11 @@ public class Indicator extends View implements ViewPager.OnPageChangeListener,
      */
     private class LeftwardStartPredicate extends StartPredicate {
 
-        public LeftwardStartPredicate(float thresholdValue) {
+        public LeftwardStartPredicate(final float thresholdValue) {
             super(thresholdValue);
         }
 
-        boolean shouldStart(float currentValue) {
+        boolean shouldStart(final float currentValue) {
             return currentValue < thresholdValue;
         }
     }

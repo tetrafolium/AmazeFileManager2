@@ -33,13 +33,13 @@ import java.util.ArrayList;
 
 public class Bzip2Decompressor extends Decompressor {
 
-    public Bzip2Decompressor(Context context) {
+    public Bzip2Decompressor(final Context context) {
         super(context);
     }
 
     @Override
-    public CompressedHelperTask changePath(String path, boolean addGoBackItem,
-                                           OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
+    public CompressedHelperTask changePath(final String path, final boolean addGoBackItem,
+                                           final OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
         return new Bzip2HelperTask(filePath, path, addGoBackItem, onFinish);
     }
 

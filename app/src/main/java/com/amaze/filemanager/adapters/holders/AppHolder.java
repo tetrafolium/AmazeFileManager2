@@ -23,7 +23,7 @@ public class AppHolder extends RecyclerView.ViewHolder {
     public final TextView txtDesc;
     public final ImageButton about;
 
-    public AppHolder(View view) {
+    public AppHolder(final View view) {
         super(view);
 
         txtTitle = view.findViewById(R.id.firstline);

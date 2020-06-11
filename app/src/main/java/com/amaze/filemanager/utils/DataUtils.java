@@ -64,7 +64,7 @@ public class DataUtils {
     private ArrayList<String> storages = new ArrayList<>();
 
     private InvertedRadixTree<Integer> tree = new ConcurrentInvertedRadixTree<>(new DefaultCharArrayNodeFactory());
-    private HashMap<MenuItem, MenuMetadata> menuMetadataMap = new HashMap<>();//Faster HashMap<Integer, V>
+    private HashMap<MenuItem, MenuMetadata> menuMetadataMap = new HashMap<>(); //Faster HashMap<Integer, V>
 
     private ArrayList<String[]> servers = new ArrayList<>();
     private ArrayList<String[]> books = new ArrayList<>();
@@ -85,11 +85,11 @@ public class DataUtils {
         return DataUtilsHolder.INSTANCE;
     }
 
-    public int containsServer(String[] a) {
+    public int containsServer(final String[] a) {
         return contains(a, servers);
     }
 
-    public int containsServer(String path) {
+    public int containsServer(final String path) {
 
         synchronized (servers) {
 
@@ -104,7 +104,7 @@ public class DataUtils {
         return -1;
     }
 
-    public int containsBooks(String[] a) {
+    public int containsBooks(final String[] a) {
         return contains(a, books);
     }
 
@@ -117,7 +117,7 @@ public class DataUtils {
      * @param serviceType the {@link OpenMode} of account to check
      * @return the index of account, -1 if not found
      */
-    public synchronized int containsAccounts(OpenMode serviceType) {
+    public synchronized int containsAccounts(final OpenMode serviceType) {
         int i = 0;
         for (CloudStorage storage : accounts) {
 
@@ -158,13 +158,13 @@ public class DataUtils {
         accounts = new ArrayList<>();
     }
 
-    public void registerOnDataChangedListener(DataChangeListener l) {
+    public void registerOnDataChangedListener(final DataChangeListener l) {
 
         dataChangeListener = l;
         clear();
     }
 
-    int contains(String a, ArrayList<String[]> b) {
+    int contains(final String a, final ArrayList<String[]> b) {
         int i = 0;
         for (String[] x : b) {
             if (x[1].equals(a)) return i;
@@ -174,7 +174,7 @@ public class DataUtils {
         return -1;
     }
 
-    int contains(String[] a, ArrayList<String[]> b) {
+    int contains(final String[] a, final ArrayList<String[]> b) {
         if (b == null) return -1;
         int i = 0;
         for (String[] x : b) {
@@ -185,7 +185,7 @@ public class DataUtils {
         return -1;
     }
 
-    public void removeBook(int i) {
+    public void removeBook(final int i) {
         synchronized (books) {
 
             if (books.size() > i)
@@ -193,7 +193,7 @@ public class DataUtils {
         }
     }
 
-    public synchronized void removeAccount(OpenMode serviceType) {
+    public synchronized void removeAccount(final OpenMode serviceType) {
         for (CloudStorage storage : accounts) {
             switch (serviceType) {
             case BOX:
@@ -226,7 +226,7 @@ public class DataUtils {
         }
     }
 
-    public void removeServer(int i) {
+    public void removeServer(final int i) {
         synchronized (servers) {
 
             if (servers.size() > i)
@@ -234,14 +234,14 @@ public class DataUtils {
         }
     }
 
-    public void addBook(String[] i) {
+    public void addBook(final String[] i) {
         synchronized (books) {
 
             books.add(i);
         }
     }
 
-    public void addBook(final String[] i, boolean refreshdrawer) {
+    public void addBook(final String[] i, final boolean refreshdrawer) {
         synchronized (books) {
 
             books.add(i);
@@ -251,11 +251,11 @@ public class DataUtils {
         }
     }
 
-    public void addAccount(CloudStorage storage) {
+    public void addAccount(final CloudStorage storage) {
         accounts.add(storage);
     }
 
-    public void addServer(String[] i) {
+    public void addServer(final String[] i) {
         servers.add(i);
     }
 
@@ -281,7 +281,7 @@ public class DataUtils {
         }
     }
 
-    public void setHistory(LinkedList<String> s) {
+    public void setHistory(final LinkedList<String> s) {
         history.clear();
         history.addAll(s);
     }
@@ -301,17 +301,17 @@ public class DataUtils {
         Collections.sort(books, new BookSorter());
     }
 
-    public synchronized void setServers(ArrayList<String[]> servers) {
+    public synchronized void setServers(final ArrayList<String[]> servers) {
         if (servers != null)
             this.servers = servers;
     }
 
-    public synchronized void setBooks(ArrayList<String[]> books) {
+    public synchronized void setBooks(final ArrayList<String[]> books) {
         if (books != null)
             this.books = books;
     }
 
-    public synchronized void setAccounts(ArrayList<CloudStorage> accounts) {
+    public synchronized void setAccounts(final ArrayList<CloudStorage> accounts) {
         if (accounts != null)
             this.accounts = accounts;
     }
@@ -328,7 +328,7 @@ public class DataUtils {
         return accounts;
     }
 
-    public synchronized CloudStorage getAccount(OpenMode serviceType) {
+    public synchronized CloudStorage getAccount(final OpenMode serviceType) {
         for (CloudStorage storage : accounts) {
             switch (serviceType) {
             case BOX:
@@ -354,7 +354,7 @@ public class DataUtils {
         return null;
     }
 
-    public boolean isFileHidden(String path) {
+    public boolean isFileHidden(final String path) {
         return getHiddenFiles().getValueForExactKey(path) != null;
     }
 
@@ -362,11 +362,11 @@ public class DataUtils {
         return hiddenfiles;
     }
 
-    public synchronized void setHiddenFiles(ConcurrentRadixTree<VoidValue> hiddenfiles) {
+    public synchronized void setHiddenFiles(final ConcurrentRadixTree<VoidValue> hiddenfiles) {
         if (hiddenfiles != null) this.hiddenfiles = hiddenfiles;
     }
 
-    public synchronized void setGridfiles(ArrayList<String> gridfiles) {
+    public synchronized void setGridfiles(final ArrayList<String> gridfiles) {
         if (gridfiles != null) {
             for (String gridfile : gridfiles) {
                 setPathAsGridOrList(gridfile, GRID);
@@ -374,7 +374,7 @@ public class DataUtils {
         }
     }
 
-    public synchronized void setListfiles(ArrayList<String> listfiles) {
+    public synchronized void setListfiles(final ArrayList<String> listfiles) {
         if (listfiles != null) {
             for (String gridfile : listfiles) {
                 setPathAsGridOrList(gridfile, LIST);
@@ -382,13 +382,13 @@ public class DataUtils {
         }
     }
 
-    public void setPathAsGridOrList(String path, int value) {
+    public void setPathAsGridOrList(final String path, final int value) {
         filesGridOrList.put(path, value);
     }
 
-    public int getListOrGridForPath(String path, int defaultValue) {
+    public int getListOrGridForPath(final String path, final int defaultValue) {
         Integer value = filesGridOrList.getValueForLongestKeyPrefixing(path);
-        return value != null? value:defaultValue;
+        return value != null ? value : defaultValue;
     }
 
     public void clearHistory() {
@@ -402,24 +402,24 @@ public class DataUtils {
         return storages;
     }
 
-    public synchronized void setStorages(ArrayList<String> storages) {
+    public synchronized void setStorages(final ArrayList<String> storages) {
         this.storages = storages;
     }
 
-    public MenuMetadata getDrawerMetadata(MenuItem item) {
+    public MenuMetadata getDrawerMetadata(final MenuItem item) {
         return menuMetadataMap.get(item);
     }
 
-    public void putDrawerMetadata(MenuItem item, MenuMetadata metadata) {
+    public void putDrawerMetadata(final MenuItem item, final MenuMetadata metadata) {
         menuMetadataMap.put(item, metadata);
-        if(metadata.path != null) tree.put(metadata.path, item.getItemId());
+        if (metadata.path != null) tree.put(metadata.path, item.getItemId());
     }
 
     /**
      * @param path the path to find
      * @return the id of the longest containing MenuMetadata.path in getDrawerMetadata() or null
      */
-    public @Nullable Integer findLongestContainingDrawerItem(CharSequence path) {
+    public @Nullable Integer findLongestContainingDrawerItem(final CharSequence path) {
         return tree.getValueForLongestKeyPrefixing(path);
     }
 

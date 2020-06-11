@@ -55,31 +55,31 @@ public class LayoutElementParcelable implements Parcelable {
     //same as hfile.modes but different than openmode in Main.java
     private OpenMode mode = OpenMode.FILE;
 
-    public LayoutElementParcelable(@NonNull Context c, boolean isBack, String goback, boolean showThumbs) {
-        this(c,true, new File("..").getName(), "..", "", "", goback, 0,
+    public LayoutElementParcelable(final @NonNull Context c, final boolean isBack, final String goback, final boolean showThumbs) {
+        this(c, true, new File("..").getName(), "..", "", "", goback, 0,
              false, "", true, showThumbs, OpenMode.UNKNOWN);
     }
 
-    public LayoutElementParcelable(@NonNull Context c, String path, String permissions, String symlink,
-                                   String size, long longSize,boolean header, String date,
-                                   boolean isDirectory, boolean useThumbs, OpenMode openMode) {
+    public LayoutElementParcelable(final @NonNull Context c, final String path, final String permissions, final String symlink,
+                                   final String size, final long longSize, final boolean header, final String date,
+                                   final boolean isDirectory, final boolean useThumbs, final OpenMode openMode) {
         this(c, new File(path).getName(), path, permissions, symlink, size, longSize, header,
              date, isDirectory, useThumbs, openMode);
     }
 
-    public LayoutElementParcelable(@NonNull Context c, String title, String path, String permissions,
-                                   String symlink, String size, long longSize, boolean header,
-                                   String date, boolean isDirectory, boolean useThumbs, OpenMode openMode) {
-        this(c,false, title, path, permissions, symlink, size, longSize, header, date, isDirectory, useThumbs, openMode);
+    public LayoutElementParcelable(final @NonNull Context c, final String title, final String path, final String permissions,
+                                   final String symlink, final String size, final long longSize, final boolean header,
+                                   final String date, final boolean isDirectory, final boolean useThumbs, final OpenMode openMode) {
+        this(c, false, title, path, permissions, symlink, size, longSize, header, date, isDirectory, useThumbs, openMode);
     }
 
-    public LayoutElementParcelable(@NonNull Context c, boolean isBack, String title, String path, String permissions,
-                                   String symlink, String size, long longSize, boolean header,
-                                   String date, boolean isDirectory, boolean useThumbs, OpenMode openMode) {
+    public LayoutElementParcelable(final @NonNull Context c, final boolean isBack, final String title, final String path, final String permissions,
+                                   final String symlink, final String size, final long longSize, final boolean header,
+                                   final String date, final boolean isDirectory, final boolean useThumbs, final OpenMode openMode) {
         filetype = Icons.getTypeOfFile(path, isDirectory);
         @DrawableRes int fallbackIcon = Icons.loadMimeIcon(path, isDirectory);
         this.mode = openMode;
-        if(useThumbs) {
+        if (useThumbs) {
             switch (mode) {
             case SMB:
             case SFTP:
@@ -110,7 +110,7 @@ public class LayoutElementParcelable implements Parcelable {
         this.symlink = symlink.trim();
         this.size = size;
         this.header = header;
-        this.longSize=longSize;
+        this.longSize = longSize;
         this.isDirectory = isDirectory;
         if (!date.trim().equals("")) {
             this.date = Long.parseLong(date);
@@ -126,12 +126,12 @@ public class LayoutElementParcelable implements Parcelable {
         return mode;
     }
 
-    public void setMode(OpenMode mode) {
+    public void setMode(final OpenMode mode) {
         this.mode = mode;
     }
 
     public HybridFileParcelable generateBaseFile() {
-        HybridFileParcelable baseFile=new HybridFileParcelable(desc, permissions, date, longSize, isDirectory);
+        HybridFileParcelable baseFile = new HybridFileParcelable(desc, permissions, date, longSize, isDirectory);
         baseFile.setMode(mode);
         baseFile.setName(title);
         return baseFile;
@@ -147,7 +147,7 @@ public class LayoutElementParcelable implements Parcelable {
     }
 
     //Hopefully it should be safe - nobody else is using this
-    public LayoutElementParcelable(Parcel im) {
+    public LayoutElementParcelable(final Parcel im) {
         filetype = im.readInt();
         iconData = im.readParcelable(IconDataParcelable.class.getClassLoader());
         title = im.readString();
@@ -161,7 +161,7 @@ public class LayoutElementParcelable implements Parcelable {
         isDirectory = j != 0;
         dateModification = im.readString();
         size = im.readString();
-        longSize=im.readLong();
+        longSize = im.readLong();
         isBack = im.readInt() != 0;
     }
 
@@ -172,29 +172,29 @@ public class LayoutElementParcelable implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel p1, int p2) {
+    public void writeToParcel(final Parcel p1, final int p2) {
         p1.writeInt(filetype);
         p1.writeParcelable(iconData, 0);
         p1.writeString(title);
         p1.writeString(desc);
         p1.writeString(permissions);
         p1.writeString(symlink);
-        p1.writeInt(isDirectory?1:0);
+        p1.writeInt(isDirectory ? 1 : 0);
         p1.writeLong(date);
         p1.writeInt(header ? 1 : 0);
         p1.writeString(dateModification);
         p1.writeString(size);
         p1.writeLong(longSize);
-        p1.writeInt(isBack? 1:0);
+        p1.writeInt(isBack ? 1 : 0);
     }
 
     public static final Parcelable.Creator<LayoutElementParcelable> CREATOR =
     new Parcelable.Creator<LayoutElementParcelable>() {
-        public LayoutElementParcelable createFromParcel(Parcel in) {
+        public LayoutElementParcelable createFromParcel(final Parcel in) {
             return new LayoutElementParcelable(in);
         }
 
-        public LayoutElementParcelable[] newArray(int size) {
+        public LayoutElementParcelable[] newArray(final int size) {
             return new LayoutElementParcelable[size];
         }
     };

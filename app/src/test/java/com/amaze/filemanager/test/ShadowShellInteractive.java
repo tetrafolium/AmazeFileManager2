@@ -36,7 +36,7 @@ public class ShadowShellInteractive {
     }
 
     @Implementation
-    public void addCommand(String command, int code, Shell.OnCommandResultListener onCommandResultListener) throws IOException, InterruptedException {
+    public void addCommand(final String command, final int code, final Shell.OnCommandResultListener onCommandResultListener) throws IOException, InterruptedException {
         ProcessBuilder pb = new ProcessBuilder("/bin/sh", "-c", command);
         pb.environment().put("LC_ALL", "en_US.utf8");
         pb.environment().put("LANG", "en_US.utf8");
@@ -46,7 +46,7 @@ public class ShadowShellInteractive {
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), "utf-8"));
         List<String> result = new ArrayList<>();
         String line;
-        while((line = reader.readLine()) != null) {
+        while ((line = reader.readLine()) != null) {
             result.add(line);
         }
         onCommandResultListener.onCommandResult(exitValue, code, result);

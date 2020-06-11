@@ -77,7 +77,7 @@ public class BottomBar implements View.OnTouchListener {
     private CountDownTimer timer;
     private GestureDetector gestureDetector;
 
-    public BottomBar(AppBar appbar, MainActivity a) {
+    public BottomBar(final AppBar appbar, final MainActivity a) {
         mainActivity = a;
         this.appbar = appbar;
 
@@ -112,7 +112,7 @@ public class BottomBar implements View.OnTouchListener {
 
         timer = new CountDownTimer(5000, 1000) {
             @Override
-            public void onTick(long l) {}
+            public void onTick(final long l) { }
 
             @Override
             public void onFinish() {
@@ -122,14 +122,14 @@ public class BottomBar implements View.OnTouchListener {
 
         gestureDetector = new GestureDetector(a.getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
             @Override
-            public boolean onDown(MotionEvent e) {
+            public boolean onDown(final MotionEvent e) {
                 return true;
             }
 
             @Override
-            public boolean onSingleTapConfirmed(MotionEvent e) {
+            public boolean onSingleTapConfirmed(final MotionEvent e) {
                 Fragment fragmentAtFrame = mainActivity.getFragmentAtFrame();
-                if(fragmentAtFrame instanceof TabFragment) {
+                if (fragmentAtFrame instanceof TabFragment) {
                     MainFragment m = mainActivity.getCurrentMainFragment();
                     if (m.openMode == OpenMode.FILE) {
                         FileUtils.crossfade(buttons, pathLayout);
@@ -147,16 +147,16 @@ public class BottomBar implements View.OnTouchListener {
             }
 
             @Override
-            public void onLongPress(MotionEvent e) {
-                if(mainActivity.getBoolean(PREFERENCE_CHANGEPATHS) &&
-                        (!mainActivity.getCurrentMainFragment().results || buttons.getVisibility() == View.VISIBLE)) {
+            public void onLongPress(final MotionEvent e) {
+                if (mainActivity.getBoolean(PREFERENCE_CHANGEPATHS)
+                        && (!mainActivity.getCurrentMainFragment().results || buttons.getVisibility() == View.VISIBLE)) {
                     GeneralDialogCreation.showChangePathsDialog(mainActivity, mainActivity.getPrefs());
                 }
             }
         });
     }
 
-    public void setClickListener() {// TODO: 15/8/2017 this is a horrible hack, if you see this, correct it
+    public void setClickListener() { // TODO: 15/8/2017 this is a horrible hack, if you see this, correct it
         frame.setOnTouchListener(this);
         scroll.setOnTouchListener(this);
         buttons.setOnTouchListener(this);
@@ -173,11 +173,11 @@ public class BottomBar implements View.OnTouchListener {
         frame.setOnTouchListener(null);
     }
 
-    public void setPathText(String text) {
+    public void setPathText(final String text) {
         pathText.setText(text);
     }
 
-    public void setFullPathText(String text) {
+    public void setFullPathText(final String text) {
         fullPathText.setText(text);
     }
 
@@ -250,7 +250,7 @@ public class BottomBar implements View.OnTouchListener {
     private ImageView createArrow() {
         ImageView buttonArrow;
 
-        if(lastUsedArrowButton >= arrowButtons.size()) {
+        if (lastUsedArrowButton >= arrowButtons.size()) {
             buttonArrow = new ImageView(mainActivity);
             buttonArrow.setImageDrawable(arrow);
             buttonArrow.setLayoutParams(buttonParams);
@@ -264,10 +264,10 @@ public class BottomBar implements View.OnTouchListener {
         return buttonArrow;
     }
 
-    private Button createFolderButton(String text) {
+    private Button createFolderButton(final String text) {
         Button button;
 
-        if(lastUsedFolderButton >= folderButtons.size()) {
+        if (lastUsedFolderButton >= folderButtons.size()) {
             button = new Button(mainActivity);
             button.setTextColor(Utils.getColor(mainActivity, android.R.color.white));
             button.setTextSize(13);
@@ -285,16 +285,16 @@ public class BottomBar implements View.OnTouchListener {
         return button;
     }
 
-    public void setBackgroundColor(@ColorInt int color) {
+    public void setBackgroundColor(final @ColorInt int color) {
         frame.setBackgroundColor(color);
     }
 
-    public void setVisibility(int visibility) {
+    public void setVisibility(final int visibility) {
         frame.setVisibility(visibility);
     }
 
-    public void updatePath(@NonNull final String news, boolean results, String query, OpenMode openmode,
-                           int folderCount, int fileCount, BottomBarButtonPath buttonPathInterface) {
+    public void updatePath(@NonNull final String news, final boolean results, final String query, final OpenMode openmode,
+                           final int folderCount, final int fileCount, final BottomBarButtonPath buttonPathInterface) {
 
         if (news.length() == 0) return;
 
@@ -344,7 +344,7 @@ public class BottomBar implements View.OnTouchListener {
                 fullPathAnim.setAnimation(slideIn);
                 fullPathAnim.animate().setListener(new AnimatorListenerAdapter() {
                     @Override
-                    public void onAnimationEnd(Animator animation) {
+                    public void onAnimationEnd(final Animator animation) {
                         super.onAnimationEnd(animation);
                         new Handler().postDelayed(() -> {
                             fullPathAnim.setVisibility(View.GONE);
@@ -353,7 +353,7 @@ public class BottomBar implements View.OnTouchListener {
                     }
 
                     @Override
-                    public void onAnimationStart(Animator animation) {
+                    public void onAnimationStart(final Animator animation) {
                         super.onAnimationStart(animation);
                         fullPathAnim.setVisibility(View.VISIBLE);
                         fullPathAnim.setText(Utils.differenceStrings(oldPath, newPath));
@@ -363,7 +363,7 @@ public class BottomBar implements View.OnTouchListener {
                     }
 
                     @Override
-                    public void onAnimationCancel(Animator animation) {
+                    public void onAnimationCancel(final Animator animation) {
                         super.onAnimationCancel(animation);
                         //onAnimationEnd(animation);
                     }
@@ -373,7 +373,7 @@ public class BottomBar implements View.OnTouchListener {
                 fullPathAnim.setAnimation(slideOut);
                 fullPathAnim.animate().setListener(new AnimatorListenerAdapter() {
                     @Override
-                    public void onAnimationEnd(Animator animation) {
+                    public void onAnimationEnd(final Animator animation) {
                         super.onAnimationEnd(animation);
                         fullPathAnim.setVisibility(View.GONE);
                         fullPathText.setText(newPath);
@@ -382,7 +382,7 @@ public class BottomBar implements View.OnTouchListener {
                     }
 
                     @Override
-                    public void onAnimationStart(Animator animation) {
+                    public void onAnimationStart(final Animator animation) {
                         super.onAnimationStart(animation);
                         fullPathAnim.setVisibility(View.VISIBLE);
                         fullPathAnim.setText(Utils.differenceStrings(newPath, oldPath));
@@ -397,7 +397,7 @@ public class BottomBar implements View.OnTouchListener {
                 fullPathAnim.setText(newPath);
                 fullPathAnim.animate().setListener(new AnimatorListenerAdapter() {
                     @Override
-                    public void onAnimationStart(Animator animation) {
+                    public void onAnimationStart(final Animator animation) {
                         super.onAnimationStart(animation);
                         fullPathAnim.setVisibility(View.VISIBLE);
                         fullPathText.setText("");
@@ -405,7 +405,7 @@ public class BottomBar implements View.OnTouchListener {
                     }
 
                     @Override
-                    public void onAnimationEnd(Animator animation) {
+                    public void onAnimationEnd(final Animator animation) {
                         super.onAnimationEnd(animation);
                         new Handler().postDelayed(() -> {
                             fullPathAnim.setVisibility(View.GONE);
@@ -414,7 +414,7 @@ public class BottomBar implements View.OnTouchListener {
                     }
 
                     @Override
-                    public void onAnimationCancel(Animator animation) {
+                    public void onAnimationCancel(final Animator animation) {
                         super.onAnimationCancel(animation);
                         //onAnimationEnd(animation);
                     }
@@ -425,7 +425,7 @@ public class BottomBar implements View.OnTouchListener {
                 fullPathAnim.setAnimation(slideOut);
                 fullPathAnim.animate().setListener(new AnimatorListenerAdapter() {
                     @Override
-                    public void onAnimationStart(Animator animator) {
+                    public void onAnimationStart(final Animator animator) {
                         super.onAnimationStart(animator);
                         fullPathAnim.setVisibility(View.VISIBLE);
                         fullPathAnim.setText(oldPath);
@@ -435,7 +435,7 @@ public class BottomBar implements View.OnTouchListener {
                     }
 
                     @Override
-                    public void onAnimationEnd(Animator animator) {
+                    public void onAnimationEnd(final Animator animator) {
                         super.onAnimationEnd(animator);
 
                         //fullPathAnim.setVisibility(View.GONE);
@@ -445,7 +445,7 @@ public class BottomBar implements View.OnTouchListener {
 
                         fullPathAnim.animate().setListener(new AnimatorListenerAdapter() {
                             @Override
-                            public void onAnimationEnd(Animator animation) {
+                            public void onAnimationEnd(final Animator animation) {
                                 super.onAnimationEnd(animation);
                                 new Handler().postDelayed(() -> {
                                     fullPathAnim.setVisibility(View.GONE);
@@ -454,7 +454,7 @@ public class BottomBar implements View.OnTouchListener {
                             }
 
                             @Override
-                            public void onAnimationStart(Animator animation) {
+                            public void onAnimationStart(final Animator animation) {
                                 super.onAnimationStart(animation);
                                 // we should not be having anything here in path bar
                                 fullPathAnim.setVisibility(View.VISIBLE);
@@ -465,7 +465,7 @@ public class BottomBar implements View.OnTouchListener {
                     }
 
                     @Override
-                    public void onAnimationCancel(Animator animation) {
+                    public void onAnimationCancel(final Animator animation) {
                         super.onAnimationCancel(animation);
                         //onAnimationEnd(animation);
                     }
@@ -482,7 +482,7 @@ public class BottomBar implements View.OnTouchListener {
     }
 
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
+    public boolean onTouch(final View v, final MotionEvent event) {
         return gestureDetector.onTouchEvent(event);
     }
 

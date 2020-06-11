@@ -11,7 +11,7 @@ public class AppThemeManager {
     private SharedPreferences preferences;
     private AppTheme appTheme;
 
-    public AppThemeManager(SharedPreferences preferences) {
+    public AppThemeManager(final SharedPreferences preferences) {
         this.preferences = preferences;
         String themeId = preferences.getString(PreferencesConstants.FRAGMENT_THEME, "0");
         appTheme = AppTheme.getTheme(Integer.parseInt(themeId)).getSimpleTheme();
@@ -30,7 +30,7 @@ public class AppThemeManager {
      * @param appTheme The new theme
      * @return The theme manager.
      */
-    public AppThemeManager setAppTheme(AppTheme appTheme) {
+    public AppThemeManager setAppTheme(final AppTheme appTheme) {
         this.appTheme = appTheme;
         preferences.edit().putString(PreferencesConstants.FRAGMENT_THEME, Integer.toString(appTheme.getId())).apply();
         return this;

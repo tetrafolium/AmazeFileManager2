@@ -123,7 +123,7 @@ public class TextEditorActivity extends ThemedActivity implements TextWatcher, V
     private File cacheFile;     // represents a file saved in cache
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (getAppTheme().equals(AppTheme.DARK))
@@ -203,7 +203,7 @@ public class TextEditorActivity extends ThemedActivity implements TextWatcher, V
         else if (getAppTheme().equals(AppTheme.BLACK))
             mInput.setBackgroundColor(Utils.getColor(this, android.R.color.black));
 
-        if(mInput.getTypeface() == null)
+        if (mInput.getTypeface() == null)
             mInput.setTypeface(Typeface.DEFAULT);
 
         mInputTypefaceDefault = mInput.getTypeface();
@@ -221,7 +221,7 @@ public class TextEditorActivity extends ThemedActivity implements TextWatcher, V
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(KEY_MODIFIED_TEXT, mInput.getText().toString());
         outState.putInt(KEY_INDEX, mInput.getScrollY());
@@ -340,20 +340,20 @@ public class TextEditorActivity extends ThemedActivity implements TextWatcher, V
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
         getMenuInflater().inflate(R.menu.text, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
+    public boolean onPrepareOptionsMenu(final Menu menu) {
         menu.findItem(R.id.save).setVisible(mModified);
         menu.findItem(R.id.monofont).setChecked(mInputTypefaceMono.equals(mInput.getTypeface()));
         return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
         case android.R.id.home:
             checkUnsavedChanges();
@@ -372,7 +372,7 @@ public class TextEditorActivity extends ThemedActivity implements TextWatcher, V
             }
             break;
         case R.id.openwith:
-            if(mFile.scheme == EditableFileAbstraction.SCHEME_FILE) {
+            if (mFile.scheme == EditableFileAbstraction.SCHEME_FILE) {
                 File currentFile = mFile.hybridFileParcelable.getFile();
                 if (currentFile.exists()) {
                     boolean useNewStack = getBoolean(PREFERENCE_TEXTEDITOR_NEWSTACK);
@@ -406,7 +406,7 @@ public class TextEditorActivity extends ThemedActivity implements TextWatcher, V
     }
 
     @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+    public void beforeTextChanged(final CharSequence charSequence, final int i, final int i2, final int i3) {
         // condition to check if callback is called in search editText
         if (searchEditText != null && charSequence.hashCode() == searchEditText.getText().hashCode()) {
 
@@ -418,7 +418,7 @@ public class TextEditorActivity extends ThemedActivity implements TextWatcher, V
     }
 
     @Override
-    public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+    public void onTextChanged(final CharSequence charSequence, final int i, final int i2, final int i3) {
         if (charSequence.hashCode() == mInput.getText().hashCode()) {
             if (mTimer != null) {
                 mTimer.cancel();
@@ -442,7 +442,7 @@ public class TextEditorActivity extends ThemedActivity implements TextWatcher, V
     }
 
     @Override
-    public void afterTextChanged(Editable editable) {
+    public void afterTextChanged(final Editable editable) {
         // searchBox callback block
         if (searchEditText != null && editable.hashCode() == searchEditText.getText().hashCode()) {
             searchTextTask = new SearchTextTask(this);
@@ -479,7 +479,7 @@ public class TextEditorActivity extends ThemedActivity implements TextWatcher, V
         animator.start();
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
-            public void onAnimationEnd(Animator animation) {
+            public void onAnimationEnd(final Animator animation) {
                 searchEditText.requestFocus();
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(searchEditText, InputMethodManager.SHOW_IMPLICIT);
@@ -516,7 +516,7 @@ public class TextEditorActivity extends ThemedActivity implements TextWatcher, V
         animator.start();
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
-            public void onAnimationEnd(Animator animation) {
+            public void onAnimationEnd(final Animator animation) {
                 searchViewLayout.setVisibility(View.GONE);
                 InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 inputMethodManager.hideSoftInputFromWindow(searchEditText.getWindowToken(),
@@ -526,7 +526,7 @@ public class TextEditorActivity extends ThemedActivity implements TextWatcher, V
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
         switch (v.getId()) {
         case R.id.prev:
             // upButton

@@ -28,7 +28,7 @@ public class ColorAdapter extends ArrayAdapter<Integer> implements AdapterView.O
      * @param selectedColor currently selected color
      * @param l OnColorSelected listener for when a color is selected
      */
-    public ColorAdapter(Context context, Integer[] colors, @ColorInt int selectedColor, OnColorSelected l) {
+    public ColorAdapter(final Context context, final Integer[] colors, final @ColorInt int selectedColor, final OnColorSelected l) {
         super(context, R.layout.rowlayout, colors);
         this.selectedColor = selectedColor;
         this.onColorSelected = l;
@@ -37,15 +37,15 @@ public class ColorAdapter extends ArrayAdapter<Integer> implements AdapterView.O
     }
 
     @ColorRes
-    private int getColorResAt(int position) {
+    private int getColorResAt(final int position) {
         return getItem(position);
     }
 
     @NonNull
     @Override
-    public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, final View convertView, final @NonNull ViewGroup parent) {
         CheckableCircleView colorView;
-        if(convertView != null && convertView instanceof CheckableCircleView) {
+        if (convertView != null && convertView instanceof CheckableCircleView) {
             colorView = (CheckableCircleView) convertView;
         } else {
             colorView = (CheckableCircleView) inflater.inflate(R.layout.dialog_grid_item, parent,
@@ -61,7 +61,7 @@ public class ColorAdapter extends ArrayAdapter<Integer> implements AdapterView.O
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
         this.selectedColor = Utils.getColor(getContext(), getColorResAt(position));
         ((CheckableCircleView) view).setChecked(true);
         onColorSelected.onColorSelected(this.selectedColor);

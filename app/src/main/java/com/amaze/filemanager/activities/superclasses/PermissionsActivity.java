@@ -23,8 +23,8 @@ public class PermissionsActivity extends ThemedActivity
     private OnPermissionGranted[] permissionCallbacks = new OnPermissionGranted[PERMISSION_LENGTH];
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(final int requestCode, final @NonNull String[] permissions,
+                                           final @NonNull int[] grantResults) {
         if (requestCode == STORAGE_PERMISSION) {
             if (isGranted(grantResults)) {
                 permissionCallbacks[STORAGE_PERMISSION].onPermissionGranted();
@@ -94,7 +94,7 @@ public class PermissionsActivity extends ThemedActivity
         }
     }
 
-    private boolean isGranted(int[] grantResults) {
+    private boolean isGranted(final int[] grantResults) {
         return grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
     }
 

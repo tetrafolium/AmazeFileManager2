@@ -89,7 +89,7 @@ public abstract class CloudStreamServer {
      * @param header        Header entries, percent decoded
      * @return HTTP response, see class Response for details
      */
-    public abstract Response serve( String uri, String method, Properties header, Properties parms, Properties files );
+    public abstract Response serve(String uri, String method, Properties header, Properties parms, Properties files);
 
     /**
      * HTTP response.
@@ -108,7 +108,7 @@ public abstract class CloudStreamServer {
         /**
          * Basic constructor.
          */
-        public Response( String status, String mimeType, CloudStreamSource data )
+        public Response(final String status, final String mimeType, final CloudStreamSource data)
         {
             this.status = status;
             this.mimeType = mimeType;
@@ -136,9 +136,9 @@ public abstract class CloudStreamServer {
         /**
          * Adds given line to the header.
          */
-        public void addHeader( String name, String value )
+        public void addHeader(final String name, final String value)
         {
-            header.put( name, value );
+            header.put(name, value);
         }
 
         /**
@@ -196,7 +196,7 @@ public abstract class CloudStreamServer {
      */
 
     //private HTTPSession session;
-    public CloudStreamServer(int port, File wwwroot ) throws IOException
+    public CloudStreamServer(final int port, final File wwwroot) throws IOException
     {
         myTcpPort = port;
         myServerSocket = tryBind(myTcpPort);
@@ -219,11 +219,11 @@ public abstract class CloudStreamServer {
             } catch (IOException ioe) {
             }
         });
-        myThread.setDaemon( true );
+        myThread.setDaemon(true);
         myThread.start();
     }
 
-    public CloudStreamServer(File wwwroot ) throws IOException
+    public CloudStreamServer(final File wwwroot) throws IOException
     {
         myServerSocket = tryBind(myTcpPort);
         myThread = new Thread(() -> {
@@ -245,7 +245,7 @@ public abstract class CloudStreamServer {
             } catch (IOException ioe) {
             }
         });
-        myThread.setDaemon( true );
+        myThread.setDaemon(true);
         myThread.start();
     }
 
@@ -258,9 +258,7 @@ public abstract class CloudStreamServer {
         {
             myServerSocket.close();
             myThread.join();
-        }
-        catch ( IOException ioe ) {}
-        catch ( InterruptedException e ) {}
+        } catch (IOException ioe) { } catch (InterruptedException e) { }
     }
 
     /**
@@ -269,7 +267,7 @@ public abstract class CloudStreamServer {
      *
      * @return ServerSocket
      */
-    private ServerSocket tryBind(int port) throws IOException {
+    private ServerSocket tryBind(final int port) throws IOException {
         ServerSocket socket;
         try {
             socket = new ServerSocket(port);
@@ -330,12 +328,12 @@ public abstract class CloudStreamServer {
         private InputStream is;
         private final Socket socket;
 
-        public HTTPSession( Socket s )
+        public HTTPSession(final Socket s)
         {
             socket = s;
             //mySocket = s;
-            Thread t = new Thread( this );
-            t.setDaemon( true );
+            Thread t = new Thread(this);
+            t.setDaemon(true);
             t.start();
         }
 
@@ -345,11 +343,11 @@ public abstract class CloudStreamServer {
                 //openInputStream();
                 handleResponse(socket);
             } finally {
-                if(is!=null) {
+                if (is != null) {
                     try {
                         is.close();
                         socket.close();
-                    } catch(IOException e) {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
@@ -360,10 +358,10 @@ public abstract class CloudStreamServer {
 //                      is = socket.getInputStream();
 //              }
 
-        private void handleResponse(Socket socket) {
+        private void handleResponse(final Socket socket) {
             try {
                 is = socket.getInputStream();
-                if ( is == null) return;
+                if (is == null) return;
 
                 // Read the first 8192 bytes.
                 // The full header should fit in here.
@@ -375,7 +373,7 @@ public abstract class CloudStreamServer {
 
                 // Create a BufferedReader for parsing the header.
                 ByteArrayInputStream hbis = new ByteArrayInputStream(buf, 0, rlen);
-                BufferedReader hin = new BufferedReader( new InputStreamReader( hbis, "utf-8"));
+                BufferedReader hin = new BufferedReader(new InputStreamReader(hbis, "utf-8"));
                 Properties pre = new Properties();
                 Properties parms = new Properties();
                 Properties header = new Properties();
@@ -384,8 +382,8 @@ public abstract class CloudStreamServer {
                 // Decode the header into parms and header java properties
                 decodeHeader(hin, pre, parms, header);
                 Log.d(CloudUtil.TAG, pre.toString());
-                Log.d(CloudUtil.TAG, "Params: "+parms.toString());
-                Log.d(CloudUtil.TAG, "Header: "+header.toString());
+                Log.d(CloudUtil.TAG, "Params: " + parms.toString());
+                Log.d(CloudUtil.TAG, "Header: " + header.toString());
                 String method = pre.getProperty("method");
                 String uri = pre.getProperty("uri");
 
@@ -395,8 +393,7 @@ public abstract class CloudStreamServer {
                 {
                     try {
                         size = Integer.parseInt(contentLength);
-                    }
-                    catch (NumberFormatException ex) {}
+                    } catch (NumberFormatException ex) { }
                 }
 
                 // We are looking for the byte separating header from body.
@@ -415,7 +412,7 @@ public abstract class CloudStreamServer {
 
                 // Write the part of body already read to ByteArrayOutputStream f
                 ByteArrayOutputStream f = new ByteArrayOutputStream();
-                if (splitbyte < rlen) f.write(buf, splitbyte, rlen-splitbyte);
+                if (splitbyte < rlen) f.write(buf, splitbyte, rlen - splitbyte);
 
                 // While Firefox sends on the first read all the data fitting
                 // our buffer, Chrome and Opera sends only the headers even if
@@ -424,13 +421,13 @@ public abstract class CloudStreamServer {
                 // have reached the end of the data to be sent or we should
                 // expect the first byte of the body at the next read.
                 if (splitbyte < rlen)
-                    size -= rlen - splitbyte +1;
+                    size -= rlen - splitbyte + 1;
                 else if (!sbfound || size == 0x7FFFFFFFFFFFFFFFL)
                     size = 0;
 
                 // Now read all the body and write it to f
                 buf = new byte[512];
-                while ( rlen >= 0 && size > 0 )
+                while (rlen >= 0 && size > 0)
                 {
                     rlen = is.read(buf, 0, 512);
                     size -= rlen;
@@ -443,70 +440,66 @@ public abstract class CloudStreamServer {
 
                 // Create a BufferedReader for easily reading it as string.
                 ByteArrayInputStream bin = new ByteArrayInputStream(fbuf);
-                BufferedReader in = new BufferedReader( new InputStreamReader(bin));
+                BufferedReader in = new BufferedReader(new InputStreamReader(bin));
 
                 // If the method is POST, there may be parameters
                 // in data section, too, read it:
-                if ( method.equalsIgnoreCase( "POST" ))
+                if (method.equalsIgnoreCase("POST"))
                 {
                     String contentType = "";
                     String contentTypeHeader = header.getProperty("content-type");
-                    StringTokenizer st = new StringTokenizer( contentTypeHeader, "; " );
-                    if ( st.hasMoreTokens()) {
+                    StringTokenizer st = new StringTokenizer(contentTypeHeader, "; ");
+                    if (st.hasMoreTokens()) {
                         contentType = st.nextToken();
                     }
 
                     if (contentType.equalsIgnoreCase("multipart/form-data"))
                     {
                         // Handle multipart/form-data
-                        if ( !st.hasMoreTokens())
-                            sendError(socket, HTTP_BADREQUEST, "BAD REQUEST: Content type is multipart/form-data but boundary missing. Usage: GET /example/file.html" );
+                        if (!st.hasMoreTokens())
+                            sendError(socket, HTTP_BADREQUEST, "BAD REQUEST: Content type is multipart/form-data but boundary missing. Usage: GET /example/file.html");
                         String boundaryExp = st.nextToken();
-                        st = new StringTokenizer( boundaryExp, "=" );
+                        st = new StringTokenizer(boundaryExp, "=");
                         if (st.countTokens() != 2)
-                            sendError(socket, HTTP_BADREQUEST, "BAD REQUEST: Content type is multipart/form-data but boundary syntax error. Usage: GET /example/file.html" );
+                            sendError(socket, HTTP_BADREQUEST, "BAD REQUEST: Content type is multipart/form-data but boundary syntax error. Usage: GET /example/file.html");
                         st.nextToken();
                         String boundary = st.nextToken();
 
                         decodeMultipartData(boundary, fbuf, in, parms, files);
-                    }
-                    else
+                    } else
                     {
                         // Handle application/x-www-form-urlencoded
                         String postLine = "";
                         char pbuf[] = new char[512];
                         int read = in.read(pbuf);
-                        while ( read >= 0 && !postLine.endsWith("\r\n") )
+                        while (read >= 0 && !postLine.endsWith("\r\n"))
                         {
                             postLine += String.valueOf(pbuf, 0, read);
                             read = in.read(pbuf);
-                            if(Thread.interrupted()) {
+                            if (Thread.interrupted()) {
                                 throw new InterruptedException();
                             }
                         }
                         postLine = postLine.trim();
-                        decodeParms( postLine, parms );
+                        decodeParms(postLine, parms);
                     }
                 }
 
                 // Ok, now do the serve()
-                Response r = serve( uri, method, header, parms, files );
-                if ( r == null )
-                    sendError(socket, HTTP_INTERNALERROR, "SERVER INTERNAL ERROR: Serve() returned a null response." );
+                Response r = serve(uri, method, header, parms, files);
+                if (r == null)
+                    sendError(socket, HTTP_INTERNALERROR, "SERVER INTERNAL ERROR: Serve() returned a null response.");
                 else
-                    sendResponse(socket, r.status, r.mimeType, r.header, r.data );
+                    sendResponse(socket, r.status, r.mimeType, r.header, r.data);
 
                 in.close();
-            }
-            catch ( IOException ioe )
+            } catch (IOException ioe)
             {
                 try
                 {
                     sendError(socket, HTTP_INTERNALERROR, "SERVER INTERNAL ERROR: IOException: " + ioe.getMessage());
-                }
-                catch ( Throwable t ) {}
-            }
-            catch ( InterruptedException ie )
+                } catch (Throwable t) { }
+            } catch (InterruptedException ie)
             {
                 // Thrown by sendError, ignore and exit the thread.
             }
@@ -517,53 +510,51 @@ public abstract class CloudStreamServer {
          * Decodes the sent headers and loads the data into
          * java Properties' key - value pairs
          **/
-        private  void decodeHeader(BufferedReader in, Properties pre, Properties parms, Properties header)
+        private  void decodeHeader(final BufferedReader in, final Properties pre, final Properties parms, final Properties header)
         throws InterruptedException
         {
             try {
                 // Read the request line
                 String inLine = in.readLine();
                 if (inLine == null) return;
-                StringTokenizer st = new StringTokenizer( inLine );
-                if ( !st.hasMoreTokens())
-                    sendError(socket, HTTP_BADREQUEST, "BAD REQUEST: Syntax error. Usage: GET /example/file.html" );
+                StringTokenizer st = new StringTokenizer(inLine);
+                if (!st.hasMoreTokens())
+                    sendError(socket, HTTP_BADREQUEST, "BAD REQUEST: Syntax error. Usage: GET /example/file.html");
 
                 String method = st.nextToken();
                 pre.put("method", method);
 
-                if ( !st.hasMoreTokens())
-                    sendError(socket, HTTP_BADREQUEST, "BAD REQUEST: Missing URI. Usage: GET /example/file.html" );
+                if (!st.hasMoreTokens())
+                    sendError(socket, HTTP_BADREQUEST, "BAD REQUEST: Missing URI. Usage: GET /example/file.html");
 
                 String uri = st.nextToken();
 
                 // Decode parameters from the URI
-                int qmi = uri.indexOf( '?' );
-                if ( qmi >= 0 )
+                int qmi = uri.indexOf('?');
+                if (qmi >= 0)
                 {
-                    decodeParms( uri.substring( qmi+1 ), parms );
-                    uri = decodePercent( uri.substring( 0, qmi ));
-                }
-                else uri = Uri.decode(uri);//decodePercent(uri);
+                    decodeParms(uri.substring(qmi + 1), parms);
+                    uri = decodePercent(uri.substring(0, qmi));
+                } else uri = Uri.decode(uri); //decodePercent(uri);
 
                 // If there's another token, it's protocol version,
                 // followed by HTTP headers. Ignore version but parse headers.
                 // NOTE: this now forces header names lowercase since they are
                 // case insensitive and vary by client.
-                if ( st.hasMoreTokens())
+                if (st.hasMoreTokens())
                 {
                     String line = in.readLine();
-                    while ( line != null && line.trim().length() > 0 )
+                    while (line != null && line.trim().length() > 0)
                     {
-                        int p = line.indexOf( ':' );
-                        if ( p >= 0 )
-                            header.put( line.substring(0,p).trim().toLowerCase(), line.substring(p+1).trim());
+                        int p = line.indexOf(':');
+                        if (p >= 0)
+                            header.put(line.substring(0, p).trim().toLowerCase(), line.substring(p + 1).trim());
                         line = in.readLine();
                     }
                 }
 
                 pre.put("uri", uri);
-            }
-            catch ( IOException ioe )
+            } catch (IOException ioe)
             {
                 sendError(socket, HTTP_INTERNALERROR, "SERVER INTERNAL ERROR: IOException: " + ioe.getMessage());
             }
@@ -573,26 +564,26 @@ public abstract class CloudStreamServer {
          * Decodes the Multipart Body data and put it
          * into java Properties' key - value pairs.
          **/
-        private void decodeMultipartData(String boundary, byte[] fbuf, BufferedReader in, Properties parms, Properties files)
+        private void decodeMultipartData(final String boundary, final byte[] fbuf, final BufferedReader in, final Properties parms, final Properties files)
         throws InterruptedException
         {
             try
             {
-                int[] bpositions = getBoundaryPositions(fbuf,boundary.getBytes());
+                int[] bpositions = getBoundaryPositions(fbuf, boundary.getBytes());
                 int boundarycount = 1;
                 String mpline = in.readLine();
-                while ( mpline != null )
+                while (mpline != null)
                 {
                     if (mpline.indexOf(boundary) == -1)
-                        sendError(socket, HTTP_BADREQUEST, "BAD REQUEST: Content type is multipart/form-data but next chunk does not start with boundary. Usage: GET /example/file.html" );
+                        sendError(socket, HTTP_BADREQUEST, "BAD REQUEST: Content type is multipart/form-data but next chunk does not start with boundary. Usage: GET /example/file.html");
                     boundarycount++;
                     Properties item = new Properties();
                     mpline = in.readLine();
                     while (mpline != null && mpline.trim().length() > 0)
                     {
-                        int p = mpline.indexOf( ':' );
+                        int p = mpline.indexOf(':');
                         if (p != -1)
-                            item.put( mpline.substring(0,p).trim().toLowerCase(), mpline.substring(p+1).trim());
+                            item.put(mpline.substring(0, p).trim().toLowerCase(), mpline.substring(p + 1).trim());
                         mpline = in.readLine();
                     }
                     if (mpline != null)
@@ -600,44 +591,43 @@ public abstract class CloudStreamServer {
                         String contentDisposition = item.getProperty("content-disposition");
                         if (contentDisposition == null)
                         {
-                            sendError(socket, HTTP_BADREQUEST, "BAD REQUEST: Content type is multipart/form-data but no content-disposition info found. Usage: GET /example/file.html" );
+                            sendError(socket, HTTP_BADREQUEST, "BAD REQUEST: Content type is multipart/form-data but no content-disposition info found. Usage: GET /example/file.html");
                         }
-                        StringTokenizer st = new StringTokenizer( contentDisposition, "; " );
+                        StringTokenizer st = new StringTokenizer(contentDisposition, "; ");
                         Properties disposition = new Properties();
-                        while ( st.hasMoreTokens())
+                        while (st.hasMoreTokens())
                         {
                             String token = st.nextToken();
-                            int p = token.indexOf( '=' );
-                            if (p!=-1)
-                                disposition.put( token.substring(0,p).trim().toLowerCase(), token.substring(p+1).trim());
+                            int p = token.indexOf('=');
+                            if (p != -1)
+                                disposition.put(token.substring(0, p).trim().toLowerCase(), token.substring(p + 1).trim());
                         }
                         String pname = disposition.getProperty("name");
-                        pname = pname.substring(1,pname.length()-1);
+                        pname = pname.substring(1, pname.length() - 1);
 
                         String value = "";
                         if (item.getProperty("content-type") == null) {
                             while (mpline != null && mpline.indexOf(boundary) == -1)
                             {
                                 mpline = in.readLine();
-                                if ( mpline != null)
+                                if (mpline != null)
                                 {
                                     int d = mpline.indexOf(boundary);
                                     if (d == -1)
-                                        value+=mpline;
+                                        value += mpline;
                                     else
-                                        value+=mpline.substring(0,d-2);
+                                        value += mpline.substring(0, d - 2);
                                 }
                             }
-                        }
-                        else
+                        } else
                         {
-                            if (boundarycount> bpositions.length)
-                                sendError(socket, HTTP_INTERNALERROR, "Error processing request" );
-                            int offset = stripMultipartHeaders(fbuf, bpositions[boundarycount-2]);
-                            String path = saveTmpFile(fbuf, offset, bpositions[boundarycount-1]-offset-4);
+                            if (boundarycount > bpositions.length)
+                                sendError(socket, HTTP_INTERNALERROR, "Error processing request");
+                            int offset = stripMultipartHeaders(fbuf, bpositions[boundarycount - 2]);
+                            String path = saveTmpFile(fbuf, offset, bpositions[boundarycount - 1] - offset - 4);
                             files.put(pname, path);
                             value = disposition.getProperty("filename");
-                            value = value.substring(1,value.length()-1);
+                            value = value.substring(1, value.length() - 1);
                             do {
                                 mpline = in.readLine();
                             } while (mpline != null && mpline.indexOf(boundary) == -1);
@@ -645,8 +635,7 @@ public abstract class CloudStreamServer {
                         parms.put(pname, value);
                     }
                 }
-            }
-            catch ( IOException ioe )
+            } catch (IOException ioe)
             {
                 sendError(socket, HTTP_INTERNALERROR, "SERVER INTERNAL ERROR: IOException: " + ioe.getMessage());
             }
@@ -655,26 +644,25 @@ public abstract class CloudStreamServer {
         /**
          * Find the byte positions where multipart boundaries start.
          **/
-        public int[] getBoundaryPositions(byte[] b, byte[] boundary)
+        public int[] getBoundaryPositions(final byte[] b, final byte[] boundary)
         {
             int matchcount = 0;
             int matchbyte = -1;
             Vector matchbytes = new Vector();
-            for (int i=0; i<b.length; i++)
+            for (int i = 0; i < b.length; i++)
             {
                 if (b[i] == boundary[matchcount])
                 {
                     if (matchcount == 0)
                         matchbyte = i;
                     matchcount++;
-                    if (matchcount==boundary.length)
+                    if (matchcount == boundary.length)
                     {
                         matchbytes.addElement(matchbyte);
                         matchcount = 0;
                         matchbyte = -1;
                     }
-                }
-                else
+                } else
                 {
                     i -= matchcount;
                     matchcount = 0;
@@ -682,7 +670,7 @@ public abstract class CloudStreamServer {
                 }
             }
             int[] ret = new int[matchbytes.size()];
-            for (int i=0; i < ret.length; i++)
+            for (int i = 0; i < ret.length; i++)
             {
                 ret[i] = (Integer) matchbytes.elementAt(i);
             }
@@ -694,7 +682,7 @@ public abstract class CloudStreamServer {
          * to a temporary file.
          * The full path to the saved file is returned.
          **/
-        private String saveTmpFile(byte[] b, int offset, int len)
+        private String saveTmpFile(final byte[] b, final int offset, final int len)
         {
             String path = "";
             if (len > 0)
@@ -718,48 +706,47 @@ public abstract class CloudStreamServer {
          * It returns the offset separating multipart file headers
          * from the file's data.
          **/
-        private int stripMultipartHeaders(byte[] b, int offset)
+        private int stripMultipartHeaders(final byte[] b, final int offset)
         {
             int i = 0;
-            for (i=offset; i<b.length; i++)
+            for (i = offset; i < b.length; i++)
             {
                 if (b[i] == '\r' && b[++i] == '\n' && b[++i] == '\r' && b[++i] == '\n')
                     break;
             }
-            return i+1;
+            return i + 1;
         }
 
         /**
          * Decodes the percent encoding scheme. <br/>
          * For example: "an+example%20string" -> "an example string"
          */
-        private String decodePercent( String str ) throws InterruptedException
+        private String decodePercent(final String str) throws InterruptedException
         {
             try
             {
                 StringBuffer sb = new StringBuffer();
-                for( int i=0; i<str.length(); i++ )
+                for (int i = 0; i < str.length(); i++)
                 {
-                    char c = str.charAt( i );
-                    switch ( c )
+                    char c = str.charAt(i);
+                    switch (c)
                     {
                     case '+':
-                        sb.append( ' ' );
+                        sb.append(' ');
                         break;
                     case '%':
-                        sb.append((char)Integer.parseInt( str.substring(i+1,i+3), 16 ));
+                        sb.append((char) Integer.parseInt(str.substring(i + 1, i + 3), 16));
                         i += 2;
                         break;
                     default:
-                        sb.append( c );
+                        sb.append(c);
                         break;
                     }
                 }
                 return sb.toString();
-            }
-            catch( Exception e )
+            } catch (Exception e)
             {
-                sendError(socket, HTTP_BADREQUEST, "BAD REQUEST: Bad percent-encoding." );
+                sendError(socket, HTTP_BADREQUEST, "BAD REQUEST: Bad percent-encoding.");
                 return null;
             }
         }
@@ -771,20 +758,20 @@ public abstract class CloudStreamServer {
          * identical keys due to the simplicity of Properties -- if you need multiples,
          * you might want to replace the Properties with a Hashtable of Vectors or such.
          */
-        private void decodeParms( String parms, Properties p )
+        private void decodeParms(final String parms, final Properties p)
         throws InterruptedException
         {
-            if ( parms == null )
+            if (parms == null)
                 return;
 
-            StringTokenizer st = new StringTokenizer( parms, "&" );
-            while ( st.hasMoreTokens())
+            StringTokenizer st = new StringTokenizer(parms, "&");
+            while (st.hasMoreTokens())
             {
                 String e = st.nextToken();
-                int sep = e.indexOf( '=' );
-                if ( sep >= 0 )
-                    p.put( decodePercent( e.substring( 0, sep )).trim(),
-                           decodePercent( e.substring( sep+1 )));
+                int sep = e.indexOf('=');
+                if (sep >= 0)
+                    p.put(decodePercent(e.substring(0, sep)).trim(),
+                           decodePercent(e.substring(sep + 1)));
             }
         }
 
@@ -792,7 +779,7 @@ public abstract class CloudStreamServer {
          * Returns an error message as a HTTP response and
          * throws InterruptedException to stop further request processing.
          */
-        private void sendError(Socket socket, String status, String msg ) throws InterruptedException
+        private void sendError(final Socket socket, final String status, final String msg) throws InterruptedException
         {
             sendResponse(socket, status, MIME_PLAINTEXT, null, null);
             throw new InterruptedException();
@@ -801,32 +788,32 @@ public abstract class CloudStreamServer {
         /**
          * Sends given response to the socket.
          */
-        private void sendResponse(Socket socket, String status, String mime, Properties header, CloudStreamSource data )
+        private void sendResponse(final Socket socket, final String status, final String mime, final Properties header, final CloudStreamSource data)
         {
             try
             {
-                if ( status == null )
-                    throw new Error( "sendResponse(): Status can't be null." );
+                if (status == null)
+                    throw new Error("sendResponse(): Status can't be null.");
 
                 OutputStream out = socket.getOutputStream();
-                PrintWriter pw = new PrintWriter( out );
+                PrintWriter pw = new PrintWriter(out);
                 pw.print("HTTP/1.0 " + status + " \r\n");
 
 
-                if ( mime != null )
+                if (mime != null)
                     pw.print("Content-Type: " + mime + "\r\n");
 
-                if ( header == null || header.getProperty( "Date" ) == null )
-                    pw.print( "Date: " + gmtFrmt.format( new Date()) + "\r\n");
+                if (header == null || header.getProperty("Date") == null)
+                    pw.print("Date: " + gmtFrmt.format(new Date()) + "\r\n");
 
-                if ( header != null )
+                if (header != null)
                 {
                     Enumeration e = header.keys();
-                    while ( e.hasMoreElements())
+                    while (e.hasMoreElements())
                     {
-                        String key = (String)e.nextElement();
-                        String value = header.getProperty( key );
-                        pw.print( key + ": " + value + "\r\n");
+                        String key = (String) e.nextElement();
+                        String value = header.getProperty(key);
+                        pw.print(key + ": " + value + "\r\n");
                     }
                 }
 
@@ -834,30 +821,28 @@ public abstract class CloudStreamServer {
                 pw.flush();
 
 
-                if ( data != null )
+                if (data != null)
                 {
                     //long pending = data.availableExact();      // This is to support partial sends, see serveFile()
                     data.open();
                     byte[] buff = new byte[8192];
                     int read = 0;
-                    while ((read = data.read(buff))>0) {
+                    while ((read = data.read(buff)) > 0) {
                         //if(SolidExplorer.LOG)Log.d(CloudUtil.TAG, "Read: "+ read +", pending: "+ data.availableExact());
-                        out.write( buff, 0, read );
+                        out.write(buff, 0, read);
                     }
                 }
                 out.flush();
                 out.close();
-                if ( data != null )
+                if (data != null)
                     data.close();
 
-            }
-            catch( IOException ioe )
+            } catch (IOException ioe)
             {
                 // Couldn't write? No can do.
                 try {
                     socket.close();
-                }
-                catch( Throwable t ) {}
+                } catch (Throwable t) { }
             }
         }
 
@@ -868,20 +853,20 @@ public abstract class CloudStreamServer {
      * URL-encodes everything between "/"-characters.
      * Encodes spaces as '%20' instead of '+'.
      */
-    private String encodeUri( String uri )
+    private String encodeUri(final String uri)
     {
         String newUri = "";
-        StringTokenizer st = new StringTokenizer( uri, "/ ", true );
-        while ( st.hasMoreTokens())
+        StringTokenizer st = new StringTokenizer(uri, "/ ", true);
+        while (st.hasMoreTokens())
         {
             String tok = st.nextToken();
-            if ( tok.equals( "/" ))
+            if (tok.equals("/"))
                 newUri += "/";
-            else if ( tok.equals( " " ))
+            else if (tok.equals(" "))
                 newUri += "%20";
             else
             {
-                newUri += URLEncoder.encode( tok );
+                newUri += URLEncoder.encode(tok);
                 // For Java 1.4 you'll want to use this instead:
                 // try { newUri += URLEncoder.encode( tok, "UTF-8" ); } catch ( java.io.UnsupportedEncodingException uee ) {}
             }
@@ -1131,7 +1116,7 @@ public abstract class CloudStreamServer {
     private static java.text.SimpleDateFormat gmtFrmt;
     static
     {
-        gmtFrmt = new java.text.SimpleDateFormat( "E, d MMM yyyy HH:mm:ss 'GMT'", Locale.US);
+        gmtFrmt = new java.text.SimpleDateFormat("E, d MMM yyyy HH:mm:ss 'GMT'", Locale.US);
         gmtFrmt.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
 
@@ -1139,30 +1124,30 @@ public abstract class CloudStreamServer {
      * The distribution licence
      */
     private static final String LICENCE =
-        "Copyright (C) 2001,2005-2011 by Jarno Elonen <elonen@iki.fi>\n"+
-        "and Copyright (C) 2010 by Konstantinos Togias <info@ktogias.gr>\n"+
-        "\n"+
-        "Redistribution and use in source and binary forms, with or without\n"+
-        "modification, are permitted provided that the following conditions\n"+
-        "are met:\n"+
-        "\n"+
-        "Redistributions of source code must retain the above copyright notice,\n"+
-        "this list of conditions and the following disclaimer. Redistributions in\n"+
-        "binary form must reproduce the above copyright notice, this list of\n"+
-        "conditions and the following disclaimer in the documentation and/or other\n"+
-        "materials provided with the distribution. The name of the author may not\n"+
-        "be used to endorse or promote products derived from this software without\n"+
-        "specific prior written permission. \n"+
-        " \n"+
-        "THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR\n"+
-        "IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES\n"+
-        "OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.\n"+
-        "IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,\n"+
-        "INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT\n"+
-        "NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\n"+
-        "DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\n"+
-        "THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n"+
-        "(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\n"+
-        "OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.";
+        "Copyright (C) 2001,2005-2011 by Jarno Elonen <elonen@iki.fi>\n"
+        + "and Copyright (C) 2010 by Konstantinos Togias <info@ktogias.gr>\n"
+        + "\n"
+        + "Redistribution and use in source and binary forms, with or without\n"
+        + "modification, are permitted provided that the following conditions\n"
+        + "are met:\n"
+        + "\n"
+        + "Redistributions of source code must retain the above copyright notice,\n"
+        + "this list of conditions and the following disclaimer. Redistributions in\n"
+        + "binary form must reproduce the above copyright notice, this list of\n"
+        + "conditions and the following disclaimer in the documentation and/or other\n"
+        + "materials provided with the distribution. The name of the author may not\n"
+        + "be used to endorse or promote products derived from this software without\n"
+        + "specific prior written permission. \n"
+        + " \n"
+        + "THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR\n"
+        + "IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES\n"
+        + "OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.\n"
+        + "IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,\n"
+        + "INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT\n"
+        + "NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\n"
+        + "DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\n"
+        + "THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n"
+        + "(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\n"
+        + "OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.";
 }
 

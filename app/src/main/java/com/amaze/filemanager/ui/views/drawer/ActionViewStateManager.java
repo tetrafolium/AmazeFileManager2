@@ -15,23 +15,23 @@ public class ActionViewStateManager {
     private @ColorInt int idleIconColor;
     private @ColorInt int selectedIconColor;
 
-    public ActionViewStateManager(@ColorInt int idleColor, @ColorInt int accentColor) {
+    public ActionViewStateManager(final @ColorInt int idleColor, final @ColorInt int accentColor) {
         idleIconColor = idleColor;
         selectedIconColor = accentColor;
     }
 
     public void deselectCurrentActionView() {
-        if(lastItemSelected != null) {
+        if (lastItemSelected != null) {
             lastItemSelected.setColorFilter(idleIconColor);
             lastItemSelected = null;
         }
     }
 
-    public void selectActionView(MenuItem item) {
-        if(lastItemSelected != null) {
+    public void selectActionView(final MenuItem item) {
+        if (lastItemSelected != null) {
             lastItemSelected.setColorFilter(idleIconColor);
         }
-        if(item.getActionView() != null) {
+        if (item.getActionView() != null) {
             lastItemSelected = (ImageButton) item.getActionView();
             lastItemSelected.setColorFilter(selectedIconColor);
         }

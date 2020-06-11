@@ -45,15 +45,15 @@ public class TarHelperTask extends CompressedHelperTask {
 
     private String filePath, relativePath;
 
-    public TarHelperTask(String filePath, String relativePath, boolean goBack,
-                         OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> l) {
+    public TarHelperTask(final String filePath, final String relativePath, final boolean goBack,
+                         final OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> l) {
         super(goBack, l);
         this.filePath = filePath;
         this.relativePath = relativePath;
     }
 
     @Override
-    void addElements(@NonNull ArrayList<CompressedObjectParcelable> elements) throws ArchiveException {
+    void addElements(final @NonNull ArrayList<CompressedObjectParcelable> elements) throws ArchiveException {
         TarArchiveInputStream tarInputStream = null;
         try {
             tarInputStream = new TarArchiveInputStream(new FileInputStream(filePath));

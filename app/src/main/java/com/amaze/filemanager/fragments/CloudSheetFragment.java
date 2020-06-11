@@ -31,17 +31,17 @@ public class CloudSheetFragment extends BottomSheetDialogFragment implements Vie
 
     private View rootView;
     private LinearLayout mSmbLayout, mScpLayout, mDropboxLayout, mBoxLayout, mGoogleDriveLayout, mOnedriveLayout
-    , mGetCloudLayout;
+, mGetCloudLayout;
 
     public static final String TAG_FRAGMENT = "cloud_fragment";
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(final @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public void setupDialog(Dialog dialog, int style) {
+    public void setupDialog(final Dialog dialog, final int style) {
         super.setupDialog(dialog, style);
 
         rootView = getActivity().getLayoutInflater().inflate(R.layout.fragment_sheet_cloud, null);
@@ -85,7 +85,7 @@ public class CloudSheetFragment extends BottomSheetDialogFragment implements Vie
     /**
      * Determines whether cloud provider is installed or not
      */
-    public static final boolean isCloudProviderAvailable(Context context) {
+    public static final boolean isCloudProviderAvailable(final Context context) {
 
         PackageManager pm = context.getPackageManager();
         try {
@@ -97,14 +97,14 @@ public class CloudSheetFragment extends BottomSheetDialogFragment implements Vie
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
 
         Log.d(TAG_FRAGMENT, "Clicked: " + v.getId());
 
         switch (v.getId()) {
         case R.id.linear_layout_smb:
             dismiss();
-            SmbSearchDialog smbDialog=new SmbSearchDialog();
+            SmbSearchDialog smbDialog = new SmbSearchDialog();
             smbDialog.show(getActivity().getFragmentManager(), "tab");
             return;
         case R.id.linear_layout_scp:

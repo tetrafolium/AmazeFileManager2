@@ -30,7 +30,7 @@ public class AppListLoader extends AsyncTaskLoader<AppListLoader.AppsDataPair> {
     private AppsDataPair mApps;
     private int sortBy, asc;
 
-    public AppListLoader(Context context, int sortBy, int asc) {
+    public AppListLoader(final Context context, final int sortBy, final int asc) {
         super(context);
 
         this.sortBy = sortBy;
@@ -46,8 +46,8 @@ public class AppListLoader extends AsyncTaskLoader<AppListLoader.AppsDataPair> {
     @Override
     public AppsDataPair loadInBackground() {
         List<ApplicationInfo> apps = packageManager.getInstalledApplications(
-                                         PackageManager.MATCH_UNINSTALLED_PACKAGES |
-                                         PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS);
+                                         PackageManager.MATCH_UNINSTALLED_PACKAGES
+                                         | PackageManager.MATCH_DISABLED_UNTIL_USED_COMPONENTS);
 
         if (apps == null)
             return new AppsDataPair(Collections.emptyList(), Collections.emptyList());
@@ -70,7 +70,7 @@ public class AppListLoader extends AsyncTaskLoader<AppListLoader.AppsDataPair> {
             AppDataParcelable elem = new AppDataParcelable(
                 label == null ? object.packageName : label,
                 object.sourceDir, object.packageName,
-                object.flags + "_" + (info!=null ? info.versionName:""),
+                object.flags + "_" + (info != null ? info.versionName : ""),
                 Formatter.formatFileSize(getContext(), sourceDir.length()),
                 sourceDir.length(), sourceDir.lastModified());
 
@@ -87,11 +87,11 @@ public class AppListLoader extends AsyncTaskLoader<AppListLoader.AppsDataPair> {
     }
 
     @Override
-    public void deliverResult(AppsDataPair data) {
+    public void deliverResult(final AppsDataPair data) {
         if (isReset()) {
 
             if (data != null)
-                onReleaseResources(data);//TODO onReleaseResources() is empty
+                onReleaseResources(data); //TODO onReleaseResources() is empty
         }
 
         // preserving old data for it to be closed
@@ -104,7 +104,7 @@ public class AppListLoader extends AsyncTaskLoader<AppListLoader.AppsDataPair> {
 
         // releasing older resources as we don't need them now
         if (oldData != null) {
-            onReleaseResources(oldData);//TODO onReleaseResources() is empty
+            onReleaseResources(oldData); //TODO onReleaseResources() is empty
         }
     }
 
@@ -133,10 +133,10 @@ public class AppListLoader extends AsyncTaskLoader<AppListLoader.AppsDataPair> {
     }
 
     @Override
-    public void onCanceled(AppsDataPair data) {
+    public void onCanceled(final AppsDataPair data) {
         super.onCanceled(data);
 
-        onReleaseResources(data);//TODO onReleaseResources() is empty
+        onReleaseResources(data); //TODO onReleaseResources() is empty
     }
 
     @Override
@@ -147,7 +147,7 @@ public class AppListLoader extends AsyncTaskLoader<AppListLoader.AppsDataPair> {
 
         // we're free to clear resources
         if (mApps != null) {
-            onReleaseResources(mApps);//TODO onReleaseResources() is empty
+            onReleaseResources(mApps); //TODO onReleaseResources() is empty
             mApps = null;
         }
 
@@ -166,7 +166,7 @@ public class AppListLoader extends AsyncTaskLoader<AppListLoader.AppsDataPair> {
      * List is nothing we would want to close
      */
     //TODO do something
-    private void onReleaseResources(AppsDataPair layoutElementList) {
+    private void onReleaseResources(final AppsDataPair layoutElementList) {
 
     }
 
@@ -181,7 +181,7 @@ public class AppListLoader extends AsyncTaskLoader<AppListLoader.AppsDataPair> {
          * @param first  the first object in the Pair
          * @param second the second object in the pair
          */
-        public AppsDataPair(List<AppDataParcelable> first, List<String> second) {
+        public AppsDataPair(final List<AppDataParcelable> first, final List<String> second) {
             super(first, second);
         }
     }

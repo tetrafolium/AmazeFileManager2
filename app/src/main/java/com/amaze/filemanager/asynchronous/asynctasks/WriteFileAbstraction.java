@@ -41,10 +41,10 @@ public class WriteFileAbstraction extends AsyncTask<Void, String, Integer> {
 
     private String dataToSave;
 
-    public WriteFileAbstraction(Context context, ContentResolver contentResolver,
-                                EditableFileAbstraction file, String dataToSave, File cachedFile,
-                                boolean isRootExplorer,
-                                OnAsyncTaskFinished<Integer> onAsyncTaskFinished) {
+    public WriteFileAbstraction(final Context context, final ContentResolver contentResolver,
+                                final EditableFileAbstraction file, final String dataToSave, final File cachedFile,
+                                final boolean isRootExplorer,
+                                final OnAsyncTaskFinished<Integer> onAsyncTaskFinished) {
         this.context = new WeakReference<>(context);
         this.contentResolver = contentResolver;
         this.fileAbstraction = file;
@@ -55,13 +55,13 @@ public class WriteFileAbstraction extends AsyncTask<Void, String, Integer> {
     }
 
     @Override
-    protected Integer doInBackground(Void... voids) {
+    protected Integer doInBackground(final Void... voids) {
         try {
             OutputStream outputStream;
 
             switch (fileAbstraction.scheme) {
             case EditableFileAbstraction.SCHEME_CONTENT:
-                if(fileAbstraction.uri == null) throw new NullPointerException("Something went really wrong!");
+                if (fileAbstraction.uri == null) throw new NullPointerException("Something went really wrong!");
 
                 try {
                     outputStream = contentResolver.openOutputStream(fileAbstraction.uri);
@@ -72,10 +72,10 @@ public class WriteFileAbstraction extends AsyncTask<Void, String, Integer> {
                 break;
             case EditableFileAbstraction.SCHEME_FILE:
                 final HybridFileParcelable hybridFileParcelable = fileAbstraction.hybridFileParcelable;
-                if(hybridFileParcelable == null) throw new NullPointerException("Something went really wrong!");
+                if (hybridFileParcelable == null) throw new NullPointerException("Something went really wrong!");
 
                 Context context = this.context.get();
-                if(context == null) {
+                if (context == null) {
                     cancel(true);
                     return null;
                 }
@@ -97,7 +97,7 @@ public class WriteFileAbstraction extends AsyncTask<Void, String, Integer> {
                 throw new IllegalArgumentException("The scheme for '" + fileAbstraction.scheme + "' cannot be processed!");
             }
 
-            if(outputStream == null) throw new StreamNotFoundException();
+            if (outputStream == null) throw new StreamNotFoundException();
 
             outputStream.write(dataToSave.getBytes());
             outputStream.close();
@@ -124,7 +124,7 @@ public class WriteFileAbstraction extends AsyncTask<Void, String, Integer> {
     }
 
     @Override
-    protected void onPostExecute(Integer integer) {
+    protected void onPostExecute(final Integer integer) {
         super.onPostExecute(integer);
 
         onAsyncTaskFinished.onAsyncTaskFinished(integer);

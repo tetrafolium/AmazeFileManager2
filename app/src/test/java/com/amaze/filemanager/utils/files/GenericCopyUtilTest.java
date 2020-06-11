@@ -43,7 +43,7 @@ public class GenericCopyUtilTest {
     }
 
     @Theory //doCopy(ReadableByteChannel in, WritableByteChannel out)
-    public void testCopyFile1(int size) throws IOException, NoSuchAlgorithmException {
+    public void testCopyFile1(final int size) throws IOException, NoSuchAlgorithmException {
         byte[] checksum = DummyFileGenerator.createFile(file1, size);
         copyUtil.doCopy(new FileInputStream(file1).getChannel(), Channels.newChannel(new FileOutputStream(file2)));
         assertEquals(file1.length(), file2.length());
@@ -51,7 +51,7 @@ public class GenericCopyUtilTest {
     }
 
     @Theory //copy(FileChannel in, FileChannel out)
-    public void testCopyFile2(int size) throws IOException, NoSuchAlgorithmException {
+    public void testCopyFile2(final int size) throws IOException, NoSuchAlgorithmException {
         byte[] checksum = DummyFileGenerator.createFile(file1, size);
         copyUtil.copyFile(new FileInputStream(file1).getChannel(), new FileOutputStream(file2).getChannel());
         assertEquals(file1.length(), file2.length());
@@ -59,18 +59,18 @@ public class GenericCopyUtilTest {
     }
 
     @Theory //copy(BufferedInputStream in, BufferedOutputStream out)
-    public void testCopyFile3(int size) throws IOException, NoSuchAlgorithmException {
+    public void testCopyFile3(final int size) throws IOException, NoSuchAlgorithmException {
         byte[] checksum = DummyFileGenerator.createFile(file1, size);
         copyUtil.copyFile(new BufferedInputStream(new FileInputStream(file1)), new BufferedOutputStream(new FileOutputStream(file2)));
         assertEquals(file1.length(), file2.length());
         assertSha1Equals(checksum, file2);
     }
 
-    private void assertSha1Equals(byte[] expected, File file) throws NoSuchAlgorithmException, IOException {
+    private void assertSha1Equals(final byte[] expected, final File file) throws NoSuchAlgorithmException, IOException {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
         DigestInputStream in = new DigestInputStream(new FileInputStream(file), md);
         byte[] buffer = new byte[GenericCopyUtil.DEFAULT_BUFFER_SIZE];
-        while (in.read(buffer) > -1) {}
+        while (in.read(buffer) > -1) { }
         in.close();
         assertArrayEquals(expected, md.digest());
     }

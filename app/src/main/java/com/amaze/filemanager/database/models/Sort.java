@@ -27,7 +27,7 @@ public class Sort {
     public final String path;
     public final int type;
 
-    public Sort(String path, int type) {
+    public Sort(final String path, final int type) {
         this.path = path;
         this.type = type;
     }

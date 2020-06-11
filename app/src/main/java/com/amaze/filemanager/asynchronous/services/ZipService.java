@@ -87,7 +87,7 @@ public class ZipService extends AbstractProgressiveService {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, final int startId) {
+    public int onStartCommand(final Intent intent, final int flags, final int startId) {
         String mZipPath = intent.getStringExtra(KEY_COMPRESS_PATH);
 
         ArrayList<HybridFileParcelable> baseFiles = intent.getParcelableArrayListExtra(KEY_COMPRESS_FILES);
@@ -162,7 +162,7 @@ public class ZipService extends AbstractProgressiveService {
 
     @Override
     @StringRes
-    protected int getTitle(boolean move) {
+    protected int getTitle(final boolean move) {
         return R.string.compressing;
     }
 
@@ -181,7 +181,7 @@ public class ZipService extends AbstractProgressiveService {
     }
 
     @Override
-    public void setProgressListener(ProgressListener progressListener) {
+    public void setProgressListener(final ProgressListener progressListener) {
         this.progressListener = progressListener;
     }
 
@@ -205,13 +205,13 @@ public class ZipService extends AbstractProgressiveService {
         private long totalBytes = 0L;
         private ArrayList<HybridFileParcelable> baseFiles;
 
-        public CompressAsyncTask(ZipService zipService, ArrayList<HybridFileParcelable> baseFiles, String zipPath) {
+        public CompressAsyncTask(final ZipService zipService, final ArrayList<HybridFileParcelable> baseFiles, final String zipPath) {
             this.zipService = zipService;
             this.baseFiles = baseFiles;
             this.zipPath = zipPath;
         }
 
-        protected Void doInBackground(Void... p1) {
+        protected Void doInBackground(final Void... p1) {
             // setting up service watchers and initial data packages
             // finding total size on background thread (this is necessary condition for SMB!)
             totalBytes = FileUtils.getTotalBytes(baseFiles, zipService.getApplicationContext());
@@ -237,7 +237,7 @@ public class ZipService extends AbstractProgressiveService {
         }
 
         @Override
-        public void onPostExecute(Void a) {
+        public void onPostExecute(final Void a) {
             watcherUtil.stopWatch();
             Intent intent = new Intent(MainActivity.KEY_INTENT_LOAD_LIST);
             intent.putExtra(MainActivity.KEY_INTENT_LOAD_LIST_FILE, zipPath);
@@ -245,7 +245,7 @@ public class ZipService extends AbstractProgressiveService {
             zipService.stopSelf();
         }
 
-        public void execute(final @NonNull Context context, ArrayList<File> baseFiles, String zipPath) {
+        public void execute(final @NonNull Context context, final ArrayList<File> baseFiles, final String zipPath) {
             OutputStream out;
             File zipDirectory = new File(zipPath);
             watcherUtil = new ServiceWatcherUtil(progressHandler);
@@ -275,7 +275,7 @@ public class ZipService extends AbstractProgressiveService {
             }
         }
 
-        private void compressFile(File file, String path) throws IOException, NullPointerException, ZipException {
+        private void compressFile(final File file, final String path) throws IOException, NullPointerException, ZipException {
             if (progressHandler.getCancelled()) return;
 
             if (!file.isDirectory()) {
@@ -304,13 +304,13 @@ public class ZipService extends AbstractProgressiveService {
 
     private BroadcastReceiver receiver1 = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(final Context context, final Intent intent) {
             progressHandler.setCancelled(true);
         }
     };
 
     @Override
-    public IBinder onBind(Intent arg0) {
+    public IBinder onBind(final Intent arg0) {
         return mBinder;
     }
 

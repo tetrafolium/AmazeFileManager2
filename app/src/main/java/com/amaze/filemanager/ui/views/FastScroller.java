@@ -29,20 +29,20 @@ public class FastScroller extends FrameLayout {
     int columns = 1;
 
     private class ScrollListener extends OnScrollListener {
-        public void onScrolled(RecyclerView recyclerView, int i, int i2) {
+        public void onScrolled(final RecyclerView recyclerView, final int i, final int i2) {
             if (handle != null && !manuallyChangingPosition) {
                 updateHandlePosition();
             }
         }
     }
 
-    public FastScroller(@NonNull Context context, AttributeSet attributeSet) {
+    public FastScroller(final @NonNull Context context, final AttributeSet attributeSet) {
         super(context, attributeSet);
         this.scrollListener = new ScrollListener();
         initialise(context);
     }
 
-    public FastScroller(@NonNull Context context, AttributeSet attributeSet, int i) {
+    public FastScroller(final @NonNull Context context, final AttributeSet attributeSet, final int i) {
         super(context, attributeSet, i);
         this.scrollListener = new ScrollListener();
         initialise(context);
@@ -64,7 +64,7 @@ public class FastScroller extends FrameLayout {
     }
 
 
-    private void initialise(@NonNull Context context) {
+    private void initialise(final @NonNull Context context) {
         setClipChildren(false);
         inflate(context, R.layout.fastscroller, this);
         this.handle = findViewById(R.id.scroll_handle);
@@ -75,7 +75,7 @@ public class FastScroller extends FrameLayout {
         setVisibility(VISIBLE);
     }
 
-    private void setHandlePosition1(float relativePos) {
+    private void setHandlePosition1(final float relativePos) {
         handle.setY(Utils.clamp(
                         0, getHeightMinusPadding() - handle.getHeight(), relativePos * (getHeightMinusPadding() - handle.getHeight()))
                    );
@@ -89,7 +89,7 @@ public class FastScroller extends FrameLayout {
         this.bar.setBackgroundDrawable(insetDrawable);
     }
 
-    int resolveColor(@NonNull Context context, @AttrRes int i) {
+    int resolveColor(final @NonNull Context context, final @AttrRes int i) {
         TypedArray obtainStyledAttributes = context.obtainStyledAttributes(new int[] {i});
         int color = obtainStyledAttributes.getColor(0, 0);
         obtainStyledAttributes.recycle();
@@ -98,7 +98,7 @@ public class FastScroller extends FrameLayout {
 
     onTouchListener a;
 
-    public boolean onTouchEvent(@NonNull MotionEvent motionEvent) {
+    public boolean onTouchEvent(final @NonNull MotionEvent motionEvent) {
         if (motionEvent.getAction() == 0 || motionEvent.getAction() == 2) {
             this.handle.setPressed(true);
             bar.setVisibility(VISIBLE);
@@ -121,8 +121,8 @@ public class FastScroller extends FrameLayout {
     }
 
     private void invalidateVisibility() {
-        if (recyclerView.getAdapter() == null || recyclerView.getAdapter().getItemCount() == 0 || recyclerView.getChildAt(0) == null ||
-                isRecyclerViewScrollable()
+        if (recyclerView.getAdapter() == null || recyclerView.getAdapter().getItemCount() == 0 || recyclerView.getChildAt(0) == null
+                || isRecyclerViewScrollable()
            ) {
             setVisibility(INVISIBLE);
         } else {
@@ -135,7 +135,7 @@ public class FastScroller extends FrameLayout {
 
     }
 
-    private void setRecyclerViewPosition(float relativePos) {
+    private void setRecyclerViewPosition(final float relativePos) {
         if (recyclerView != null) {
             int itemCount = recyclerView.getAdapter().getItemCount();
             int targetPos = (int) Utils.clamp(0, itemCount - 1, (int) (relativePos * (float) itemCount));
@@ -143,7 +143,7 @@ public class FastScroller extends FrameLayout {
         }
     }
 
-    private float getRelativeTouchPosition(MotionEvent event) {
+    private float getRelativeTouchPosition(final MotionEvent event) {
         float yInParent = event.getRawY() - Utils.getViewRawY(handle);
         return yInParent / (getHeightMinusPadding() - handle.getHeight());
 
@@ -153,11 +153,11 @@ public class FastScroller extends FrameLayout {
         void onTouch();
     }
 
-    public void registerOnTouchListener(onTouchListener onTouchListener) {
+    public void registerOnTouchListener(final onTouchListener onTouchListener) {
         a = onTouchListener;
     }
 
-    public void setPressedHandleColor(int i) {
+    public void setPressedHandleColor(final int i) {
         handle.setColorFilter(i);
         StateListDrawable stateListDrawable = new StateListDrawable();
         Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.fastscroller_handle_normal);
@@ -167,7 +167,7 @@ public class FastScroller extends FrameLayout {
         this.handle.setImageDrawable(stateListDrawable);
     }
 
-    public void setRecyclerView(@NonNull RecyclerView recyclerView, int columns) {
+    public void setRecyclerView(final @NonNull RecyclerView recyclerView, final int columns) {
         this.recyclerView = recyclerView;
         this.columns = columns;
         bar.setVisibility(INVISIBLE);
@@ -175,13 +175,13 @@ public class FastScroller extends FrameLayout {
         invalidateVisibility();
         recyclerView.setOnHierarchyChangeListener(new OnHierarchyChangeListener() {
             @Override
-            public void onChildViewAdded(View parent, View child) {
+            public void onChildViewAdded(final View parent, final View child) {
                 invalidateVisibility();
             }
 
 
             @Override
-            public void onChildViewRemoved(View parent, View child) {
+            public void onChildViewRemoved(final View parent, final View child) {
                 invalidateVisibility();
             }
         });
@@ -193,7 +193,7 @@ public class FastScroller extends FrameLayout {
 
     int vx1 = -1;
 
-    public void updateHandlePosition(int vx, int l) {
+    public void updateHandlePosition(final int vx, final int l) {
         if (vx != vx1) {
             setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(), l + vx);
             setHandlePosition1(computeHandlePosition());

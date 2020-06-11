@@ -47,7 +47,7 @@ public class SshConnectionPoolTest {
 
     @After
     public void tearDown() {
-        if(server != null && server.isOpen())
+        if (server != null && server.isOpen())
             server.close(true);
     }
 
@@ -188,43 +188,43 @@ public class SshConnectionPoolTest {
         assertNull(SshConnectionPool.getInstance().getConnection("ssh://invaliduser:invalidpassword@127.0.0.1:22222"));
     }
 
-    private void createSshServer(@NonNull String validUsername, @Nullable String validPassword) throws IOException {
+    private void createSshServer(final @NonNull String validUsername, final @Nullable String validPassword) throws IOException {
         server = SshServer.setUpDefaultServer();
         server.setPublickeyAuthenticator(AcceptAllPublickeyAuthenticator.INSTANCE);
         server.setPort(22222);
         server.setHost("127.0.0.1");
         server.setKeyPairProvider(hostKeyProvider);
-        if(validPassword != null)
+        if (validPassword != null)
             server.setPasswordAuthenticator(((username, password, session) -> username.equals(validUsername) && password.equals(validPassword)));
         server.setPublickeyAuthenticator((username, key, session) -> username.equals(validUsername) && key.equals(userKeyProvider.getKeyPair().getPublic()));
         server.start();
     }
 
-    private void saveSshConnectionSettings(@NonNull String validUsername, @Nullable String validPassword, @Nullable PrivateKey privateKey) {
+    private void saveSshConnectionSettings(final @NonNull String validUsername, final @Nullable String validPassword, final @Nullable PrivateKey privateKey) {
         utilsHandler = new UtilsHandler(RuntimeEnvironment.application);
         utilsHandler.onCreate(utilsHandler.getWritableDatabase());
 
         String privateKeyContents = null;
-        if(privateKey != null) {
+        if (privateKey != null) {
             StringWriter writer = new StringWriter();
             JcaPEMWriter jw = new JcaPEMWriter(writer);
             try {
                 jw.writeObject(userKeyProvider.getKeyPair().getPrivate());
                 jw.flush();
                 jw.close();
-            } catch(IOException shallNeverHappen) {}
+            } catch (IOException shallNeverHappen) { }
             privateKeyContents = writer.toString();
         }
 
         StringBuilder fullUri = new StringBuilder()
         .append("ssh://").append(validUsername);
 
-        if(validPassword != null)
+        if (validPassword != null)
             fullUri.append(':').append(validPassword);
 
         fullUri.append("@127.0.0.1:22222");
 
-        if(validPassword != null)
+        if (validPassword != null)
             utilsHandler.addSsh("test", SshClientUtils.encryptSshPathAsNecessary(fullUri.toString()), SecurityUtils.getFingerprint(hostKeyProvider.getKeyPair().getPublic()), null, null);
         else
             utilsHandler.addSsh("test", fullUri.toString(), SecurityUtils.getFingerprint(hostKeyProvider.getKeyPair().getPublic()), "id_rsa", privateKeyContents);

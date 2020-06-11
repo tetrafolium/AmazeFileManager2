@@ -9,7 +9,7 @@ public abstract class RandomAccessStream extends InputStream {
     private long markedPosition;
     private long length;
 
-    public RandomAccessStream(long length) {
+    public RandomAccessStream(final long length) {
         this.length = length;
 
         mark(-1);
@@ -21,8 +21,8 @@ public abstract class RandomAccessStream extends InputStream {
     }
 
     @Override
-    public synchronized void mark(int readLimit) {
-        if(readLimit != -1) {
+    public synchronized void mark(final int readLimit) {
+        if (readLimit != -1) {
             throw new IllegalArgumentException("readLimit argument of RandomAccessStream.mark() is not used, please set to -1!");
         }
 

@@ -66,7 +66,7 @@ public class ColorPickerDialog extends SelectedColorsPreference {
     private View selectedItem = null;
     private int selectedIndex = -1;
 
-    public ColorPickerDialog(Context context, AttributeSet attrs) {
+    public ColorPickerDialog(final Context context, final AttributeSet attrs) {
         super(context, attrs);
 
         setDialogLayoutResource(R.layout.dialog_colorpicker);
@@ -76,42 +76,42 @@ public class ColorPickerDialog extends SelectedColorsPreference {
         setDialogIcon(null);
     }
 
-    public void setColorPreference(ColorPreferenceHelper colorPreferenceHelper, UserColorPreferences color, AppTheme theme) {
+    public void setColorPreference(final ColorPreferenceHelper colorPreferenceHelper, final UserColorPreferences color, final AppTheme theme) {
         this.colorPreferenceHelper = colorPreferenceHelper;
         colorPref = color;
         appTheme = theme;
     }
 
-    public void setListener(OnAcceptedConfig l) {
+    public void setListener(final OnAcceptedConfig l) {
         listener = l;
     }
 
     @Override
-    protected Object onGetDefaultValue(TypedArray a, int index) {
+    protected Object onGetDefaultValue(final TypedArray a, final int index) {
         return a.getString(index);
     }
 
     @Override
     public CharSequence getSummary() {
-        return "";//Always empty
+        return ""; //Always empty
     }
 
     @Override
-    public void onBindDialogView(View view) {
+    public void onBindDialogView(final View view) {
         sharedPrefs = getSharedPreferences();
         int accentColor = colorPref.accent;
-        if(selectedIndex == NO_DATA) {//if instance was restored the value is already set
+        if (selectedIndex == NO_DATA) { //if instance was restored the value is already set
             boolean isUsingDefault = sharedPrefs.getInt(PreferencesConstants.PREFERENCE_COLOR_CONFIG, NO_DATA) == NO_DATA
                                      && sharedPrefs.getInt(PreferencesConstants.PREFERENCE_SKIN, R.color.primary_indigo) == R.color.primary_indigo
                                      && sharedPrefs.getInt(PreferencesConstants.PREFERENCE_SKIN_TWO, R.color.primary_indigo) == R.color.primary_indigo
                                      && sharedPrefs.getInt(PreferencesConstants.PREFERENCE_ACCENT, R.color.primary_pink) == R.color.primary_pink
                                      && sharedPrefs.getInt(PreferencesConstants.PREFERENCE_ICON_SKIN, R.color.primary_pink) == R.color.primary_pink;
 
-            if(isUsingDefault) {
+            if (isUsingDefault) {
                 sharedPrefs.edit().putInt(PreferencesConstants.PREFERENCE_COLOR_CONFIG, DEFAULT).apply();
             }
 
-            if(sharedPrefs.getBoolean("random_checkbox", false)) {
+            if (sharedPrefs.getBoolean("random_checkbox", false)) {
                 sharedPrefs.edit().putInt(PreferencesConstants.PREFERENCE_COLOR_CONFIG, RANDOM_INDEX).apply();
             }
             sharedPrefs.edit().remove("random_checkbox").apply();
@@ -119,10 +119,10 @@ public class ColorPickerDialog extends SelectedColorsPreference {
         }
 
         LinearLayout container = view.findViewById(R.id.container);
-        for(int i = 0; i < COLORS.length; i++) {
+        for (int i = 0; i < COLORS.length; i++) {
             View child = inflateItem(container, i, accentColor);
 
-            if(selectedIndex == i) {
+            if (selectedIndex == i) {
                 selectedItem = child;
                 select(selectedItem, true);
             }
@@ -137,7 +137,7 @@ public class ColorPickerDialog extends SelectedColorsPreference {
         /*CUSTOM*/ {
             View child = inflateItem(container, CUSTOM_INDEX, accentColor);
 
-            if(selectedIndex == CUSTOM_INDEX) {
+            if (selectedIndex == CUSTOM_INDEX) {
                 selectedItem = child;
                 select(selectedItem, true);
             }
@@ -149,7 +149,7 @@ public class ColorPickerDialog extends SelectedColorsPreference {
         /*RANDOM*/ {
             View child = inflateItem(container, RANDOM_INDEX, accentColor);
 
-            if(selectedIndex == RANDOM_INDEX) {
+            if (selectedIndex == RANDOM_INDEX) {
                 selectedItem = child;
                 select(selectedItem, true);
             }
@@ -161,14 +161,14 @@ public class ColorPickerDialog extends SelectedColorsPreference {
         super.onBindDialogView(view);
     }
 
-    private void select(View listChild, boolean checked) {
+    private void select(final View listChild, final boolean checked) {
         RadioButton button = listChild.findViewById(R.id.select);
         button.setChecked(checked);
     }
 
-    private View inflateItem(LinearLayout container, final int index, int accentColor) {
+    private View inflateItem(final LinearLayout container, final int index, final int accentColor) {
         View.OnClickListener clickListener = v -> {
-            if(!v.isSelected()) {
+            if (!v.isSelected()) {
                 select(selectedItem, false);
                 select(v, true);
                 selectedItem = v;
@@ -182,7 +182,7 @@ public class ColorPickerDialog extends SelectedColorsPreference {
 
         RadioButton radio = child.findViewById(R.id.select);
         radio.setOnClickListener(clickListener);
-        if(Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= 21) {
             ColorStateList colorStateList = new ColorStateList(
             new int[][] {
                 {-android.R.attr.state_enabled}, //disabled
@@ -195,7 +195,7 @@ public class ColorPickerDialog extends SelectedColorsPreference {
     }
 
     @Override
-    protected void showDialog(Bundle state) {
+    protected void showDialog(final Bundle state) {
         super.showDialog(state);
         Resources res = getContext().getResources();
         Window window = getDialog().getWindow();
@@ -210,12 +210,12 @@ public class ColorPickerDialog extends SelectedColorsPreference {
     }
 
     @Override
-    protected void onDialogClosed(boolean positiveResult) {
+    protected void onDialogClosed(final boolean positiveResult) {
         // When the user selects "OK", persist the new value
         if (positiveResult) {
             sharedPrefs.edit().putInt(PreferencesConstants.PREFERENCE_COLOR_CONFIG, selectedIndex).apply();
 
-            if(selectedIndex != CUSTOM_INDEX && selectedIndex != RANDOM_INDEX) {
+            if (selectedIndex != CUSTOM_INDEX && selectedIndex != RANDOM_INDEX) {
                 colorPreferenceHelper.saveColorPreferences(sharedPrefs,
                         new UserColorPreferences(getColor(selectedIndex, 0),
                                                  getColor(selectedIndex, 1), getColor(selectedIndex, 2),
@@ -228,7 +228,7 @@ public class ColorPickerDialog extends SelectedColorsPreference {
         }
     }
 
-    private int getColor(int i, int pos) {
+    private int getColor(final int i, final int pos) {
         return Utils.getColor(getContext(), COLORS[i].second[pos]);
     }
 
@@ -243,7 +243,7 @@ public class ColorPickerDialog extends SelectedColorsPreference {
          * @param first  the first object in the Pair
          * @param second the second object in the pair
          */
-        public ColorItemPair(Integer first, int[] second) {
+        public ColorItemPair(final Integer first, final int[] second) {
             super(first, second);
         }
     }
@@ -260,7 +260,7 @@ public class ColorPickerDialog extends SelectedColorsPreference {
     }
 
     @Override
-    protected void onRestoreInstanceState(Parcelable state) {
+    protected void onRestoreInstanceState(final Parcelable state) {
         if (state == null || !state.getClass().equals(SavedState.class)) {
             // Didn't save state for us in onSaveInstanceState
             super.onRestoreInstanceState(state);
@@ -269,34 +269,34 @@ public class ColorPickerDialog extends SelectedColorsPreference {
 
         SavedState myState = (SavedState) state;
         selectedIndex = myState.selectedItem;
-        super.onRestoreInstanceState(myState.getSuperState());//onBindDialogView(View view)
+        super.onRestoreInstanceState(myState.getSuperState()); //onBindDialogView(View view)
         select(selectedItem, true);
     }
 
     private static class SavedState extends BaseSavedState {
         int selectedItem;
 
-        public SavedState(Parcel source) {
+        public SavedState(final Parcel source) {
             super(source);
             selectedItem = source.readInt();
         }
 
         @Override
-        public void writeToParcel(Parcel dest, int flags) {
+        public void writeToParcel(final Parcel dest, final int flags) {
             super.writeToParcel(dest, flags);
             dest.writeInt(selectedItem);
         }
 
-        public SavedState(Parcelable superState) {
+        public SavedState(final Parcelable superState) {
             super(superState);
         }
 
         public static final Parcelable.Creator<SavedState> CREATOR =
         new Parcelable.Creator<SavedState>() {
-            public SavedState createFromParcel(Parcel in) {
+            public SavedState createFromParcel(final Parcel in) {
                 return new SavedState(in);
             }
-            public SavedState[] newArray(int size) {
+            public SavedState[] newArray(final int size) {
                 return new SavedState[size];
             }
         };

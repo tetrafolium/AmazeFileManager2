@@ -26,7 +26,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     private int leftPaddingPx = 0, rightPaddingPx = 0;
     private boolean showtopbottomdividers;
 
-    public DividerItemDecoration(Context context, boolean showtopbottomdividers, boolean show) {
+    public DividerItemDecoration(final Context context, final boolean showtopbottomdividers, final boolean show) {
         final TypedArray typedArray = context.obtainStyledAttributes(ATTRS);
         mDivider = typedArray.getDrawable(0);
         typedArray.recycle();
@@ -37,7 +37,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     }
 
     @Override
-    public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+    public void onDraw(final Canvas c, final RecyclerView parent, final RecyclerView.State state) {
         super.onDraw(c, parent, state);
 
         if (!show) return;
@@ -49,7 +49,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
      * Draws the divider on the canvas provided by RecyclerView
      * Be advised - divider will be drawn before the views, hence it'll be below the views of adapter
      */
-    private void drawVertical(Canvas c, RecyclerView parent) {
+    private void drawVertical(final Canvas c, final RecyclerView parent) {
         final int left = parent.getPaddingLeft() + leftPaddingPx;
         final int right = parent.getWidth() - parent.getPaddingRight() - rightPaddingPx;
 
@@ -74,7 +74,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     }
 
     @Override
-    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+    public void getItemOffsets(final Rect outRect, final View view, final RecyclerView parent, final RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
 
         if (parent.getChildAdapterPosition(view) == 0) {

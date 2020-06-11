@@ -23,7 +23,7 @@ public class FileHandler extends Handler {
     private RecyclerView listView;
     private boolean useThumbs;
 
-    public FileHandler(MainFragment mainFragment, RecyclerView listView, boolean useThumbs) {
+    public FileHandler(final MainFragment mainFragment, final RecyclerView listView, final boolean useThumbs) {
         super(Looper.getMainLooper());
         this.mainFragment = new WeakReference<>(mainFragment);
         this.listView = listView;
@@ -31,11 +31,11 @@ public class FileHandler extends Handler {
     }
 
     @Override
-    public void handleMessage(Message msg) {
+    public void handleMessage(final Message msg) {
         super.handleMessage(msg);
         final MainFragment main = mainFragment.get();
 
-        if(main == null || main.getActivity() == null) {
+        if (main == null || main.getActivity() == null) {
             return;
         }
 

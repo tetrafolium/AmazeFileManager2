@@ -22,11 +22,11 @@ public abstract class Decompressor {
     protected Context context;
     protected String filePath;
 
-    public Decompressor(Context context) {
+    public Decompressor(final Context context) {
         this.context = context;
     }
 
-    public void setFilePath(String path) {
+    public void setFilePath(final String path) {
         filePath = path;
     }
 
@@ -40,7 +40,7 @@ public abstract class Decompressor {
     /**
      * Decompress a file somewhere
      */
-    public final void decompress(String whereToDecompress) {
+    public final void decompress(final String whereToDecompress) {
         Intent intent = new Intent(context, ExtractService.class);
         intent.putExtra(ExtractService.KEY_PATH_ZIP, filePath);
         intent.putExtra(ExtractService.KEY_ENTRIES_ZIP, new String[0]);
@@ -52,7 +52,7 @@ public abstract class Decompressor {
      * Decompress files or dirs inside the compressed file.
      * @param subDirectories separator is "/", ended with "/" if it is a directory, does not if it's a file
      */
-    public final void decompress(String whereToDecompress, String[] subDirectories) {
+    public final void decompress(final String whereToDecompress, final String[] subDirectories) {
         for (int i = 0; i < subDirectories.length; i++) {
             subDirectories[i] = realRelativeDirectory(subDirectories[i]);
         }
@@ -67,7 +67,7 @@ public abstract class Decompressor {
     /**
      * Get the real relative directory path (useful if you converted the separator or something)
      */
-    protected String realRelativeDirectory(String dir) {
+    protected String realRelativeDirectory(final String dir) {
         return dir;
     }
 

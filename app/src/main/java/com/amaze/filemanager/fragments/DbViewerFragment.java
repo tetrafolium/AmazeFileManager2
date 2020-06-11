@@ -31,7 +31,7 @@ public class DbViewerFragment extends Fragment {
     private WebView webView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final @Nullable ViewGroup container, final @Nullable Bundle savedInstanceState) {
         databaseViewerActivity = (DatabaseViewerActivity) getActivity();
 
         rootView = inflater.inflate(R.layout.fragment_db_viewer, null);
@@ -50,7 +50,7 @@ public class DbViewerFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(final @Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (databaseViewerActivity.getAppTheme().equals(AppTheme.DARK)) {
             relativeLayout.setBackgroundColor(Utils.getColor(getContext(), R.color.holo_dark_background));

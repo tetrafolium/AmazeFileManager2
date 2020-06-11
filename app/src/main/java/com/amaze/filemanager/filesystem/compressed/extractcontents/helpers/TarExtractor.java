@@ -44,12 +44,12 @@ import java.util.List;
 
 public class TarExtractor extends Extractor {
 
-    public TarExtractor(@NonNull Context context, @NonNull String filePath, @NonNull String outputPath, @NonNull OnUpdate listener) {
+    public TarExtractor(final @NonNull Context context, final @NonNull String filePath, final @NonNull String outputPath, final @NonNull OnUpdate listener) {
         super(context, filePath, outputPath, listener);
     }
 
     @Override
-    protected void extractWithFilter(@NonNull Filter filter) throws IOException {
+    protected void extractWithFilter(final @NonNull Filter filter) throws IOException {
         long totalBytes = 0;
         List<TarArchiveEntry> archiveEntries = new ArrayList<>();
         TarArchiveInputStream inputStream = new TarArchiveInputStream(new FileInputStream(filePath));
@@ -57,7 +57,7 @@ public class TarExtractor extends Extractor {
         TarArchiveEntry tarArchiveEntry;
 
         while ((tarArchiveEntry = inputStream.getNextTarEntry()) != null) {
-            if(CompressedHelper.isEntryPathValid(tarArchiveEntry.getName())) {
+            if (CompressedHelper.isEntryPathValid(tarArchiveEntry.getName())) {
                 if (filter.shouldExtract(tarArchiveEntry.getName(), tarArchiveEntry.isDirectory())) {
                     archiveEntries.add(tarArchiveEntry);
                     totalBytes += tarArchiveEntry.getSize();
@@ -85,8 +85,8 @@ public class TarExtractor extends Extractor {
         listener.onFinish();
     }
 
-    private void extractEntry(@NonNull final Context context, TarArchiveInputStream inputStream,
-                              TarArchiveEntry entry, String outputDir) throws IOException {
+    private void extractEntry(@NonNull final Context context, final TarArchiveInputStream inputStream,
+                              final TarArchiveEntry entry, final String outputDir) throws IOException {
         File outputFile = new File(outputDir, fixEntryName(entry.getName()));
 
         if (!outputFile.getCanonicalPath().startsWith(outputDir)) {

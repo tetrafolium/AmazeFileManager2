@@ -96,7 +96,7 @@ public abstract class FileUtil {
      * @return true if the copying was successful.
      */
     @SuppressWarnings("null")
-    private static boolean copyFile(final File source, final File target, Context context) {
+    private static boolean copyFile(final File source, final File target, final Context context) {
         FileInputStream inStream = null;
         OutputStream outStream = null;
         FileChannel inChannel = null;
@@ -167,7 +167,7 @@ public abstract class FileUtil {
         return true;
     }
 
-    public static OutputStream getOutputStream(final File target, Context context) throws FileNotFoundException {
+    public static OutputStream getOutputStream(final File target, final Context context) throws FileNotFoundException {
         OutputStream outStream = null;
         // First try the normal way
         if (isWritable(target)) {
@@ -214,7 +214,7 @@ public abstract class FileUtil {
                     try {
                         DocumentFile documentFile = DocumentFile.fromSingleUri(mainActivity, uri);
                         String filename = documentFile.getName();
-                        if(filename == null) {
+                        if (filename == null) {
                             filename = uri.getLastPathSegment();
 
                             //For cleaning up slashes. Back in #1217 there is a case of Uri.getLastPathSegment() end up with a full file path
@@ -240,7 +240,7 @@ public abstract class FileUtil {
                             DocumentFile targetDocumentFile = getDocumentFile(targetFile, false, mainActivity.getApplicationContext());
 
                             //Fallback, in case getDocumentFile() didn't properly return a DocumentFile instance
-                            if(targetDocumentFile == null)
+                            if (targetDocumentFile == null)
                                 targetDocumentFile = DocumentFile.fromFile(targetFile);
 
                             //Lazy check... and in fact, different apps may pass in URI in different formats, so we could only check filename matches
@@ -300,7 +300,7 @@ public abstract class FileUtil {
                             DocumentFile documentTargetFile = OTGUtil.getDocumentFile(finalFilePath,
                                                               mainActivity, true);
 
-                            if(documentTargetFile.exists()) {
+                            if (documentTargetFile.exists()) {
                                 AppConfig.toast(mainActivity, mainActivity.getString(R.string.cannot_overwrite));
                                 return null;
                             }
@@ -351,8 +351,8 @@ public abstract class FileUtil {
                 return (retval.size() > 0) ? retval : null;
             }
             @Override
-            public void onPostExecute(List<String> result) {
-                if(result !=  null) {
+            public void onPostExecute(final List<String> result) {
+                if (result !=  null) {
                     List<String> paths = (List<String>) result;
                     if (paths.size() == 1) {
                         Toast.makeText(mainActivity, mainActivity.getString(R.string.saved_single_file, paths.get(0)), Toast.LENGTH_LONG).show();
@@ -370,7 +370,7 @@ public abstract class FileUtil {
      * @param file the file to be deleted.
      * @return True if successfully deleted.
      */
-    static boolean deleteFile(@NonNull final File file, Context context) {
+    static boolean deleteFile(@NonNull final File file, final Context context) {
         // First try the normal deletion.
         if (file == null) return true;
         boolean fileDelete = rmdir(file, context);
@@ -401,7 +401,7 @@ public abstract class FileUtil {
         return !file.exists();
     }
 
-    private static boolean rename(File f, String name, boolean root) throws ShellNotRunningException {
+    private static boolean rename(final File f, final String name, final boolean root) throws ShellNotRunningException {
         String newPath = f.getParent() + "/" + name;
         if (f.getParentFile().canWrite()) {
             return f.renameTo(new File(newPath));
@@ -420,7 +420,7 @@ public abstract class FileUtil {
      * @return true if the renaming was successful.
      */
     static boolean renameFolder(@NonNull final File source, @NonNull final File target,
-                                Context context) throws ShellNotRunningException {
+                                final Context context) throws ShellNotRunningException {
         // First try the normal rename.
         if (rename(source, target.getName(), false)) {
             return true;
@@ -473,7 +473,7 @@ public abstract class FileUtil {
      * @param file The base file for which to create a temp file.
      * @return The temp file.
      */
-    public static File getTempFile(@NonNull final File file, Context context) {
+    public static File getTempFile(@NonNull final File file, final Context context) {
         File extDir = context.getExternalFilesDir(null);
         return new File(extDir, file.getName());
     }
@@ -485,8 +485,8 @@ public abstract class FileUtil {
      * @param file  The folder to be created.
      * @return True if creation was successful.
      */
-    public static boolean mkdir(final File file, Context context) {
-        if(file==null)
+    public static boolean mkdir(final File file, final Context context) {
+        if (file == null)
             return false;
         if (file.exists()) {
             // nothing to create.
@@ -517,7 +517,7 @@ public abstract class FileUtil {
         return false;
     }
 
-    public static boolean mkdirs(Context context, HybridFile file) {
+    public static boolean mkdirs(final Context context, final HybridFile file) {
         boolean isSuccessful = true;
         switch (file.mode) {
         case SMB:
@@ -547,8 +547,8 @@ public abstract class FileUtil {
         return isSuccessful;
     }
 
-    public static boolean mkfile(final File file,Context context) {
-        if(file==null)
+    public static boolean mkfile(final File file, final Context context) {
+        if (file == null)
             return false;
         if (file.exists()) {
             // nothing to create.
@@ -592,12 +592,12 @@ public abstract class FileUtil {
      * @param file The folder name.
      * @return true if successful.
      */
-    private static boolean rmdir(@NonNull final File file, Context context) {
+    private static boolean rmdir(@NonNull final File file, final Context context) {
         if (!file.exists()) return true;
 
         File[] files = file.listFiles();
         if (files != null && files.length > 0) {
-            for(File child : files) {
+            for (File child : files) {
                 rmdir(child, context);
             }
         }
@@ -610,7 +610,7 @@ public abstract class FileUtil {
         // Try with Storage Access Framework.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             DocumentFile document = getDocumentFile(file, true, context);
-            if(document != null && document.delete()) {
+            if (document != null && document.delete()) {
                 return true;
             }
         }
@@ -693,7 +693,7 @@ public abstract class FileUtil {
      * @param folder The directory
      * @return true if it is possible to write in this directory.
      */
-    public static boolean isWritableNormalOrSaf(final File folder, Context c) {
+    public static boolean isWritableNormalOrSaf(final File folder, final Context c) {
 
         // Verify that this is a directory.
         if (folder == null)
@@ -736,7 +736,7 @@ public abstract class FileUtil {
      * @return A list of external SD card paths.
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    private static String[] getExtSdCardPaths(Context context) {
+    private static String[] getExtSdCardPaths(final Context context) {
         List<String> paths = new ArrayList<>();
         for (File file : context.getExternalFilesDirs("external")) {
             if (file != null && !file.equals(context.getExternalFilesDir("external"))) {
@@ -759,7 +759,7 @@ public abstract class FileUtil {
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    public static String[] getExtSdCardPathsForActivity(Context context) {
+    public static String[] getExtSdCardPathsForActivity(final Context context) {
         List<String> paths = new ArrayList<>();
         for (File file : context.getExternalFilesDirs("external")) {
             if (file != null) {
@@ -789,7 +789,7 @@ public abstract class FileUtil {
      * null is returned.
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    private static String getExtSdCardFolder(final File file, Context context) {
+    private static String getExtSdCardFolder(final File file, final Context context) {
         String[] extSdPaths = getExtSdCardPaths(context);
         try {
             for (int i = 0; i < extSdPaths.length; i++) {
@@ -810,7 +810,7 @@ public abstract class FileUtil {
      * @return true if on external sd card.
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    public static boolean isOnExtSdCard(final File file, Context c) {
+    public static boolean isOnExtSdCard(final File file, final Context c) {
         return getExtSdCardFolder(file, c) != null;
     }
 
@@ -822,9 +822,9 @@ public abstract class FileUtil {
      * @param isDirectory flag indicating if the file should be a directory.
      * @return The DocumentFile
      */
-    public static DocumentFile getDocumentFile(final File file, final boolean isDirectory, Context context) {
+    public static DocumentFile getDocumentFile(final File file, final boolean isDirectory, final Context context) {
 
-        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT)
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT)
             return DocumentFile.fromFile(file);
 
         String baseFolder = getExtSdCardFolder(file, context);
@@ -885,7 +885,7 @@ public abstract class FileUtil {
      * @param targetName The name of the target file.
      * @return the dummy file.
      */
-    private static File copyDummyFile(final int resource, final String folderName, final String targetName, Context context)
+    private static File copyDummyFile(final int resource, final String folderName, final String targetName, final Context context)
     throws IOException {
         File externalFilesDir = context.getExternalFilesDir(folderName);
         if (externalFilesDir == null) {
@@ -929,9 +929,9 @@ public abstract class FileUtil {
      * @param f the target path
      * @return 1 if exists or writable, 0 if not writable
      */
-    public static int checkFolder(final String f,Context context) {
-        if(f==null)return 0;
-        if(f.startsWith("smb://")
+    public static int checkFolder(final String f, final Context context) {
+        if (f == null) return 0;
+        if (f.startsWith("smb://")
                 || f.startsWith("ssh://")
                 || f.startsWith(OTGUtil.PREFIX_OTG)
                 || f.startsWith(CloudHandler.CLOUD_PREFIX_BOX)
@@ -941,7 +941,7 @@ public abstract class FileUtil {
           )
             return 1;
 
-        File folder=new File(f);
+        File folder = new File(f);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && FileUtil.isOnExtSdCard(folder, context)) {
             if (!folder.exists() || !folder.isDirectory()) {
                 return 0;
@@ -968,7 +968,7 @@ public abstract class FileUtil {
      *
      * @return the dummy mp3.
      */
-    private static File copyDummyFiles(Context c) {
+    private static File copyDummyFiles(final Context c) {
         try {
             copyDummyFile(R.mipmap.ic_launcher, "mkdirFiles", "albumart.jpg", c);
             return copyDummyFile(R.raw.temptrack, "mkdirFiles", "temptrack.mp3", c);
@@ -984,7 +984,7 @@ public abstract class FileUtil {
         private static final String ALBUM_ART_URI = "content://media/external/audio/albumart";
         private static final String[] ALBUM_PROJECTION = {BaseColumns._ID, MediaStore.Audio.AlbumColumns.ALBUM_ID, "media_type"};
 
-        private static File getExternalFilesDir(Context context) {
+        private static File getExternalFilesDir(final Context context) {
 
 
             try {
@@ -1014,7 +1014,7 @@ public abstract class FileUtil {
         private final ContentResolver contentResolver;
         Uri filesUri;
 
-        MediaFile(Context context, File file) {
+        MediaFile(final Context context, final File file) {
             this.file = file;
             this.context = context;
             contentResolver = context.getContentResolver();
@@ -1205,7 +1205,7 @@ public abstract class FileUtil {
         /**
          * Returns an OutputStream to write to the file. The file will be truncated immediately.
          */
-        public OutputStream write(long size)
+        public OutputStream write(final long size)
         throws IOException {
 
             if (NO_MEDIA.equals(file.getName().trim())) {
@@ -1244,7 +1244,7 @@ public abstract class FileUtil {
      * @param text
      * @return true if given text is a valid filename
      */
-    public static boolean isValidFilename(String text) {
+    public static boolean isValidFilename(final String text) {
         //It's not easy to use regex to detect single/double dot while leaving valid values (filename.zip) behind...
         //So we simply use equality to check them
         return (!FILENAME_REGEX.matcher(text).find())

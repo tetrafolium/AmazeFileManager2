@@ -56,8 +56,8 @@ public class ZipHelperTask extends CompressedHelperTask {
      * @param realFileDirectory the location of the zip file
      * @param dir relativeDirectory to access inside the zip file
      */
-    public ZipHelperTask(Context c, String realFileDirectory, String dir, boolean goback,
-                         OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> l) {
+    public ZipHelperTask(final Context c, final String realFileDirectory, final String dir, final boolean goback,
+                         final OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> l) {
         super(goback, l);
         context = new WeakReference<>(c);
         fileLocation = Uri.parse(realFileDirectory);
@@ -65,7 +65,7 @@ public class ZipHelperTask extends CompressedHelperTask {
     }
 
     @Override
-    void addElements(@NonNull ArrayList<CompressedObjectParcelable> elements) throws ArchiveException {
+    void addElements(final @NonNull ArrayList<CompressedObjectParcelable> elements) throws ArchiveException {
         try {
             ArrayList<CompressedObjectParcelable> wholelist = new ArrayList<>();
 

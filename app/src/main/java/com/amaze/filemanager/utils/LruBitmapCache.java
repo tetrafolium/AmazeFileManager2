@@ -14,7 +14,7 @@ public class LruBitmapCache extends LruCache<String, Bitmap> implements ImageLoa
      *                the maximum number of entries in the cache. For all other caches,
      *                this is the maximum sum of the sizes of the entries in this cache.
      */
-    public LruBitmapCache(int maxSize) {
+    public LruBitmapCache(final int maxSize) {
         super(maxSize);
     }
 
@@ -23,22 +23,22 @@ public class LruBitmapCache extends LruCache<String, Bitmap> implements ImageLoa
     }
 
     private static int getDefaultCacheSize() {
-        int memory = (int) (Runtime.getRuntime().maxMemory()/1024);
-        return memory/8;
+        int memory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        return memory / 8;
     }
 
     @Override
-    public Bitmap getBitmap(String url) {
+    public Bitmap getBitmap(final String url) {
         return get(url);
     }
 
     @Override
-    public void putBitmap(String url, Bitmap bitmap) {
+    public void putBitmap(final String url, final Bitmap bitmap) {
         put(url, bitmap);
     }
 
     @Override
-    protected int sizeOf(String key, Bitmap value) {
+    protected int sizeOf(final String key, final Bitmap value) {
 
         return value.getByteCount();
     }

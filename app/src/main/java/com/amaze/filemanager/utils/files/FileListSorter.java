@@ -29,13 +29,13 @@ public class FileListSorter implements Comparator<LayoutElementParcelable> {
     private int asc = 1;
     private int sort = 0;
 
-    public FileListSorter(int dir, int sort, int asc) {
+    public FileListSorter(final int dir, final int sort, final int asc) {
         this.dirsOnTop = dir;
         this.asc = asc;
         this.sort = sort;
     }
 
-    private boolean isDirectory(LayoutElementParcelable path) {
+    private boolean isDirectory(final LayoutElementParcelable path) {
         return path.isDirectory;
     }
 
@@ -44,7 +44,7 @@ public class FileListSorter implements Comparator<LayoutElementParcelable> {
      * less than, equal to or greater than second
      */
     @Override
-    public int compare(LayoutElementParcelable file1, LayoutElementParcelable file2) {
+    public int compare(final LayoutElementParcelable file1, final LayoutElementParcelable file2) {
 
         /*File f1;
 
@@ -100,16 +100,16 @@ public class FileListSorter implements Comparator<LayoutElementParcelable> {
                 return file1.title.compareToIgnoreCase(file2.title);
             }
 
-        } else if(sort ==3) {
+        } else if (sort == 3) {
 
             // sort by type
-            if(!file1.isDirectory && !file2.isDirectory) {
+            if (!file1.isDirectory && !file2.isDirectory) {
 
                 final String ext_a = getExtension(file1.title);
                 final String ext_b = getExtension(file2.title);
 
 
-                final int res = asc*ext_a.compareTo(ext_b);
+                final int res = asc * ext_a.compareTo(ext_b);
                 if (res == 0) {
                     return asc * file1.title.compareToIgnoreCase(file2.title);
                 }
@@ -122,7 +122,7 @@ public class FileListSorter implements Comparator<LayoutElementParcelable> {
 
     }
 
-    private static String getExtension(String a) {
+    private static String getExtension(final String a) {
         return a.substring(a.lastIndexOf(".") + 1).toLowerCase();
     }
 

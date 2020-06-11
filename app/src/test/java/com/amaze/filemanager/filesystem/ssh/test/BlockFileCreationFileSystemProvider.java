@@ -26,14 +26,14 @@ public class BlockFileCreationFileSystemProvider extends RootedFileSystemProvide
      * @throws IOException
      */
     @Override
-    public FileChannel newFileChannel(Path path, Set<? extends OpenOption> options, FileAttribute<?>... attrs) throws IOException {
+    public FileChannel newFileChannel(final Path path, final Set<? extends OpenOption> options, final FileAttribute<?>... attrs) throws IOException {
         Path r = unroot(path);
         FileSystemProvider p = provider(r);
         return p.newFileChannel(r, Collections.singleton(StandardOpenOption.READ), attrs);
     }
 
     @Override
-    public OutputStream newOutputStream(Path path, OpenOption... options) throws IOException {
+    public OutputStream newOutputStream(final Path path, final OpenOption... options) throws IOException {
         throw new FileSystemException("Unsupported operation");
     }
 }

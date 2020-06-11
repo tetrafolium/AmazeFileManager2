@@ -29,7 +29,7 @@ public class Streamer extends StreamServer {
     // private CBItem source;
     // private String mime;
 
-    protected Streamer(int port) throws IOException {
+    protected Streamer(final int port) throws IOException {
         super(port, new File("."));
     }
 
@@ -43,11 +43,11 @@ public class Streamer extends StreamServer {
         return instance;
     }
 
-    public static boolean isStreamMedia(SmbFile file) {
+    public static boolean isStreamMedia(final SmbFile file) {
         return pattern.matcher(file.getName()).matches();
     }
 
-    public void setStreamSrc(SmbFile file, long len) {
+    public void setStreamSrc(final SmbFile file, final long len) {
         this.file = file;
         //this.extras = extraFiles;
         this.length = len;
@@ -60,7 +60,7 @@ public class Streamer extends StreamServer {
     }
 
     @Override
-    public Response serve(String uri, String method, Properties header, Properties parms, Properties files) {
+    public Response serve(final String uri, final String method, final Properties header, final Properties parms, final Properties files) {
         Response res;
         SmbFile sourceFile = null;
         String name = getNameFromPath(uri);
@@ -131,7 +131,7 @@ public class Streamer extends StreamServer {
         return res;
     }
 
-    private static String getNameFromPath(String path) {
+    private static String getNameFromPath(final String path) {
         if (path == null || path.length() < 2)
             return null;
         int slash = path.lastIndexOf('/');

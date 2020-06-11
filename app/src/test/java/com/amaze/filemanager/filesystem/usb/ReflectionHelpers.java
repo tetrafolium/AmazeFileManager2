@@ -26,13 +26,13 @@ import static org.robolectric.Shadows.shadowOf;
 
 class ReflectionHelpers {
 
-    static void addUsbOtgDevice(Activity activity) {
+    static void addUsbOtgDevice(final Activity activity) {
         ShadowUsbManager sUsbManager = shadowOf((UsbManager) activity.getSystemService(USB_SERVICE));
 
         UsbDevice device;
         try {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     device = callUsbDeviceConstructor("usb", 0, 0,
                                                       USB_CLASS_MASS_STORAGE, 0, 0, null,
                                                       null, "v2", null);
@@ -57,7 +57,7 @@ class ReflectionHelpers {
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    static void configureUsbDevice(UsbDevice device) throws NoSuchMethodException,
+    static void configureUsbDevice(final UsbDevice device) throws NoSuchMethodException,
         ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException {
         UsbConfiguration usbConfiguration = callUsbConfigurationConstructor(0, "",
                                             0, 0);
@@ -68,9 +68,9 @@ class ReflectionHelpers {
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    static void configureUsbConfiguration(UsbConfiguration usbConfiguration) throws NoSuchMethodException,
+    static void configureUsbConfiguration(final UsbConfiguration usbConfiguration) throws NoSuchMethodException,
         ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        UsbInterface usbInterface = callUsbInterfaceConstructor(01, 0,"",
+        UsbInterface usbInterface = callUsbInterfaceConstructor(01, 0, "",
                                     USB_CLASS_MASS_STORAGE, 0, 0);
 
         Method configureMethod = usbConfiguration.getClass().getDeclaredMethod("setInterfaces", Parcelable[].class);
@@ -87,11 +87,11 @@ class ReflectionHelpers {
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    static UsbDevice callUsbDeviceConstructor(@NonNull String name, int vendorId, int productId,
-            int usbClass, int subClass, int protocol,
-            @Nullable String manufacturerName,
-            @Nullable String productName,
-            @NonNull String version, @Nullable String serialNumber)
+    static UsbDevice callUsbDeviceConstructor(final @NonNull String name, final int vendorId, final int productId,
+            final int usbClass, final int subClass, final int protocol,
+            final @Nullable String manufacturerName,
+            final @Nullable String productName,
+            final @NonNull String version, final @Nullable String serialNumber)
     throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 
         Class<UsbDevice> clazz = (Class<UsbDevice>) Class.forName("android.hardware.usb.UsbDevice");
@@ -104,10 +104,10 @@ class ReflectionHelpers {
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    static UsbDevice callUsbDeviceConstructor(@NonNull String name, int vendorId, int productId,
-            int usbClass, int subClass, int protocol,
-            @Nullable String manufacturerName,
-            @Nullable String productName, @Nullable String serialNumber)
+    static UsbDevice callUsbDeviceConstructor(final @NonNull String name, final int vendorId, final int productId,
+            final int usbClass, final int subClass, final int protocol,
+            final @Nullable String manufacturerName,
+            final @Nullable String productName, final @Nullable String serialNumber)
     throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 
         Class<UsbDevice> clazz = (Class<UsbDevice>) Class.forName("android.hardware.usb.UsbDevice");
@@ -120,9 +120,9 @@ class ReflectionHelpers {
     }
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
-    static UsbDevice callUsbDeviceConstructor(@NonNull String name, int vendorId, int productId,
-            int usbClass, int subClass, int protocol,
-            @NonNull Parcelable[] interfaces)
+    static UsbDevice callUsbDeviceConstructor(final @NonNull String name, final int vendorId, final int productId,
+            final int usbClass, final int subClass, final int protocol,
+            final @NonNull Parcelable[] interfaces)
     throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 
         Class<UsbDevice> clazz = (Class<UsbDevice>) Class.forName("android.hardware.usb.UsbDevice");
@@ -133,8 +133,8 @@ class ReflectionHelpers {
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    static UsbConfiguration callUsbConfigurationConstructor(int id, @Nullable String name,
-            int attributes, int maxPower)
+    static UsbConfiguration callUsbConfigurationConstructor(final int id, final @Nullable String name,
+            final int attributes, final int maxPower)
     throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 
         Class<UsbConfiguration> clazz = (Class<UsbConfiguration>) Class.forName("android.hardware.usb.UsbConfiguration");
@@ -145,9 +145,9 @@ class ReflectionHelpers {
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    static UsbInterface callUsbInterfaceConstructor(int id, int alternateSetting,
-            @Nullable String name, int usbClass, int subClass,
-            int protocol)
+    static UsbInterface callUsbInterfaceConstructor(final int id, final int alternateSetting,
+            final @Nullable String name, final int usbClass, final int subClass,
+            final int protocol)
     throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 
         Class<UsbInterface> clazz = (Class<UsbInterface>) Class.forName("android.hardware.usb.UsbInterface");
@@ -158,8 +158,8 @@ class ReflectionHelpers {
     }
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
-    static UsbInterface callUsbInterfaceConstructor(int id, int usbClass, int subClass, int protocol,
-            @Nullable Parcelable[] endpoints)
+    static UsbInterface callUsbInterfaceConstructor(final int id, final int usbClass, final int subClass, final int protocol,
+            final @Nullable Parcelable[] endpoints)
     throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 
         Class<UsbInterface> clazz = (Class<UsbInterface>) Class.forName("android.hardware.usb.UsbInterface");

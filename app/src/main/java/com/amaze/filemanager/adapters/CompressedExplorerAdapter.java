@@ -58,10 +58,10 @@ public class CompressedExplorerAdapter extends RecyclerView.Adapter<CompressedIt
     private int offset = 0;
     private SharedPreferences sharedPrefs;
 
-    public CompressedExplorerAdapter(Context c, UtilitiesProvider utilsProvider,
-                                     List<CompressedObjectParcelable> items,
-                                     CompressedExplorerFragment compressedExplorerFragment,
-                                     Decompressor decompressor, SharedPreferences sharedPrefs) {
+    public CompressedExplorerAdapter(final Context c, final UtilitiesProvider utilsProvider,
+                                     final List<CompressedObjectParcelable> items,
+                                     final CompressedExplorerFragment compressedExplorerFragment,
+                                     final Decompressor decompressor, final SharedPreferences sharedPrefs) {
         setHasStableIds(true);
 
         this.utilsProvider = utilsProvider;
@@ -78,7 +78,7 @@ public class CompressedExplorerAdapter extends RecyclerView.Adapter<CompressedIt
         this.sharedPrefs = sharedPrefs;
     }
 
-    public void toggleChecked(boolean check) {
+    public void toggleChecked(final boolean check) {
         int k = 0;
 
         for (int i = k; i < items.size(); i++) {
@@ -105,7 +105,7 @@ public class CompressedExplorerAdapter extends RecyclerView.Adapter<CompressedIt
      * @param position  the position of the item
      * @param imageView the circular {@link CircleGradientDrawable} that is to be animated
      */
-    private void toggleChecked(int position, ImageView imageView) {
+    private void toggleChecked(final int position, final ImageView imageView) {
         compressedExplorerFragment.stopAnim();
         stoppedAnimation = true;
 
@@ -139,7 +139,7 @@ public class CompressedExplorerAdapter extends RecyclerView.Adapter<CompressedIt
         }
     }
 
-    private void animate(CompressedItemViewHolder holder) {
+    private void animate(final CompressedItemViewHolder holder) {
         holder.rl.clearAnimation();
         Animation localAnimation = AnimationUtils.loadAnimation(compressedExplorerFragment.getActivity(), R.anim.fade_in_top);
         localAnimation.setStartOffset(this.offset);
@@ -147,7 +147,7 @@ public class CompressedExplorerAdapter extends RecyclerView.Adapter<CompressedIt
         this.offset = (30 + this.offset);
     }
 
-    public void generateZip(List<CompressedObjectParcelable> arrayList) {
+    public void generateZip(final List<CompressedObjectParcelable> arrayList) {
         offset = 0;
         stoppedAnimation = false;
         items = arrayList;
@@ -156,12 +156,12 @@ public class CompressedExplorerAdapter extends RecyclerView.Adapter<CompressedIt
     }
 
     @Override
-    public long getItemId(int position) {
+    public long getItemId(final int position) {
         return position;
     }
 
     @Override
-    public int getItemViewType(int position) {
+    public int getItemViewType(final int position) {
         if (isPositionHeader(position))
             return TYPE_HEADER;
 
@@ -169,12 +169,12 @@ public class CompressedExplorerAdapter extends RecyclerView.Adapter<CompressedIt
     }
 
     @Override
-    public CompressedItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CompressedItemViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         if (viewType == TYPE_HEADER) {
             View v = mInflater.inflate(R.layout.rowlayout, parent, false);
             v.findViewById(R.id.picture_icon).setVisibility(View.INVISIBLE);
             return new CompressedItemViewHolder(v);
-        } else if(viewType == TYPE_ITEM) {
+        } else if (viewType == TYPE_ITEM) {
             View v = mInflater.inflate(R.layout.rowlayout, parent, false);
             CompressedItemViewHolder vh = new CompressedItemViewHolder(v);
             ImageButton about = v.findViewById(R.id.properties);
@@ -186,16 +186,16 @@ public class CompressedExplorerAdapter extends RecyclerView.Adapter<CompressedIt
     }
 
     @Override
-    public void onBindViewHolder(final CompressedItemViewHolder holder, int position) {
+    public void onBindViewHolder(final CompressedItemViewHolder holder, final int position) {
         if (!stoppedAnimation) {
             animate(holder);
         }
 
         boolean enableMarquee = sharedPrefs.getBoolean(
                                     PreferencesConstants.PREFERENCE_ENABLE_MARQUEE_FILENAME, true);
-        holder.txtTitle.setEllipsize(enableMarquee ?
-                                     TextUtils.TruncateAt.MARQUEE :
-                                     TextUtils.TruncateAt.MIDDLE);
+        holder.txtTitle.setEllipsize(enableMarquee
+                                     ? TextUtils.TruncateAt.MARQUEE
+                                     : TextUtils.TruncateAt.MIDDLE);
 
         final CompressedObjectParcelable rowItem = items.get(position);
         GradientDrawable gradientDrawable = (GradientDrawable) holder.genericIcon.getBackground();
@@ -272,8 +272,8 @@ public class CompressedExplorerAdapter extends RecyclerView.Adapter<CompressedIt
                     } else {
 
                         String fileName = CompressedHelper.getFileName(compressedExplorerFragment.compressedFile.getName());
-                        String archiveCacheDirPath = compressedExplorerFragment.getActivity().getExternalCacheDir().getPath() +
-                                                     CompressedHelper.SEPARATOR + fileName;
+                        String archiveCacheDirPath = compressedExplorerFragment.getActivity().getExternalCacheDir().getPath()
+                                                     + CompressedHelper.SEPARATOR + fileName;
 
                         HybridFileParcelable file = new HybridFileParcelable(archiveCacheDirPath
                                 + CompressedHelper.SEPARATOR
@@ -301,14 +301,14 @@ public class CompressedExplorerAdapter extends RecyclerView.Adapter<CompressedIt
     }
 
     @Override
-    public void onViewDetachedFromWindow(CompressedItemViewHolder holder) {
+    public void onViewDetachedFromWindow(final CompressedItemViewHolder holder) {
         super.onViewAttachedToWindow(holder);
         holder.rl.clearAnimation();
         holder.txtTitle.setSelected(false);
     }
 
     @Override
-    public void onViewAttachedToWindow(CompressedItemViewHolder holder) {
+    public void onViewAttachedToWindow(final CompressedItemViewHolder holder) {
         super.onViewAttachedToWindow(holder);
         boolean enableMarqueeFilename = sharedPrefs.getBoolean(
                                             PreferencesConstants.PREFERENCE_ENABLE_MARQUEE_FILENAME, true);
@@ -318,14 +318,14 @@ public class CompressedExplorerAdapter extends RecyclerView.Adapter<CompressedIt
     }
 
     @Override
-    public boolean onFailedToRecycleView(CompressedItemViewHolder holder) {
+    public boolean onFailedToRecycleView(final CompressedItemViewHolder holder) {
         holder.rl.clearAnimation();
         holder.txtTitle.setSelected(false);
         return super.onFailedToRecycleView(holder);
     }
 
-    private boolean isPositionHeader(int position) {
-        return false;// TODO:
+    private boolean isPositionHeader(final int position) {
+        return false; // TODO:
     }
 
 }

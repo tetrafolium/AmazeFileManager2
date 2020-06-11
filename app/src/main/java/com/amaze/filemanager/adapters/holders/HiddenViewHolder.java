@@ -19,7 +19,7 @@ public class HiddenViewHolder extends RecyclerView.ViewHolder {
     public final TextView txtDesc;
     public final LinearLayout row;
 
-    public HiddenViewHolder(View view) {
+    public HiddenViewHolder(final View view) {
         super(view);
 
         txtTitle = view.findViewById(R.id.text1);

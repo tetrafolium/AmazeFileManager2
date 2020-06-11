@@ -36,7 +36,7 @@ public abstract class SFtpClientTemplate
 
     public final boolean closeClientOnFinish;
 
-    public SFtpClientTemplate(@NonNull String url)
+    public SFtpClientTemplate(final @NonNull String url)
     {
         this(url, true);
     }
@@ -47,7 +47,7 @@ public abstract class SFtpClientTemplate
      *
      * @param url SSH connection URL, in the form of <code>ssh://&lt;username&gt;:&lt;password&gt;@&lt;host&gt;:&lt;port&gt;</code> or <code>ssh://&lt;username&gt;@&lt;host&gt;:&lt;port&gt;</code>
      */
-    public SFtpClientTemplate(@NonNull String url, boolean closeClientOnFinish)
+    public SFtpClientTemplate(final @NonNull String url, final boolean closeClientOnFinish)
     {
         this.url = url;
         this.closeClientOnFinish = closeClientOnFinish;

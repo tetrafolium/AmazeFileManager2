@@ -50,7 +50,7 @@ public class TabHandler extends SQLiteOpenHelper {
     protected static final String COLUMN_ENCRYPTED_PATH = "path";
     protected static final String COLUMN_ENCRYPTED_PASSWORD = "password";
 
-    public TabHandler(Context context) {
+    public TabHandler(final Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         // The call to onUpgrade() is not performed unless getWritableDatabase() is called.
         // See more at https://github.com/TeamAmaze/AmazeFileManager/pull/1262
@@ -58,12 +58,12 @@ public class TabHandler extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void onCreate(final SQLiteDatabase db) {
         String CREATE_TAB_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_TAB + "("
                                   + COLUMN_TAB_NO + " INTEGER PRIMARY KEY,"
                                   + COLUMN_PATH + " TEXT,"
-                                  + COLUMN_HOME + " TEXT" +
-                                  ")";
+                                  + COLUMN_HOME + " TEXT"
+                                  + ")";
 
         String CREATE_TABLE_ENCRYPTED = "CREATE TABLE IF NOT EXISTS " + TABLE_ENCRYPTED + "("
                                         + COLUMN_ENCRYPTED_ID + " INTEGER PRIMARY KEY,"
@@ -89,16 +89,16 @@ public class TabHandler extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i2) {
+    public void onUpgrade(final SQLiteDatabase sqLiteDatabase, final int i, final int i2) {
         onCreate(sqLiteDatabase);
     }
 
     @Override
-    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onDowngrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
         onUpgrade(db, oldVersion, newVersion);
     }
 
-    public void addTab(Tab tab) {
+    public void addTab(final Tab tab) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_TAB_NO, tab.tabNumber);
         contentValues.put(COLUMN_PATH, tab.path);
@@ -117,7 +117,7 @@ public class TabHandler extends SQLiteOpenHelper {
         }
     }
 
-    public Tab findTab(int tabNo) {
+    public Tab findTab(final int tabNo) {
         String query = "Select * FROM " + TABLE_TAB + " WHERE " + COLUMN_TAB_NO + "= \"" + tabNo + "\"";
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);

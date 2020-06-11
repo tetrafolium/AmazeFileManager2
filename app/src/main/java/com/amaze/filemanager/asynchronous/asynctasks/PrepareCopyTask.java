@@ -68,7 +68,7 @@ public class PrepareCopyTask extends AsyncTask<ArrayList<HybridFileParcelable>, 
     private final ArrayList<ArrayList<HybridFileParcelable>> filesToCopyPerFolder = new ArrayList<>();
     private ArrayList<HybridFileParcelable> filesToCopy;    // a copy of params sent to this
 
-    public PrepareCopyTask(MainFragment ma, String path, Boolean move, MainActivity con, boolean rootMode) {
+    public PrepareCopyTask(final MainFragment ma, final String path, final Boolean move, final MainActivity con, final boolean rootMode) {
         mainFrag = ma;
         this.move = move;
         mainActivity = con;
@@ -86,17 +86,17 @@ public class PrepareCopyTask extends AsyncTask<ArrayList<HybridFileParcelable>, 
     }
 
     @Override
-    public void onProgressUpdate(String... message) {
+    public void onProgressUpdate(final String... message) {
         Toast.makeText(context, message[0], Toast.LENGTH_LONG).show();
     }
 
     @Override
-    protected CopyNode doInBackground(ArrayList<HybridFileParcelable>... params) {
+    protected CopyNode doInBackground(final ArrayList<HybridFileParcelable>... params) {
         filesToCopy = params[0];
         long totalBytes = 0;
 
-        if (openMode == OpenMode.OTG ||
-                openMode == OpenMode.DROPBOX
+        if (openMode == OpenMode.OTG
+                || openMode == OpenMode.DROPBOX
                 || openMode == OpenMode.BOX
                 || openMode == OpenMode.GDRIVE
                 || openMode == OpenMode.ONEDRIVE
@@ -127,7 +127,7 @@ public class PrepareCopyTask extends AsyncTask<ArrayList<HybridFileParcelable>, 
         return copyFolder;
     }
 
-    private ArrayList<HybridFileParcelable> checkConflicts(final ArrayList<HybridFileParcelable> filesToCopy, HybridFile destination) {
+    private ArrayList<HybridFileParcelable> checkConflicts(final ArrayList<HybridFileParcelable> filesToCopy, final HybridFile destination) {
         final ArrayList<HybridFileParcelable> conflictingFiles = new ArrayList<>();
         destination.forEachChildrenFile(context, rootMode, file -> {
             for (HybridFileParcelable j : filesToCopy) {
@@ -140,7 +140,7 @@ public class PrepareCopyTask extends AsyncTask<ArrayList<HybridFileParcelable>, 
     }
 
     @Override
-    protected void onPostExecute(CopyNode copyFolder) {
+    protected void onPostExecute(final CopyNode copyFolder) {
         super.onPostExecute(copyFolder);
         if (openMode == OpenMode.OTG
                 || openMode == OpenMode.GDRIVE
@@ -165,7 +165,7 @@ public class PrepareCopyTask extends AsyncTask<ArrayList<HybridFileParcelable>, 
         dialog.dismiss();
     }
 
-    private void startService(ArrayList<HybridFileParcelable> sourceFiles, String target, OpenMode openmode) {
+    private void startService(final ArrayList<HybridFileParcelable> sourceFiles, final String target, final OpenMode openmode) {
         Intent intent = new Intent(context, CopyService.class);
         intent.putParcelableArrayListExtra(CopyService.TAG_COPY_SOURCES, sourceFiles);
         intent.putExtra(CopyService.TAG_COPY_TARGET, target);
@@ -218,8 +218,8 @@ public class PrepareCopyTask extends AsyncTask<ArrayList<HybridFileParcelable>, 
         }
     }
 
-    private void onEndDialog(String path, ArrayList<HybridFileParcelable> filesToCopy,
-                             ArrayList<HybridFileParcelable> conflictingFiles) {
+    private void onEndDialog(final String path, final ArrayList<HybridFileParcelable> filesToCopy,
+                             final ArrayList<HybridFileParcelable> conflictingFiles) {
         if (conflictingFiles != null && counter != conflictingFiles.size() && conflictingFiles.size() > 0) {
             if (dialogState == null)
                 showDialog(path, filesToCopy, conflictingFiles);
@@ -228,7 +228,7 @@ public class PrepareCopyTask extends AsyncTask<ArrayList<HybridFileParcelable>, 
             else if (dialogState == DO_FOR_ALL_ELEMENTS.REPLACE)
                 replaceFiles(path, filesToCopy, conflictingFiles);
         } else {
-            CopyNode c = !copyFolder.hasStarted()? copyFolder.startCopy():copyFolder.goToNextNode();
+            CopyNode c = !copyFolder.hasStarted() ? copyFolder.startCopy() : copyFolder.goToNextNode();
 
             if (c != null) {
                 counter = 0;
@@ -248,7 +248,7 @@ public class PrepareCopyTask extends AsyncTask<ArrayList<HybridFileParcelable>, 
         }
     }
 
-    private void doNotReplaceFiles(String path, ArrayList<HybridFileParcelable> filesToCopy, ArrayList<HybridFileParcelable> conflictingFiles) {
+    private void doNotReplaceFiles(final String path, final ArrayList<HybridFileParcelable> filesToCopy, final ArrayList<HybridFileParcelable> conflictingFiles) {
         if (counter < conflictingFiles.size()) {
             if (dialogState != null) {
                 filesToCopy.remove(conflictingFiles.get(counter));
@@ -264,7 +264,7 @@ public class PrepareCopyTask extends AsyncTask<ArrayList<HybridFileParcelable>, 
         onEndDialog(path, filesToCopy, conflictingFiles);
     }
 
-    private void replaceFiles(String path, ArrayList<HybridFileParcelable> filesToCopy, ArrayList<HybridFileParcelable> conflictingFiles) {
+    private void replaceFiles(final String path, final ArrayList<HybridFileParcelable> filesToCopy, final ArrayList<HybridFileParcelable> conflictingFiles) {
         if (counter < conflictingFiles.size()) {
             if (dialogState != null) {
                 counter++;
@@ -276,7 +276,7 @@ public class PrepareCopyTask extends AsyncTask<ArrayList<HybridFileParcelable>, 
         onEndDialog(path, filesToCopy, conflictingFiles);
     }
 
-    private void finishCopying(ArrayList<String> paths, ArrayList<ArrayList<HybridFileParcelable>> filesToCopyPerFolder) {
+    private void finishCopying(final ArrayList<String> paths, final ArrayList<ArrayList<HybridFileParcelable>> filesToCopyPerFolder) {
         for (int i = 0; i < filesToCopyPerFolder.size(); i++) {
             if (filesToCopyPerFolder.get(i) == null || filesToCopyPerFolder.get(i).size() == 0) {
                 filesToCopyPerFolder.remove(i);
@@ -315,7 +315,7 @@ public class PrepareCopyTask extends AsyncTask<ArrayList<HybridFileParcelable>, 
         private ArrayList<HybridFileParcelable> filesToCopy, conflictingFiles;
         private ArrayList<CopyNode> nextNodes = new ArrayList<>();
 
-        CopyNode(String p, ArrayList<HybridFileParcelable> filesToCopy) {
+        CopyNode(final String p, final ArrayList<HybridFileParcelable> filesToCopy) {
             path = p;
             this.filesToCopy = filesToCopy;
 
@@ -391,7 +391,7 @@ public class PrepareCopyTask extends AsyncTask<ArrayList<HybridFileParcelable>, 
             return conflictingFiles;
         }
 
-        private CopyNode getUnvisitedChildNode(Set<CopyNode> visited, CopyNode node) {
+        private CopyNode getUnvisitedChildNode(final Set<CopyNode> visited, final CopyNode node) {
             for (CopyNode n : node.nextNodes) {
                 if (!visited.contains(n)) {
                     return n;

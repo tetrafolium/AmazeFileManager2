@@ -41,7 +41,7 @@ public class LoadFolderSpaceDataTask extends AsyncTask<Void, Long, Pair<String, 
     private PieChart chart;
     private HybridFileParcelable file;
 
-    public LoadFolderSpaceDataTask(Context c, AppTheme appTheme, PieChart chart, HybridFileParcelable f) {
+    public LoadFolderSpaceDataTask(final Context c, final AppTheme appTheme, final PieChart chart, final HybridFileParcelable f) {
         context = c;
         this.appTheme = appTheme;
         this.chart = chart;
@@ -53,7 +53,7 @@ public class LoadFolderSpaceDataTask extends AsyncTask<Void, Long, Pair<String, 
     }
 
     @Override
-    protected Pair<String, List<PieEntry>> doInBackground(Void... params) {
+    protected Pair<String, List<PieEntry>> doInBackground(final Void... params) {
         long[] dataArray = FileUtils.getSpaces(file, context, this::publishProgress);
 
         if (dataArray[0] != -1 && dataArray[0] != 0) {
@@ -68,7 +68,7 @@ public class LoadFolderSpaceDataTask extends AsyncTask<Void, Long, Pair<String, 
     }
 
     @Override
-    protected void onProgressUpdate(Long[] dataArray) {
+    protected void onProgressUpdate(final Long[] dataArray) {
         if (dataArray[0] != -1 && dataArray[0] != 0) {
             long totalSpace = dataArray[0];
 
@@ -84,8 +84,8 @@ public class LoadFolderSpaceDataTask extends AsyncTask<Void, Long, Pair<String, 
     }
 
     @Override
-    protected void onPostExecute(Pair<String, List<PieEntry>> data) {
-        if(data == null) {
+    protected void onPostExecute(final Pair<String, List<PieEntry>> data) {
+        if (data == null) {
             chart.setVisibility(View.GONE);
             return;
         }
@@ -96,20 +96,20 @@ public class LoadFolderSpaceDataTask extends AsyncTask<Void, Long, Pair<String, 
         chart.invalidate();
     }
 
-    private List<PieEntry> createEntriesFromArray(long[] dataArray, boolean loading) {
+    private List<PieEntry> createEntriesFromArray(final long[] dataArray, final boolean loading) {
         long usedByFolder = dataArray[2],
              usedByOther = dataArray[0] - dataArray[1] - dataArray[2],
              freeSpace = dataArray[1];
 
         List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(usedByFolder, LEGENDS[0], loading? ">":null));
-        entries.add(new PieEntry(usedByOther, LEGENDS[1], loading? "<":null));
+        entries.add(new PieEntry(usedByFolder, LEGENDS[0], loading ? ">" : null));
+        entries.add(new PieEntry(usedByOther, LEGENDS[1], loading ? "<" : null));
         entries.add(new PieEntry(freeSpace, LEGENDS[2]));
 
         return entries;
     }
 
-    private void updateChart(String totalSpace, List<PieEntry> entries) {
+    private void updateChart(final String totalSpace, final List<PieEntry> entries) {
         boolean isDarkTheme = appTheme.getMaterialDialogTheme() == Theme.DARK;
 
         PieDataSet set = new PieDataSet(entries, null);
@@ -123,7 +123,7 @@ public class LoadFolderSpaceDataTask extends AsyncTask<Void, Long, Pair<String, 
 
         PieData pieData = new PieData(set);
         pieData.setValueFormatter(new GeneralDialogCreation.SizeFormatter(context));
-        pieData.setValueTextColor(isDarkTheme? Color.WHITE:Color.BLACK);
+        pieData.setValueTextColor(isDarkTheme ? Color.WHITE : Color.BLACK);
 
         chart.setCenterText(new SpannableString(context.getString(R.string.total) + "\n" + totalSpace));
         chart.setData(pieData);

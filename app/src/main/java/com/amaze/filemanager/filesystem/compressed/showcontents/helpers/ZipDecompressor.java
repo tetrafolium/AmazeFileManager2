@@ -34,13 +34,13 @@ import com.amaze.filemanager.utils.OnAsyncTaskFinished;
 
 public class ZipDecompressor extends Decompressor {
 
-    public ZipDecompressor(Context context) {
+    public ZipDecompressor(final Context context) {
         super(context);
     }
 
     @Override
-    public ZipHelperTask changePath(String path, boolean addGoBackItem,
-                                    OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
+    public ZipHelperTask changePath(final String path, final boolean addGoBackItem,
+                                    final OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
         return new ZipHelperTask(context, filePath, path, addGoBackItem, onFinish);
     }
 

@@ -85,7 +85,7 @@ public class FtpServiceEspressoTest {
         testDownloadWith(ftpClient);
     }
 
-    private void loginAndVerifyWith(FTPClient ftpClient) throws IOException {
+    private void loginAndVerifyWith(final FTPClient ftpClient) throws IOException {
         ftpClient.connect("localhost", FtpService.DEFAULT_PORT);
         ftpClient.login("anonymous", "test@example.com");
         ftpClient.changeWorkingDirectory("/");
@@ -105,7 +105,7 @@ public class FtpServiceEspressoTest {
                    downloadFolderExists);
     }
 
-    private void testUploadWith(FTPClient ftpClient) throws IOException {
+    private void testUploadWith(final FTPClient ftpClient) throws IOException {
         byte[] bytes1 = new byte[32], bytes2 = new byte[32];
         SecureRandom sr = new SecureRandom();
         sr.setSeed(System.currentTimeMillis());
@@ -143,7 +143,7 @@ public class FtpServiceEspressoTest {
         verify.delete();
     }
 
-    private void testDownloadWith(FTPClient ftpClient) throws IOException {
+    private void testDownloadWith(final FTPClient ftpClient) throws IOException {
         File testFile1 = new File(Environment.getExternalStorageDirectory(), "test.txt");
         File testFile2 = new File(Environment.getExternalStorageDirectory(), "test.bin");
 

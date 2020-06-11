@@ -15,8 +15,8 @@ public final class AppDataParcelable implements Parcelable {
     public final String label, path, packageName, data, fileSize;
     public final long size, lastModification;
 
-    public AppDataParcelable(String label, String path, String packageName, String data,
-                             String fileSize, long size, long lastModification) {
+    public AppDataParcelable(final String label, final String path, final String packageName, final String data,
+                             final String fileSize, final long size, final long lastModification) {
         this.label = label;
         this.path = path;
         this.packageName = packageName;
@@ -32,7 +32,7 @@ public final class AppDataParcelable implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    public void writeToParcel(final Parcel parcel, final int i) {
         parcel.writeString(label);
         parcel.writeString(path);
         parcel.writeString(packageName);
@@ -42,7 +42,7 @@ public final class AppDataParcelable implements Parcelable {
         parcel.writeLong(lastModification);
     }
 
-    private AppDataParcelable(Parcel in) {
+    private AppDataParcelable(final Parcel in) {
         this.label = in.readString();
         this.path = in.readString();
         this.packageName = in.readString();
@@ -54,12 +54,12 @@ public final class AppDataParcelable implements Parcelable {
 
     public static final Creator<AppDataParcelable> CREATOR = new Creator<AppDataParcelable>() {
         @Override
-        public AppDataParcelable createFromParcel(Parcel in) {
+        public AppDataParcelable createFromParcel(final Parcel in) {
             return new AppDataParcelable(in);
         }
 
         @Override
-        public AppDataParcelable[] newArray(int size) {
+        public AppDataParcelable[] newArray(final int size) {
             return new AppDataParcelable[size];
         }
     };
@@ -70,7 +70,7 @@ public final class AppDataParcelable implements Parcelable {
         private int asc = 1;
         private int sort = 0;
 
-        public AppDataSorter(int sort, int asc) {
+        public AppDataSorter(final int sort, final int asc) {
             this.asc = asc;
             this.sort = sort;
         }
@@ -80,7 +80,7 @@ public final class AppDataParcelable implements Parcelable {
          * less than, equal to or greater than second
          */
         @Override
-        public int compare(AppDataParcelable file1, AppDataParcelable file2) {
+        public int compare(final AppDataParcelable file1, final AppDataParcelable file2) {
             if (sort == SORT_NAME) {
                 // sort by name
                 return asc * file1.label.compareToIgnoreCase(file2.label);

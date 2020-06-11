@@ -24,20 +24,20 @@ public class SelectedColorsPreference extends DialogPreference {
     private int backgroundColor;
     private int visibility = View.VISIBLE;
 
-    public SelectedColorsPreference(Context context, AttributeSet attrs) {
+    public SelectedColorsPreference(final Context context, final AttributeSet attrs) {
         super(context, attrs);
     }
 
     @Override
-    protected View onCreateView(ViewGroup parent) {
+    protected View onCreateView(final ViewGroup parent) {
         setWidgetLayoutResource(R.layout.selectedcolors_preference);
         return super.onCreateView(parent);
     }
 
     @SuppressLint("WrongConstant")
     @Override
-    protected void onBindView(View view) {
-        super.onBindView(view);//Keep this before things that need changing what's on screen
+    protected void onBindView(final View view) {
+        super.onBindView(view); //Keep this before things that need changing what's on screen
 
         CircularColorsView colorsView = view.findViewById(R.id.colorsection);
         colorsView.setColors(colors[0], colors[1], colors[2], colors[3]);
@@ -45,16 +45,16 @@ public class SelectedColorsPreference extends DialogPreference {
         colorsView.setVisibility(visibility);
     }
 
-    public void setColorsVisibility(int visibility) {
+    public void setColorsVisibility(final int visibility) {
         this.visibility = visibility;
         notifyChanged();
     }
 
-    public void setDividerColor(int color) {
+    public void setDividerColor(final int color) {
         backgroundColor = color;
     }
 
-    public void setColors(int color, int color1, int color2, int color3) {
+    public void setColors(final int color, final int color1, final int color2, final int color3) {
         colors = new int[] {color, color1, color2, color3};
         notifyChanged();
     }

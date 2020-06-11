@@ -42,7 +42,7 @@ public class CreateFileOnSshdTest extends AbstractSftpServerTest {
         tearDown();
         createSshServer(new VirtualFileSystemFactory() {
             @Override
-            public FileSystem createFileSystem(Session session) throws IOException {
+            public FileSystem createFileSystem(final Session session) throws IOException {
                 return new BlockFileCreationFileSystemProvider().newFileSystem(Paths.get(Environment.getExternalStorageDirectory().getAbsolutePath()), Collections.emptyMap());
             }
         });

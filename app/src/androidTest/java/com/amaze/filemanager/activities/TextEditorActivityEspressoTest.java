@@ -44,7 +44,7 @@ public class TextEditorActivityEspressoTest {
         .setData(uri);
         activityRule.launchActivity(intent);
         CountDownLatch waiter = new CountDownLatch(1);
-        while("".equals(activityRule.getActivity().mInput.getText().toString())) {
+        while ("".equals(activityRule.getActivity().mInput.getText().toString())) {
             waiter.await();
         }
         waiter.countDown();

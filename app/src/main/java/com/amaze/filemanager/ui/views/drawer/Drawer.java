@@ -131,7 +131,7 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
      */
     private boolean isOnTablet = false;
 
-    public Drawer(MainActivity mainActivity) {
+    public Drawer(final MainActivity mainActivity) {
         this.mainActivity = mainActivity;
         resources = mainActivity.getResources();
         dataUtils = DataUtils.getInstance();
@@ -222,11 +222,11 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
                 R.string.drawer_open,  /* "open drawer" description for accessibility */
                 R.string.drawer_close  /* "close drawer" description for accessibility */
             ) {
-                public void onDrawerClosed(View view) {
+                public void onDrawerClosed(final View view) {
                     Drawer.this.onDrawerClosed();
                 }
 
-                public void onDrawerOpened(View drawerView) {
+                public void onDrawerOpened(final View drawerView) {
                     //title.setText("Amaze File Manager");
                     // creates call to onPrepareOptionsMenu()
                 }
@@ -240,7 +240,7 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
 
     }
 
-    private void setNavViewDimension(CustomNavigationView navView) {
+    private void setNavViewDimension(final CustomNavigationView navView) {
         int screenWidth = AppConfig.getInstance().getScreenUtils().getScreenWidthInDp();
         int desiredWidthInDp = screenWidth - ScreenUtils.TOOLBAR_HEIGHT_IN_DP;
         int desiredWidthInPx = AppConfig.getInstance().getScreenUtils().convertDbToPx(desiredWidthInDp);
@@ -285,8 +285,8 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
             if (f.isDirectory() || f.canExecute()) {
                 addNewItem(menu, STORAGES_GROUP, order++, name, new MenuMetadata(file), icon1,
                            R.drawable.ic_show_chart_black_24dp);
-                if(phoneStorageCount == 0) firstPath = file;
-                else if(phoneStorageCount == 1) secondPath = file;
+                if (phoneStorageCount == 0) firstPath = file;
+                else if (phoneStorageCount == 1) secondPath = file;
 
                 phoneStorageCount++;
             }
@@ -457,9 +457,9 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
         }
     }
 
-    private void addNewItem(Menu menu, int group, int order, @StringRes int text, MenuMetadata meta,
-                            @DrawableRes int icon, @DrawableRes Integer actionViewIcon) {
-        if(BuildConfig.DEBUG && menu.findItem(order) != null) throw new IllegalStateException("Item already id exists: " + order);
+    private void addNewItem(final Menu menu, final int group, final int order, final @StringRes int text, final MenuMetadata meta,
+                            final @DrawableRes int icon, final @DrawableRes Integer actionViewIcon) {
+        if (BuildConfig.DEBUG && menu.findItem(order) != null) throw new IllegalStateException("Item already id exists: " + order);
 
         MenuItem item = menu.add(group, order, order, text).setIcon(icon);
         dataUtils.putDrawerMetadata(item, meta);
@@ -476,9 +476,9 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
         }
     }
 
-    private void addNewItem(Menu menu, int group, int order, String text, MenuMetadata meta,
-                            @DrawableRes int icon, @DrawableRes Integer actionViewIcon) {
-        if(BuildConfig.DEBUG && menu.findItem(order) != null) throw new IllegalStateException("Item already id exists: " + order);
+    private void addNewItem(final Menu menu, final int group, final int order, final String text, final MenuMetadata meta,
+                            final @DrawableRes int icon, final @DrawableRes Integer actionViewIcon) {
+        if (BuildConfig.DEBUG && menu.findItem(order) != null) throw new IllegalStateException("Item already id exists: " + order);
 
         MenuItem item = menu.add(group, order, order, text).setIcon(icon);
         dataUtils.putDrawerMetadata(item, meta);
@@ -496,7 +496,7 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
         }
     }
 
-    public void onActivityResult(int requestCode, int responseCode, Intent intent) {
+    public void onActivityResult(final int requestCode, final int responseCode, final Intent intent) {
         if (mainActivity.getPrefs() != null && intent != null && intent.getData() != null) {
             if (SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 mainActivity.getContentResolver().takePersistableUriPermission(intent.getData(),
@@ -558,7 +558,7 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    public boolean onNavigationItemSelected(final @NonNull MenuItem item) {
         actionViewStateManager.deselectCurrentActionView();
         actionViewStateManager.selectActionView(item);
         isSomethingSelected = true;
@@ -572,10 +572,10 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
                 FileUtils.checkForPath(mainActivity, meta.path, mainActivity.isRootExplorer());
             }
 
-            if (dataUtils.getAccounts().size() > 0 && (meta.path.startsWith(CloudHandler.CLOUD_PREFIX_BOX) ||
-                    meta.path.startsWith(CloudHandler.CLOUD_PREFIX_DROPBOX) ||
-                    meta.path.startsWith(CloudHandler.CLOUD_PREFIX_ONE_DRIVE) ||
-                    meta.path.startsWith(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE))) {
+            if (dataUtils.getAccounts().size() > 0 && (meta.path.startsWith(CloudHandler.CLOUD_PREFIX_BOX)
+                    || meta.path.startsWith(CloudHandler.CLOUD_PREFIX_DROPBOX)
+                    || meta.path.startsWith(CloudHandler.CLOUD_PREFIX_ONE_DRIVE)
+                    || meta.path.startsWith(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE))) {
                 // we have cloud accounts, try see if token is expired or not
                 CloudUtil.checkToken(meta.path, mainActivity);
             }
@@ -606,7 +606,7 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
         return true;
     }
 
-    public void onNavigationItemActionClick(MenuItem item) {
+    public void onNavigationItemActionClick(final MenuItem item) {
         String title = item.getTitle().toString();
         MenuMetadata meta = dataUtils.getDrawerMetadata(item);
         String path = meta.path;
@@ -645,7 +645,7 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
         return isSomethingSelected;
     }
 
-    public void setSomethingSelected(boolean isSelected) {
+    public void setSomethingSelected(final boolean isSelected) {
         isSomethingSelected = isSelected;
     }
 
@@ -663,13 +663,13 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
             headerImageView.setImageDrawable(drawerHeaderParent.getBackground());
             mImageLoader.get(path1, new ImageLoader.ImageListener() {
                 @Override
-                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                public void onResponse(final ImageLoader.ImageContainer response, final boolean isImmediate) {
                     headerImageView.setImageBitmap(response.getBitmap());
                     drawerHeaderView.setBackgroundResource(R.drawable.amaze_header_2);
                 }
 
                 @Override
-                public void onErrorResponse(VolleyError error) {}
+                public void onErrorResponse(final VolleyError error) { }
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -679,7 +679,7 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
     public void selectCorrectDrawerItemForPath(final String path) {
         Integer id = dataUtils.findLongestContainingDrawerItem(path);
 
-        if(id == null) deselectEverything();
+        if (id == null) deselectEverything();
         else {
             MenuItem item = navView.getMenu().findItem(id);
             navView.setCheckedItem(item);
@@ -687,7 +687,7 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
         }
     }
 
-    public void setBackgroundColor(@ColorInt int color) {
+    public void setBackgroundColor(final @ColorInt int color) {
         mDrawerLayout.setStatusBarBackgroundColor(color);
         drawerHeaderParent.setBackgroundColor(color);
     }
@@ -702,11 +702,11 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
         }
     }
 
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(final Configuration newConfig) {
         if (mDrawerToggle != null) mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         return mDrawerToggle != null && mDrawerToggle.onOptionsItemSelected(item);
     }
 
@@ -718,7 +718,7 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
     }
 
     public void deselectEverything() {
-        actionViewStateManager.deselectCurrentActionView();//If you set the item as checked the listener doesn't trigger
+        actionViewStateManager.deselectCurrentActionView(); //If you set the item as checked the listener doesn't trigger
         if (!isSomethingSelected) {
             return;
         }
@@ -740,8 +740,8 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
      * @throws IllegalArgumentException if you try to {{@link DrawerLayout#LOCK_MODE_LOCKED_OPEN}
      *             or {@link DrawerLayout#LOCK_MODE_UNDEFINED} on a tablet
      */
-    private void lock(int mode) {
-        if(isOnTablet && mode != DrawerLayout.LOCK_MODE_LOCKED_OPEN) {
+    private void lock(final int mode) {
+        if (isOnTablet && mode != DrawerLayout.LOCK_MODE_LOCKED_OPEN) {
             throw new IllegalArgumentException("You can't lock closed or unlock drawer in tablet!");
         }
 
@@ -756,8 +756,8 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
      *              {@link DrawerLayout#LOCK_MODE_LOCKED_OPEN}
      *             or {@link DrawerLayout#LOCK_MODE_UNDEFINED}
      */
-    public void lockIfNotOnTablet(int mode) {
-        if(isOnTablet) {
+    public void lockIfNotOnTablet(final int mode) {
+        if (isOnTablet) {
             return;
         }
 
@@ -766,7 +766,7 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
     }
 
     public void unlockIfNotOnTablet() {
-        if(isOnTablet) {
+        if (isOnTablet) {
             return;
         }
 

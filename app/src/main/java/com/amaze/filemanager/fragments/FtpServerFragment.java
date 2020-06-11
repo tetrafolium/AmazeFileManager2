@@ -84,15 +84,15 @@ public class FtpServerFragment extends Fragment {
     private ImageButton ftpPasswordVisibleButton;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         mainActivity = (MainActivity) getActivity();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+                             final Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_ftp, container, false);
         statusText = rootView.findViewById(R.id.text_view_ftp_status);
         url = rootView.findViewById(R.id.text_view_ftp_url);
@@ -141,7 +141,7 @@ public class FtpServerFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setRetainInstance(true);
         mainActivity.getAppbar().setTitle(R.string.ftp);
@@ -152,19 +152,19 @@ public class FtpServerFragment extends Fragment {
         int skin_color = mainActivity.getCurrentColorPreference().primaryFirstTab;
         int skinTwoColor = mainActivity.getCurrentColorPreference().primarySecondTab;
 
-        mainActivity.updateViews(new ColorDrawable(MainActivity.currentTab==1 ?
-                                 skinTwoColor : skin_color));
+        mainActivity.updateViews(new ColorDrawable(MainActivity.currentTab == 1
+                                 ? skinTwoColor : skin_color));
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
 
         switch (item.getItemId()) {
         case R.id.choose_ftp_port:
             int currentFtpPort = getDefaultPortFromPreferences();
 
             new MaterialDialog.Builder(getContext())
-            .input(getString(R.string.ftp_port_edit_menu_title), Integer.toString(currentFtpPort), true, (dialog, input) -> {})
+            .input(getString(R.string.ftp_port_edit_menu_title), Integer.toString(currentFtpPort), true, (dialog, input) -> { })
             .inputType(InputType.TYPE_CLASS_NUMBER)
             .onPositive((dialog, which) -> {
                 EditText editText = dialog.getInputEditText();
@@ -192,7 +192,7 @@ public class FtpServerFragment extends Fragment {
             dialogBuilder.title(getString(R.string.ftp_path));
             dialogBuilder.input(getString(R.string.ftp_path_hint),
                                 getDefaultPathFromPreferences(),
-                                false, (dialog, input) -> {});
+                                false, (dialog, input) -> { });
             dialogBuilder.onPositive((dialog, which) -> {
                 EditText editText = dialog.getInputEditText();
                 if (editText != null) {
@@ -276,10 +276,10 @@ public class FtpServerFragment extends Fragment {
         case R.id.ftp_timeout:
             MaterialDialog.Builder timeoutBuilder = new MaterialDialog.Builder(getActivity());
 
-            timeoutBuilder.title(getString(R.string.ftp_timeout) + " (" +
-                                 getResources().getString(R.string.ftp_seconds) + ")");
-            timeoutBuilder.input(String.valueOf(FtpService.DEFAULT_TIMEOUT + " " +
-                                                getResources().getString(R.string.ftp_seconds)), String.valueOf(getFTPTimeout()),
+            timeoutBuilder.title(getString(R.string.ftp_timeout) + " ("
+                                 + getResources().getString(R.string.ftp_seconds) + ")");
+            timeoutBuilder.input(String.valueOf(FtpService.DEFAULT_TIMEOUT + " "
+                                                + getResources().getString(R.string.ftp_seconds)), String.valueOf(getFTPTimeout()),
             true, (dialog, input) -> {
                 boolean isInputInteger;
                 try {
@@ -290,7 +290,7 @@ public class FtpServerFragment extends Fragment {
                     isInputInteger = false;
                 }
 
-                if (input.length()==0 || !isInputInteger)
+                if (input.length() == 0 || !isInputInteger)
                     setFTPTimeout(FtpService.DEFAULT_TIMEOUT);
                 else
                     setFTPTimeout(Integer.valueOf(input.toString()));
@@ -306,14 +306,14 @@ public class FtpServerFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
         mainActivity.getMenuInflater().inflate(R.menu.ftp_server_menu, menu);
     }
 
     private BroadcastReceiver mWifiReceiver = new BroadcastReceiver() {
 
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(final Context context, final Intent intent) {
             ConnectivityManager conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo netInfo = conMan.getActiveNetworkInfo();
             if ((netInfo != null && (netInfo.getType() == ConnectivityManager.TYPE_WIFI || netInfo.getType() == ConnectivityManager.TYPE_ETHERNET))
@@ -333,7 +333,7 @@ public class FtpServerFragment extends Fragment {
 
     private BroadcastReceiver ftpReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(final Context context, final Intent intent) {
             updateSpans();
             switch (intent.getAction()) {
             case FtpService.ACTION_STARTED:
@@ -441,8 +441,8 @@ public class FtpServerFragment extends Fragment {
         ftpPasswordVisibleButton.setOnClickListener(v -> {
             if (password.getText().toString().contains("\u25CF")) {
                 // password was not visible, let's make it visible
-                password.setText(getResources().getString(R.string.password) + ": " +
-                                 passwordDecrypted);
+                password.setText(getResources().getString(R.string.password) + ": "
+                                 + passwordDecrypted);
                 ftpPasswordVisibleButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_eye_off_grey600_24dp));
             } else {
                 // password was visible, let's hide it
@@ -451,10 +451,10 @@ public class FtpServerFragment extends Fragment {
             }
         });
 
-        port.setText(getResources().getString(R.string.ftp_port) + ": " +
-                     getDefaultPortFromPreferences());
-        sharedPath.setText(getResources().getString(R.string.ftp_path) + ": " +
-                           getDefaultPathFromPreferences());
+        port.setText(getResources().getString(R.string.ftp_port) + ": "
+                     + getDefaultPortFromPreferences());
+        sharedPath.setText(getResources().getString(R.string.ftp_path) + ": "
+                           + getDefaultPathFromPreferences());
     }
 
     /**
@@ -464,30 +464,30 @@ public class FtpServerFragment extends Fragment {
 
         String ftpAddress = getFTPAddressString();
 
-        if(ftpAddress == null) {
+        if (ftpAddress == null) {
             ftpAddress = "";
             Toast.makeText(getContext(), getResources().getString(R.string.local_inet_addr_error), Toast.LENGTH_SHORT).show();
         }
 
         String statusHead = getResources().getString(R.string.ftp_status_title) + ": ";
 
-        spannedStatusConnected = Html.fromHtml(statusHead + "<b>&nbsp;&nbsp;" +
-                                               "<font color='" + accentColor + "'>"
+        spannedStatusConnected = Html.fromHtml(statusHead + "<b>&nbsp;&nbsp;"
+                                               + "<font color='" + accentColor + "'>"
                                                + getResources().getString(R.string.ftp_status_running) + "</font></b>");
         spannedStatusUrl = Html.fromHtml("URL:&nbsp;" + ftpAddress);
-        spannedStatusNoConnection = Html.fromHtml(statusHead + "<b>&nbsp;&nbsp;&nbsp;&nbsp;" +
-                                    "<font color='" + Utils.getColor(getContext(), android.R.color.holo_red_light) + "'>"
+        spannedStatusNoConnection = Html.fromHtml(statusHead + "<b>&nbsp;&nbsp;&nbsp;&nbsp;"
+                                    + "<font color='" + Utils.getColor(getContext(), android.R.color.holo_red_light) + "'>"
                                     + getResources().getString(R.string.ftp_status_no_connection) + "</font></b>");
 
-        spannedStatusNotRunning = Html.fromHtml(statusHead + "<b>&nbsp;&nbsp;&nbsp;&nbsp;" +
-                                                getResources().getString(R.string.ftp_status_not_running) + "</b>");
-        spannedStatusSecure = Html.fromHtml(statusHead + "<b>&nbsp;&nbsp;&nbsp;&nbsp;" +
-                                            "<font color='" + Utils.getColor(getContext(), android.R.color.holo_green_light) + "'>"
+        spannedStatusNotRunning = Html.fromHtml(statusHead + "<b>&nbsp;&nbsp;&nbsp;&nbsp;"
+                                                + getResources().getString(R.string.ftp_status_not_running) + "</b>");
+        spannedStatusSecure = Html.fromHtml(statusHead + "<b>&nbsp;&nbsp;&nbsp;&nbsp;"
+                                            + "<font color='" + Utils.getColor(getContext(), android.R.color.holo_green_light) + "'>"
                                             + getResources().getString(R.string.ftp_status_secure_connection) + "</font></b>");
         spannedStatusUrl = Html.fromHtml("URL:&nbsp;" + ftpAddress);
     }
 
-    private void initLoginDialogViews(View loginDialogView) {
+    private void initLoginDialogViews(final View loginDialogView) {
 
         usernameEditText = loginDialogView.findViewById(R.id.edit_text_dialog_ftp_username);
         passwordEditText = loginDialogView.findViewById(R.id.edit_text_dialog_ftp_password);
@@ -526,7 +526,7 @@ public class FtpServerFragment extends Fragment {
     @Nullable
     private String getFTPAddressString() {
         InetAddress ia = FtpService.getLocalInetAddress(getContext());
-        if(ia == null) return null;
+        if (ia == null) return null;
 
         return (getSecurePreference() ? FtpService.INITIALS_HOST_SFTP : FtpService.INITIALS_HOST_FTP)
                + ia.getHostAddress()  + ":" + getDefaultPortFromPreferences();
@@ -565,7 +565,7 @@ public class FtpServerFragment extends Fragment {
         return preferences.getString(FtpService.KEY_PREFERENCE_PATH, FtpService.DEFAULT_PATH);
     }
 
-    private void changeFTPServerPort(int port) {
+    private void changeFTPServerPort(final int port) {
         mainActivity.getPrefs().edit()
         .putInt(FtpService.PORT_PREFERENCE_KEY, port)
         .apply();
@@ -575,7 +575,7 @@ public class FtpServerFragment extends Fragment {
         updateStatus();
     }
 
-    private void changeFTPServerPath(String path) {
+    private void changeFTPServerPath(final String path) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         preferences.edit().putString(FtpService.KEY_PREFERENCE_PATH, path).apply();
 
@@ -583,12 +583,12 @@ public class FtpServerFragment extends Fragment {
 
     }
 
-    private void setFTPUsername(String username) {
+    private void setFTPUsername(final String username) {
         mainActivity.getPrefs().edit().putString(FtpService.KEY_PREFERENCE_USERNAME, username).apply();
         updateStatus();
     }
 
-    private void setFTPPassword(String password) {
+    private void setFTPPassword(final String password) {
         try {
             mainActivity.getPrefs().edit().putString(FtpService.KEY_PREFERENCE_PASSWORD, CryptUtil.encryptPassword(getContext(), password)).apply();
         } catch (GeneralSecurityException | IOException e) {
@@ -606,7 +606,7 @@ public class FtpServerFragment extends Fragment {
         return mainActivity.getPrefs().getInt(FtpService.KEY_PREFERENCE_TIMEOUT, FtpService.DEFAULT_TIMEOUT);
     }
 
-    private void setFTPTimeout(int seconds) {
+    private void setFTPTimeout(final int seconds) {
         mainActivity.getPrefs().edit().putInt(FtpService.KEY_PREFERENCE_TIMEOUT, seconds).apply();
     }
 
@@ -614,7 +614,7 @@ public class FtpServerFragment extends Fragment {
         return mainActivity.getPrefs().getBoolean(FtpService.KEY_PREFERENCE_SECURE, FtpService.DEFAULT_SECURE);
     }
 
-    private void setSecurePreference(boolean isSecureEnabled) {
+    private void setSecurePreference(final boolean isSecureEnabled) {
         mainActivity.getPrefs().edit().putBoolean(FtpService.KEY_PREFERENCE_SECURE, isSecureEnabled).apply();
     }
 }

@@ -98,7 +98,7 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
      */
     public ArrayList<HybridFileParcelable> files;
     public boolean selection = false;
-    public String relativeDirectory = "";//Normally this would be "/" but for pathing issues it isn't
+    public String relativeDirectory = ""; //Normally this would be "/" but for pathing issues it isn't
     public @ColorInt int accentColor, iconskin;
     public String year;
     public CompressedExplorerAdapter compressedExplorerAdapter;
@@ -123,18 +123,18 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
     private int file = 0, folder = 0;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(final @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         utilsProvider = ((BasicActivity) getActivity()).getUtilsProvider();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.main_frag, container, false);
         mainActivity = (MainActivity) getActivity();
         listView = rootView.findViewById(R.id.listView);
         listView.setOnTouchListener((view, motionEvent) -> {
-            if(compressedExplorerAdapter != null) {
+            if (compressedExplorerAdapter != null) {
                 if (stopAnims && !compressedExplorerAdapter.stoppedAnimation) {
                     stopAnim();
                 }
@@ -159,7 +159,7 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState)
+    public void onActivityCreated(final Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -168,9 +168,9 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
         mToolbarContainer = mainActivity.getAppbar().getAppbarLayout();
         mToolbarContainer.setOnTouchListener((view, motionEvent) ->
         {
-            if(stopAnims)
+            if (stopAnims)
             {
-                if((!compressedExplorerAdapter.stoppedAnimation))
+                if ((!compressedExplorerAdapter.stoppedAnimation))
                 {
                     stopAnim();
                 }
@@ -184,10 +184,10 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
         mLayoutManager = new LinearLayoutManager(getActivity());
         listView.setLayoutManager(mLayoutManager);
 
-        if(utilsProvider.getAppTheme().equals(AppTheme.DARK))
+        if (utilsProvider.getAppTheme().equals(AppTheme.DARK))
         {
             rootView.setBackgroundColor(Utils.getColor(getContext(), R.color.holo_dark_background));
-        } else if(utilsProvider.getAppTheme().equals(AppTheme.BLACK)) {
+        } else if (utilsProvider.getAppTheme().equals(AppTheme.BLACK)) {
             listView.setBackgroundColor(Utils.getColor(getContext(), android.R.color.black));
         } else {
             listView.setBackgroundColor(Utils.getColor(getContext(), android.R.color.background_light));
@@ -221,7 +221,7 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
 
         outState.putParcelableArrayList(KEY_ELEMENTS, elements);
@@ -232,7 +232,7 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
         outState.putBoolean(KEY_OPEN, isOpen);
     }
 
-    private void onRestoreInstanceState(Bundle savedInstanceState) {
+    private void onRestoreInstanceState(final Bundle savedInstanceState) {
         compressedFile = new File(Uri.parse(savedInstanceState.getString(KEY_URI)).getPath());
         files = savedInstanceState.getParcelableArrayList(KEY_CACHE_FILES);
         isOpen = savedInstanceState.getBoolean(KEY_OPEN);
@@ -244,12 +244,12 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
     }
 
     public ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-        private void hideOption(int id, Menu menu) {
+        private void hideOption(final int id, final Menu menu) {
             MenuItem item = menu.findItem(id);
             item.setVisible(false);
         }
 
-        private void showOption(int id, Menu menu) {
+        private void showOption(final int id, final Menu menu) {
             MenuItem item = menu.findItem(id);
             item.setVisible(true);
         }
@@ -257,7 +257,7 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
         View v;
 
         // called when the action mode is created; startActionMode() was called
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        public boolean onCreateActionMode(final ActionMode mode, final Menu menu) {
             // Inflate a menu resource providing context menu items
             MenuInflater inflater = mode.getMenuInflater();
             v = getActivity().getLayoutInflater().inflate(R.layout.actionmode, null);
@@ -292,17 +292,17 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
         // the action mode is shown. Always called after
         // onCreateActionMode, but
         // may be called multiple times if the mode is invalidated.
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        public boolean onPrepareActionMode(final ActionMode mode, final Menu menu) {
             ArrayList<Integer> positions = compressedExplorerAdapter.getCheckedItemPositions();
             ((TextView) v.findViewById(R.id.item_count)).setText(positions.size() + "");
-            menu.findItem(R.id.all).setTitle(positions.size() == folder + file ?
-                                             R.string.deselect_all : R.string.selectall);
+            menu.findItem(R.id.all).setTitle(positions.size() == folder + file
+                                             ? R.string.deselect_all : R.string.selectall);
 
             return false; // Return false if nothing is done
         }
 
         // called when the user selects a contextual menu item
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        public boolean onActionItemClicked(final ActionMode mode, final MenuItem item) {
             switch (item.getItemId()) {
             case R.id.all:
                 ArrayList<Integer> positions = compressedExplorerAdapter.getCheckedItemPositions();
@@ -310,7 +310,7 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
                 compressedExplorerAdapter.toggleChecked(shouldDeselectAll);
                 mode.invalidate();
                 item.setTitle(shouldDeselectAll ? R.string.deselect_all : R.string.selectall);
-                if(!shouldDeselectAll)
+                if (!shouldDeselectAll)
                 {
                     selection = false;
                     mActionMode.finish();
@@ -334,7 +334,7 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
         }
 
         @Override
-        public void onDestroyActionMode(ActionMode actionMode) {
+        public void onDestroyActionMode(final ActionMode actionMode) {
             if (compressedExplorerAdapter != null) compressedExplorerAdapter.toggleChecked(false);
             @ColorInt int primaryColor = ColorPreferenceHelper.getPrimary(mainActivity.getCurrentColorPreference(), MainActivity.currentTab);
             selection = false;
@@ -380,11 +380,11 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
+        public void onServiceConnected(final ComponentName name, final IBinder service) {
         }
 
         @Override
-        public void onServiceDisconnected(ComponentName name) {
+        public void onServiceDisconnected(final ComponentName name) {
             // open file if pending
             if (isOpen) {
                 // open most recent entry added to files to be deleted from cache
@@ -400,13 +400,13 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
     };
 
     @Override
-    public void changePath(String folder) {
-        if(folder == null) folder = "";
-        if(folder.startsWith("/")) folder = folder.substring(1);
+    public void changePath(final String folder) {
+        if (folder == null) folder = "";
+        if (folder.startsWith("/")) folder = folder.substring(1);
 
         boolean addGoBackItem = gobackitem && !isRoot(folder);
         String finalfolder = folder;
-        if(decompressor!=null) {
+        if (decompressor != null) {
             decompressor.changePath(folder, addGoBackItem, result -> {
                 if (result.exception == null) {
                     elements = result.result;
@@ -426,7 +426,7 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
 
     @Override
     public String getPath() {
-        if(!isRootRelativePath()) return SEPARATOR + relativeDirectory;
+        if (!isRootRelativePath()) return SEPARATOR + relativeDirectory;
         else return "";
     }
 
@@ -440,11 +440,11 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
     }
 
     private void updateBottomBar() {
-        String path = !isRootRelativePath()? compressedFile.getName() + SEPARATOR + relativeDirectory : compressedFile.getName();
+        String path = !isRootRelativePath() ? compressedFile.getName() + SEPARATOR + relativeDirectory : compressedFile.getName();
         mainActivity.getAppbar().getBottomBar().updatePath(path, false, null, OpenMode.FILE, folder, file, this);
     }
 
-    private void createViews(List<CompressedObjectParcelable> items, String dir) {
+    private void createViews(final List<CompressedObjectParcelable> items, final String dir) {
         if (compressedExplorerAdapter == null) {
             compressedExplorerAdapter = new CompressedExplorerAdapter(getActivity(), utilsProvider, items, this, decompressor,
                     PreferenceManager.getDefaultSharedPreferences(getActivity()));
@@ -456,7 +456,7 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
         folder = 0;
         file = 0;
         for (CompressedObjectParcelable item : items) {
-            if(item.type == CompressedObjectParcelable.TYPE_GOBACK) continue;
+            if (item.type == CompressedObjectParcelable.TYPE_GOBACK) continue;
 
             if (item.directory) folder++;
             else file++;
@@ -498,7 +498,7 @@ public class CompressedExplorerFragment extends Fragment implements BottomBarBut
         return isRoot(relativeDirectory);
     }
 
-    private boolean isRoot(String folder) {
+    private boolean isRoot(final String folder) {
         return folder == null || folder.isEmpty();
     }
 

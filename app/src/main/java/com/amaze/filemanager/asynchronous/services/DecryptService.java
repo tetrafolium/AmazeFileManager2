@@ -53,7 +53,7 @@ public class DecryptService extends AbstractProgressiveService {
     // list of data packages, to initiate chart in process viewer fragment
     private ArrayList<DatapointParcelable> dataPackages = new ArrayList<>();
     private ServiceWatcherUtil serviceWatcherUtil;
-    private long totalSize = 0l;
+    private long totalSize = 0L;
     private String decryptPath;
     private HybridFileParcelable baseFile;
     private ArrayList<HybridFile> failedOps = new ArrayList<>();
@@ -70,7 +70,7 @@ public class DecryptService extends AbstractProgressiveService {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(final Intent intent, final int flags, final int startId) {
 
         baseFile = intent.getParcelableExtra(TAG_SOURCE);
 
@@ -123,10 +123,10 @@ public class DecryptService extends AbstractProgressiveService {
     class BackgroundTask extends AsyncTask<Void, Void, Void> {
 
         @Override
-        protected Void doInBackground(Void... params) {
-            String baseFileFolder = baseFile.isDirectory()?
-                                    baseFile.getPath():
-                                    baseFile.getPath().substring(0, baseFile.getPath().lastIndexOf('/'));
+        protected Void doInBackground(final Void... params) {
+            String baseFileFolder = baseFile.isDirectory()
+                                    ? baseFile.getPath()
+                                    : baseFile.getPath().substring(0, baseFile.getPath().lastIndexOf('/'));
 
             if (baseFile.isDirectory())  totalSize = baseFile.folderSize(context);
             else totalSize = baseFile.length(context);
@@ -137,7 +137,7 @@ public class DecryptService extends AbstractProgressiveService {
                                                 publishResults(speed, false, false));
             serviceWatcherUtil = new ServiceWatcherUtil(progressHandler);
 
-            addFirstDatapoint(baseFile.getName(), 1, totalSize, false);// we're using encrypt as move flag false
+            addFirstDatapoint(baseFile.getName(), 1, totalSize, false); // we're using encrypt as move flag false
 
             if (FileUtil.checkFolder(baseFileFolder, context) == 1) {
                 serviceWatcherUtil.watch(DecryptService.this);
@@ -157,7 +157,7 @@ public class DecryptService extends AbstractProgressiveService {
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected void onPostExecute(final Void aVoid) {
             super.onPostExecute(aVoid);
 
             serviceWatcherUtil.stopWatch();
@@ -187,7 +187,7 @@ public class DecryptService extends AbstractProgressiveService {
 
     @Override
     @StringRes
-    protected int getTitle(boolean move) {
+    protected int getTitle(final boolean move) {
         return R.string.crypt_decrypting;
     }
 
@@ -206,7 +206,7 @@ public class DecryptService extends AbstractProgressiveService {
     }
 
     @Override
-    public void setProgressListener(ProgressListener progressListener) {
+    public void setProgressListener(final ProgressListener progressListener) {
         this.progressListener = progressListener;
     }
 
@@ -226,7 +226,7 @@ public class DecryptService extends AbstractProgressiveService {
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
+    public IBinder onBind(final Intent intent) {
         return mBinder;
     }
 
@@ -239,7 +239,7 @@ public class DecryptService extends AbstractProgressiveService {
     private BroadcastReceiver cancelReceiver = new BroadcastReceiver() {
 
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(final Context context, final Intent intent) {
             //cancel operation
             progressHandler.setCancelled(true);
         }

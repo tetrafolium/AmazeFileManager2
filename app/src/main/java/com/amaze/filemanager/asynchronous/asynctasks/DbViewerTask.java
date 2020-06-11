@@ -23,7 +23,7 @@ public class DbViewerTask extends AsyncTask<Void, Integer, Void> {
     WebView webView;
     String htmlInit;
 
-    public DbViewerTask (Cursor schemaCursor, Cursor contentCursor, WebView webView, DbViewerFragment dbViewerFragment) {
+    public DbViewerTask(final Cursor schemaCursor, final Cursor contentCursor, final WebView webView, final DbViewerFragment dbViewerFragment) {
         this.schemaCursor = schemaCursor;
         this.contentCursor = contentCursor;
         this.webView = webView;
@@ -40,26 +40,26 @@ public class DbViewerTask extends AsyncTask<Void, Integer, Void> {
         if (dbViewerFragment.databaseViewerActivity.getAppTheme().equals(AppTheme.DARK) || dbViewerFragment.databaseViewerActivity.getAppTheme()
                 .equals(AppTheme.BLACK)) {
 
-            htmlInit = "<html><body>" +
-                       "<table border='1' style='width:100%;color:#ffffff'>";
+            htmlInit = "<html><body>"
+                       + "<table border='1' style='width:100%;color:#ffffff'>";
         } else {
 
-            htmlInit = "<html><body>" +
-                       "<table border='1' style='width:100%;color:#000000'>";
+            htmlInit = "<html><body>"
+                       + "<table border='1' style='width:100%;color:#000000'>";
         }
         stringBuilder.append(htmlInit);
         dbViewerFragment.loadingText.setVisibility(View.VISIBLE);
     }
 
     @Override
-    protected void onProgressUpdate(Integer... values) {
+    protected void onProgressUpdate(final Integer... values) {
         super.onProgressUpdate(values);
 
         dbViewerFragment.loadingText.setText(values[0] + " records loaded");
     }
 
     @Override
-    protected Void doInBackground(Void... params) {
+    protected Void doInBackground(final Void... params) {
         schemaList = getDbTableSchema(schemaCursor);
         contentList = getDbTableDetails(contentCursor);
         return null;
@@ -72,7 +72,7 @@ public class DbViewerTask extends AsyncTask<Void, Integer, Void> {
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
+    protected void onPostExecute(final Void aVoid) {
         super.onPostExecute(aVoid);
 
         dbViewerFragment.loadingText.setVisibility(View.GONE);
@@ -87,7 +87,7 @@ public class DbViewerTask extends AsyncTask<Void, Integer, Void> {
         for (String[] strings : contentList) {
             // init content row
             stringBuilder.append("<tr>");
-            for (int i = 0; i<strings.length; i++) {
+            for (int i = 0; i < strings.length; i++) {
                 stringBuilder.append("<td>").append(strings[i]).append("</td>");
             }
             stringBuilder.append("</tr>");
@@ -97,7 +97,7 @@ public class DbViewerTask extends AsyncTask<Void, Integer, Void> {
         webView.setVisibility(View.VISIBLE);
     }
 
-    private ArrayList<String[]> getDbTableDetails(Cursor c) {
+    private ArrayList<String[]> getDbTableDetails(final Cursor c) {
         ArrayList<String[]> result = new ArrayList<>();
         int j = 0;
         for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
@@ -139,7 +139,7 @@ public class DbViewerTask extends AsyncTask<Void, Integer, Void> {
         }
         return result;
     }
-    private ArrayList<String> getDbTableSchema(Cursor c) {
+    private ArrayList<String> getDbTableSchema(final Cursor c) {
         ArrayList<String> result = new ArrayList<>();
         for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
             if (!isCancelled()) {

@@ -94,16 +94,16 @@ public class SftpConnectDialog extends DialogFragment {
     private String selectedParsedKeyPairName = null;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         utilsProvider = AppConfig.getInstance().getUtilsProvider();
         utilsHandler = AppConfig.getInstance().getUtilsHandler();
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
         context = getActivity();
-        final boolean edit=getArguments().getBoolean("edit",false);
+        final boolean edit = getArguments().getBoolean("edit", false);
         final View v2 = getActivity().getLayoutInflater().inflate(R.layout.sftp_dialog, null);
         final EditText connectionET = v2.findViewById(R.id.connectionET);
         final EditText addressET = v2.findViewById(R.id.ipET);
@@ -114,7 +114,7 @@ public class SftpConnectDialog extends DialogFragment {
 
         // If it's new connection setup, set some default values
         // Otherwise, use given Bundle instance for filling in the blanks
-        if(!edit) {
+        if (!edit) {
             connectionET.setText(R.string.scp_con);
             portET.setText(Integer.toString(SshConnectionPool.SSH_DEFAULT_PORT));
         } else {
@@ -122,7 +122,7 @@ public class SftpConnectDialog extends DialogFragment {
             addressET.setText(getArguments().getString("address"));
             portET.setText(getArguments().getString("port"));
             usernameET.setText(getArguments().getString("username"));
-            if(getArguments().getBoolean("hasPassword")) {
+            if (getArguments().getBoolean("hasPassword")) {
                 passwordET.setHint(R.string.password_unchanged);
             } else {
                 selectedParsedKeyPairName = getArguments().getString("keypairName");
@@ -132,7 +132,7 @@ public class SftpConnectDialog extends DialogFragment {
 
         //For convenience, so I don't need to press backspace all the time
         portET.setOnFocusChangeListener((v, hasFocus) -> {
-            if(hasFocus)
+            if (hasFocus)
                 portET.selectAll();
         });
 
@@ -165,8 +165,8 @@ public class SftpConnectDialog extends DialogFragment {
             final String hostname = addressET.getText().toString();
             final int port = Integer.parseInt(portET.getText().toString());
             final String username = usernameET.getText().toString();
-            final String password = passwordET.getText() != null ?
-            passwordET.getText().toString() : null;
+            final String password = passwordET.getText() != null
+            ? passwordET.getText().toString() : null;
 
             String sshHostKey = utilsHandler.getSshHostKey(deriveSftpPathFrom(hostname, port,
                     username, password, selectedParsedKeyPair));
@@ -206,7 +206,7 @@ public class SftpConnectDialog extends DialogFragment {
         }).onNegative((dialog, which) -> dialog.dismiss());
 
         //If we are editing connection settings, give new actions for neutral and negative buttons
-        if(edit) {
+        if (edit) {
             dialogBuilder.negativeText(R.string.delete).onNegative((dialog, which) -> {
 
                 final String connectionName = connectionET.getText().toString();
@@ -236,12 +236,12 @@ public class SftpConnectDialog extends DialogFragment {
         // Some validations to make sure the Create/Update button is clickable only when required
         // setting values are given
         final View okBTN = dialog.getActionButton(DialogAction.POSITIVE);
-        if(!edit)
+        if (!edit)
             okBTN.setEnabled(false);
 
         TextWatcher validator = new SimpleTextWatcher() {
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(final Editable s) {
                 int port = portET.getText().toString().length() > 0 ? Integer.parseInt(portET.getText().toString()) : -1;
                 okBTN.setEnabled(
                     (connectionET.getText().length() > 0
@@ -265,9 +265,9 @@ public class SftpConnectDialog extends DialogFragment {
      * Set the PEM key for authentication when the Intent to browse file returned.
      */
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(SELECT_PEM_INTENT == requestCode && Activity.RESULT_OK == resultCode)
+        if (SELECT_PEM_INTENT == requestCode && Activity.RESULT_OK == resultCode)
         {
             selectedPem = data.getData();
 
@@ -277,8 +277,8 @@ public class SftpConnectDialog extends DialogFragment {
                 new PemToKeyPairTask(selectedKeyContent, result -> {
                     selectedParsedKeyPair = result;
                     selectedParsedKeyPairName = selectedPem.getLastPathSegment()
-                    .substring(selectedPem.getLastPathSegment().indexOf('/')+1);
-                    MDButton okBTN = ((MaterialDialog)getDialog())
+                    .substring(selectedPem.getLastPathSegment().indexOf('/') + 1);
+                    MDButton okBTN = ((MaterialDialog) getDialog())
                     .getActionButton(DialogAction.POSITIVE);
                     okBTN.setEnabled(okBTN.isEnabled() || true);
 
@@ -286,19 +286,19 @@ public class SftpConnectDialog extends DialogFragment {
                     selectPemBTN.setText(selectedParsedKeyPairName);
                 }).execute();
 
-            } catch(FileNotFoundException e) {
+            } catch (FileNotFoundException e) {
                 Log.e(TAG, "File not found", e);
-            } catch(IOException shouldNotHappen) {}
+            } catch (IOException shouldNotHappen) { }
         }
     }
 
-    private boolean authenticateAndSaveSetup(String connectionName, String hostname,
-            int port, String hostKeyFingerprint,
-            String username, String password,
-            String selectedParsedKeyPairName,
-            KeyPair selectedParsedKeyPair, boolean isEdit) {
+    private boolean authenticateAndSaveSetup(final String connectionName, final String hostname,
+            final int port, final String hostKeyFingerprint,
+            final String username, final String password,
+            final String selectedParsedKeyPairName,
+            final KeyPair selectedParsedKeyPair, final boolean isEdit) {
 
-        if(isEdit)
+        if (isEdit)
             password = getArguments().getString("password", null);
 
         final String path = deriveSftpPathFrom(hostname, port, username, password,
@@ -306,14 +306,14 @@ public class SftpConnectDialog extends DialogFragment {
 
         final String encryptedPath = SshClientUtils.encryptSshPathAsNecessary(path);
 
-        if(!isEdit) {
+        if (!isEdit) {
             try {
                 SSHClient result = SshConnectionPool.getInstance().getConnection(hostname, port,
                                    hostKeyFingerprint, username, password, selectedParsedKeyPair);
 
-                if(result != null) {
+                if (result != null) {
 
-                    if(DataUtils.getInstance().containsServer(path) == -1) {
+                    if (DataUtils.getInstance().containsServer(path) == -1) {
                         DataUtils.getInstance().addServer(new String[] {connectionName, path});
                         ((MainActivity) getActivity()).getDrawer().refreshDrawer();
 
@@ -321,7 +321,7 @@ public class SftpConnectDialog extends DialogFragment {
                                                     encryptedPath, connectionName, hostKeyFingerprint,
                                                     selectedParsedKeyPairName, getPemContents()));
 
-                        MainFragment ma = ((MainActivity)getActivity()).getCurrentMainFragment();
+                        MainFragment ma = ((MainActivity) getActivity()).getCurrentMainFragment();
                         ma.loadlist(path, false, OpenMode.SFTP);
                         dismiss();
 
@@ -357,7 +357,7 @@ public class SftpConnectDialog extends DialogFragment {
 
     //Read the PEM content from InputStream to String.
     private String getPemContents() {
-        if(selectedPem == null)
+        if (selectedPem == null)
             return null;
 
         try {
@@ -367,9 +367,9 @@ public class SftpConnectDialog extends DialogFragment {
                 sb.append(line).append("\n");
             }
             return sb.toString();
-        } catch(FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             return null;
-        } catch(IOException e) {
+        } catch (IOException e) {
             return null;
         }
     }

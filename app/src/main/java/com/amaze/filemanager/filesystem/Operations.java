@@ -85,7 +85,7 @@ public class Operations {
             private DataUtils dataUtils = DataUtils.getInstance();
 
             @Override
-            protected Void doInBackground(Void... params) {
+            protected Void doInBackground(final Void... params) {
                 // checking whether filename is valid or a recursive call possible
                 if (!Operations.isFileNameValid(file.getName(context))) {
                     errorCallBack.invalidName(file);
@@ -199,7 +199,7 @@ public class Operations {
             private DataUtils dataUtils = DataUtils.getInstance();
 
             @Override
-            protected Void doInBackground(Void... params) {
+            protected Void doInBackground(final Void... params) {
                 // check whether filename is valid or not
                 if (!Operations.isFileNameValid(file.getName(context))) {
                     errorCallBack.invalidName(file);
@@ -212,7 +212,7 @@ public class Operations {
                 }
                 if (file.isSftp()) {
                     OutputStream out = file.getOutputStream(context);
-                    if(out == null) {
+                    if (out == null) {
                         errorCallBack.done(file, false);
                         return null;
                     }
@@ -220,7 +220,7 @@ public class Operations {
                         out.close();
                         errorCallBack.done(file, true);
                         return null;
-                    } catch(IOException e) {
+                    } catch (IOException e) {
                         errorCallBack.done(file, false);
                         return null;
                     }
@@ -241,7 +241,7 @@ public class Operations {
                         byte[] tempBytes = new byte[0];
                         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(tempBytes);
                         cloudStorageDropbox.upload(CloudUtil.stripPath(OpenMode.DROPBOX, file.getPath()),
-                                                   byteArrayInputStream, 0l, true);
+                                                   byteArrayInputStream, 0L, true);
                         errorCallBack.done(file, true);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -253,7 +253,7 @@ public class Operations {
                         byte[] tempBytes = new byte[0];
                         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(tempBytes);
                         cloudStorageBox.upload(CloudUtil.stripPath(OpenMode.BOX, file.getPath()),
-                                               byteArrayInputStream, 0l, true);
+                                               byteArrayInputStream, 0L, true);
                         errorCallBack.done(file, true);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -265,7 +265,7 @@ public class Operations {
                         byte[] tempBytes = new byte[0];
                         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(tempBytes);
                         cloudStorageOneDrive.upload(CloudUtil.stripPath(OpenMode.ONEDRIVE, file.getPath()),
-                                                    byteArrayInputStream, 0l, true);
+                                                    byteArrayInputStream, 0L, true);
                         errorCallBack.done(file, true);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -277,7 +277,7 @@ public class Operations {
                         byte[] tempBytes = new byte[0];
                         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(tempBytes);
                         cloudStorageGdrive.upload(CloudUtil.stripPath(OpenMode.GDRIVE, file.getPath()),
-                                                  byteArrayInputStream, 0l, true);
+                                                  byteArrayInputStream, 0L, true);
                         errorCallBack.done(file, true);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -337,7 +337,7 @@ public class Operations {
             private DataUtils dataUtils = DataUtils.getInstance();
 
             @Override
-            protected Void doInBackground(Void... params) {
+            protected Void doInBackground(final Void... params) {
                 // check whether file names for new file are valid or recursion occurs
                 if (!Operations.isFileNameValid(newFile.getName(context))) {
                     errorCallBack.invalidName(newFile);
@@ -369,12 +369,12 @@ public class Operations {
                 } else if (oldFile.isSftp()) {
                     SshClientUtils.execute(new SFtpClientTemplate(oldFile.getPath()) {
                         @Override
-                        public <Void> Void execute(@NonNull SFTPClient client) {
+                        public <Void> Void execute(final @NonNull SFTPClient client) {
                             try {
                                 client.rename(SshClientUtils.extractRemotePathFrom(oldFile.getPath()),
                                               SshClientUtils.extractRemotePathFrom(newFile.getPath()));
                                 errorCallBack.done(newFile, true);
-                            } catch(IOException e) {
+                            } catch (IOException e) {
                                 e.printStackTrace();
                                 errorCallBack.done(newFile, false);
                             }
@@ -477,10 +477,10 @@ public class Operations {
             }
 
             @Override
-            protected void onPostExecute(Void aVoid) {
+            protected void onPostExecute(final Void aVoid) {
                 super.onPostExecute(aVoid);
                 if (newFile != null && oldFile != null) {
-                    HybridFile[] hybridFiles = { newFile, oldFile};
+                    HybridFile[] hybridFiles = {newFile, oldFile};
                     FileUtils.scanFile(context, hybridFiles);
                 }
             }
@@ -488,7 +488,7 @@ public class Operations {
 
     }
 
-    private static int checkFolder(final File folder, Context context) {
+    private static int checkFolder(final File folder, final Context context) {
         boolean lol = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
         if (lol) {
 
@@ -525,7 +525,7 @@ public class Operations {
      *
      * @return true when copy loop is possible
      */
-    public static boolean isCopyLoopPossible(HybridFileParcelable sourceFile, HybridFile targetFile) {
+    public static boolean isCopyLoopPossible(final HybridFileParcelable sourceFile, final HybridFile targetFile) {
         return targetFile.getPath().contains(sourceFile.getPath());
     }
 
@@ -536,17 +536,17 @@ public class Operations {
      * @param fileName the filename, not the full path!
      * @return boolean if the file name is valid or invalid
      */
-    public static boolean isFileNameValid(String fileName) {
+    public static boolean isFileNameValid(final String fileName) {
         //String fileName = builder.substring(builder.lastIndexOf("/")+1, builder.length());
 
         // TODO: check file name validation only for FAT filesystems
-        return !(fileName.contains(ASTERISK) || fileName.contains(BACKWARD_SLASH) ||
-                 fileName.contains(COLON) || fileName.contains(FOREWARD_SLASH) ||
-                 fileName.contains(GREATER_THAN) || fileName.contains(LESS_THAN) ||
-                 fileName.contains(QUESTION_MARK) || fileName.contains(QUOTE));
+        return !(fileName.contains(ASTERISK) || fileName.contains(BACKWARD_SLASH)
+                 || fileName.contains(COLON) || fileName.contains(FOREWARD_SLASH)
+                 || fileName.contains(GREATER_THAN) || fileName.contains(LESS_THAN)
+                 || fileName.contains(QUESTION_MARK) || fileName.contains(QUOTE));
     }
 
-    private static boolean isFileSystemFAT(String mountPoint) {
+    private static boolean isFileSystemFAT(final String mountPoint) {
         String[] args = new String[] {"/bin/bash", "-c", "df -DO_NOT_REPLACE | awk '{print $1,$2,$NF}' | grep \"^"
                                       + mountPoint + "\""
                                      };

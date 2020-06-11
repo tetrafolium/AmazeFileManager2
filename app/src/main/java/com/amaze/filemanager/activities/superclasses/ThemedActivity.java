@@ -19,7 +19,7 @@ import com.amaze.filemanager.utils.theme.AppTheme;
 public class ThemedActivity extends PreferenceActivity {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // checking if theme should be set light/dark or automatic

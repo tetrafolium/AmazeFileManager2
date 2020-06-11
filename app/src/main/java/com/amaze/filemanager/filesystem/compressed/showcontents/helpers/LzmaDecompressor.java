@@ -33,13 +33,13 @@ import java.util.ArrayList;
 
 public class LzmaDecompressor extends Decompressor {
 
-    public LzmaDecompressor(Context context) {
+    public LzmaDecompressor(final Context context) {
         super(context);
     }
 
     @Override
-    public CompressedHelperTask changePath(String path, boolean addGoBackItem,
-                                           OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
+    public CompressedHelperTask changePath(final String path, final boolean addGoBackItem,
+                                           final OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
         return new LzmaHelperTask(filePath, path, addGoBackItem, onFinish);
     }
 

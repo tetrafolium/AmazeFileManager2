@@ -25,14 +25,14 @@ public class RecyclerPreloadModelProvider implements ListPreloader.PreloadModelP
     private List<IconDataParcelable> urisToLoad;
     private GlideRequest<Drawable> request;
 
-    public RecyclerPreloadModelProvider(@NonNull Fragment fragment, @NonNull List<IconDataParcelable> uris) {
+    public RecyclerPreloadModelProvider(final @NonNull Fragment fragment, final @NonNull List<IconDataParcelable> uris) {
         urisToLoad = uris;
         request = GlideApp.with(fragment).asDrawable().centerCrop();
     }
 
     @Override
     @NonNull
-    public List<IconDataParcelable> getPreloadItems(int position) {
+    public List<IconDataParcelable> getPreloadItems(final int position) {
         IconDataParcelable iconData = urisToLoad.get(position);
         if (iconData == null) return Collections.emptyList();
         return Collections.singletonList(iconData);
@@ -40,7 +40,7 @@ public class RecyclerPreloadModelProvider implements ListPreloader.PreloadModelP
 
     @Override
     @Nullable
-    public RequestBuilder<Drawable> getPreloadRequestBuilder(IconDataParcelable iconData) {
+    public RequestBuilder<Drawable> getPreloadRequestBuilder(final IconDataParcelable iconData) {
         RequestBuilder<Drawable> requestBuilder;
         if (iconData.type == IconDataParcelable.IMAGE_FROMFILE) {
             requestBuilder = request.load(iconData.path);

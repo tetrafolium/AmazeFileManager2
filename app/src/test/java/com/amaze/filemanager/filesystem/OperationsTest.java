@@ -33,7 +33,7 @@ public class OperationsTest {
         CountDownLatch waiter = new CountDownLatch(1);
         Operations.mkdir(newFolderHF, RuntimeEnvironment.application, false, new AbstractErrorCallback() {
             @Override
-            public void done(HybridFile hFile, boolean b) {
+            public void done(final HybridFile hFile, final boolean b) {
                 waiter.countDown();
             }
         });
@@ -50,7 +50,7 @@ public class OperationsTest {
         CountDownLatch waiter1 = new CountDownLatch(1);
         Operations.mkdir(newFolderHF, RuntimeEnvironment.application, false, new AbstractErrorCallback() {
             @Override
-            public void done(HybridFile hFile, boolean b) {
+            public void done(final HybridFile hFile, final boolean b) {
                 waiter1.countDown();
             }
         });
@@ -61,7 +61,7 @@ public class OperationsTest {
         AtomicBoolean assertFlag = new AtomicBoolean(false);
         Operations.mkdir(newFolderHF, RuntimeEnvironment.application, false, new AbstractErrorCallback() {
             @Override
-            public void exists(HybridFile file) {
+            public void exists(final HybridFile file) {
                 assertFlag.set(true);
                 waiter2.countDown();
             }
@@ -79,7 +79,7 @@ public class OperationsTest {
         CountDownLatch waiter1 = new CountDownLatch(1);
         Operations.mkdir(newFolderHF, RuntimeEnvironment.application, false, new AbstractErrorCallback() {
             @Override
-            public void done(HybridFile hFile, boolean b) {
+            public void done(final HybridFile hFile, final boolean b) {
                 waiter1.countDown();
             }
         });
@@ -91,7 +91,7 @@ public class OperationsTest {
         CountDownLatch waiter2 = new CountDownLatch(1);
         Operations.mkdir(newFolder2HF, RuntimeEnvironment.application, false, new AbstractErrorCallback() {
             @Override
-            public void done(HybridFile hFile, boolean b) {
+            public void done(final HybridFile hFile, final boolean b) {
                 waiter2.countDown();
             }
         });
@@ -102,7 +102,7 @@ public class OperationsTest {
         AtomicBoolean assertFlag = new AtomicBoolean(false);
         Operations.mkdir(newFolder2HF, RuntimeEnvironment.application, false, new AbstractErrorCallback() {
             @Override
-            public void exists(HybridFile file) {
+            public void exists(final HybridFile file) {
                 assertFlag.set(true);
                 waiter3.countDown();
             }
@@ -122,7 +122,7 @@ public class OperationsTest {
         CountDownLatch waiter1 = new CountDownLatch(1);
         Operations.mkdir(oldFolderHF, RuntimeEnvironment.application, false, new AbstractErrorCallback() {
             @Override
-            public void done(HybridFile hFile, boolean b) {
+            public void done(final HybridFile hFile, final boolean b) {
                 waiter1.countDown();
             }
         });
@@ -132,7 +132,7 @@ public class OperationsTest {
         CountDownLatch waiter2 = new CountDownLatch(1);
         Operations.rename(oldFolderHF, newFolderHF, false, RuntimeEnvironment.application, new AbstractErrorCallback() {
             @Override
-            public void done(HybridFile hFile, boolean b) {
+            public void done(final HybridFile hFile, final boolean b) {
                 waiter2.countDown();
             }
         });
@@ -150,7 +150,7 @@ public class OperationsTest {
         CountDownLatch waiter1 = new CountDownLatch(1);
         Operations.mkdir(folderHF, RuntimeEnvironment.application, false, new AbstractErrorCallback() {
             @Override
-            public void done(HybridFile hFile, boolean b) {
+            public void done(final HybridFile hFile, final boolean b) {
                 waiter1.countDown();
             }
         });
@@ -161,7 +161,7 @@ public class OperationsTest {
         AtomicBoolean assertFlag = new AtomicBoolean(false);
         Operations.rename(folderHF, folderHF, false, RuntimeEnvironment.application, new AbstractErrorCallback() {
             @Override
-            public void exists(HybridFile file) {
+            public void exists(final HybridFile file) {
                 assertFlag.set(true);
                 waiter2.countDown();
             }
@@ -180,7 +180,7 @@ public class OperationsTest {
         CountDownLatch waiter1 = new CountDownLatch(1);
         Operations.mkdir(folderHF, RuntimeEnvironment.application, false, new AbstractErrorCallback() {
             @Override
-            public void done(HybridFile hFile, boolean b) {
+            public void done(final HybridFile hFile, final boolean b) {
                 waiter1.countDown();
             }
         });
@@ -193,7 +193,7 @@ public class OperationsTest {
         CountDownLatch waiter2 = new CountDownLatch(1);
         Operations.mkdir(folder2HF, RuntimeEnvironment.application, false, new AbstractErrorCallback() {
             @Override
-            public void done(HybridFile hFile, boolean b) {
+            public void done(final HybridFile hFile, final boolean b) {
                 waiter2.countDown();
             }
         });
@@ -204,7 +204,7 @@ public class OperationsTest {
         AtomicBoolean assertFlag = new AtomicBoolean(false);
         Operations.rename(folderHF, folder2HF, false, RuntimeEnvironment.application, new AbstractErrorCallback() {
             @Override
-            public void exists(HybridFile file) {
+            public void exists(final HybridFile file) {
                 assertFlag.set(true);
                 waiter3.countDown();
             }
@@ -223,7 +223,7 @@ public class OperationsTest {
         CountDownLatch waiter1 = new CountDownLatch(1);
         Operations.mkdir(folderHF, RuntimeEnvironment.application, false, new AbstractErrorCallback() {
             @Override
-            public void done(HybridFile hFile, boolean b) {
+            public void done(final HybridFile hFile, final boolean b) {
                 waiter1.countDown();
             }
         });
@@ -236,7 +236,7 @@ public class OperationsTest {
         CountDownLatch waiter2 = new CountDownLatch(1);
         Operations.mkdir(folder2HF, RuntimeEnvironment.application, false, new AbstractErrorCallback() {
             @Override
-            public void done(HybridFile hFile, boolean b) {
+            public void done(final HybridFile hFile, final boolean b) {
                 waiter2.countDown();
             }
         });
@@ -250,7 +250,7 @@ public class OperationsTest {
         AtomicBoolean assertFlag = new AtomicBoolean(false);
         Operations.rename(folder2HF, folder3HF, false, RuntimeEnvironment.application, new AbstractErrorCallback() {
             @Override
-            public void done(HybridFile file, boolean b) {
+            public void done(final HybridFile file, final boolean b) {
                 assertFlag.set(true);
                 waiter3.countDown();
             }
@@ -263,18 +263,18 @@ public class OperationsTest {
     private abstract class AbstractErrorCallback implements Operations.ErrorCallBack
     {
         @Override
-        public void exists(HybridFile file) {}
+        public void exists(final HybridFile file) { }
 
         @Override
-        public void launchSAF(HybridFile file) {}
+        public void launchSAF(final HybridFile file) { }
 
         @Override
-        public void launchSAF(HybridFile file, HybridFile file1) {}
+        public void launchSAF(final HybridFile file, final HybridFile file1) { }
 
         @Override
-        public void done(HybridFile hFile, boolean b) {}
+        public void done(final HybridFile hFile, final boolean b) { }
 
         @Override
-        public void invalidName(HybridFile file) {}
+        public void invalidName(final HybridFile file) { }
     }
 }

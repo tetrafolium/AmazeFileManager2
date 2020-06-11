@@ -39,7 +39,7 @@ public class SmbSearchDialog extends DialogFragment {
     private SubnetScanner subnetScanner;
 
     @Override
-    public void onCreate(Bundle bundle) {
+    public void onCreate(final Bundle bundle) {
         super.onCreate(bundle);
         utilsProvider = ((BasicActivity) getActivity()).getUtilsProvider();
 
@@ -54,7 +54,7 @@ public class SmbSearchDialog extends DialogFragment {
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
         MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity());
         builder.title(R.string.searchingdevices);
         builder.negativeColor(accentColor);
@@ -119,14 +119,14 @@ public class SmbSearchDialog extends DialogFragment {
         private ArrayList<ComputerParcelable> items;
         private LayoutInflater mInflater;
 
-        public ListViewAdapter(Context context, List<ComputerParcelable> objects) {
+        public ListViewAdapter(final Context context, final List<ComputerParcelable> objects) {
             items = new ArrayList<>(objects);
             mInflater = (LayoutInflater) context
                         .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         }
 
         @Override
-        public ElementViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ElementViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
             View view;
             switch (viewType) {
             case VIEW_PROGRESSBAR:
@@ -140,7 +140,7 @@ public class SmbSearchDialog extends DialogFragment {
         }
 
         @Override
-        public void onBindViewHolder(ElementViewHolder holder, int position) {
+        public void onBindViewHolder(final ElementViewHolder holder, final int position) {
             int viewType = getItemViewType(position);
             if (viewType == VIEW_PROGRESSBAR) {
                 return;
@@ -167,7 +167,7 @@ public class SmbSearchDialog extends DialogFragment {
         }
 
         @Override
-        public int getItemViewType(int position) {
+        public int getItemViewType(final int position) {
             ComputerParcelable f = items.get(position);
             if (f.addr.equals("-1")) {
                 return VIEW_PROGRESSBAR;
@@ -177,7 +177,7 @@ public class SmbSearchDialog extends DialogFragment {
         }
 
         @Override
-        public long getItemId(int position) {
+        public long getItemId(final int position) {
             return position;
         }
 
@@ -195,7 +195,7 @@ public class SmbSearchDialog extends DialogFragment {
         private TextView txtTitle;
         private TextView txtDesc;
 
-        ElementViewHolder(View view) {
+        ElementViewHolder(final View view) {
             super(view);
 
             rootView = view;

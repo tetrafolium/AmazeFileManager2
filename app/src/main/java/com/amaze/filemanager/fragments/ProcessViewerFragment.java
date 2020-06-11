@@ -94,8 +94,8 @@ public class ProcessViewerFragment extends Fragment {
             mEncryptConnection, mDecryptConnection;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+                             final Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.processparent, container, false);
 
         mainActivity = (MainActivity) getActivity();
@@ -133,7 +133,7 @@ public class ProcessViewerFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(final @Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         setRetainInstance(true);
@@ -146,8 +146,8 @@ public class ProcessViewerFragment extends Fragment {
         int skinTwoColor = mainActivity.getCurrentColorPreference().primarySecondTab;
         accentColor = mainActivity.getAccent();
 
-        mainActivity.updateViews(new ColorDrawable(MainActivity.currentTab==1 ?
-                                 skinTwoColor : skin_color));
+        mainActivity.updateViews(new ColorDrawable(MainActivity.currentTab == 1
+                                 ? skinTwoColor : skin_color));
     }
 
     @Override
@@ -180,7 +180,7 @@ public class ProcessViewerFragment extends Fragment {
         getActivity().unbindService(mDecryptConnection);
     }
 
-    public void processResults(final DatapointParcelable dataPackage, int serviceType) {
+    public void processResults(final DatapointParcelable dataPackage, final int serviceType) {
         if (dataPackage != null) {
             String name = dataPackage.name;
             long total = dataPackage.totalSize;
@@ -227,14 +227,14 @@ public class ProcessViewerFragment extends Fragment {
 
             mProgressTimer.setText(timerSpan);
 
-            if(dataPackage.completed) mCancelButton.setVisibility(View.GONE);
+            if (dataPackage.completed) mCancelButton.setVisibility(View.GONE);
         }
     }
 
     /**
      * Setup drawables and click listeners based on the SERVICE_* constants
      */
-    private void setupDrawables(int serviceType, boolean isMove) {
+    private void setupDrawables(final int serviceType, final boolean isMove) {
         switch (serviceType) {
         case SERVICE_COPY:
             if (mainActivity.getAppTheme().equals(AppTheme.DARK) || mainActivity.getAppTheme().equals(AppTheme.BLACK)) {
@@ -324,10 +324,10 @@ public class ProcessViewerFragment extends Fragment {
      * @param xValue the x-axis value, the number of bytes processed till now
      * @param yValue the y-axis value, bytes processed per sec
      */
-    private void addEntry(float xValue, float yValue) {
+    private void addEntry(final float xValue, final float yValue) {
         ILineDataSet dataSet = mLineData.getDataSetByIndex(0);
 
-        if (dataSet == null) {// adding set for first time
+        if (dataSet == null) { // adding set for first time
             dataSet = createDataSet();
             mLineData.addDataSet(dataSet);
         }
@@ -361,7 +361,7 @@ public class ProcessViewerFragment extends Fragment {
      * Initialize chart for the first time
      * @param totalBytes maximum value for x-axis
      */
-    private void chartInit(long totalBytes) {
+    private void chartInit(final long totalBytes) {
         mLineChart.setBackgroundColor(accentColor);
         mLineChart.getLegend().setEnabled(false);
 
@@ -392,14 +392,14 @@ public class ProcessViewerFragment extends Fragment {
         private LineChart lineChart;
         private int serviceType;
 
-        public CustomServiceConnection(ProcessViewerFragment frag, LineChart lineChart, int serviceType) {
+        public CustomServiceConnection(final ProcessViewerFragment frag, final LineChart lineChart, final int serviceType) {
             fragment = frag;
             this.lineChart = lineChart;
             this.serviceType = serviceType;
         }
 
         @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
+        public void onServiceConnected(final ComponentName name, final IBinder service) {
             ObtainableServiceBinder<? extends AbstractProgressiveService> binder =
                 (ObtainableServiceBinder<? extends AbstractProgressiveService>) service;
             AbstractProgressiveService specificService = binder.getService();
@@ -423,12 +423,12 @@ public class ProcessViewerFragment extends Fragment {
                 }
 
                 @Override
-                public void refresh() {}
+                public void refresh() { }
             });
         }
 
         @Override
-        public void onServiceDisconnected(ComponentName name) {}
+        public void onServiceDisconnected(final ComponentName name) { }
     }
 
 }

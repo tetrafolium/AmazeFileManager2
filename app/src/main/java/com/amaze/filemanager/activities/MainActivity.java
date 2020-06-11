@@ -282,7 +282,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
 
         setContentView(R.layout.main_toolbar);
         appbar = new AppBar(this, getPrefs(), queue -> {
-            if(!queue.isEmpty()) {
+            if (!queue.isEmpty()) {
                 mainActivityHelper.search(getPrefs(), queue);
             }
         });
@@ -292,7 +292,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
         cloudHandler = new CloudHandler(this);
 
         mainActivityHelper = new MainActivityHelper(this);
-        initialiseFab();// TODO: 7/12/2017 not init when actionIntent != null
+        initialiseFab(); // TODO: 7/12/2017 not init when actionIntent != null
 
         if (CloudSheetFragment.isCloudProviderAvailable(this)) {
 
@@ -374,7 +374,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
             }
 
             @Override
-            public void onPostExecute(Void result) {
+            public void onPostExecute(final Void result) {
 
                 drawer.refreshDrawer();
 
@@ -389,8 +389,8 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
                         //Commit the transaction
                         transaction.commit();
                         supportInvalidateOptionsMenu();
-                    }  else if (intent.getAction() != null &&
-                                intent.getAction().equals(TileService.ACTION_QS_TILE_PREFERENCES)) {
+                    }  else if (intent.getAction() != null
+                                && intent.getAction().equals(TileService.ACTION_QS_TILE_PREFERENCES)) {
                         // tile preferences, open ftp fragment
 
                         FragmentTransaction transaction2 = getSupportFragmentManager().beginTransaction();
@@ -477,7 +477,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
     /**
      * Checks for the action to take when Amaze receives an intent from external source
      */
-    private void checkForExternalIntent(Intent intent) {
+    private void checkForExternalIntent(final Intent intent) {
         String actionIntent = intent.getAction();
         String type = intent.getType();
 
@@ -553,11 +553,11 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
 
         floatingActionButton.setMenuButtonIcon(R.drawable.ic_file_download_white_24dp);
         floatingActionButton.getMenuButton().setOnClickListener(v -> {
-            if(uris != null && uris.size() > 0) {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (uris != null && uris.size() > 0) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     File folder = new File(getCurrentMainFragment().getCurrentPath());
                     int result = mainActivityHelper.checkFolder(folder, MainActivity.this);
-                    if(result == MainActivityHelper.WRITABLE_OR_ON_SDCARD) {
+                    if (result == MainActivityHelper.WRITABLE_OR_ON_SDCARD) {
                         FileUtil.writeUriToStorage(MainActivity.this, uris, getContentResolver(), getCurrentMainFragment().getCurrentPath());
                         finish();
                     } else {
@@ -630,7 +630,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
             if (TextUtils.isEmpty(rawExternalStorage)) {
                 // EXTERNAL_STORAGE undefined; falling back to default.
                 // Check for actual existence of the directory before adding to list
-                if(new File(DEFAULT_FALLBACK_STORAGE_PATH).exists()) {
+                if (new File(DEFAULT_FALLBACK_STORAGE_PATH).exists()) {
                     rv.add(DEFAULT_FALLBACK_STORAGE_PATH);
                 } else {
                     //We know nothing else, use Environment's fallback
@@ -750,7 +750,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
         }
     }
 
-    public void invalidatePasteButton(MenuItem paste) {
+    public void invalidatePasteButton(final MenuItem paste) {
         if (pasteHelper != null) {
             paste.setVisible(true);
         } else {
@@ -774,7 +774,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
         }
     }
 
-    public void goToMain(String path) {
+    public void goToMain(final String path) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         //title.setText(R.string.app_name);
         TabFragment tabFragment = new TabFragment();
@@ -798,7 +798,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.activity_extra, menu);
         /*
@@ -828,7 +828,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
+    public boolean onPrepareOptionsMenu(final Menu menu) {
         MenuItem s = menu.findItem(R.id.view);
         MenuItem search = menu.findItem(R.id.search);
         MenuItem paste = menu.findItem(R.id.paste);
@@ -846,7 +846,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
                 else s.setTitle(R.string.listview);
                 appbar.getBottomBar().updatePath(ma.getCurrentPath(), ma.results,
                                                  MainActivityHelper.SEARCH_TEXT, ma.openMode, ma.folder_count, ma.file_count, ma);
-            } catch (Exception e) {}
+            } catch (Exception e) { }
 
             appbar.getBottomBar().setClickListener();
 
@@ -899,7 +899,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
         return super.onPrepareOptionsMenu(menu);
     }
 
-    void showToast(String message) {
+    void showToast(final String message) {
         if (this.toast == null) {
             // Create toast if found null, it would he the case of first call only
             this.toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
@@ -922,7 +922,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
 
     // called when the user exits the action mode
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         // The action bar home/up action should open or close the drawer.
         // ActionBarDrawerToggle will take care of this.
         if (drawer.onOptionsItemSelected(item)) return true;
@@ -1054,24 +1054,24 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
     }*/
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
+    protected void onPostCreate(final Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         drawer.syncState();
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(final Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggls
         drawer.onConfigurationChanged(newConfig);
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(KEY_DRAWER_SELECTED, drawer.isSomethingSelected());
-        if(pasteHelper != null) {
+        if (pasteHelper != null) {
             outState.putParcelable(PASTEHELPER_BUNDLE, pasteHelper);
         }
 
@@ -1130,7 +1130,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
         boolean isInformationUpdated = false;
         List<UsbOtgRepresentation> connectedDevices = OTGUtil.getMassStorageDevicesConnected(this);
 
-        if(!connectedDevices.isEmpty()) {
+        if (!connectedDevices.isEmpty()) {
             if (SingletonUsbOtg.getInstance().getUsbOtgRoot() != null && OTGUtil.isUsbUriAccessible(this)) {
                 for (UsbOtgRepresentation device : connectedDevices) {
                     if (SingletonUsbOtg.getInstance().checkIfRootIsFromDevice(device)) {
@@ -1139,18 +1139,18 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
                     }
                 }
 
-                if(!isInformationUpdated) {
+                if (!isInformationUpdated) {
                     SingletonUsbOtg.getInstance().resetUsbOtgRoot();
                 }
             }
 
-            if(!isInformationUpdated) {
+            if (!isInformationUpdated) {
                 SingletonUsbOtg.getInstance().setConnectedDevice(connectedDevices.get(0));
                 isInformationUpdated = true;
             }
         }
 
-        if(!isInformationUpdated) {
+        if (!isInformationUpdated) {
             SingletonUsbOtg.getInstance().resetUsbOtgRoot();
             drawer.refreshDrawer();
             goToMain(null);
@@ -1168,7 +1168,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
      */
     BroadcastReceiver mOtgReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(final Context context, final Intent intent) {
             if (intent.getAction().equals(UsbManager.ACTION_USB_DEVICE_ATTACHED)) {
                 SingletonUsbOtg.getInstance().resetUsbOtgRoot();
                 List<UsbOtgRepresentation> connectedDevices = OTGUtil.getMassStorageDevicesConnected(MainActivity.this);
@@ -1183,7 +1183,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
     };
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    public boolean onKeyDown(final int keyCode, final KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
             /*
             ImageView ib = findViewById(R.id.action_overflow);
@@ -1229,13 +1229,13 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
         }
     }
 
-    public void updatePaths(int pos) {
+    public void updatePaths(final int pos) {
         TabFragment tabFragment = getTabFragment();
         if (tabFragment != null)
             tabFragment.updatepaths(pos);
     }
 
-    public void openCompressed(String path) {
+    public void openCompressed(final String path) {
         appBarLayout.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_in_bottom);
@@ -1250,7 +1250,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
     public MainFragment getCurrentMainFragment() {
         TabFragment tab = getTabFragment();
 
-        if(tab != null && tab.getCurrentTabFragment() instanceof MainFragment) {
+        if (tab != null && tab.getCurrentTabFragment() instanceof MainFragment) {
             return (MainFragment) tab.getCurrentTabFragment();
         } else return null;
     }
@@ -1266,7 +1266,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
         return getSupportFragmentManager().findFragmentById(R.id.content_frame);
     }
 
-    public void setPagingEnabled(boolean b) {
+    public void setPagingEnabled(final boolean b) {
         getTabFragment().mViewPager.setPagingEnabled(b);
     }
 
@@ -1277,7 +1277,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
             for (File f : parent.listFiles())
                 if (f.exists() && f.getName().toLowerCase().contains("usb") && f.canExecute())
                     return f;
-        } catch (Exception e) {}
+        } catch (Exception e) { }
 
         parent = new File("/mnt/sdcard/usbStorage");
         if (parent.exists() && parent.canExecute())
@@ -1301,7 +1301,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
         return drawer;
     }
 
-    protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
+    protected void onActivityResult(final int requestCode, final int responseCode, final Intent intent) {
         if (requestCode == Drawer.image_selector_request_code) {
             drawer.onActivityResult(requestCode, responseCode, intent);
         } else if (requestCode == 3) {
@@ -1332,7 +1332,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
                 break;
             case DataUtils.COPY://copying
                 //legacy compatibility
-                if(oparrayList != null && oparrayList.size() != 0) {
+                if (oparrayList != null && oparrayList.size() != 0) {
                     oparrayListList = new ArrayList<>();
                     oparrayListList.add(oparrayList);
                     oparrayList = null;
@@ -1350,7 +1350,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
                 break;
             case DataUtils.MOVE://moving
                 //legacy compatibility
-                if(oparrayList != null && oparrayList.size() != 0) {
+                if (oparrayList != null && oparrayList.size() != 0) {
                     oparrayListList = new ArrayList<>();
                     oparrayListList.add(oparrayList);
                     oparrayList = null;
@@ -1457,7 +1457,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
             if (drawer.isLocked()) {
                 window.setStatusBarColor((skinStatusBar));
             } else window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            if ( getBoolean(PREFERENCE_COLORED_NAVIGATION))
+            if (getBoolean(PREFERENCE_COLORED_NAVIGATION))
                 window.setNavigationBarColor(skinStatusBar);
         }
     }
@@ -1467,7 +1467,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
      * update in the {@link MainActivity#currentTab}
      * Warning - All the variables should be initialised before calling this method!
      */
-    public void updateViews(ColorDrawable colorDrawable) {
+    public void updateViews(final ColorDrawable colorDrawable) {
         // appbar view color
         appbar.getBottomBar().setBackgroundColor(colorDrawable.getColor());
         // action bar color
@@ -1478,7 +1478,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
         if (SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // for lollipop devices, the status bar color
             mainActivity.getWindow().setStatusBarColor(colorDrawable.getColor());
-            if ( getBoolean(PREFERENCE_COLORED_NAVIGATION))
+            if (getBoolean(PREFERENCE_COLORED_NAVIGATION))
                 mainActivity.getWindow().setNavigationBarColor(PreferenceUtils
                         .getStatusColor(colorDrawable.getColor()));
         } else if (SDK_INT == Build.VERSION_CODES.KITKAT_WATCH || SDK_INT == Build.VERSION_CODES.KITKAT) {
@@ -1499,24 +1499,24 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
         floatingActionButton.setAnimationDuration(500);
         floatingActionButton.setMenuListener(new FABsMenuListener() {
             @Override
-            public void onMenuExpanded(FABsMenu fabsMenu) {
+            public void onMenuExpanded(final FABsMenu fabsMenu) {
                 showSmokeScreen();
             }
 
             @Override
-            public void onMenuCollapsed(FABsMenu fabsMenu) {
+            public void onMenuCollapsed(final FABsMenu fabsMenu) {
                 hideSmokeScreen();
             }
         });
 
         floatingActionButton.setMenuListener(new FABsMenuListener() {
             @Override
-            public void onMenuExpanded(FABsMenu fabsMenu) {
+            public void onMenuExpanded(final FABsMenu fabsMenu) {
                 FileUtils.revealShow(fabBgView, true);
             }
 
             @Override
-            public void onMenuCollapsed(FABsMenu fabsMenu) {
+            public void onMenuCollapsed(final FABsMenu fabsMenu) {
                 FileUtils.revealShow(fabBgView, false);
             }
         });
@@ -1526,7 +1526,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
         initFabTitle(findViewById(R.id.menu_new_cloud), MainActivityHelper.NEW_CLOUD);
     }
 
-    private void initFabTitle(TitleFAB fabTitle, int type) {
+    private void initFabTitle(final TitleFAB fabTitle, final int type) {
         int iconSkin = getCurrentColorPreference().iconSkin;
 
         fabTitle.setBackgroundColor(iconSkin);
@@ -1548,7 +1548,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
         }
     }
 
-    public boolean copyToClipboard(Context context, String text) {
+    public boolean copyToClipboard(final Context context, final String text) {
         try {
             android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context
                     .getSystemService(CLIPBOARD_SERVICE);
@@ -1573,13 +1573,13 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
         return pasteHelper;
     }
 
-    public void setPaste(PasteHelper p) {
+    public void setPaste(final PasteHelper p) {
         pasteHelper = p;
         supportInvalidateOptionsMenu();
     }
 
     @Override
-    public void onNewIntent(Intent i) {
+    public void onNewIntent(final Intent i) {
         intent = i;
         path = i.getStringExtra("path");
 
@@ -1622,7 +1622,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
 
     private BroadcastReceiver receiver2 = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent i) {
+        public void onReceive(final Context context, final Intent i) {
             if (i.getStringArrayListExtra(TAG_INTENT_FILTER_FAILED_OPS) != null) {
                 ArrayList<HybridFileParcelable> failedOps = i.getParcelableArrayListExtra(TAG_INTENT_FILTER_FAILED_OPS);
                 if (failedOps != null) {
@@ -1632,7 +1632,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
         }
     };
 
-    public void showSMBDialog(String name, String path, boolean edit) {
+    public void showSMBDialog(final String name, final String path, final boolean edit) {
         if (path.length() > 0 && name.length() == 0) {
             int i = dataUtils.containsServer(new String[] {name, path});
             if (i != -1)
@@ -1647,7 +1647,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
         smbConnectDialog.show(getFragmentManager(), "smbdailog");
     }
 
-    public void showSftpDialog(String name, String path, boolean edit) {
+    public void showSftpDialog(final String name, final String path, final boolean edit) {
         if (path.length() > 0 && name.length() == 0) {
             int i = dataUtils.containsServer(new String[] {name, path});
             if (i != -1)
@@ -1661,15 +1661,15 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
         bundle.putString("address", uri.getHost());
         bundle.putString("port", Integer.toString(uri.getPort()));
         bundle.putString("path", path);
-        bundle.putString("username", userinfo.indexOf(':') > 0 ?
-                         userinfo.substring(0, userinfo.indexOf(':')) : userinfo);
+        bundle.putString("username", userinfo.indexOf(':') > 0
+                         ? userinfo.substring(0, userinfo.indexOf(':')) : userinfo);
 
-        if(userinfo.indexOf(':') < 0) {
+        if (userinfo.indexOf(':') < 0) {
             bundle.putBoolean("hasPassword", false);
             bundle.putString("keypairName", utilsHandler.getSshAuthPrivateKeyName(path));
         } else {
             bundle.putBoolean("hasPassword", true);
-            bundle.putString("password", userinfo.substring(userinfo.indexOf(':')+1));
+            bundle.putString("password", userinfo.substring(userinfo.indexOf(':') + 1));
         }
         bundle.putBoolean("edit", edit);
         sftpConnectDialog.setArguments(bundle);
@@ -1689,7 +1689,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
     }
 
     @Override
-    public void addConnection(boolean edit, @NonNull final String name, @NonNull final String path, @Nullable final String encryptedPath,
+    public void addConnection(final boolean edit, @NonNull final String name, @NonNull final String path, @Nullable final String encryptedPath,
                               @Nullable final String oldname, @Nullable final String oldPath) {
         String[] s = new String[] {name, path};
         if (!edit) {
@@ -1741,22 +1741,22 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
     }
 
     @Override
-    public void onHiddenFileAdded(String path) {
+    public void onHiddenFileAdded(final String path) {
         utilsHandler.saveToDatabase(new OperationData(UtilsHandler.Operation.HIDDEN, path));
     }
 
     @Override
-    public void onHiddenFileRemoved(String path) {
+    public void onHiddenFileRemoved(final String path) {
         utilsHandler.removeFromDatabase(new OperationData(UtilsHandler.Operation.HIDDEN, path));
     }
 
     @Override
-    public void onHistoryAdded(String path) {
+    public void onHistoryAdded(final String path) {
         utilsHandler.saveToDatabase(new OperationData(UtilsHandler.Operation.HISTORY, path));
     }
 
     @Override
-    public void onBookAdded(String[] path, boolean refreshdrawer) {
+    public void onBookAdded(final String[] path, final boolean refreshdrawer) {
         utilsHandler.saveToDatabase(new OperationData(UtilsHandler.Operation.BOOKMARKS, path[0], path[1]));
         if (refreshdrawer) drawer.refreshDrawer();
     }
@@ -1767,7 +1767,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
     }
 
     @Override
-    public void delete(String title, String path) {
+    public void delete(final String title, final String path) {
         utilsHandler.removeFromDatabase(new OperationData(UtilsHandler.Operation.BOOKMARKS, title,
                                         path));
         drawer.refreshDrawer();
@@ -1775,26 +1775,26 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
     }
 
     @Override
-    public void modify(String oldpath, String oldname, String newPath, String newname) {
+    public void modify(final String oldpath, final String oldname, final String newPath, final String newname) {
         utilsHandler.renameBookmark(oldname, oldpath, newname, newPath);
         drawer.refreshDrawer();
     }
 
     @Override
-    public void onPreExecute(String query) {
+    public void onPreExecute(final String query) {
         mainFragment.mSwipeRefreshLayout.setRefreshing(true);
         mainFragment.onSearchPreExecute(query);
     }
 
     @Override
-    public void onPostExecute(String query) {
+    public void onPostExecute(final String query) {
         mainFragment.onSearchCompleted(query);
         mainFragment.mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
-    public void onProgressUpdate(HybridFileParcelable val, String query) {
-        mainFragment.addSearchResult(val,query);
+    public void onProgressUpdate(final HybridFileParcelable val, final String query) {
+        mainFragment.addSearchResult(val, query);
     }
 
     @Override
@@ -1804,7 +1804,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
     }
 
     @Override
-    public void addConnection(OpenMode service) {
+    public void addConnection(final OpenMode service) {
         try {
             if (cloudHandler.findEntry(service) != null) {
                 // cloud entry already exists
@@ -1833,7 +1833,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
     }
 
     @Override
-    public void deleteConnection(OpenMode service) {
+    public void deleteConnection(final OpenMode service) {
         cloudHandler.clear(service);
         dataUtils.removeAccount(service);
 
@@ -1842,7 +1842,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
 
     @NonNull
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         Uri uri = Uri.withAppendedPath(Uri.parse("content://" + CloudContract.PROVIDER_AUTHORITY), "/keys.db/secret_keys");
 
         String[] projection = new String[] {
@@ -1880,10 +1880,10 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
                 String ids[] = new String[cloudEntries.size() + 1];
 
                 ids[0] = 1 + "";
-                for (int i=1; i<=cloudEntries.size(); i++) {
+                for (int i = 1; i <= cloudEntries.size(); i++) {
 
                     // we need to get only those cloud details which user wants
-                    switch (cloudEntries.get(i-1).getServiceType()) {
+                    switch (cloudEntries.get(i - 1).getServiceType()) {
                     case GDRIVE:
                         ids[i] = 2 + "";
                         break;
@@ -1912,7 +1912,7 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, final Cursor data) {
+    public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
         if (data == null) {
             Toast.makeText(this, getResources().getString(R.string.cloud_error_failed_restart),
                            Toast.LENGTH_LONG).show();
@@ -1937,6 +1937,6 @@ public class MainActivity extends PermissionsActivity implements SmbConnectionLi
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(final Loader<Cursor> loader) {
     }
 }

@@ -83,7 +83,7 @@ public class GenericCopyUtil {
      */
     private static final int DEFAULT_TRANSFER_QUANTUM = 65536;
 
-    public GenericCopyUtil(Context context, ProgressHandler progressHandler) {
+    public GenericCopyUtil(final Context context, final ProgressHandler progressHandler) {
         this.mContext = context;
         this.progressHandler = progressHandler;
     }
@@ -96,7 +96,7 @@ public class GenericCopyUtil {
      *                    TODO: Use buffers even on low memory but don't map the whole file to memory but
      *                          parts of it, and transfer each part instead.
      */
-    private void startCopy(boolean lowOnMemory) throws IOException {
+    private void startCopy(final boolean lowOnMemory) throws IOException {
 
         FileInputStream inputStream = null;
         FileOutputStream outputStream = null;
@@ -275,14 +275,14 @@ public class GenericCopyUtil {
                 }
             }
 
-            if (bufferedInputStream!=null) {
-                if (bufferedOutputStream!=null) copyFile(bufferedInputStream, bufferedOutputStream);
-                else if (outChannel!=null) {
+            if (bufferedInputStream != null) {
+                if (bufferedOutputStream != null) copyFile(bufferedInputStream, bufferedOutputStream);
+                else if (outChannel != null) {
                     copyFile(bufferedInputStream, outChannel);
                 }
-            } else if (inChannel!=null) {
-                if (bufferedOutputStream!=null) copyFile(inChannel, bufferedOutputStream);
-                else if (outChannel!=null)  copyFile(inChannel, outChannel);
+            } else if (inChannel != null) {
+                if (bufferedOutputStream != null) copyFile(inChannel, bufferedOutputStream);
+                else if (outChannel != null)  copyFile(inChannel, outChannel);
             }
 
         } catch (IOException e) {
@@ -299,12 +299,12 @@ public class GenericCopyUtil {
         } finally {
 
             try {
-                if (inChannel!=null) inChannel.close();
-                if (outChannel!=null) outChannel.close();
-                if (inputStream!=null) inputStream.close();
-                if (outputStream!=null) outputStream.close();
-                if (bufferedInputStream!=null) bufferedInputStream.close();
-                if (bufferedOutputStream!=null) bufferedOutputStream.close();
+                if (inChannel != null) inChannel.close();
+                if (outChannel != null) outChannel.close();
+                if (inputStream != null) inputStream.close();
+                if (outputStream != null) outputStream.close();
+                if (bufferedInputStream != null) bufferedInputStream.close();
+                if (bufferedOutputStream != null) bufferedOutputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();
                 // failure in closing stream
@@ -322,7 +322,7 @@ public class GenericCopyUtil {
      * @param sourceFile the source file, which is to be copied
      * @param targetFile the target file
      */
-    public void copy(HybridFileParcelable sourceFile, HybridFile targetFile) throws IOException {
+    public void copy(final HybridFileParcelable sourceFile, final HybridFile targetFile) throws IOException {
 
         this.mSourceFile = sourceFile;
         this.mTargetFile = targetFile;
@@ -339,7 +339,7 @@ public class GenericCopyUtil {
      * @throws IOException
      */
     @VisibleForTesting
-    void copyFile(@NonNull BufferedInputStream bufferedInputStream, @NonNull FileChannel outChannel)
+    void copyFile(final @NonNull BufferedInputStream bufferedInputStream, final @NonNull FileChannel outChannel)
     throws IOException {
         doCopy(Channels.newChannel(bufferedInputStream), outChannel);
     }
@@ -352,7 +352,7 @@ public class GenericCopyUtil {
      * @throws IOException
      */
     @VisibleForTesting
-    void copyFile(@NonNull FileChannel inChannel, @NonNull FileChannel outChannel)
+    void copyFile(final @NonNull FileChannel inChannel, final @NonNull FileChannel outChannel)
     throws IOException {
         //MappedByteBuffer inByteBuffer = inChannel.map(FileChannel.MapMode.READ_ONLY, 0, inChannel.size());
         //MappedByteBuffer outByteBuffer = outChannel.map(FileChannel.MapMode.READ_WRITE, 0, inChannel.size());
@@ -369,7 +369,7 @@ public class GenericCopyUtil {
      * @throws IOException
      */
     @VisibleForTesting
-    void copyFile(@NonNull BufferedInputStream bufferedInputStream, @NonNull BufferedOutputStream bufferedOutputStream)
+    void copyFile(final @NonNull BufferedInputStream bufferedInputStream, final @NonNull BufferedOutputStream bufferedOutputStream)
     throws IOException {
         doCopy(Channels.newChannel(bufferedInputStream), Channels.newChannel(bufferedOutputStream));
     }
@@ -383,13 +383,13 @@ public class GenericCopyUtil {
      * @throws IOException
      */
     @VisibleForTesting
-    void copyFile(@NonNull FileChannel inChannel, @NonNull BufferedOutputStream bufferedOutputStream)
+    void copyFile(final @NonNull FileChannel inChannel, final @NonNull BufferedOutputStream bufferedOutputStream)
     throws IOException {
         doCopy(inChannel, Channels.newChannel(bufferedOutputStream));
     }
 
     @VisibleForTesting
-    void doCopy(@NonNull ReadableByteChannel from, @NonNull WritableByteChannel to) throws IOException {
+    void doCopy(final @NonNull ReadableByteChannel from, final @NonNull WritableByteChannel to) throws IOException {
         ByteBuffer buffer = ByteBuffer.allocateDirect(DEFAULT_TRANSFER_QUANTUM);
         long count;
         while ((from.read(buffer) != -1 || buffer.position() > 0) && !progressHandler.getCancelled()) {
@@ -400,7 +400,7 @@ public class GenericCopyUtil {
         }
 
         buffer.flip();
-        while(buffer.hasRemaining())
+        while (buffer.hasRemaining())
             to.write(buffer);
 
         from.close();

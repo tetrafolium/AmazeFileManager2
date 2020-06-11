@@ -19,23 +19,23 @@ public class CustomNavigationView extends NavigationView
     private OnNavigationItemSelectedListener subclassListener;
     private int checkedId = -1;
 
-    public CustomNavigationView(Context context, AttributeSet attrs) {
+    public CustomNavigationView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
 
         super.setNavigationItemSelectedListener(this);
     }
 
     @Override
-    public void setNavigationItemSelectedListener(@Nullable OnNavigationItemSelectedListener listener) {
+    public void setNavigationItemSelectedListener(final @Nullable OnNavigationItemSelectedListener listener) {
         subclassListener = listener;
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        if(subclassListener != null) {
+    public boolean onNavigationItemSelected(final @NonNull MenuItem item) {
+        if (subclassListener != null) {
             boolean shouldBeSelected = subclassListener.onNavigationItemSelected(item);
 
-            if(shouldBeSelected) {
+            if (shouldBeSelected) {
                 onItemChecked(item);
             }
 
@@ -46,11 +46,11 @@ public class CustomNavigationView extends NavigationView
         }
     }
 
-    private void onItemChecked(MenuItem item) {
+    private void onItemChecked(final MenuItem item) {
         checkedId = item.getItemId();
     }
 
-    public void setCheckedItem(MenuItem item) {
+    public void setCheckedItem(final MenuItem item) {
         this.checkedId = item.getItemId();
         item.setChecked(true);
     }
@@ -60,7 +60,7 @@ public class CustomNavigationView extends NavigationView
     }
 
     public @Nullable MenuItem getSelected() {
-        if(checkedId == -1) return null;
+        if (checkedId == -1) return null;
         return getMenu().findItem(checkedId);
     }
 
@@ -82,19 +82,19 @@ public class CustomNavigationView extends NavigationView
     }
 
     @Override
-    public void onRestoreInstanceState(Parcelable state) {
-        if(isNavigationViewSavedStateMissing()) {
+    public void onRestoreInstanceState(final Parcelable state) {
+        if (isNavigationViewSavedStateMissing()) {
             super.onRestoreInstanceState(state);
             return;
         }
 
         //begin boilerplate code so parent classes can restore state
-        if(!(state instanceof SavedState)) {
+        if (!(state instanceof SavedState)) {
             super.onRestoreInstanceState(state);
             return;
         }
 
-        SavedState ss = (SavedState)state;
+        SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
         //end
 
@@ -120,17 +120,17 @@ public class CustomNavigationView extends NavigationView
     static class SavedState extends BaseSavedState {
         int selectedId;
 
-        SavedState(Parcelable superState) {
+        SavedState(final Parcelable superState) {
             super(superState);
         }
 
-        private SavedState(Parcel in) {
+        private SavedState(final Parcel in) {
             super(in);
             this.selectedId = in.readInt();
         }
 
         @Override
-        public void writeToParcel(Parcel out, int flags) {
+        public void writeToParcel(final Parcel out, final int flags) {
             super.writeToParcel(out, flags);
             out.writeInt(this.selectedId);
         }
@@ -138,10 +138,10 @@ public class CustomNavigationView extends NavigationView
         //required field that makes Parcelables from a Parcel
         public static final Parcelable.Creator<SavedState> CREATOR =
         new Parcelable.Creator<SavedState>() {
-            public SavedState createFromParcel(Parcel in) {
+            public SavedState createFromParcel(final Parcel in) {
                 return new SavedState(in);
             }
-            public SavedState[] newArray(int size) {
+            public SavedState[] newArray(final int size) {
                 return new SavedState[size];
             }
         };

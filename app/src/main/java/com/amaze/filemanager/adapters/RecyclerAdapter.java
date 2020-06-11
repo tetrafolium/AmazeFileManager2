@@ -101,7 +101,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public static final int TYPE_ITEM = 0, TYPE_HEADER_FOLDERS = 1, TYPE_HEADER_FILES = 2, EMPTY_LAST_ITEM = 3, TYPE_BACK = 4;
 
     @IntDef({TYPE_ITEM, TYPE_HEADER_FOLDERS, TYPE_HEADER_FILES, EMPTY_LAST_ITEM, TYPE_BACK})
-    public @interface ListElemType {}
+    public @interface ListElemType { }
 
     private static final int VIEW_GENERIC = 0, VIEW_PICTURE = 1, VIEW_APK = 2, VIEW_THUMB = 3;
 
@@ -122,10 +122,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             pdfColor, codeColor, textColor, archiveColor, genericColor, apkColor;
     private int offset = 0;
 
-    public RecyclerAdapter(PreferenceActivity preferenceActivity, MainFragment m,
-                           UtilitiesProvider utilsProvider, SharedPreferences sharedPrefs,
-                           RecyclerView recyclerView,  ArrayList<LayoutElementParcelable> itemsRaw,
-                           Context context) {
+    public RecyclerAdapter(final PreferenceActivity preferenceActivity, final MainFragment m,
+                           final UtilitiesProvider utilsProvider, final SharedPreferences sharedPrefs,
+                           final RecyclerView recyclerView,  final ArrayList<LayoutElementParcelable> itemsRaw,
+                           final Context context) {
         setHasStableIds(true);
 
         this.preferenceActivity = preferenceActivity;
@@ -159,8 +159,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      * @param position  the position of the item
      * @param imageView the check {@link CircleGradientDrawable} that is to be animated
      */
-    public void toggleChecked(int position, ImageView imageView) {
-        if(itemsDigested.get(position).getChecked() == ListItem.UNCHECKABLE) {
+    public void toggleChecked(final int position, final ImageView imageView) {
+        if (itemsDigested.get(position).getChecked() == ListItem.UNCHECKABLE) {
             throw new IllegalArgumentException("You have checked a header");
         }
 
@@ -205,7 +205,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    public void toggleChecked(boolean b, String path) {
+    public void toggleChecked(final boolean b, final String path) {
         int i = path.equals("/") || !getBoolean(PREFERENCE_SHOW_GOBACK_BUTTON) ? 0 : 1;
 
         for (; i < itemsDigested.size(); i++) {
@@ -237,7 +237,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      *
      * @param b if to toggle true or false
      */
-    public void toggleChecked(boolean b) {
+    public void toggleChecked(final boolean b) {
         for (int i = 0; i < itemsDigested.size(); i++) {
             ListItem item = itemsDigested.get(i);
             if (b && item.getChecked() != ListItem.CHECKED) {
@@ -273,9 +273,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return selected;
     }
 
-    public boolean areAllChecked(String path) {
+    public boolean areAllChecked(final String path) {
         boolean allChecked = true;
-        int i = (path.equals("/") || !getBoolean(PREFERENCE_SHOW_GOBACK_BUTTON))? 0:1;
+        int i = (path.equals("/") || !getBoolean(PREFERENCE_SHOW_GOBACK_BUTTON)) ? 0 : 1;
 
         for (; i < itemsDigested.size(); i++) {
             if (itemsDigested.get(i).getChecked() == ListItem.NOT_CHECKED) {
@@ -299,8 +299,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
-        if(holder instanceof ItemViewHolder) {
+    public void onViewDetachedFromWindow(final RecyclerView.ViewHolder holder) {
+        if (holder instanceof ItemViewHolder) {
             ((ItemViewHolder) holder).rl.clearAnimation();
             ((ItemViewHolder) holder).txtTitle.setSelected(false);
         }
@@ -308,7 +308,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
+    public void onViewAttachedToWindow(final RecyclerView.ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
         boolean enableMarqueeFilename = sharedPrefs.getBoolean(
                                             PreferencesConstants.PREFERENCE_ENABLE_MARQUEE_FILENAME, true);
@@ -319,13 +319,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public boolean onFailedToRecycleView(RecyclerView.ViewHolder holder) {
+    public boolean onFailedToRecycleView(final RecyclerView.ViewHolder holder) {
         ((ItemViewHolder) holder).rl.clearAnimation();
         ((ItemViewHolder) holder).txtTitle.setSelected(false);
         return super.onFailedToRecycleView(holder);
     }
 
-    private void animate(ItemViewHolder holder) {
+    private void animate(final ItemViewHolder holder) {
         holder.rl.clearAnimation();
         Animation localAnimation = AnimationUtils.loadAnimation(context, R.anim.fade_in_top);
         localAnimation.setStartOffset(this.offset);
@@ -337,10 +337,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      * Adds item to the end of the list, don't use this unless you are dynamically loading the adapter,
      * after you are finished you must call createHeaders
      */
-    public void addItem(LayoutElementParcelable e) {
+    public void addItem(final LayoutElementParcelable e) {
         if (mainFrag.IS_LIST && itemsDigested.size() > 0) {
-            itemsDigested.add(itemsDigested.size()-1, new ListItem(e));
-        } else if(mainFrag.IS_LIST) {
+            itemsDigested.add(itemsDigested.size() - 1, new ListItem(e));
+        } else if (mainFrag.IS_LIST) {
             itemsDigested.add(new ListItem(e));
             itemsDigested.add(new ListItem(EMPTY_LAST_ITEM));
         } else {
@@ -350,12 +350,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyItemInserted(getItemCount());
     }
 
-    public void setItems(RecyclerView recyclerView, ArrayList<LayoutElementParcelable> arrayList) {
+    public void setItems(final RecyclerView recyclerView, final ArrayList<LayoutElementParcelable> arrayList) {
         setItems(recyclerView, arrayList, true);
     }
 
-    private void setItems(RecyclerView recyclerView, ArrayList<LayoutElementParcelable> arrayList, boolean invalidate) {
-        if(preloader != null)  {
+    private void setItems(final RecyclerView recyclerView, final ArrayList<LayoutElementParcelable> arrayList, final boolean invalidate) {
+        if (preloader != null)  {
             recyclerView.removeOnScrollListener(preloader);
             preloader = null;
         }
@@ -392,7 +392,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         recyclerView.addOnScrollListener(preloader);
     }
 
-    public void createHeaders(boolean invalidate, List<IconDataParcelable> uris)  {
+    public void createHeaders(final boolean invalidate, final List<IconDataParcelable> uris)  {
         boolean[] headers = new boolean[] {false, false};
 
         for (int i = 0; i < itemsDigested.size(); i++) {
@@ -412,13 +412,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     headers[1] = true;
                     itemsDigested.add(i, new ListItem(TYPE_HEADER_FILES));
                     uris.add(i, null);
-                    continue;//leave this continue for symmetry
+                    continue; //leave this continue for symmetry
                 }
             }
 
         }
 
-        if(invalidate) {
+        if (invalidate) {
             notifyDataSetChanged();
         }
     }
@@ -429,13 +429,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public long getItemId(int position) {
+    public long getItemId(final int position) {
         return position;
     }
 
     @Override
-    public int getItemViewType(int position) {
-        if(itemsDigested.get(position).specialType != -1) {
+    public int getItemViewType(final int position) {
+        if (itemsDigested.get(position).specialType != -1) {
             return itemsDigested.get(position).specialType;
         } else {
             return TYPE_ITEM;
@@ -443,7 +443,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         View view;
 
         switch (viewType) {
@@ -488,24 +488,24 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder vholder, int p) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder vholder, final int p) {
         if (vholder instanceof ItemViewHolder) {
             final ItemViewHolder holder = (ItemViewHolder) vholder;
 
             boolean enableMarquee = sharedPrefs.getBoolean(
                                         PreferencesConstants.PREFERENCE_ENABLE_MARQUEE_FILENAME, true);
-            holder.txtTitle.setEllipsize(enableMarquee ?
-                                         TextUtils.TruncateAt.MARQUEE :
-                                         TextUtils.TruncateAt.MIDDLE);
+            holder.txtTitle.setEllipsize(enableMarquee
+                                         ? TextUtils.TruncateAt.MARQUEE
+                                         : TextUtils.TruncateAt.MIDDLE);
 
             final boolean isBackButton = itemsDigested.get(p).specialType == TYPE_BACK;
-            if(isBackButton) {
+            if (isBackButton) {
                 holder.about.setVisibility(View.GONE);
             }
             if (mainFrag.IS_LIST) {
                 if (p == getItemCount() - 1) {
                     holder.rl.setMinimumHeight((int) minRowHeight);
-                    if (itemsDigested.size() == (getBoolean(PREFERENCE_SHOW_GOBACK_BUTTON)? 1:0))
+                    if (itemsDigested.size() == (getBoolean(PREFERENCE_SHOW_GOBACK_BUTTON) ? 1 : 0))
                         holder.txtTitle.setText(R.string.nofiles);
                     else {
                         holder.txtTitle.setText("");
@@ -599,7 +599,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                                         rowItem.iconData::setImageBroken);
                         }
                     } else {
-                        holder.genericIcon.setImageResource(rowItem.filetype==Icons.IMAGE
+                        holder.genericIcon.setImageResource(rowItem.filetype == Icons.IMAGE
                                                             ? R.drawable.ic_doc_image : R.drawable.ic_doc_video_am);
                     }
                     break;
@@ -614,7 +614,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 case Icons.NOT_KNOWN:
                     holder.genericIcon.setVisibility(View.VISIBLE);
                     // if the file type is any unknown variable
-                    String ext = !rowItem.isDirectory? MimeTypes.getExtension(rowItem.title):null;
+                    String ext = !rowItem.isDirectory ? MimeTypes.getExtension(rowItem.title) : null;
                     if (ext != null && ext.trim().length() != 0) {
                         holder.genericText.setText(ext);
                         holder.genericIcon.setImageDrawable(null);
@@ -639,7 +639,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 holder.rl.setSelected(false);
                 if (itemsDigested.get(p).getChecked() == ListItem.CHECKED) {
 
-                    if (holder.checkImageView.getVisibility()==View.INVISIBLE)
+                    if (holder.checkImageView.getVisibility() == View.INVISIBLE)
                         holder.checkImageView.setVisibility(View.VISIBLE);
                     // making sure the generic icon background color filter doesn't get changed
                     // to grey on picture/video/apk/generic text icons when checked
@@ -738,8 +738,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     GlideApp.with(mainFrag).load(rowItem.iconData.image).into(holder.genericIcon);
                 }
 
-                if(holder.genericIcon.getVisibility() == View.VISIBLE) {
-                    View iconBackground = getBoolean(PREFERENCE_USE_CIRCULAR_IMAGES)? holder.genericIcon:holder.iconLayout;
+                if (holder.genericIcon.getVisibility() == View.VISIBLE) {
+                    View iconBackground = getBoolean(PREFERENCE_USE_CIRCULAR_IMAGES) ? holder.genericIcon : holder.iconLayout;
                     if (rowItem.isDirectory) {
                         iconBackground.setBackgroundColor(iconSkinColor);
                     } else {
@@ -790,7 +790,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                         if ((rowItem.filetype != Icons.IMAGE && rowItem.filetype != Icons.APK && rowItem.filetype != Icons.VIDEO)
                                 || !getBoolean(PREFERENCE_SHOW_THUMB)) {
-                            View iconBackground = getBoolean(PREFERENCE_USE_CIRCULAR_IMAGES)? holder.genericIcon:holder.iconLayout;
+                            View iconBackground = getBoolean(PREFERENCE_USE_CIRCULAR_IMAGES) ? holder.genericIcon : holder.iconLayout;
                             iconBackground.setBackgroundColor(goBackColor);
                         }
                     }
@@ -827,9 +827,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public int getCorrectView(IconDataParcelable item, int adapterPosition) {
+    public int getCorrectView(final IconDataParcelable item, final int adapterPosition) {
         if (mainFrag.IS_LIST) {
-            if(getBoolean(PREFERENCE_SHOW_THUMB)) {
+            if (getBoolean(PREFERENCE_SHOW_THUMB)) {
                 int filetype = itemsDigested.get(adapterPosition).elem.filetype;
 
                 if (filetype == Icons.VIDEO || filetype == Icons.IMAGE) {
@@ -853,9 +853,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    private void showThumbnailWithBackground(ItemViewHolder viewHolder, IconDataParcelable iconData,
-            ImageView view, OnImageProcessed errorListener) {
-        if(iconData.isImageBroken()) {
+    private void showThumbnailWithBackground(final ItemViewHolder viewHolder, final IconDataParcelable iconData,
+            final ImageView view, final OnImageProcessed errorListener) {
+        if (iconData.isImageBroken()) {
             viewHolder.genericIcon.setVisibility(View.VISIBLE);
             GlideApp.with(mainFrag).load(R.drawable.ic_broken_image_white_24dp).into(viewHolder.genericIcon);
             GradientDrawable gradientDrawable = (GradientDrawable) viewHolder.genericIcon.getBackground();
@@ -872,7 +872,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         RequestListener<Drawable> requestListener = new RequestListener<Drawable>() {
 
             @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
+            public boolean onLoadFailed(final @Nullable GlideException e, final Object model, final Target target, final boolean isFirstResource) {
                 new Handler(msg -> {
                     viewHolder.genericIcon.setVisibility(View.VISIBLE);
                     GlideApp.with(mainFrag).load(R.drawable.ic_broken_image_white_24dp).into(viewHolder.genericIcon);
@@ -885,8 +885,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
 
             @Override
-            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
-                                           DataSource dataSource, boolean isFirstResource) {
+            public boolean onResourceReady(final Drawable resource, final Object model, final Target<Drawable> target,
+                                           final DataSource dataSource, final boolean isFirstResource) {
                 viewHolder.genericIcon.setImageDrawable(null);
                 viewHolder.genericIcon.setVisibility(View.GONE);
                 gradientDrawable.setColor(mainFrag.getResources().getColor(android.R.color.transparent));
@@ -899,10 +899,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         modelProvider.getPreloadRequestBuilder(iconData).listener(requestListener).into(view);
     }
 
-    private void showRoundedThumbnail(ItemViewHolder viewHolder, IconDataParcelable iconData,
-                                      ImageView view, OnImageProcessed errorListener) {
-        if(iconData.isImageBroken()) {
-            View iconBackground = getBoolean(PREFERENCE_USE_CIRCULAR_IMAGES)? viewHolder.genericIcon:viewHolder.iconLayout;
+    private void showRoundedThumbnail(final ItemViewHolder viewHolder, final IconDataParcelable iconData,
+                                      final ImageView view, final OnImageProcessed errorListener) {
+        if (iconData.isImageBroken()) {
+            View iconBackground = getBoolean(PREFERENCE_USE_CIRCULAR_IMAGES) ? viewHolder.genericIcon : viewHolder.iconLayout;
 
             viewHolder.genericIcon.setVisibility(View.VISIBLE);
             iconBackground.setBackgroundColor(grey_color);
@@ -913,7 +913,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return;
         }
 
-        View iconBackground = getBoolean(PREFERENCE_USE_CIRCULAR_IMAGES)? viewHolder.genericIcon:viewHolder.iconLayout;
+        View iconBackground = getBoolean(PREFERENCE_USE_CIRCULAR_IMAGES) ? viewHolder.genericIcon : viewHolder.iconLayout;
 
         viewHolder.genericIcon.setVisibility(View.VISIBLE);
         GlideApp.with(mainFrag).load(iconData.loadingImage).into(viewHolder.genericIcon);
@@ -921,7 +921,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         RequestListener<Drawable> requestListener = new RequestListener<Drawable>() {
             @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target target, boolean isFirstResource) {
+            public boolean onLoadFailed(final @Nullable GlideException e, final Object model, final Target target, final boolean isFirstResource) {
                 iconBackground.setBackgroundColor(grey_color);
                 new Handler(msg -> {
                     GlideApp.with(mainFrag).load(R.drawable.ic_broken_image_white_24dp).into(viewHolder.genericIcon);
@@ -932,8 +932,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
 
             @Override
-            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
-                                           DataSource dataSource, boolean isFirstResource) {
+            public boolean onResourceReady(final Drawable resource, final Object model, final Target<Drawable> target,
+                                           final DataSource dataSource, final boolean isFirstResource) {
                 viewHolder.genericIcon.setImageDrawable(null);
                 viewHolder.genericIcon.setVisibility(View.GONE);
                 view.setVisibility(View.VISIBLE);
@@ -945,7 +945,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         modelProvider.getPreloadRequestBuilder(iconData).listener(requestListener).into(view);
     }
 
-    private void showPopup(View v, final LayoutElementParcelable rowItem) {
+    private void showPopup(final View v, final LayoutElementParcelable rowItem) {
         v.setOnClickListener(view -> {
             PopupMenu popupMenu = new ItemPopupMenu(context, mainFrag.getMainActivity(),
                                                     utilsProvider, mainFrag, rowItem, view, sharedPrefs);
@@ -982,7 +982,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         });
     }
 
-    private boolean getBoolean(String key) {
+    private boolean getBoolean(final String key) {
         return preferenceActivity.getBoolean(key);
     }
 
@@ -994,31 +994,31 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private boolean checked;
         private boolean animate;
 
-        ListItem(LayoutElementParcelable elem) {
+        ListItem(final LayoutElementParcelable elem) {
             this(false, elem);
         }
 
-        ListItem(boolean isBack, LayoutElementParcelable elem) {
+        ListItem(final boolean isBack, final LayoutElementParcelable elem) {
             this.elem = elem;
-            specialType = isBack? TYPE_BACK:TYPE_ITEM;
+            specialType = isBack ? TYPE_BACK : TYPE_ITEM;
         }
 
-        ListItem(@ListElemType int specialType) {
+        ListItem(final @ListElemType int specialType) {
             this.specialType = specialType;
         }
 
-        public void setChecked(boolean checked) {
-            if(specialType == TYPE_ITEM) this.checked = checked;
+        public void setChecked(final boolean checked) {
+            if (specialType == TYPE_ITEM) this.checked = checked;
         }
 
         public int getChecked() {
-            if(checked) return CHECKED;
-            else if(specialType == TYPE_ITEM) return NOT_CHECKED;
+            if (checked) return CHECKED;
+            else if (specialType == TYPE_ITEM) return NOT_CHECKED;
             else return UNCHECKABLE;
         }
 
-        public void setAnimate(boolean animating) {
-            if(specialType == -1) this.animate = animating;
+        public void setAnimate(final boolean animating) {
+            if (specialType == -1) this.animate = animating;
         }
 
         public boolean getAnimating() {

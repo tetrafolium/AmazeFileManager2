@@ -96,7 +96,7 @@ import jcifs.smb.SmbFile;
  */
 public class FileUtils {
 
-    public static long folderSize(File directory, OnProgressUpdate<Long> updateState) {
+    public static long folderSize(final File directory, final OnProgressUpdate<Long> updateState) {
         long length = 0;
         try {
             for (File file:directory.listFiles()) {
@@ -105,7 +105,7 @@ public class FileUtils {
                 else
                     length += folderSize(file, null); //null because updateState would be called for children dirs
 
-                if(updateState != null)
+                if (updateState != null)
                     updateState.onUpdate(length);
             }
         } catch (Exception e) {
@@ -114,14 +114,14 @@ public class FileUtils {
         return length;
     }
 
-    public static long folderSize(HybridFile directory, OnProgressUpdate<Long> updateState) {
-        if(directory.isSimpleFile())
+    public static long folderSize(final HybridFile directory, final OnProgressUpdate<Long> updateState) {
+        if (directory.isSimpleFile())
             return folderSize(new File(directory.getPath()), updateState);
         else
             return directory.folderSize(AppConfig.getInstance());
     }
 
-    public static long folderSize(SmbFile directory) {
+    public static long folderSize(final SmbFile directory) {
         long length = 0;
         try {
             for (SmbFile file:directory.listFiles()) {
@@ -146,7 +146,7 @@ public class FileUtils {
      * @see HybridFile#folderSize(Context)
      * @return Folder size in bytes
      */
-    public static Long folderSizeSftp(SFTPClient client, String remotePath) {
+    public static Long folderSizeSftp(final SFTPClient client, final String remotePath) {
         Long retval = 0L;
         try {
             for (RemoteResourceInfo info : client.ls(remotePath)) {
@@ -164,7 +164,7 @@ public class FileUtils {
     }
 
 
-    public static long folderSizeCloud(OpenMode openMode, CloudMetaData sourceFileMeta) {
+    public static long folderSizeCloud(final OpenMode openMode, final CloudMetaData sourceFileMeta) {
 
         DataUtils dataUtils = DataUtils.getInstance();
         long length = 0;
@@ -184,7 +184,7 @@ public class FileUtils {
     /**
      * Helper method to get size of an otg folder
      */
-    public static long otgFolderSize(String path, final Context context) {
+    public static long otgFolderSize(final String path, final Context context) {
         final AtomicLong totalBytes = new AtomicLong(0);
         OTGUtil.getDocumentFiles(path, context, file -> totalBytes.addAndGet(getBaseFileSize(file, context)));
         return totalBytes.longValue();
@@ -193,7 +193,7 @@ public class FileUtils {
     /**
      * Helper method to calculate source files size
      */
-    public static long getTotalBytes(ArrayList<HybridFileParcelable> files, Context context) {
+    public static long getTotalBytes(final ArrayList<HybridFileParcelable> files, final Context context) {
         long totalBytes = 0L;
         for (HybridFileParcelable file : files) {
             totalBytes += getBaseFileSize(file, context);
@@ -201,7 +201,7 @@ public class FileUtils {
         return totalBytes;
     }
 
-    private static long getBaseFileSize(HybridFileParcelable baseFile, Context context) {
+    private static long getBaseFileSize(final HybridFileParcelable baseFile, final Context context) {
         if (baseFile.isDirectory(context)) {
             return baseFile.folderSize(context);
         } else {
@@ -216,7 +216,7 @@ public class FileUtils {
      * @param file File to scan
      * @param c {@link Context}
      */
-    public static void scanFile(@NonNull File file, @NonNull Context c) {
+    public static void scanFile(final @NonNull File file, final @NonNull Context c) {
         scanFile(Uri.fromFile(file), c);
     }
 
@@ -226,7 +226,7 @@ public class FileUtils {
      * @param uri File's {@link Uri}
      * @param c {@link Context}
      */
-    private static void scanFile(@NonNull Uri uri, @NonNull Context c) {
+    private static void scanFile(final @NonNull Uri uri, final @NonNull Context c) {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
         c.sendBroadcast(mediaScanIntent);
     }
@@ -238,11 +238,11 @@ public class FileUtils {
      * @param hybridFiles
      * @param context
      */
-    public static void scanFile(@NonNull Context context, @NonNull HybridFile[] hybridFiles) {
+    public static void scanFile(final @NonNull Context context, final @NonNull HybridFile[] hybridFiles) {
         AsyncTask.execute(() -> {
             if (hybridFiles[0].exists(context) && hybridFiles[0].isLocal()) {
                 String[] paths = new String[hybridFiles.length];
-                for (int i = 0; i<hybridFiles.length; i++) {
+                for (int i = 0; i < hybridFiles.length; i++) {
                     HybridFile hybridFile = hybridFiles[i];
                     paths[i] = hybridFile.getPath();
                 }
@@ -260,13 +260,13 @@ public class FileUtils {
      * @param hybridFile the file which was changed (directory not supported)
      * @param context
      */
-    public static void scanFile(@NonNull HybridFile hybridFile, Context context) {
+    public static void scanFile(final @NonNull HybridFile hybridFile, final Context context) {
 
-        if((hybridFile.isLocal() || hybridFile.isOtgFile()) && hybridFile.exists(context)) {
+        if ((hybridFile.isLocal() || hybridFile.isOtgFile()) && hybridFile.exists(context)) {
 
             DocumentFile documentFile = FileUtil.getDocumentFile(hybridFile.getFile(), false, context);
             //If FileUtil.getDocumentFile() returns null, fall back to DocumentFile.fromFile()
-            if(documentFile == null)
+            if (documentFile == null)
                 documentFile = DocumentFile.fromFile(hybridFile.getFile());
 
             FileUtils.scanFile(documentFile.getUri(), context);
@@ -274,7 +274,7 @@ public class FileUtils {
     }
 
 
-    public static void crossfade(View buttons,final View pathbar) {
+    public static void crossfade(final View buttons, final View pathbar) {
         // Set the content view to 0% opacity but visible, so that it is visible
         // (but fully transparent) during the animation.
         buttons.setAlpha(0f);
@@ -292,7 +292,7 @@ public class FileUtils {
         .setDuration(100)
         .setListener(new AnimatorListenerAdapter() {
             @Override
-            public void onAnimationEnd(Animator animation) {
+            public void onAnimationEnd(final Animator animation) {
                 pathbar.setVisibility(View.GONE);
             }
         });
@@ -301,13 +301,13 @@ public class FileUtils {
         // participate in layout passes, etc.)
     }
 
-    public static void revealShow(final View view, boolean reveal) {
+    public static void revealShow(final View view, final boolean reveal) {
         if (reveal) {
             ObjectAnimator animator = ObjectAnimator.ofFloat(view, View.ALPHA, 0f, 1f);
             animator.setDuration(300); //ms
             animator.addListener(new AnimatorListenerAdapter() {
                 @Override
-                public void onAnimationStart(Animator animation) {
+                public void onAnimationStart(final Animator animation) {
                     view.setVisibility(View.VISIBLE);
                 }
             });
@@ -318,7 +318,7 @@ public class FileUtils {
             animator.setDuration(300); //ms
             animator.addListener(new AnimatorListenerAdapter() {
                 @Override
-                public void onAnimationEnd(Animator animation) {
+                public void onAnimationEnd(final Animator animation) {
                     view.setVisibility(View.GONE);
                 }
             });
@@ -326,7 +326,7 @@ public class FileUtils {
         }
     }
 
-    public static void crossfadeInverse(final View buttons,final View pathbar) {
+    public static void crossfadeInverse(final View buttons, final View pathbar) {
         // Set the content view to 0% opacity but visible, so that it is visible
         // (but fully transparent) during the animation.
 
@@ -344,7 +344,7 @@ public class FileUtils {
         .setDuration(500)
         .setListener(new AnimatorListenerAdapter() {
             @Override
-            public void onAnimationEnd(Animator animation) {
+            public void onAnimationEnd(final Animator animation) {
                 buttons.setVisibility(View.GONE);
             }
         });
@@ -353,18 +353,18 @@ public class FileUtils {
         // participate in layout passes, etc.)
     }
 
-    public static void shareCloudFile(String path, final OpenMode openMode, final Context context) {
+    public static void shareCloudFile(final String path, final OpenMode openMode, final Context context) {
         new AsyncTask<String, Void, String>() {
 
             @Override
-            protected String doInBackground(String... params) {
+            protected String doInBackground(final String... params) {
                 String shareFilePath = params[0];
                 CloudStorage cloudStorage = DataUtils.getInstance().getAccount(openMode);
                 return cloudStorage.createShareLink(CloudUtil.stripPath(openMode, shareFilePath));
             }
 
             @Override
-            protected void onPostExecute(String s) {
+            protected void onPostExecute(final String s) {
                 super.onPostExecute(s);
 
                 FileUtils.copyToClipboard(context, s);
@@ -374,7 +374,7 @@ public class FileUtils {
         } .execute(path);
     }
 
-    public static void shareFiles(ArrayList<File> a, Activity c,AppTheme appTheme,int fab_skin) {
+    public static void shareFiles(final ArrayList<File> a, final Activity c, final AppTheme appTheme, final int fab_skin) {
 
         ArrayList<Uri> uris = new ArrayList<>();
         boolean b = true;
@@ -390,19 +390,19 @@ public class FileUtils {
                 }
             }
 
-        if (!b || mime==(null))
+        if (!b || mime == (null))
             mime = "*/*";
         try {
 
-            new ShareTask(c,uris,appTheme,fab_skin).execute(mime);
+            new ShareTask(c, uris, appTheme, fab_skin).execute(mime);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static float readableFileSizeFloat(long size) {
+    public static float readableFileSizeFloat(final long size) {
         if (size <= 0) return 0;
-        return (float) (size / (1024*1024));
+        return (float) (size / (1024 * 1024));
     }
 
     /**
@@ -433,7 +433,7 @@ public class FileUtils {
      * @param f the file
      * @param forcechooser force the chooser to show up even when set default by user
      */
-    public static void openunknown(File f, Context c, boolean forcechooser, boolean useNewStack) {
+    public static void openunknown(final File f, final Context c, final boolean forcechooser, final boolean useNewStack) {
         Intent chooserIntent = new Intent();
         chooserIntent.setAction(Intent.ACTION_VIEW);
 
@@ -445,11 +445,11 @@ public class FileUtils {
 
             Intent activityIntent;
             if (forcechooser) {
-                if(useNewStack) applyNewDocFlag(chooserIntent);
+                if (useNewStack) applyNewDocFlag(chooserIntent);
                 activityIntent = Intent.createChooser(chooserIntent, c.getString(R.string.openwith));
             } else {
                 activityIntent = chooserIntent;
-                if(useNewStack) applyNewDocFlag(activityIntent);
+                if (useNewStack) applyNewDocFlag(activityIntent);
             }
 
             try {
@@ -468,7 +468,7 @@ public class FileUtils {
     /**
      * Open file from OTG
      */
-    public static void openunknown(DocumentFile f, Context c, boolean forcechooser, boolean useNewStack) {
+    public static void openunknown(final DocumentFile f, final Context c, final boolean forcechooser, final boolean useNewStack) {
         Intent chooserIntent = new Intent();
         chooserIntent.setAction(Intent.ACTION_VIEW);
         chooserIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -478,11 +478,11 @@ public class FileUtils {
             chooserIntent.setDataAndType(f.getUri(), type);
             Intent activityIntent;
             if (forcechooser) {
-                if(useNewStack) applyNewDocFlag(chooserIntent);
+                if (useNewStack) applyNewDocFlag(chooserIntent);
                 activityIntent = Intent.createChooser(chooserIntent, c.getString(R.string.openwith));
             } else {
                 activityIntent = chooserIntent;
-                if(useNewStack) applyNewDocFlag(chooserIntent);
+                if (useNewStack) applyNewDocFlag(chooserIntent);
             }
 
             try {
@@ -497,7 +497,7 @@ public class FileUtils {
         }
     }
 
-    private static void applyNewDocFlag(Intent i) {
+    private static void applyNewDocFlag(final Intent i) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
         } else {
@@ -513,11 +513,11 @@ public class FileUtils {
     private static final String EMULATED_STORAGE_SOURCE = System.getenv("EMULATED_STORAGE_SOURCE");
     private static final String EMULATED_STORAGE_TARGET = System.getenv("EMULATED_STORAGE_TARGET");
     private static final String EXTERNAL_STORAGE = System.getenv("EXTERNAL_STORAGE");
-    public static String normalizeMediaPath(String path) {
+    public static String normalizeMediaPath(final String path) {
         // Retrieve all the paths and check that we have this environment vars
-        if (TextUtils.isEmpty(EMULATED_STORAGE_SOURCE) ||
-                TextUtils.isEmpty(EMULATED_STORAGE_TARGET) ||
-                TextUtils.isEmpty(EXTERNAL_STORAGE)) {
+        if (TextUtils.isEmpty(EMULATED_STORAGE_SOURCE)
+                || TextUtils.isEmpty(EMULATED_STORAGE_TARGET)
+                || TextUtils.isEmpty(EXTERNAL_STORAGE)) {
             return path;
         }
 
@@ -527,7 +527,7 @@ public class FileUtils {
         }
         return path;
     }
-    public static Uri fileToContentUri(Context context, File file) {
+    public static Uri fileToContentUri(final Context context, final File file) {
         // Normalize the path to ensure media search
         final String normalizedPath = normalizeMediaPath(file.getAbsolutePath());
 
@@ -543,7 +543,7 @@ public class FileUtils {
         return null;
     }
 
-    private static Uri fileToContentUri(Context context, String path, boolean isDirectory, String volume) {
+    private static Uri fileToContentUri(final Context context, final String path, final boolean isDirectory, final String volume) {
         final String where = MediaStore.MediaColumns.DATA + " = ?";
         Uri baseUri;
         String[] projection;
@@ -597,9 +597,9 @@ public class FileUtils {
      * Method supports showing a UI to ask user to open a file without any extension/mime
      */
     public static void openWith(final File f, final Context c, final boolean useNewStack) {
-        MaterialDialog.Builder a=new MaterialDialog.Builder(c);
+        MaterialDialog.Builder a = new MaterialDialog.Builder(c);
         a.title(c.getString(R.string.openas));
-        String[] items=new String[] {c.getString(R.string.text),c.getString(R.string.image),c.getString(R.string.video),c.getString(R.string.audio),c.getString(R.string.database),c.getString(R.string.other)};
+        String[] items = new String[] {c.getString(R.string.text), c.getString(R.string.image), c.getString(R.string.video), c.getString(R.string.audio), c.getString(R.string.database), c.getString(R.string.other)};
 
         a.items(items).itemsCallback((materialDialog, view, i, charSequence) -> {
             Uri uri = fileToContentUri(c, f);
@@ -608,7 +608,7 @@ public class FileUtils {
             intent.setAction(Intent.ACTION_VIEW);
             switch (i) {
             case 0:
-                if(useNewStack) applyNewDocFlag(intent);
+                if (useNewStack) applyNewDocFlag(intent);
                 intent.setDataAndType(uri, "text/*");
                 break;
             case 1:
@@ -653,7 +653,7 @@ public class FileUtils {
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             switch (i) {
             case 0:
-                if(useNewStack) applyNewDocFlag(intent);
+                if (useNewStack) applyNewDocFlag(intent);
                 intent.setDataAndType(f.getUri(), "text/*");
                 break;
             case 1:
@@ -687,7 +687,7 @@ public class FileUtils {
     /**
      * Method determines if there is something to go back to
      */
-    public static boolean canGoBack(Context context, HybridFile currentFile) {
+    public static boolean canGoBack(final Context context, final HybridFile currentFile) {
         switch (currentFile.getMode()) {
 
         // we're on main thread and can't list the cloud files
@@ -699,14 +699,14 @@ public class FileUtils {
         case SFTP:
             return true;
         default:
-            return true;// TODO: 29/9/2017 there might be nothing to go back to (check parent)
+            return true; // TODO: 29/9/2017 there might be nothing to go back to (check parent)
         }
     }
 
-    public static long[] getSpaces(HybridFile hFile, Context context, final OnProgressUpdate<Long[]> updateState) {
+    public static long[] getSpaces(final HybridFile hFile, final Context context, final OnProgressUpdate<Long[]> updateState) {
         long totalSpace = hFile.getTotal(context);
         long freeSpace = hFile.getUsableSpace();
-        long fileSize = 0l;
+        long fileSize = 0L;
 
         if (hFile.isDirectory(context)) {
             fileSize = hFile.folderSize(context);
@@ -716,7 +716,7 @@ public class FileUtils {
         return new long[] {totalSpace, freeSpace, fileSize};
     }
 
-    public static boolean copyToClipboard(Context context, String text) {
+    public static boolean copyToClipboard(final Context context, final String text) {
         try {
             android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context
                     .getSystemService(Context.CLIPBOARD_SERVICE);
@@ -729,13 +729,13 @@ public class FileUtils {
         }
     }
 
-    public static String[] getFolderNamesInPath(String path) {
-        if(!path.endsWith("/")) path += "/";
+    public static String[] getFolderNamesInPath(final String path) {
+        if (!path.endsWith("/")) path += "/";
         return ("root" + path).split("/");
     }
 
-    public static String[] getPathsInPath(String path) {
-        if(path.endsWith("/")) path = path.substring(0, path.length()-1);
+    public static String[] getPathsInPath(final String path) {
+        if (path.endsWith("/")) path = path.substring(0, path.length() - 1);
 
         ArrayList<String> paths = new ArrayList<>();
 
@@ -750,17 +750,17 @@ public class FileUtils {
         return paths.toArray(new String[paths.size()]);
     }
 
-    public static boolean canListFiles(File f) {
+    public static boolean canListFiles(final File f) {
         return f.canRead() && f.isDirectory();
     }
 
-    public static void openFile(final File f, final MainActivity m, SharedPreferences sharedPrefs) {
+    public static void openFile(final File f, final MainActivity m, final SharedPreferences sharedPrefs) {
         boolean useNewStack = sharedPrefs.getBoolean(PreferencesConstants.PREFERENCE_TEXTEDITOR_NEWSTACK, false);
         boolean defaultHandler = isSelfDefault(f, m);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(m);
         final Toast[] studioCount = {null};
 
-        if(f.getName().toLowerCase().endsWith(".apk")) {
+        if (f.getName().toLowerCase().endsWith(".apk")) {
             GeneralDialogCreation.showPackageDialog(f, m);
         } else if (defaultHandler && CompressedHelper.isFileExtractable(f.getPath())) {
             GeneralDialogCreation.showArchiveDialog(f, m);
@@ -776,12 +776,12 @@ public class FileUtils {
             intent.setDataAndType(uri, "audio/*");
 
             // Behold! It's the  legendary easter egg!
-            if (studio_count!=0) {
+            if (studio_count != 0) {
                 new CountDownTimer(studio_count, 1000) {
                     @Override
-                    public void onTick(long millisUntilFinished) {
-                        int sec = (int)millisUntilFinished/1000;
-                        if (studioCount[0] !=null)
+                    public void onTick(final long millisUntilFinished) {
+                        int sec = (int) millisUntilFinished / 1000;
+                        if (studioCount[0] != null)
                             studioCount[0].cancel();
                         studioCount[0] = Toast.makeText(m, sec + "", Toast.LENGTH_LONG);
                         studioCount[0].show();
@@ -789,7 +789,7 @@ public class FileUtils {
 
                     @Override
                     public void onFinish() {
-                        if (studioCount[0] !=null)
+                        if (studioCount[0] != null)
                             studioCount[0].cancel();
                         studioCount[0] = Toast.makeText(m, m.getString(R.string.opening),
                                                         Toast.LENGTH_LONG);
@@ -803,13 +803,13 @@ public class FileUtils {
             try {
                 openunknown(f, m, false, useNewStack);
             } catch (Exception e) {
-                Toast.makeText(m, m.getString(R.string.noappfound),Toast.LENGTH_LONG).show();
+                Toast.makeText(m, m.getString(R.string.noappfound), Toast.LENGTH_LONG).show();
                 openWith(f, m, useNewStack);
             }
         }
     }
 
-    private static boolean isSelfDefault(File f, Context c) {
+    private static boolean isSelfDefault(final File f, final Context c) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.fromFile(f), MimeTypes.getMimeType(f.getPath(), f.isDirectory()));
         ResolveInfo info = c.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
@@ -824,12 +824,12 @@ public class FileUtils {
     /**
      * Support file opening for {@link DocumentFile} (eg. OTG)
      */
-    public static void openFile(final DocumentFile f, final MainActivity m, SharedPreferences sharedPrefs) {
+    public static void openFile(final DocumentFile f, final MainActivity m, final SharedPreferences sharedPrefs) {
         boolean useNewStack = sharedPrefs.getBoolean(PreferencesConstants.PREFERENCE_TEXTEDITOR_NEWSTACK, false);
         try {
             openunknown(f, m, false, useNewStack);
         } catch (Exception e) {
-            Toast.makeText(m, m.getString(R.string.noappfound),Toast.LENGTH_LONG).show();
+            Toast.makeText(m, m.getString(R.string.noappfound), Toast.LENGTH_LONG).show();
             openWith(f, m, useNewStack);
         }
 
@@ -887,7 +887,7 @@ public class FileUtils {
 }*/
     }
 
-    public static ArrayList<HybridFile> toHybridFileConcurrentRadixTree(ConcurrentRadixTree<VoidValue> a) {
+    public static ArrayList<HybridFile> toHybridFileConcurrentRadixTree(final ConcurrentRadixTree<VoidValue> a) {
         ArrayList<HybridFile> b = new ArrayList<>();
         for (CharSequence o : a.getKeysStartingWith("")) {
             HybridFile hFile = new HybridFile(OpenMode.UNKNOWN, o.toString());
@@ -897,7 +897,7 @@ public class FileUtils {
         return b;
     }
 
-    public static ArrayList<HybridFile> toHybridFileArrayList(LinkedList<String> a) {
+    public static ArrayList<HybridFile> toHybridFileArrayList(final LinkedList<String> a) {
         ArrayList<HybridFile> b = new ArrayList<>();
         for (String s : a) {
             HybridFile hFile = new HybridFile(OpenMode.UNKNOWN, s);
@@ -911,21 +911,21 @@ public class FileUtils {
      * We're parsing a line returned from a stdout of shell.
      * @param line must be the line returned from a 'ls' command
      */
-    public static HybridFileParcelable parseName(String line) {
+    public static HybridFileParcelable parseName(final String line) {
         boolean linked = false;
         StringBuilder name = new StringBuilder();
         StringBuilder link = new StringBuilder();
         String size = "-1";
         String date = "";
         String[] array = line.split(" ");
-        if(array.length<6)return null;
+        if (array.length < 6) return null;
         for (String anArray : array) {
             if (anArray.contains("->") && array[0].startsWith("l")) {
                 linked = true;
             }
         }
         int p = getColonPosition(array);
-        if(p!=-1) {
+        if (p != -1) {
             date = array[p - 1] + " | " + array[p];
             size = array[p - 2];
         }
@@ -944,48 +944,48 @@ public class FileUtils {
                 link.append(" ").append(array[i]);
             }
         }
-        long Size = (size==null || size.trim().length()==0)?-1:Long.parseLong(size);
-        if(date.trim().length()>0) {
+        long Size = (size == null || size.trim().length() == 0) ? -1 : Long.parseLong(size);
+        if (date.trim().length() > 0) {
             ParsePosition pos = new ParsePosition(0);
             SimpleDateFormat simpledateformat = new SimpleDateFormat("yyyy-MM-dd | HH:mm");
             Date stringDate = simpledateformat.parse(date, pos);
-            HybridFileParcelable baseFile=new HybridFileParcelable(name.toString(),array[0],stringDate.getTime(),Size,true);
+            HybridFileParcelable baseFile = new HybridFileParcelable(name.toString(), array[0], stringDate.getTime(), Size, true);
             baseFile.setLink(link.toString());
             return baseFile;
         } else {
-            HybridFileParcelable baseFile= new HybridFileParcelable(name.toString(),array[0],new File("/").lastModified(),Size,true);
+            HybridFileParcelable baseFile = new HybridFileParcelable(name.toString(), array[0], new File("/").lastModified(), Size, true);
             baseFile.setLink(link.toString());
             return baseFile;
         }
     }
 
-    private static int getLinkPosition(String[] array) {
-        for(int i=0; i<array.length; i++) {
-            if(array[i].contains("->"))return i;
+    private static int getLinkPosition(final String[] array) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].contains("->")) return i;
         }
         return  0;
     }
 
-    private static int getColonPosition(String[] array) {
-        for(int i=0; i<array.length; i++) {
-            if(array[i].contains(":"))return i;
+    private static int getColonPosition(final String[] array) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].contains(":")) return i;
         }
         return  -1;
     }
 
-    public static ArrayList<Boolean[]> parse(String permLine) {
-        ArrayList<Boolean[]> arrayList= new ArrayList<>(3);
-        Boolean[] read =new Boolean[] {permLine.charAt(1) == 'r',
+    public static ArrayList<Boolean[]> parse(final String permLine) {
+        ArrayList<Boolean[]> arrayList = new ArrayList<>(3);
+        Boolean[] read = new Boolean[] {permLine.charAt(1) == 'r',
                                        permLine.charAt(4) == 'r',
                                        permLine.charAt(7) == 'r'
                                       };
 
-        Boolean[] write=new Boolean[] {permLine.charAt(2) == 'w',
+        Boolean[] write = new Boolean[] {permLine.charAt(2) == 'w',
                                        permLine.charAt(5) == 'w',
                                        permLine.charAt(8) == 'w'
                                       };
 
-        Boolean[] execute=new Boolean[] {permLine.charAt(3) == 'x',
+        Boolean[] execute = new Boolean[] {permLine.charAt(3) == 'x',
                                          permLine.charAt(6) == 'x',
                                          permLine.charAt(9) == 'x'
                                         };
@@ -996,13 +996,13 @@ public class FileUtils {
         return arrayList;
     }
 
-    public static boolean isStorage(String path) {
+    public static boolean isStorage(final String path) {
         for (String s : DataUtils.getInstance().getStorages())
             if (s.equals(path)) return true;
         return false;
     }
 
-    public static boolean isPathAccessible(String dir, SharedPreferences pref) {
+    public static boolean isPathAccessible(final String dir, final SharedPreferences pref) {
         File f = new File(dir);
         boolean showIfHidden = pref.getBoolean(PreferencesConstants.PREFERENCE_SHOW_HIDDENFILES, false),
                 isDirSelfOrParent = dir.endsWith("/.") || dir.endsWith("/.."),
@@ -1015,14 +1015,14 @@ public class FileUtils {
         // TODO: 2/5/2017 use another system that doesn't create new object
     }
 
-    public static boolean isRoot(String dir) {// TODO: 5/5/2017 hardcoding root might lead to problems down the line
+    public static boolean isRoot(final String dir) { // TODO: 5/5/2017 hardcoding root might lead to problems down the line
         return !dir.contains(OTGUtil.PREFIX_OTG) && !dir.startsWith("/storage");
     }
 
     /**
      * Converts ArrayList of HybridFileParcelable to ArrayList of File
      */
-    public static ArrayList<File> hybridListToFileArrayList(ArrayList<HybridFileParcelable> a) {
+    public static ArrayList<File> hybridListToFileArrayList(final ArrayList<HybridFileParcelable> a) {
         ArrayList<File> b = new ArrayList<>();
         for (int i = 0; i < a.size(); i++) {
             b.add(new File(a.get(i).getPath()));
@@ -1034,7 +1034,7 @@ public class FileUtils {
      * Checks whether path for bookmark exists
      * If path is not found, empty directory is created
      */
-    public static void checkForPath(Context context, String path, boolean isRootExplorer) {
+    public static void checkForPath(final Context context, final String path, final boolean isRootExplorer) {
         // TODO: Add support for SMB and OTG in this function
         if (!new File(path).exists()) {
             Toast.makeText(context, context.getString(R.string.bookmark_lost), Toast.LENGTH_SHORT).show();
@@ -1042,27 +1042,27 @@ public class FileUtils {
             isRootExplorer, new Operations.ErrorCallBack() {
                 //TODO empty
                 @Override
-                public void exists(HybridFile file) {
+                public void exists(final HybridFile file) {
 
                 }
 
                 @Override
-                public void launchSAF(HybridFile file) {
+                public void launchSAF(final HybridFile file) {
 
                 }
 
                 @Override
-                public void launchSAF(HybridFile file, HybridFile file1) {
+                public void launchSAF(final HybridFile file, final HybridFile file1) {
 
                 }
 
                 @Override
-                public void done(HybridFile hFile, boolean b) {
+                public void done(final HybridFile hFile, final boolean b) {
 
                 }
 
                 @Override
-                public void invalidName(HybridFile file) {
+                public void invalidName(final HybridFile file) {
 
                 }
             });

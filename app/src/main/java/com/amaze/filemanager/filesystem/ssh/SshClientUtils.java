@@ -65,19 +65,19 @@ public abstract class SshClientUtils
      * @param <T> Type of return value
      * @return Template execution results
      */
-    public static final <T> T execute(@NonNull SshClientTemplate template) {
+    public static final <T> T execute(final @NonNull SshClientTemplate template) {
         SSHClient client = null;
         T retval = null;
         try {
             client = SshConnectionPool.getInstance().getConnection(template.url);
-            if(client != null)
+            if (client != null)
                 retval = template.execute(client);
             else
                 throw new RuntimeException("Unable to execute template");
-        } catch(Exception e) {
+        } catch (Exception e) {
             Log.e(TAG, "Error executing template method", e);
         } finally {
-            if(client != null && template.closeClientOnFinish) {
+            if (client != null && template.closeClientOnFinish) {
                 tryDisconnect(client);
             }
         }
@@ -94,19 +94,19 @@ public abstract class SshClientUtils
     public static final <T> T execute(@NonNull final SshClientSessionTemplate template) {
         return execute(new SshClientTemplate(template.url, false) {
             @Override
-            public T execute(SSHClient client) {
+            public T execute(final SSHClient client) {
                 Session session = null;
                 T retval = null;
                 try {
                     session = client.startSession();
                     retval = template.execute(session);
-                } catch(IOException e) {
+                } catch (IOException e) {
                     Log.e(TAG, "Error executing template method", e);
                 } finally {
-                    if(session != null && session.isOpen()) {
+                    if (session != null && session.isOpen()) {
                         try {
                             session.close();
-                        } catch(IOException e) {
+                        } catch (IOException e) {
                             Log.w(TAG, "Error closing SFTP client", e);
                         }
                     }
@@ -126,19 +126,19 @@ public abstract class SshClientUtils
     public static final <T> T execute(@NonNull final SFtpClientTemplate template) {
         return execute(new SshClientTemplate(template.url, false) {
             @Override
-            public T execute(SSHClient client) {
+            public T execute(final SSHClient client) {
                 SFTPClient sftpClient = null;
                 T retval = null;
                 try {
                     sftpClient = client.newSFTPClient();
                     retval = template.execute(sftpClient);
-                } catch(IOException e) {
+                } catch (IOException e) {
                     Log.e(TAG, "Error executing template method", e);
                 } finally {
-                    if(sftpClient != null && template.closeClientOnFinish) {
+                    if (sftpClient != null && template.closeClientOnFinish) {
                         try {
                             sftpClient.close();
-                        } catch(IOException e) {
+                        } catch (IOException e) {
                             Log.w(TAG, "Error closing SFTP client", e);
                         }
                     }
@@ -155,13 +155,13 @@ public abstract class SshClientUtils
      * @param fullUri SSH URL
      * @return SSH URL with the password (if exists) encrypted
      */
-    public static final String encryptSshPathAsNecessary(@NonNull String fullUri) {
+    public static final String encryptSshPathAsNecessary(final @NonNull String fullUri) {
         String uriWithoutProtocol = fullUri.substring(SSH_URI_PREFIX.length(), fullUri.lastIndexOf('@'));
         try {
-            return (uriWithoutProtocol.lastIndexOf(':') > 0) ?
-                   SmbUtil.getSmbEncryptedPath(AppConfig.getInstance(), fullUri) :
-                   fullUri;
-        } catch(IOException | GeneralSecurityException e) {
+            return (uriWithoutProtocol.lastIndexOf(':') > 0)
+                   ? SmbUtil.getSmbEncryptedPath(AppConfig.getInstance(), fullUri)
+                   : fullUri;
+        } catch (IOException | GeneralSecurityException e) {
             Log.e(TAG, "Error encrypting path", e);
             return fullUri;
         }
@@ -174,13 +174,13 @@ public abstract class SshClientUtils
      * @param fullUri SSH URL
      * @return SSH URL with the password (if exists) decrypted
      */
-    public static final String decryptSshPathAsNecessary(@NonNull String fullUri) {
+    public static final String decryptSshPathAsNecessary(final @NonNull String fullUri) {
         String uriWithoutProtocol = fullUri.substring(SSH_URI_PREFIX.length(), fullUri.lastIndexOf('@'));
         try {
-            return (uriWithoutProtocol.lastIndexOf(':') > 0) ?
-                   SmbUtil.getSmbDecryptedPath(AppConfig.getInstance(), fullUri) :
-                   fullUri;
-        } catch(IOException | GeneralSecurityException e) {
+            return (uriWithoutProtocol.lastIndexOf(':') > 0)
+                   ? SmbUtil.getSmbDecryptedPath(AppConfig.getInstance(), fullUri)
+                   : fullUri;
+        } catch (IOException | GeneralSecurityException e) {
             Log.e(TAG, "Error decrypting path", e);
             return fullUri;
         }
@@ -195,11 +195,11 @@ public abstract class SshClientUtils
      * @param fullUri Full SSH URL
      * @return The remote path part of the full SSH URL
      */
-    public static final String extractBaseUriFrom(@NonNull String fullUri) {
+    public static final String extractBaseUriFrom(final @NonNull String fullUri) {
         String uriWithoutProtocol = fullUri.substring(SSH_URI_PREFIX.length());
-        return uriWithoutProtocol.indexOf('/') == -1 ?
-               fullUri :
-               fullUri.substring(0, uriWithoutProtocol.indexOf('/') + SSH_URI_PREFIX.length());
+        return uriWithoutProtocol.indexOf('/') == -1
+               ? fullUri
+               : fullUri.substring(0, uriWithoutProtocol.indexOf('/') + SSH_URI_PREFIX.length());
     }
 
     /**
@@ -211,11 +211,11 @@ public abstract class SshClientUtils
      * @param fullUri Full SSH URL
      * @return The remote path part of the full SSH URL
      */
-    public static final String extractRemotePathFrom(@NonNull String fullUri) {
+    public static final String extractRemotePathFrom(final @NonNull String fullUri) {
         String uriWithoutProtocol = fullUri.substring(SSH_URI_PREFIX.length());
-        return uriWithoutProtocol.indexOf('/') == -1 ?
-               "/" :
-               uriWithoutProtocol.substring(uriWithoutProtocol.indexOf('/'));
+        return uriWithoutProtocol.indexOf('/') == -1
+               ? "/"
+               : uriWithoutProtocol.substring(uriWithoutProtocol.indexOf('/'));
     }
 
     /**
@@ -224,8 +224,8 @@ public abstract class SshClientUtils
      *
      * @param client {@link SSHClient} instance
      */
-    public static final void tryDisconnect(SSHClient client) {
-        if(client != null && client.isConnected()) {
+    public static final void tryDisconnect(final SSHClient client) {
+        if (client != null && client.isConnected()) {
             try {
                 client.disconnect();
             } catch (IOException e) {
@@ -266,10 +266,10 @@ public abstract class SshClientUtils
     }
 
     //Decide the SSH URL depends on password/selected KeyPair
-    public static String deriveSftpPathFrom(String hostname, int port, String username, String password,
-                                            KeyPair selectedParsedKeyPair) {
-        return (selectedParsedKeyPair != null || password == null) ?
-               String.format("ssh://%s@%s:%d", username, hostname, port) :
-               String.format("ssh://%s:%s@%s:%d", username, password, hostname, port);
+    public static String deriveSftpPathFrom(final String hostname, final int port, final String username, final String password,
+                                            final KeyPair selectedParsedKeyPair) {
+        return (selectedParsedKeyPair != null || password == null)
+               ? String.format("ssh://%s@%s:%d", username, hostname, port)
+               : String.format("ssh://%s:%s@%s:%d", username, password, hostname, port);
     }
 }

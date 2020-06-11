@@ -41,12 +41,12 @@ import java.util.ArrayList;
 
 public class LzmaExtractor extends Extractor {
 
-    public LzmaExtractor(@NonNull Context context, @NonNull String filePath, @NonNull String outputPath, @NonNull OnUpdate listener) {
+    public LzmaExtractor(final @NonNull Context context, final @NonNull String filePath, final @NonNull String outputPath, final @NonNull OnUpdate listener) {
         super(context, filePath, outputPath, listener);
     }
 
     @Override
-    protected void extractWithFilter(@NonNull Filter filter) throws IOException {
+    protected void extractWithFilter(final @NonNull Filter filter) throws IOException {
         long totalBytes = 0;
         ArrayList<TarArchiveEntry> archiveEntries = new ArrayList<>();
         TarArchiveInputStream inputStream = new TarArchiveInputStream(
@@ -55,7 +55,7 @@ public class LzmaExtractor extends Extractor {
         TarArchiveEntry tarArchiveEntry;
 
         while ((tarArchiveEntry = inputStream.getNextTarEntry()) != null) {
-            if(filter.shouldExtract(tarArchiveEntry.getName(), tarArchiveEntry.isDirectory())) {
+            if (filter.shouldExtract(tarArchiveEntry.getName(), tarArchiveEntry.isDirectory())) {
                 archiveEntries.add(tarArchiveEntry);
                 totalBytes += tarArchiveEntry.getSize();
             }
@@ -79,8 +79,8 @@ public class LzmaExtractor extends Extractor {
         listener.onFinish();
     }
 
-    private void extractEntry(@NonNull final Context context, TarArchiveInputStream inputStream,
-                              TarArchiveEntry entry, String outputDir) throws IOException {
+    private void extractEntry(@NonNull final Context context, final TarArchiveInputStream inputStream,
+                              final TarArchiveEntry entry, final String outputDir) throws IOException {
         if (entry.isDirectory()) {
             FileUtil.mkdir(new File(outputDir, entry.getName()), context);
             return;

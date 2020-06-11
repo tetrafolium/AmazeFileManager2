@@ -90,7 +90,7 @@ public abstract class StreamServer {
      * @param header        Header entries, percent decoded
      * @return HTTP response, see class Response for details
      */
-    public abstract Response serve( String uri, String method, Properties header, Properties parms, Properties files );
+    public abstract Response serve(String uri, String method, Properties header, Properties parms, Properties files);
 
     /**
      * HTTP response.
@@ -100,7 +100,7 @@ public abstract class StreamServer {
         /**
          * Basic constructor.
          */
-        public Response( String status, String mimeType, StreamSource data ) {
+        public Response(final String status, final String mimeType, final StreamSource data) {
             this.status = status;
             this.mimeType = mimeType;
             this.data = data;
@@ -109,9 +109,9 @@ public abstract class StreamServer {
         /**
          * Adds given line to the header.
          */
-        public void addHeader( String name, String value )
+        public void addHeader(final String name, final String value)
         {
-            header.put( name, value );
+            header.put(name, value);
         }
 
         /**
@@ -169,7 +169,7 @@ public abstract class StreamServer {
      */
 
     //private HTTPSession session;
-    public StreamServer( int port, File wwwroot ) throws IOException {
+    public StreamServer(final int port, final File wwwroot) throws IOException {
         myTcpPort = port;
         this.myRootDir = wwwroot;
         myServerSocket = tryBind(myTcpPort);
@@ -182,7 +182,7 @@ public abstract class StreamServer {
             } catch (IOException ioe) {
             }
         });
-        myThread.setDaemon( true );
+        myThread.setDaemon(true);
         myThread.start();
     }
 
@@ -204,7 +204,7 @@ public abstract class StreamServer {
      *
      * @return ServerSocket
      */
-    private ServerSocket tryBind(int port) throws IOException {
+    private ServerSocket tryBind(final int port) throws IOException {
         ServerSocket socket;
         try {
             socket = new ServerSocket(port);
@@ -223,7 +223,7 @@ public abstract class StreamServer {
         private InputStream is;
         private final Socket socket;
 
-        public HTTPSession(Socket s) {
+        public HTTPSession(final Socket s) {
             socket = s;
             //mySocket = s;
             Thread t = new Thread(this);
@@ -247,7 +247,7 @@ public abstract class StreamServer {
             }
         }
 
-        private void handleResponse(Socket socket) {
+        private void handleResponse(final Socket socket) {
             try {
                 is = socket.getInputStream();
                 if (is == null) return;
@@ -391,7 +391,7 @@ public abstract class StreamServer {
          * Decodes the sent headers and loads the data into
          * java Properties' key - value pairs
          **/
-        private void decodeHeader(BufferedReader in, Properties pre, Properties parms, Properties header)
+        private void decodeHeader(final BufferedReader in, final Properties pre, final Properties parms, final Properties header)
         throws InterruptedException {
             try {
                 // Read the request line
@@ -414,7 +414,7 @@ public abstract class StreamServer {
                 if (qmi >= 0) {
                     decodeParms(uri.substring(qmi + 1), parms);
                     uri = decodePercent(uri.substring(0, qmi));
-                } else uri = Uri.decode(uri);//decodePercent(uri);
+                } else uri = Uri.decode(uri); //decodePercent(uri);
 
                 // If there's another token, it's protocol version,
                 // followed by HTTP headers. Ignore version but parse headers.
@@ -440,7 +440,7 @@ public abstract class StreamServer {
          * Decodes the Multipart Body data and put it
          * into java Properties' key - value pairs.
          **/
-        private void decodeMultipartData(String boundary, byte[] fbuf, BufferedReader in, Properties parms, Properties files)
+        private void decodeMultipartData(final String boundary, final byte[] fbuf, final BufferedReader in, final Properties parms, final Properties files)
         throws InterruptedException {
             try {
                 int[] bpositions = getBoundaryPositions(fbuf, boundary.getBytes());
@@ -509,7 +509,7 @@ public abstract class StreamServer {
         /**
          * Find the byte positions where multipart boundaries start.
          **/
-        public int[] getBoundaryPositions(byte[] b, byte[] boundary) {
+        public int[] getBoundaryPositions(final byte[] b, final byte[] boundary) {
             int matchcount = 0;
             int matchbyte = -1;
             Vector matchbytes = new Vector();
@@ -541,7 +541,7 @@ public abstract class StreamServer {
          * to a temporary file.
          * The full path to the saved file is returned.
          **/
-        private String saveTmpFile(byte[] b, int offset, int len) {
+        private String saveTmpFile(final byte[] b, final int offset, final int len) {
             String path = "";
             if (len > 0) {
                 String tmpdir = System.getProperty("java.io.tmpdir");
@@ -563,7 +563,7 @@ public abstract class StreamServer {
          * It returns the offset separating multipart file headers
          * from the file's data.
          **/
-        private int stripMultipartHeaders(byte[] b, int offset) {
+        private int stripMultipartHeaders(final byte[] b, final int offset) {
             int i = 0;
             for (i = offset; i < b.length; i++) {
                 if (b[i] == '\r' && b[++i] == '\n' && b[++i] == '\r' && b[++i] == '\n')
@@ -576,7 +576,7 @@ public abstract class StreamServer {
          * Decodes the percent encoding scheme. <br/>
          * For example: "an+example%20string" -> "an example string"
          */
-        private String decodePercent(String str) throws InterruptedException {
+        private String decodePercent(final String str) throws InterruptedException {
             try {
                 StringBuffer sb = new StringBuffer();
                 for (int i = 0; i < str.length(); i++) {
@@ -608,7 +608,7 @@ public abstract class StreamServer {
          * identical keys due to the simplicity of Properties -- if you need multiples,
          * you might want to replace the Properties with a Hashtable of Vectors or such.
          */
-        private void decodeParms(String parms, Properties p)
+        private void decodeParms(final String parms, final Properties p)
         throws InterruptedException {
             if (parms == null)
                 return;
@@ -627,7 +627,7 @@ public abstract class StreamServer {
          * Returns an error message as a HTTP response and
          * throws InterruptedException to stop further request processing.
          */
-        private void sendError(Socket socket, String status, String msg) throws InterruptedException {
+        private void sendError(final Socket socket, final String status, final String msg) throws InterruptedException {
             sendResponse(socket, status, MIME_PLAINTEXT, null, null);
             throw new InterruptedException();
         }
@@ -635,7 +635,7 @@ public abstract class StreamServer {
         /**
          * Sends given response to the socket.
          */
-        private void sendResponse(Socket socket, String status, String mime, Properties header, StreamSource data) {
+        private void sendResponse(final Socket socket, final String status, final String mime, final Properties header, final StreamSource data) {
             try {
                 if (status == null)
                     throw new Error("sendResponse(): Status can't be null.");
@@ -700,7 +700,7 @@ public abstract class StreamServer {
     private static java.text.SimpleDateFormat gmtFrmt;
 
     static {
-        gmtFrmt = new java.text.SimpleDateFormat( "E, d MMM yyyy HH:mm:ss 'GMT'", Locale.US);
+        gmtFrmt = new java.text.SimpleDateFormat("E, d MMM yyyy HH:mm:ss 'GMT'", Locale.US);
         gmtFrmt.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
 
@@ -708,30 +708,30 @@ public abstract class StreamServer {
      * The distribution licence
      */
     private static final String LICENCE =
-        "Copyright (C) 2001,2005-2011 by Jarno Elonen <elonen@iki.fi>\n"+
-        "and Copyright (C) 2010 by Konstantinos Togias <info@ktogias.gr>\n"+
-        "\n"+
-        "Redistribution and use in source and binary forms, with or without\n"+
-        "modification, are permitted provided that the following conditions\n"+
-        "are met:\n"+
-        "\n"+
-        "Redistributions of source code must retain the above copyright notice,\n"+
-        "this list of conditions and the following disclaimer. Redistributions in\n"+
-        "binary form must reproduce the above copyright notice, this list of\n"+
-        "conditions and the following disclaimer in the documentation and/or other\n"+
-        "materials provided with the distribution. The name of the author may not\n"+
-        "be used to endorse or promote products derived from this software without\n"+
-        "specific prior written permission. \n"+
-        " \n"+
-        "THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR\n"+
-        "IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES\n"+
-        "OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.\n"+
-        "IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,\n"+
-        "INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT\n"+
-        "NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\n"+
-        "DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\n"+
-        "THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n"+
-        "(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\n"+
-        "OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.";
+        "Copyright (C) 2001,2005-2011 by Jarno Elonen <elonen@iki.fi>\n"
+        + "and Copyright (C) 2010 by Konstantinos Togias <info@ktogias.gr>\n"
+        + "\n"
+        + "Redistribution and use in source and binary forms, with or without\n"
+        + "modification, are permitted provided that the following conditions\n"
+        + "are met:\n"
+        + "\n"
+        + "Redistributions of source code must retain the above copyright notice,\n"
+        + "this list of conditions and the following disclaimer. Redistributions in\n"
+        + "binary form must reproduce the above copyright notice, this list of\n"
+        + "conditions and the following disclaimer in the documentation and/or other\n"
+        + "materials provided with the distribution. The name of the author may not\n"
+        + "be used to endorse or promote products derived from this software without\n"
+        + "specific prior written permission. \n"
+        + " \n"
+        + "THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR\n"
+        + "IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES\n"
+        + "OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.\n"
+        + "IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,\n"
+        + "INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT\n"
+        + "NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,\n"
+        + "DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\n"
+        + "THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n"
+        + "(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE\n"
+        + "OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.";
 }
 

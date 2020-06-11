@@ -17,7 +17,7 @@ import com.amaze.filemanager.R;
 
 public class EditTextColorStateUtil {
 
-    public static void setTint(Context context, EditText editText, int color) {
+    public static void setTint(final Context context, final EditText editText, final int color) {
         if (Build.VERSION.SDK_INT >= 21) return;
         ColorStateList editTextColorStateList = createEditTextColorStateList(context, color);
         if (editText instanceof AppCompatEditText) {
@@ -27,7 +27,7 @@ public class EditTextColorStateUtil {
         }
     }
 
-    private static ColorStateList createEditTextColorStateList(Context context, int color) {
+    private static ColorStateList createEditTextColorStateList(final Context context, final int color) {
         int[][] states = new int[3][];
         int[] colors = new int[3];
         int i = 0;

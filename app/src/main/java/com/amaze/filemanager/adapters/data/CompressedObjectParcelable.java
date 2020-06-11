@@ -43,7 +43,7 @@ public class CompressedObjectParcelable implements Parcelable {
     public final int filetype;
     public final IconDataParcelable iconData;
 
-    public CompressedObjectParcelable(String path, long date, long size, boolean directory) {
+    public CompressedObjectParcelable(final String path, final long date, final long size, final boolean directory) {
         this.directory = directory;
         this.type = TYPE_NORMAL;
         this.path = path;
@@ -74,10 +74,10 @@ public class CompressedObjectParcelable implements Parcelable {
         return 0;
     }
 
-    public void writeToParcel(Parcel p1, int p2) {
+    public void writeToParcel(final Parcel p1, final int p2) {
         p1.writeInt(type);
-        if(type != TYPE_GOBACK) {
-            p1.writeInt(directory? 1:0);
+        if (type != TYPE_GOBACK) {
+            p1.writeInt(directory ? 1 : 0);
             p1.writeString(path);
             p1.writeString(name);
             p1.writeLong(size);
@@ -89,18 +89,18 @@ public class CompressedObjectParcelable implements Parcelable {
 
     public static final Parcelable.Creator<CompressedObjectParcelable> CREATOR =
     new Parcelable.Creator<CompressedObjectParcelable>() {
-        public CompressedObjectParcelable createFromParcel(Parcel in) {
+        public CompressedObjectParcelable createFromParcel(final Parcel in) {
             return new CompressedObjectParcelable(in);
         }
 
-        public CompressedObjectParcelable[] newArray(int size) {
+        public CompressedObjectParcelable[] newArray(final int size) {
             return new CompressedObjectParcelable[size];
         }
     };
 
-    private CompressedObjectParcelable(Parcel im) {
+    private CompressedObjectParcelable(final Parcel im) {
         type = im.readInt();
-        if(type == TYPE_GOBACK) {
+        if (type == TYPE_GOBACK) {
             directory = true;
             path = null;
             name = null;
@@ -121,9 +121,9 @@ public class CompressedObjectParcelable implements Parcelable {
 
     public static class Sorter implements Comparator<CompressedObjectParcelable> {
         @Override
-        public int compare(CompressedObjectParcelable file1, CompressedObjectParcelable file2) {
-            if(file1.type == CompressedObjectParcelable.TYPE_GOBACK) return -1;
-            else if(file2.type == CompressedObjectParcelable.TYPE_GOBACK) return 1;
+        public int compare(final CompressedObjectParcelable file1, final CompressedObjectParcelable file2) {
+            if (file1.type == CompressedObjectParcelable.TYPE_GOBACK) return -1;
+            else if (file2.type == CompressedObjectParcelable.TYPE_GOBACK) return 1;
             else if (file1.directory && !file2.directory) {
                 return -1;
             } else if (file2.directory && !(file1).directory) {
@@ -133,11 +133,11 @@ public class CompressedObjectParcelable implements Parcelable {
 
     }
 
-    private String getNameForPath(String path) {
+    private String getNameForPath(final String path) {
         if (path.isEmpty()) return "";
 
         final StringBuilder stringBuilder = new StringBuilder(path);
-        if(stringBuilder.charAt(path.length()-1) == '/')
+        if (stringBuilder.charAt(path.length() - 1) == '/')
             stringBuilder.deleteCharAt(path.length() - 1);
 
         try {
@@ -148,9 +148,9 @@ public class CompressedObjectParcelable implements Parcelable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if(obj instanceof CompressedObjectParcelable) {
-            CompressedObjectParcelable otherObj = (CompressedObjectParcelable)obj;
+    public boolean equals(final Object obj) {
+        if (obj instanceof CompressedObjectParcelable) {
+            CompressedObjectParcelable otherObj = (CompressedObjectParcelable) obj;
             return name.equals(otherObj.name)
                    && type == otherObj.type
                    && directory == otherObj.directory

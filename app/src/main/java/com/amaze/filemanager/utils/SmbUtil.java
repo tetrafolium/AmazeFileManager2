@@ -19,7 +19,7 @@ public class SmbUtil {
     /**
      * Parse path to decrypt smb password
      */
-    public static String getSmbDecryptedPath(Context context, String path) throws GeneralSecurityException, IOException {
+    public static String getSmbDecryptedPath(final Context context, final String path) throws GeneralSecurityException, IOException {
         if (!(path.contains(":") && path.contains("@"))) {
             // smb path doesn't have any credentials
             return path;
@@ -27,8 +27,8 @@ public class SmbUtil {
 
         StringBuilder buffer = new StringBuilder();
 
-        buffer.append(path.substring(0, path.indexOf(":", 4)+1));
-        String encryptedPassword = path.substring(path.indexOf(":", 4)+1, path.lastIndexOf("@"));
+        buffer.append(path.substring(0, path.indexOf(":", 4) + 1));
+        String encryptedPassword = path.substring(path.indexOf(":", 4) + 1, path.lastIndexOf("@"));
 
         if (!TextUtils.isEmpty(encryptedPassword)) {
             String decryptedPassword = CryptUtil.decryptPassword(context, encryptedPassword);
@@ -42,15 +42,15 @@ public class SmbUtil {
     /**
      * Parse path to encrypt smb password
      */
-    public static String getSmbEncryptedPath(Context context, String path) throws GeneralSecurityException, IOException  {
+    public static String getSmbEncryptedPath(final Context context, final String path) throws GeneralSecurityException, IOException  {
         if (!(path.contains(":") && path.contains("@"))) {
             // smb path doesn't have any credentials
             return path;
         }
 
         StringBuilder buffer = new StringBuilder();
-        buffer.append(path.substring(0, path.indexOf(":", 4)+1));
-        String decryptedPassword = path.substring(path.indexOf(":", 4)+1, path.lastIndexOf("@"));
+        buffer.append(path.substring(0, path.indexOf(":", 4) + 1));
+        String decryptedPassword = path.substring(path.indexOf(":", 4) + 1, path.lastIndexOf("@"));
 
         if (!TextUtils.isEmpty(decryptedPassword)) {
             String encryptPassword =  CryptUtil.encryptPassword(context, decryptedPassword);

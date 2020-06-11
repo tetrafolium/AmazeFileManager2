@@ -724,12 +724,12 @@ public class SevenZOutputFile implements Closeable {
         }
     }
 
-    private void writeUint64(final DataOutput header, long value) throws IOException {
+    private void writeUint64(final DataOutput header, final long value) throws IOException {
         int firstByte = 0;
         int mask = 0x80;
         int i;
         for (i = 0; i < 8; i++) {
-            if (value < ((1L << ( 7  * (i + 1))))) {
+            if (value < ((1L << (7  * (i + 1))))) {
                 firstByte |= (value >>> (8 * i));
                 break;
             }

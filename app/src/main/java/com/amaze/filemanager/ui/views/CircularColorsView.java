@@ -25,13 +25,13 @@ public class CircularColorsView extends View {
     private Paint[] colors = {new Paint(), new Paint(), new Paint(), new Paint()};
     private RectF semicicleRect = new RectF();
 
-    public CircularColorsView(Context context) {
+    public CircularColorsView(final Context context) {
         super(context);
         init();
     }
 
 
-    public CircularColorsView(Context context, @Nullable AttributeSet attrs) {
+    public CircularColorsView(final Context context, final @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
@@ -43,11 +43,11 @@ public class CircularColorsView extends View {
         dividerPaint.setStrokeWidth(SEMICIRCLE_LINE_WIDTH);
     }
 
-    public void setDividerColor(int color) {
+    public void setDividerColor(final int color) {
         dividerPaint.setColor(color);
     }
 
-    public void setColors(int color, int color1, int color2, int color3) {
+    public void setColors(final int color, final int color1, final int color2, final int color3) {
         colors[0].setColor(color);
         colors[1].setColor(color1);
         colors[2].setColor(color2);
@@ -59,26 +59,26 @@ public class CircularColorsView extends View {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(final Canvas canvas) {
         super.onDraw(canvas);
 
-        if(isInEditMode()) setColors(Color.CYAN, Color.RED, Color.GREEN, Color.BLUE);
-        if(!paintInitialized) throw new IllegalStateException("Paint has not actual color!");
+        if (isInEditMode()) setColors(Color.CYAN, Color.RED, Color.GREEN, Color.BLUE);
+        if (!paintInitialized) throw new IllegalStateException("Paint has not actual color!");
 
         float distance = getWidth() * DISTANCE_PERCENTUAL;
 
-        float diameterByHeight = getHeight()* DIAMETER_PERCENTUAL;
-        float diameterByWidth = (getWidth() - distance*2)/3f* DIAMETER_PERCENTUAL;
+        float diameterByHeight = getHeight() * DIAMETER_PERCENTUAL;
+        float diameterByWidth = (getWidth() - distance * 2) / 3f * DIAMETER_PERCENTUAL;
         float diameter = Math.min(diameterByHeight, diameterByWidth);
 
-        float radius = diameter/2f;
+        float radius = diameter / 2f;
 
-        int centerY = getHeight()/2;
-        float[] positionX = {getWidth()- diameter - distance - diameter - distance - radius,
+        int centerY = getHeight() / 2;
+        float[] positionX = {getWidth() - diameter - distance - diameter - distance - radius,
                              getWidth() - diameter - distance - radius,
                              getWidth() - radius
                             };
-        semicicleRect.set(positionX[0]- radius, centerY- radius, positionX[0]+ radius, centerY+ radius);
+        semicicleRect.set(positionX[0] - radius, centerY - radius, positionX[0] + radius, centerY + radius);
 
         canvas.drawArc(semicicleRect, 90, 180, true, colors[0]);
         canvas.drawArc(semicicleRect, 270, 180, true, colors[1]);

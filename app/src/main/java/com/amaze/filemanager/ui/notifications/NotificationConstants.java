@@ -34,7 +34,7 @@ public class NotificationConstants {
     /**
      * This creates a channel (API >= 26) or applies the correct metadata to a notification (API < 26)
      */
-    public static void setMetadata(Context context, NotificationCompat.Builder notification, int type) {
+    public static void setMetadata(final Context context, final NotificationCompat.Builder notification, final int type) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             switch (type) {
             case TYPE_NORMAL:
@@ -76,9 +76,9 @@ public class NotificationConstants {
      * THis channel is set so it doesn't bother the user, but it has importance.
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private static void createFtpChannel(Context context) {
+    private static void createFtpChannel(final Context context) {
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if(mNotificationManager.getNotificationChannel(CHANNEL_FTP_ID) == null) {
+        if (mNotificationManager.getNotificationChannel(CHANNEL_FTP_ID) == null) {
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_FTP_ID,
                     context.getString(R.string.channelname_ftp), NotificationManager.IMPORTANCE_HIGH);
             // Configure the notification channel.
@@ -92,9 +92,9 @@ public class NotificationConstants {
      * THis channel is set so it doesn't bother the user, with the lowest importance.
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private static void createNormalChannel(Context context) {
+    private static void createNormalChannel(final Context context) {
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if(mNotificationManager.getNotificationChannel(CHANNEL_NORMAL_ID) == null) {
+        if (mNotificationManager.getNotificationChannel(CHANNEL_NORMAL_ID) == null) {
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_NORMAL_ID,
                     context.getString(R.string.channelname_normal), NotificationManager.IMPORTANCE_MIN);
             // Configure the notification channel.

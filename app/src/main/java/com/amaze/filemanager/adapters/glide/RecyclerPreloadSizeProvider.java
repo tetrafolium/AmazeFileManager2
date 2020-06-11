@@ -24,7 +24,7 @@ public class RecyclerPreloadSizeProvider implements ListPreloader.PreloadSizePro
     private SparseArray<int[]> viewSizes = new SparseArray<>();
     private boolean isAdditionClosed = false;
 
-    public RecyclerPreloadSizeProvider(RecyclerPreloadSizeProviderCallback c) {
+    public RecyclerPreloadSizeProvider(final RecyclerPreloadSizeProviderCallback c) {
         callback = c;
     }
 
@@ -36,8 +36,8 @@ public class RecyclerPreloadSizeProvider implements ListPreloader.PreloadSizePro
      * @param id a unique number for each view loaded to this object
      * @param v the ciew to load
      */
-    public void addView(int id, View v) {
-        if(!isAdditionClosed && viewSizes.get(id, null) != null) return;
+    public void addView(final int id, final View v) {
+        if (!isAdditionClosed && viewSizes.get(id, null) != null) return;
 
         final int viewNumber = id;
         new SizeViewTarget(v, (width, height) -> viewSizes.append(viewNumber, new int[] {width, height}));
@@ -52,7 +52,7 @@ public class RecyclerPreloadSizeProvider implements ListPreloader.PreloadSizePro
 
     @Nullable
     @Override
-    public int[] getPreloadSize(IconDataParcelable item, int adapterPosition, int perItemPosition) {
+    public int[] getPreloadSize(final IconDataParcelable item, final int adapterPosition, final int perItemPosition) {
         return viewSizes.get(callback.getCorrectView(item, adapterPosition), null);
     }
 
@@ -66,13 +66,13 @@ public class RecyclerPreloadSizeProvider implements ListPreloader.PreloadSizePro
     }
 
     private static final class SizeViewTarget extends ViewTarget<View, Object> {
-        public SizeViewTarget(View view, SizeReadyCallback callback) {
+        public SizeViewTarget(final View view, final SizeReadyCallback callback) {
             super(view);
             getSize(callback);
         }
 
         @Override
-        public void onResourceReady(Object resource, Transition<? super Object> transition) {
+        public void onResourceReady(final Object resource, final Transition<? super Object> transition) {
             // Do nothing
         }
     }

@@ -118,7 +118,7 @@ public class FtpService extends Service implements Runnable {
     private boolean isStartedByTile = false;
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(final Intent intent, final int flags, final int startId) {
         isStartedByTile = intent.getBooleanExtra(TAG_STARTED_BY_TILE, false);
         int attempts = 10;
         while (serverThread != null) {
@@ -145,7 +145,7 @@ public class FtpService extends Service implements Runnable {
 
 
     @Override
-    public IBinder onBind(Intent intent) {
+    public IBinder onBind(final Intent intent) {
         return null;
     }
 
@@ -251,7 +251,7 @@ public class FtpService extends Service implements Runnable {
 
     //Restart the service if the app is closed from the recent list
     @Override
-    public void onTaskRemoved(Intent rootIntent) {
+    public void onTaskRemoved(final Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
 
         Intent restartService = new Intent(getApplicationContext(), this.getClass());
@@ -268,7 +268,7 @@ public class FtpService extends Service implements Runnable {
         return serverThread != null;
     }
 
-    public static boolean isConnectedToLocalNetwork(Context context) {
+    public static boolean isConnectedToLocalNetwork(final Context context) {
         ConnectivityManager cm = (ConnectivityManager) context
                                  .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
@@ -289,7 +289,7 @@ public class FtpService extends Service implements Runnable {
         return connected;
     }
 
-    public static boolean isConnectedToWifi(Context context) {
+    public static boolean isConnectedToWifi(final Context context) {
         ConnectivityManager cm = (ConnectivityManager) context
                                  .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
@@ -297,13 +297,13 @@ public class FtpService extends Service implements Runnable {
                && ni.getType() == ConnectivityManager.TYPE_WIFI;
     }
 
-    public static boolean isEnabledWifiHotspot(Context context) {
+    public static boolean isEnabledWifiHotspot(final Context context) {
         WifiManager wm = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         Boolean enabled = callIsWifiApEnabled(wm);
-        return enabled != null? enabled:false;
+        return enabled != null ? enabled : false;
     }
 
-    public static InetAddress getLocalInetAddress(Context context) {
+    public static InetAddress getLocalInetAddress(final Context context) {
         if (!isConnectedToLocalNetwork(context) && !isEnabledWifiHotspot(context)) {
             return null;
         }
@@ -324,7 +324,7 @@ public class FtpService extends Service implements Runnable {
                 while (addresses.hasMoreElements()) {
                     InetAddress address = addresses.nextElement();
 
-                    if(WIFI_AP_ADDRESS.equals(address.getHostAddress()) && isEnabledWifiHotspot(context))
+                    if (WIFI_AP_ADDRESS.equals(address.getHostAddress()) && isEnabledWifiHotspot(context))
                         return address;
 
                     // this is the condition that sometimes gives problems
@@ -338,7 +338,7 @@ public class FtpService extends Service implements Runnable {
         return null;
     }
 
-    public static InetAddress intToInet(int value) {
+    public static InetAddress intToInet(final int value) {
         byte[] bytes = new byte[4];
         for (int i = 0; i < 4; i++) {
             bytes[i] = byteOfInt(value, i);
@@ -351,17 +351,17 @@ public class FtpService extends Service implements Runnable {
         }
     }
 
-    public static byte byteOfInt(int value, int which) {
+    public static byte byteOfInt(final int value, final int which) {
         int shift = which * 8;
         return (byte) (value >> shift);
     }
 
-    public static int getPort(SharedPreferences preferences) {
+    public static int getPort(final SharedPreferences preferences) {
         return preferences.getInt(PORT_PREFERENCE_KEY, DEFAULT_PORT);
     }
 
     @Nullable
-    private static Boolean callIsWifiApEnabled(@NonNull WifiManager wifiManager) {
+    private static Boolean callIsWifiApEnabled(final @NonNull WifiManager wifiManager) {
         Boolean r = null;
         try {
             Method method = wifiManager.getClass().getDeclaredMethod("isWifiApEnabled");

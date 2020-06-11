@@ -44,7 +44,7 @@ public class RootHelper {
      * @return a list of results. Null only if the command passed is a blocking call or no output is
      * there for the command passed
      */
-    public static ArrayList<String> runShellCommandToList(String cmd) throws ShellNotRunningException {
+    public static ArrayList<String> runShellCommandToList(final String cmd) throws ShellNotRunningException {
         final ArrayList<String> result = new ArrayList<>();
         // callback being called on a background handler thread
         runShellCommandWithCallback(cmd, (commandCode, exitCode, output) -> result.addAll(output));
@@ -56,7 +56,7 @@ public class RootHelper {
      *
      * @param cmd the command
      */
-    public static void runShellCommand(String cmd) throws ShellNotRunningException {
+    public static void runShellCommand(final String cmd) throws ShellNotRunningException {
         if (MainActivity.shellInteractive == null || !MainActivity.shellInteractive.isRunning())
             throw new ShellNotRunningException();
         MainActivity.shellInteractive.addCommand(cmd);
@@ -71,7 +71,7 @@ public class RootHelper {
      *
      * @param cmd the command
      */
-    public static void runShellCommandWithCallback(String cmd, Shell.OnCommandResultListener callback)
+    public static void runShellCommandWithCallback(final String cmd, final Shell.OnCommandResultListener callback)
     throws ShellNotRunningException {
         if (MainActivity.shellInteractive == null || !MainActivity.shellInteractive.isRunning())
             throw new ShellNotRunningException();
@@ -90,11 +90,11 @@ public class RootHelper {
      * Command is run from a third-party level context (u:r:init_shell0)
      * Not callback supported as the shell is not interactive
      */
-    public static List<String> runNonRootShellCommand(String cmd) {
+    public static List<String> runNonRootShellCommand(final String cmd) {
         return Shell.SH.run(cmd);
     }
 
-    public static String getCommandLineString(String input) {
+    public static String getCommandLineString(final String input) {
         return input.replaceAll(UNIX_ESCAPE_EXPRESSION, "\\\\$1");
     }
 
@@ -105,7 +105,7 @@ public class RootHelper {
      *
      * @param path       the path
      */
-    public static ArrayList<HybridFileParcelable> getFilesList(String path, boolean showHidden, OnFileFound listener) {
+    public static ArrayList<HybridFileParcelable> getFilesList(final String path, final boolean showHidden, final OnFileFound listener) {
         File f = new File(path);
         ArrayList<HybridFileParcelable> files = new ArrayList<>();
         try {
@@ -133,7 +133,7 @@ public class RootHelper {
         return files;
     }
 
-    public static HybridFileParcelable generateBaseFile(File x, boolean showHidden) {
+    public static HybridFileParcelable generateBaseFile(final File x, final boolean showHidden) {
         long size = 0;
         if (!x.isDirectory())
             size = x.length();
@@ -148,7 +148,7 @@ public class RootHelper {
         return null;
     }
 
-    public static HybridFileParcelable generateBaseFile(DocumentFile file) {
+    public static HybridFileParcelable generateBaseFile(final DocumentFile file) {
         long size = 0;
         if (!file.isDirectory())
             size = file.length();
@@ -160,7 +160,7 @@ public class RootHelper {
         return baseFile;
     }
 
-    public static String parseFilePermission(File f) {
+    public static String parseFilePermission(final File f) {
         String per = "";
         if (f.canRead()) {
             per = per + "r";
@@ -174,7 +174,7 @@ public class RootHelper {
         return per;
     }
 
-    public static String parseDocumentFilePermission(DocumentFile file) {
+    public static String parseDocumentFilePermission(final DocumentFile file) {
         String per = "";
         if (file.canRead()) {
             per = per + "r";
@@ -192,7 +192,7 @@ public class RootHelper {
      * Whether a file exist at a specified path. We try to reload a list and conform from that list
      * of parent's children that the file we're looking for is there or not.
      */
-    public static boolean fileExists(String path) {
+    public static boolean fileExists(final String path) {
         File f = new File(path);
         String p = f.getParent();
         if (p != null && p.length() > 0) {
@@ -207,7 +207,7 @@ public class RootHelper {
         return false;
     }
 
-    static boolean contains(String[] a, String name) {
+    static boolean contains(final String[] a, final String name) {
         for (String s : a) {
             //Log.e("checking",s);
             if (s.equals(name)) return true;
@@ -219,7 +219,7 @@ public class RootHelper {
      * Whether toTest file is directory or not
      * TODO: Avoid parsing ls
      */
-    public static boolean isDirectory(String toTest, boolean root, int count)
+    public static boolean isDirectory(final String toTest, final boolean root, final int count)
     throws ShellNotRunningException {
         File f = new File(toTest);
         String name = f.getName();
@@ -248,7 +248,7 @@ public class RootHelper {
         return f.isDirectory();
     }
 
-    private static boolean isDirectory(HybridFileParcelable path) {
+    private static boolean isDirectory(final HybridFileParcelable path) {
         return path.getPermission().startsWith("d") || new File(path.getPath()).isDirectory();
     }
 
@@ -268,8 +268,8 @@ public class RootHelper {
      * @param getModeCallBack callback to set the type of file
      * @deprecated use getFiles()
      */
-    public static ArrayList<HybridFileParcelable> getFilesList(String path, boolean root, boolean showHidden,
-            GetModeCallBack getModeCallBack) {
+    public static ArrayList<HybridFileParcelable> getFilesList(final String path, final boolean root, final boolean showHidden,
+            final GetModeCallBack getModeCallBack) {
         final ArrayList<HybridFileParcelable> files = new ArrayList<>();
         getFiles(path, root, showHidden, getModeCallBack, files::add);
         return files;
@@ -283,8 +283,8 @@ public class RootHelper {
      * @param showHidden      to show hidden files
      * @param getModeCallBack callback to set the type of file
      */
-    public static void getFiles(String path, boolean root, boolean showHidden,
-                                GetModeCallBack getModeCallBack, OnFileFound fileCallback) {
+    public static void getFiles(final String path, final boolean root, final boolean showHidden,
+                                final GetModeCallBack getModeCallBack, final OnFileFound fileCallback) {
         OpenMode mode = OpenMode.FILE;
         if (root && !path.startsWith("/storage") && !path.startsWith("/sdcard")) {
             try {
@@ -322,9 +322,7 @@ public class RootHelper {
             } catch (ShellNotRunningException e) {
                 e.printStackTrace();
             }
-        }
-
-        else if (FileUtils.canListFiles(new File(path))) {
+        } else if (FileUtils.canListFiles(new File(path))) {
             // we're taking a chance to load files using basic java filesystem
             getFilesList(path, showHidden, fileCallback);
             mode = OpenMode.FILE;

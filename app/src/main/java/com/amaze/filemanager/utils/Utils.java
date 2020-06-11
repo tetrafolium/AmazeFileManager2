@@ -64,12 +64,12 @@ public class Utils {
     private static final String DATE_TIME_FORMAT = "%s | %s";
 
     //methods for fastscroller
-    public static float clamp(float min, float max, float value) {
+    public static float clamp(final float min, final float max, final float value) {
         float minimum = Math.max(min, value);
         return Math.min(minimum, max);
     }
 
-    public static float getViewRawY(View view) {
+    public static float getViewRawY(final View view) {
         int[] location = new int[2];
         location[0] = 0;
         location[1] = (int) view.getY();
@@ -77,7 +77,7 @@ public class Utils {
         return location[1];
     }
 
-    public static void setTint(Context context, CheckBox box, int color) {
+    public static void setTint(final Context context, final CheckBox box, final int color) {
         if (Build.VERSION.SDK_INT >= 21) return;
         ColorStateList sl = new ColorStateList(new int[][] {
                                                    new int[]{-android.R.attr.state_checked},
@@ -93,7 +93,7 @@ public class Utils {
         }
     }
 
-    public static String getDate(@NonNull Context c, long f) {
+    public static String getDate(final @NonNull Context c, final long f) {
         return String.format(DATE_TIME_FORMAT, DateUtils.formatDateTime(c, f, DateUtils.FORMAT_SHOW_DATE), DateUtils.formatDateTime(c, f, DateUtils.FORMAT_SHOW_TIME));
     }
 
@@ -104,7 +104,7 @@ public class Utils {
      * @return the color
      */
     @SuppressWarnings("deprecation")
-    public static int getColor(Context c, @ColorRes int color) {
+    public static int getColor(final Context c, final @ColorRes int color) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return c.getColor(color);
         } else {
@@ -112,7 +112,7 @@ public class Utils {
         }
     }
 
-    public static int dpToPx(Context c, int dp) {
+    public static int dpToPx(final Context c, final int dp) {
         DisplayMetrics displayMetrics = c.getResources().getDisplayMetrics();
         return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
@@ -139,7 +139,7 @@ public class Utils {
      *  Stolen from Apache's StringUtils
      *  (https://commons.apache.org/proper/commons-lang/javadocs/api-2.6/org/apache/commons/lang/StringUtils.html#difference(java.lang.String,%20java.lang.String))
      */
-    public static String differenceStrings(String str1, String str2) {
+    public static String differenceStrings(final String str1, final String str2) {
         if (str1 == null) return str2;
         if (str2 == null) return str1;
 
@@ -150,7 +150,7 @@ public class Utils {
         return str2.substring(at);
     }
 
-    private static int indexOfDifferenceStrings(CharSequence cs1, CharSequence cs2) {
+    private static int indexOfDifferenceStrings(final CharSequence cs1, final CharSequence cs2) {
         if (cs1 == cs2) return INDEX_NOT_FOUND;
         if (cs1 == null || cs2 == null) return 0;
 
@@ -168,7 +168,7 @@ public class Utils {
      * Force disables screen rotation. Useful when we're temporarily in activity because of external intent,
      * and don't have to really deal much with filesystem.
      */
-    public static void disableScreenRotation(MainActivity mainActivity) {
+    public static void disableScreenRotation(final MainActivity mainActivity) {
         int screenOrientation = mainActivity.getResources().getConfiguration().orientation;
 
         if (screenOrientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -178,14 +178,14 @@ public class Utils {
         }
     }
 
-    public static boolean isDeviceInLandScape(Activity activity) {
+    public static boolean isDeviceInLandScape(final Activity activity) {
         return activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     /**
      * Sanitizes input from external application to avoid any attempt of command injection
      */
-    public static String sanitizeInput(String input) {
+    public static String sanitizeInput(final String input) {
         // iterate through input and keep sanitizing until it's fully injection proof
         String sanitizedInput;
         String sanitizedInputTemp = input;
@@ -199,7 +199,7 @@ public class Utils {
         return sanitizedInput;
     }
 
-    private static String sanitizeInputOnce(String input) {
+    private static String sanitizeInputOnce(final String input) {
         return input.replaceAll(INPUT_INTENT_BLACKLIST_PIPE, "").
                replaceAll(INPUT_INTENT_BLACKLIST_AMP, "").
                replaceAll(INPUT_INTENT_BLACKLIST_DOTS, "").
@@ -209,7 +209,7 @@ public class Utils {
     /**
      * Returns uri associated to specific basefile
      */
-    public static Uri getUriForBaseFile(Context context, HybridFileParcelable baseFile) {
+    public static Uri getUriForBaseFile(final Context context, final HybridFileParcelable baseFile) {
         switch (baseFile.getMode()) {
         case FILE:
         case ROOT:
@@ -240,12 +240,12 @@ public class Utils {
      * nthToLastCharIndex(1, "a.tar.gz") = 1
      * nthToLastCharIndex(0, "a.tar.gz") = 5
      */
-    public static int nthToLastCharIndex(int elementNumber, String str, char element) {
-        if(elementNumber <= 0) throw new IllegalArgumentException();
+    public static int nthToLastCharIndex(final int elementNumber, final String str, final char element) {
+        if (elementNumber <= 0) throw new IllegalArgumentException();
 
         int occurencies = 0;
-        for (int i = str.length()-1; i >= 0; i--) {
-            if(str.charAt(i) == element && ++occurencies == elementNumber) {
+        for (int i = str.length() - 1; i >= 0; i--) {
+            if (str.charAt(i) == element && ++occurencies == elementNumber) {
                 return i;
             }
         }
@@ -258,7 +258,7 @@ public class Utils {
      * @param timerInSeconds duration in seconds
      * @return time in mm:ss format
      */
-    public static String formatTimer(long timerInSeconds) {
+    public static String formatTimer(final long timerInSeconds) {
         final long min = TimeUnit.SECONDS.toMinutes(timerInSeconds);
         final long sec = TimeUnit.SECONDS.toSeconds(timerInSeconds - TimeUnit.MINUTES.toSeconds(min));
         return String.format("%02d:%02d", min, sec);

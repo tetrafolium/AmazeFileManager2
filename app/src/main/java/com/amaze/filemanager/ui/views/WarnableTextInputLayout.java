@@ -18,7 +18,7 @@ public class WarnableTextInputLayout extends TextInputLayout {
 
     private boolean isStyleWarning = false;
 
-    public WarnableTextInputLayout(Context context, AttributeSet attrs) {
+    public WarnableTextInputLayout(final Context context, final AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -31,8 +31,8 @@ public class WarnableTextInputLayout extends TextInputLayout {
     }
 
     @Override
-    public void setError(@Nullable CharSequence error) {
-        if(isStyleWarning) {
+    public void setError(final @Nullable CharSequence error) {
+        if (isStyleWarning) {
             setErrorEnabled(true);
             setErrorTextAppearance(R.style.error_inputTextLayout);
             isStyleWarning = false;
@@ -40,8 +40,8 @@ public class WarnableTextInputLayout extends TextInputLayout {
         super.setError(error);
     }
 
-    public void setWarning(@StringRes int text) {
-        if(!isStyleWarning) {
+    public void setWarning(final @StringRes int text) {
+        if (!isStyleWarning) {
             removeError();
             setErrorEnabled(true);
             setErrorTextAppearance(R.style.warning_inputTextLayout);

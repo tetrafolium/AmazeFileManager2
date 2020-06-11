@@ -13,15 +13,15 @@ public class PreferenceUtils {
     public static final int DEFAULT_ICON = -1;
     public static final int DEFAULT_CURRENT_TAB = 1;
 
-    public static int getStatusColor(String skin) {
+    public static int getStatusColor(final String skin) {
         return darker(Color.parseColor(skin));
     }
 
-    public static int getStatusColor(int skin) {
+    public static int getStatusColor(final int skin) {
         return darker(skin);
     }
 
-    private static int darker(int color) {
+    private static int darker(final int color) {
         int a = Color.alpha(color);
         int r = Color.red(color);
         int g = Color.green(color);

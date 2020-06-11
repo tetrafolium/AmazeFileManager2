@@ -21,7 +21,7 @@ public class StreamSource extends RandomAccessStream {
     protected SmbFile file;
     InputStream input;
 
-    public StreamSource(SmbFile file,long l) {
+    public StreamSource(final SmbFile file, final long l) {
         super(l);
 
         fp = 0;
@@ -57,8 +57,8 @@ public class StreamSource extends RandomAccessStream {
      */
     public void open() throws IOException {
         try {
-            input = file.getInputStream();//new SmbFileInputStream(file, bufferSize, 1);
-            if(fp>0)
+            input = file.getInputStream(); //new SmbFileInputStream(file, bufferSize, 1);
+            if (fp > 0)
                 input.skip(fp);
         } catch (Exception e) {
             throw new IOException(e);
@@ -68,19 +68,19 @@ public class StreamSource extends RandomAccessStream {
     @Override
     public int read() throws IOException {
         int read = input.read();
-        if(read != -1) fp++;
+        if (read != -1) fp++;
         return read;
     }
 
-    public int read(byte[] bytes, int start, int offs) throws IOException {
+    public int read(final byte[] bytes, final int start, final int offs) throws IOException {
         int read =  input.read(bytes, start, offs);
         fp += read;
         return read;
     }
 
     @Override
-    public void moveTo(long position) throws IllegalArgumentException {
-        if(position < 0 || length() < position) {
+    public void moveTo(final long position) throws IllegalArgumentException {
+        if (position < 0 || length() < position) {
             throw new IllegalArgumentException("Position out of the bounds of the file!");
         }
 

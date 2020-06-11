@@ -7,9 +7,9 @@ import java.io.File;
 public class RarHelperTaskTest extends AbstractCompressedHelperTaskTest {
 
     @Override
-    protected CompressedHelperTask createTask(String relativePath) {
+    protected CompressedHelperTask createTask(final String relativePath) {
         return new RarHelperTask(new File(Environment.getExternalStorageDirectory(),
                                           "test-archive.rar").getAbsolutePath(),
-                                 relativePath, false, (data) -> {});
+                                 relativePath, false, (data) -> { });
     }
 }

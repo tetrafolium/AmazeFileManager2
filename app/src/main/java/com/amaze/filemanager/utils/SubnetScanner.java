@@ -45,7 +45,7 @@ public class SubnetScanner extends Thread {
     class Task implements Callable<ComputerParcelable> {
         String addr;
 
-        public Task(String str) {
+        public Task(final String str) {
             this.addr = str;
         }
 
@@ -73,7 +73,7 @@ public class SubnetScanner extends Thread {
         Config.setProperty("jcifs.netbios.cachePolicy", "-1");
     }
 
-    public SubnetScanner(Context context) {
+    public SubnetScanner(final Context context) {
         this.context = context;
         mLock = new Object();
         tasks = new ArrayList<>(260);
@@ -170,7 +170,7 @@ public class SubnetScanner extends Thread {
         this.bdThread.start();
     }
 
-    private void onFound(ComputerParcelable computer) {
+    private void onFound(final ComputerParcelable computer) {
         mResults.add(computer);
         synchronized (this.mLock) {
             if (this.observer != null) {
@@ -179,7 +179,7 @@ public class SubnetScanner extends Thread {
         }
     }
 
-    public void setObserver(ScanObserver scanObserver) {
+    public void setObserver(final ScanObserver scanObserver) {
         synchronized (this.mLock) {
             this.observer = scanObserver;
         }

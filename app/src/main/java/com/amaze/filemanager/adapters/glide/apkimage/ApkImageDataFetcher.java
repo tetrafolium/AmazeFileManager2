@@ -19,13 +19,13 @@ public class ApkImageDataFetcher implements DataFetcher<Drawable> {
     private PackageManager packageManager;
     private String model;
 
-    public ApkImageDataFetcher(PackageManager packageManager, String model) {
+    public ApkImageDataFetcher(final PackageManager packageManager, final String model) {
         this.packageManager = packageManager;
         this.model = model;
     }
 
     @Override
-    public void loadData(Priority priority, DataCallback<? super Drawable> callback) {
+    public void loadData(final Priority priority, final DataCallback<? super Drawable> callback) {
         PackageInfo pi = packageManager.getPackageArchiveInfo(model, 0);
         pi.applicationInfo.sourceDir = model;
         pi.applicationInfo.publicSourceDir = model;

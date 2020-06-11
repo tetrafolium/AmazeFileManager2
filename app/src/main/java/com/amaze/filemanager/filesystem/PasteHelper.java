@@ -17,13 +17,13 @@ public final class PasteHelper implements Parcelable {
     public final int operation;
     public final HybridFileParcelable[] paths;
 
-    public PasteHelper(int op, HybridFileParcelable[] paths) {
-        if(paths == null || paths.length == 0) throw new IllegalArgumentException();
+    public PasteHelper(final int op, final HybridFileParcelable[] paths) {
+        if (paths == null || paths.length == 0) throw new IllegalArgumentException();
         operation = op;
         this.paths = paths;
     }
 
-    private PasteHelper(Parcel in) {
+    private PasteHelper(final Parcel in) {
         operation = in.readInt();
         paths = (HybridFileParcelable[]) in.readParcelableArray(HybridFileParcelable.class.getClassLoader());
     }
@@ -34,17 +34,17 @@ public final class PasteHelper implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeInt(operation);
         dest.writeParcelableArray(paths, 0);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public PasteHelper createFromParcel(Parcel in) {
+        public PasteHelper createFromParcel(final Parcel in) {
             return new PasteHelper(in);
         }
 
-        public PasteHelper[] newArray(int size) {
+        public PasteHelper[] newArray(final int size) {
             return new PasteHelper[size];
         }
     };

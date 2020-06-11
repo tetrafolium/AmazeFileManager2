@@ -30,7 +30,7 @@ public class ShareTask extends AsyncTask<String, String, Void> {
     private ArrayList<String> arrayList1 = new ArrayList<>();
     private ArrayList<Drawable> arrayList2 = new ArrayList<>();
 
-    public ShareTask(Activity context, ArrayList<Uri> arrayList, AppTheme appTheme, int fab_skin) {
+    public ShareTask(final Activity context, final ArrayList<Uri> arrayList, final AppTheme appTheme, final int fab_skin) {
         this.contextc = context;
         this.arrayList = arrayList;
         this.appTheme = appTheme;
@@ -38,7 +38,7 @@ public class ShareTask extends AsyncTask<String, String, Void> {
     }
 
     @Override
-    protected Void doInBackground(String... strings) {
+    protected Void doInBackground(final String... strings) {
         String mime = strings[0];
         Intent shareIntent = new Intent();
         boolean bluetooth_present = false;
@@ -78,7 +78,7 @@ public class ShareTask extends AsyncTask<String, String, Void> {
         return null;
     }
 
-    private boolean appInstalledOrNot(String uri, PackageManager pm) {
+    private boolean appInstalledOrNot(final String uri, final PackageManager pm) {
         boolean app_installed;
         try {
             pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
@@ -90,7 +90,7 @@ public class ShareTask extends AsyncTask<String, String, Void> {
     }
 
     @Override
-    public void onPostExecute(Void v) {
+    public void onPostExecute(final Void v) {
         if (!targetShareIntents.isEmpty()) {
             MaterialDialog.Builder builder = new MaterialDialog.Builder(contextc);
             builder.title(R.string.share);

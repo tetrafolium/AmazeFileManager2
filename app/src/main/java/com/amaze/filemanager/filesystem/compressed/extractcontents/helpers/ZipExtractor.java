@@ -46,25 +46,25 @@ import java.util.List;
 
 public class ZipExtractor extends Extractor {
 
-    public ZipExtractor(@NonNull Context context, @NonNull String filePath, @NonNull String outputPath, @NonNull OnUpdate listener) {
+    public ZipExtractor(final @NonNull Context context, final @NonNull String filePath, final @NonNull String outputPath, final @NonNull OnUpdate listener) {
         super(context, filePath, outputPath, listener);
     }
 
     @Override
-    protected void extractWithFilter(@NonNull Filter filter) throws IOException {
+    protected void extractWithFilter(final @NonNull Filter filter) throws IOException {
         long totalBytes = 0;
         List<FileHeader> entriesToExtract = new ArrayList<>();
         try {
             ZipFile zipfile = new ZipFile(filePath);
-            if(ArchivePasswordCache.getInstance().containsKey(filePath)) {
+            if (ArchivePasswordCache.getInstance().containsKey(filePath)) {
                 zipfile.setPassword(ArchivePasswordCache.getInstance().get(filePath));
             }
 
             // iterating archive elements to find file names that are to be extracted
             for (Object obj : zipfile.getFileHeaders()) {
-                FileHeader fileHeader = (FileHeader)obj;
+                FileHeader fileHeader = (FileHeader) obj;
 
-                if(CompressedHelper.isEntryPathValid(fileHeader.getFileName())) {
+                if (CompressedHelper.isEntryPathValid(fileHeader.getFileName())) {
                     if (filter.shouldExtract(fileHeader.getFileName(), fileHeader.isDirectory())) {
                         entriesToExtract.add(fileHeader);
                         totalBytes += fileHeader.getUncompressedSize();
@@ -95,11 +95,11 @@ public class ZipExtractor extends Extractor {
      * @param entry     zip entry that is to be extracted
      * @param outputDir output directory
      */
-    private void extractEntry(@NonNull final Context context, ZipFile zipFile, FileHeader entry,
-                              String outputDir) throws IOException, ZipException {
+    private void extractEntry(@NonNull final Context context, final ZipFile zipFile, final FileHeader entry,
+                              final String outputDir) throws IOException, ZipException {
         final File outputFile = new File(outputDir, fixEntryName(entry.getFileName()));
 
-        if(ArchivePasswordCache.getInstance().containsKey(filePath))
+        if (ArchivePasswordCache.getInstance().containsKey(filePath))
             entry.setPassword(ArchivePasswordCache.getInstance().get(filePath).toCharArray());
 
         if (!outputFile.getCanonicalPath().startsWith(outputDir)) {

@@ -26,8 +26,8 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
     private MaterialDialog materialDialog;
 
     // Constructor
-    public FingerprintHandler(Context mContext, Intent intent, MaterialDialog materialDialog,
-                              EncryptDecryptUtils.DecryptButtonCallbackInterface decryptButtonCallbackInterface) {
+    public FingerprintHandler(final Context mContext, final Intent intent, final MaterialDialog materialDialog,
+                              final EncryptDecryptUtils.DecryptButtonCallbackInterface decryptButtonCallbackInterface) {
         context = mContext;
         this.decryptIntent = intent;
         this.materialDialog = materialDialog;
@@ -36,11 +36,11 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public void authenticate(FingerprintManager manager, FingerprintManager.CryptoObject cryptoObject) {
+    public void authenticate(final FingerprintManager manager, final FingerprintManager.CryptoObject cryptoObject) {
 
         CancellationSignal cancellationSignal = new CancellationSignal();
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.USE_FINGERPRINT) !=
-                PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.USE_FINGERPRINT)
+                != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         manager.authenticate(cryptoObject, cancellationSignal, 0, this, null);
@@ -48,13 +48,13 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
 
 
     @Override
-    public void onAuthenticationError(int errMsgId, CharSequence errString) {
+    public void onAuthenticationError(final int errMsgId, final CharSequence errString) {
 
     }
 
 
     @Override
-    public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
+    public void onAuthenticationHelp(final int helpMsgId, final CharSequence helpString) {
 
     }
 
@@ -67,7 +67,7 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
 
 
     @Override
-    public void onAuthenticationSucceeded(FingerprintManager.AuthenticationResult result) {
+    public void onAuthenticationSucceeded(final FingerprintManager.AuthenticationResult result) {
 
         materialDialog.cancel();
         decryptButtonCallbackInterface.confirm(decryptIntent);

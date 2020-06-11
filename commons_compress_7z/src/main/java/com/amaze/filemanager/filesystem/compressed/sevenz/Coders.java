@@ -73,8 +73,8 @@ class Coders {
                                   final Coder coder, final byte[] password) throws IOException {
         final CoderBase cb = findByMethod(SevenZMethod.byId(coder.decompressionMethodId));
         if (cb == null) {
-            throw new IOException("Unsupported compression method " +
-                                  Arrays.toString(coder.decompressionMethodId)
+            throw new IOException("Unsupported compression method "
+                                  + Arrays.toString(coder.decompressionMethodId)
                                   + " used in " + archiveName);
         }
         return cb.decode(archiveName, is, uncompressedLength, coder, password);
@@ -161,8 +161,8 @@ class Coders {
             InflaterInputStream inflaterInputStream;
             Inflater inflater;
 
-            public DeflateDecoderInputStream(InflaterInputStream inflaterInputStream,
-                                             Inflater inflater) {
+            public DeflateDecoderInputStream(final InflaterInputStream inflaterInputStream,
+                                             final Inflater inflater) {
                 this.inflaterInputStream = inflaterInputStream;
                 this.inflater = inflater;
             }
@@ -197,8 +197,8 @@ class Coders {
             DeflaterOutputStream deflaterOutputStream;
             Deflater deflater;
 
-            public DeflateDecoderOutputStream(DeflaterOutputStream deflaterOutputStream,
-                                              Deflater deflater) {
+            public DeflateDecoderOutputStream(final DeflaterOutputStream deflaterOutputStream,
+                                              final Deflater deflater) {
                 this.deflaterOutputStream = deflaterOutputStream;
                 this.deflater = deflater;
             }

@@ -47,7 +47,7 @@ public class PropertiesSheet extends BottomSheetDialogFragment {
     public static final String TAG_FRAGMENT = "properties";
 
     @Override
-    public void setupDialog(Dialog dialog, int style) {
+    public void setupDialog(final Dialog dialog, final int style) {
         super.setupDialog(dialog, style);
         rootView = View.inflate(getContext(), R.layout.fragment_sheet_properties, null);
         dialog.setContentView(rootView);
@@ -85,9 +85,9 @@ public class PropertiesSheet extends BottomSheetDialogFragment {
 
         mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+            public void onScrollChange(final NestedScrollView v, final int scrollX, final int scrollY, final int oldScrollX, final int oldScrollY) {
                 Log.d(getClass().getSimpleName(), "ScrollY: " + scrollY + " oldScrollY: " + oldScrollY);
-                if (scrollY==0) {
+                if (scrollY == 0) {
                     // we're at the top
                     mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }
@@ -109,21 +109,21 @@ public class PropertiesSheet extends BottomSheetDialogFragment {
         return staticPropertiesSheet = propertiesSheet;
     }*/
 
-    private void generate(BottomSheetBehavior.BottomSheetCallback callback) {
+    private void generate(final BottomSheetBehavior.BottomSheetCallback callback) {
         //if (staticPropertiesSheet==null) return;
 
     }
 
     private BottomSheetBehavior.BottomSheetCallback mCallback = new BottomSheetBehavior.BottomSheetCallback() {
         @Override
-        public void onStateChanged(@NonNull View bottomSheet, int newState) {
-            if (newState==BottomSheetBehavior.STATE_HIDDEN) {
+        public void onStateChanged(final @NonNull View bottomSheet, final int newState) {
+            if (newState == BottomSheetBehavior.STATE_HIDDEN) {
                 dismiss();
             }
         }
 
         @Override
-        public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+        public void onSlide(final @NonNull View bottomSheet, final float slideOffset) {
 
         }
     };

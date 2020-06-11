@@ -43,10 +43,10 @@ public class EncryptDecryptUtils {
      * @throws GeneralSecurityException Errors on encrypting file/folder
      * @throws IOException I/O errors on encrypting file/folder
      */
-    public static void startEncryption(Context c, final String path, final String password,
-                                       Intent intent) throws GeneralSecurityException, IOException {
+    public static void startEncryption(final Context c, final String path, final String password,
+                                       final Intent intent) throws GeneralSecurityException, IOException {
         CryptHandler cryptHandler = new CryptHandler(c);
-        String destPath = path.substring(0, path.lastIndexOf('/')+1)
+        String destPath = path.substring(0, path.lastIndexOf('/') + 1)
                           .concat(intent.getStringExtra(EncryptService.TAG_ENCRYPT_TARGET));
 
         //EncryptService.TAG_ENCRYPT_TARGET already has the .aze extension, no need to append again
@@ -59,10 +59,10 @@ public class EncryptDecryptUtils {
     }
 
 
-    public static void decryptFile(Context c, final MainActivity mainActivity, final MainFragment main, OpenMode openMode,
-                                   HybridFileParcelable sourceFile, String decryptPath,
-                                   UtilitiesProvider utilsProvider,
-                                   boolean broadcastResult) {
+    public static void decryptFile(final Context c, final MainActivity mainActivity, final MainFragment main, final OpenMode openMode,
+                                   final HybridFileParcelable sourceFile, final String decryptPath,
+                                   final UtilitiesProvider utilsProvider,
+                                   final boolean broadcastResult) {
 
         Intent decryptIntent = new Intent(main.getContext(), DecryptService.class);
         decryptIntent.putExtra(EncryptService.TAG_OPEN_MODE, openMode.ordinal());
@@ -85,7 +85,7 @@ public class EncryptDecryptUtils {
         DecryptButtonCallbackInterface decryptButtonCallbackInterface =
         new DecryptButtonCallbackInterface() {
             @Override
-            public void confirm(Intent intent) {
+            public void confirm(final Intent intent) {
                 ServiceWatcherUtil.runService(main.getContext(), intent);
             }
 
@@ -140,7 +140,7 @@ public class EncryptDecryptUtils {
      * @param path the path to match with
      * @return the entry
      */
-    private static EncryptedEntry findEncryptedEntry(Context context, String path) throws GeneralSecurityException, IOException {
+    private static EncryptedEntry findEncryptedEntry(final Context context, final String path) throws GeneralSecurityException, IOException {
 
         CryptHandler handler = new CryptHandler(context);
 

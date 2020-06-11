@@ -18,18 +18,18 @@ public class InvalidablePreferenceCategory extends PreferenceCategory {
 
     private int titleColor;
 
-    public InvalidablePreferenceCategory(Context context, AttributeSet attrs) {
+    public InvalidablePreferenceCategory(final Context context, final AttributeSet attrs) {
         super(context, attrs);
     }
 
     @Override
-    protected void onBindView(View view) {
+    protected void onBindView(final View view) {
         super.onBindView(view);
         AppCompatTextView title = view.findViewById(android.R.id.title);
         title.setTextColor(titleColor);
     }
 
-    public void invalidate(@ColorInt int accentColor) {
+    public void invalidate(final @ColorInt int accentColor) {
         titleColor = PreferenceUtils.getStatusColor(accentColor);
         notifyChanged();
     }

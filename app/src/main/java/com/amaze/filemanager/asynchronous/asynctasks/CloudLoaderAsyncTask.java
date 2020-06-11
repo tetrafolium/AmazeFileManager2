@@ -31,8 +31,8 @@ public class CloudLoaderAsyncTask extends AsyncTask<Void, Void, Boolean> {
     private CloudHandler cloudHandler;
     private DataUtils dataUtils;
 
-    public CloudLoaderAsyncTask(MainActivity mainActivity,
-                                CloudHandler cloudHandler, Cursor data) {
+    public CloudLoaderAsyncTask(final MainActivity mainActivity,
+                                final CloudHandler cloudHandler, final Cursor data) {
         this.data = data;
         this.mainActivity = new WeakReference<>(mainActivity);
         this.cloudHandler = cloudHandler;
@@ -41,7 +41,7 @@ public class CloudLoaderAsyncTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     @NonNull
-    public Boolean doInBackground(Void... voids) {
+    public Boolean doInBackground(final Void... voids) {
         boolean hasUpdatedDrawer = false;
 
         if (data == null) return false;
@@ -272,7 +272,7 @@ public class CloudLoaderAsyncTask extends AsyncTask<Void, Void, Boolean> {
                         CloudStorage cloudStorageOnedrive;
                         final MainActivity mainActivity = this.mainActivity.get();
                         if (mainActivity != null) {
-                            cloudStorageOnedrive= new OneDrive(mainActivity.getApplicationContext(),
+                            cloudStorageOnedrive = new OneDrive(mainActivity.getApplicationContext(),
                                                                data.getString(1), data.getString(2));
                         } else {
                             cancel(true);
@@ -349,7 +349,7 @@ public class CloudLoaderAsyncTask extends AsyncTask<Void, Void, Boolean> {
     }
 
     @Override
-    public void onPostExecute(@NonNull Boolean result) {
+    public void onPostExecute(final @NonNull Boolean result) {
         if (result) {
             final MainActivity mainActivity = this.mainActivity.get();
             if (mainActivity != null) {

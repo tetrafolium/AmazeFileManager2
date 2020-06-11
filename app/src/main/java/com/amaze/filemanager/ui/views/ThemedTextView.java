@@ -16,7 +16,7 @@ import com.amaze.filemanager.utils.theme.AppTheme;
 
 public class ThemedTextView extends TextView {
 
-    public ThemedTextView(Context context, AttributeSet attrs) {
+    public ThemedTextView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
         if (((MainActivity) context).getAppTheme().equals(AppTheme.LIGHT)) {
             setTextColor(Utils.getColor(getContext(), android.R.color.black));

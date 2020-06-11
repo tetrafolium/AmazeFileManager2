@@ -46,7 +46,7 @@ public abstract class AbstractSftpServerTest {
     @After
     public void tearDown() {
         SshConnectionPool.getInstance().expungeAllConnections();
-        if(server != null && server.isOpen())
+        if (server != null && server.isOpen())
             server.close(true);
     }
 
@@ -55,7 +55,7 @@ public abstract class AbstractSftpServerTest {
         SshConnectionPool.getInstance().getConnection("127.0.0.1", 22222, hostFingerprint, "testuser", "testpassword", null);
     }
 
-    protected final void createSshServer(FileSystemFactory fileSystemFactory) throws IOException {
+    protected final void createSshServer(final FileSystemFactory fileSystemFactory) throws IOException {
         server = SshServer.setUpDefaultServer();
 
         server.setFileSystemFactory(fileSystemFactory);

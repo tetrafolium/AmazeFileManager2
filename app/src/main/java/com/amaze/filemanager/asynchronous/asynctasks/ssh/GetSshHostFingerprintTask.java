@@ -70,14 +70,14 @@ public class GetSshHostFingerprintTask extends AsyncTask<Void, Void, AsyncTaskRe
 
     private ProgressDialog progressDialog;
 
-    public GetSshHostFingerprintTask(@NonNull String hostname, int port, AsyncTaskResult.Callback<AsyncTaskResult<PublicKey>> callback) {
+    public GetSshHostFingerprintTask(final @NonNull String hostname, final int port, final AsyncTaskResult.Callback<AsyncTaskResult<PublicKey>> callback) {
         this.hostname = hostname;
         this.port = port;
         this.callback = callback;
     }
 
     @Override
-    protected AsyncTaskResult<PublicKey> doInBackground(Void... voids) {
+    protected AsyncTaskResult<PublicKey> doInBackground(final Void... voids) {
 
         final AtomicReference<AsyncTaskResult<PublicKey>> holder = new AtomicReference<AsyncTaskResult<PublicKey>>();
         final CountDownLatch latch = new CountDownLatch(1);
@@ -92,16 +92,15 @@ public class GetSshHostFingerprintTask extends AsyncTask<Void, Void, AsyncTaskRe
         try {
             sshClient.connect(hostname, port);
             latch.await();
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             holder.set(new AsyncTaskResult<PublicKey>(e));
             latch.countDown();
-        } catch(InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
             holder.set(new AsyncTaskResult<PublicKey>(e));
             latch.countDown();
-        }
-        finally {
+        } finally {
             SshClientUtils.tryDisconnect(sshClient);
             return holder.get();
         }
@@ -114,11 +113,11 @@ public class GetSshHostFingerprintTask extends AsyncTask<Void, Void, AsyncTaskRe
     }
 
     @Override
-    protected void onPostExecute(AsyncTaskResult<PublicKey> result) {
+    protected void onPostExecute(final AsyncTaskResult<PublicKey> result) {
         progressDialog.dismiss();
 
-        if(result.exception != null) {
-            if(SocketException.class.isAssignableFrom(result.exception.getClass())
+        if (result.exception != null) {
+            if (SocketException.class.isAssignableFrom(result.exception.getClass())
                     || SocketTimeoutException.class.isAssignableFrom(result.exception.getClass())) {
                 Toast.makeText(AppConfig.getInstance(),
                                AppConfig.getInstance().getResources().getString(R.string.ssh_connect_failed,

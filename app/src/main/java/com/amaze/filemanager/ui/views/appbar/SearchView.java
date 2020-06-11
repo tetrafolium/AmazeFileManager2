@@ -74,7 +74,7 @@ public class SearchView {
         Animator animator;
         if (SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             int[] searchCoords = new int[2];
-            View searchItem = appbar.getToolbar().findViewById(R.id.search);//It could change position, get it every time
+            View searchItem = appbar.getToolbar().findViewById(R.id.search); //It could change position, get it every time
             searchViewEditText.setText("");
             searchItem.getLocationOnScreen(searchCoords);
             animator = ViewAnimationUtils.createCircularReveal(searchViewLayout,
@@ -92,10 +92,10 @@ public class SearchView {
         animator.start();
         animator.addListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animation) {}
+            public void onAnimationStart(final Animator animation) { }
 
             @Override
-            public void onAnimationEnd(Animator animation) {
+            public void onAnimationEnd(final Animator animation) {
                 searchViewEditText.requestFocus();
                 InputMethodManager imm = (InputMethodManager) mainActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(searchViewEditText, InputMethodManager.SHOW_IMPLICIT);
@@ -103,10 +103,10 @@ public class SearchView {
             }
 
             @Override
-            public void onAnimationCancel(Animator animation) {}
+            public void onAnimationCancel(final Animator animation) { }
 
             @Override
-            public void onAnimationRepeat(Animator animation) {}
+            public void onAnimationRepeat(final Animator animation) { }
         });
     }
 
@@ -119,7 +119,7 @@ public class SearchView {
         Animator animator;
         if (SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             int[] searchCoords = new int[2];
-            View searchItem = appbar.getToolbar().findViewById(R.id.search);//It could change position, get it every time
+            View searchItem = appbar.getToolbar().findViewById(R.id.search); //It could change position, get it every time
             searchViewEditText.setText("");
             searchItem.getLocationOnScreen(searchCoords);
             animator = ViewAnimationUtils.createCircularReveal(searchViewLayout,
@@ -136,10 +136,10 @@ public class SearchView {
         animator.start();
         animator.addListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animation) {}
+            public void onAnimationStart(final Animator animation) { }
 
             @Override
-            public void onAnimationEnd(Animator animation) {
+            public void onAnimationEnd(final Animator animation) {
                 searchViewLayout.setVisibility(View.GONE);
                 enabled = false;
                 InputMethodManager inputMethodManager = (InputMethodManager) mainActivity.getSystemService(INPUT_METHOD_SERVICE);
@@ -147,10 +147,10 @@ public class SearchView {
             }
 
             @Override
-            public void onAnimationCancel(Animator animation) {}
+            public void onAnimationCancel(final Animator animation) { }
 
             @Override
-            public void onAnimationRepeat(Animator animation) {}
+            public void onAnimationRepeat(final Animator animation) { }
         });
     }
 

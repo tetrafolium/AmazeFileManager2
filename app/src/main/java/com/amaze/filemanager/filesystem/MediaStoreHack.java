@@ -97,7 +97,7 @@ public class MediaStoreHack {
         }
     }
 
-    public static OutputStream getOutputStream(Context context, String str) {
+    public static OutputStream getOutputStream(final Context context, final String str) {
         OutputStream outputStream = null;
         Uri fileUri = getUriFromFile(str, context);
         if (fileUri != null) {
@@ -109,7 +109,7 @@ public class MediaStoreHack {
         return outputStream;
     }
 
-    public static Uri getUriFromFile(final String path, Context context) {
+    public static Uri getUriFromFile(final String path, final Context context) {
         ContentResolver resolver = context.getContentResolver();
 
         Cursor filecursor = resolver.query(MediaStore.Files.getContentUri("external"),

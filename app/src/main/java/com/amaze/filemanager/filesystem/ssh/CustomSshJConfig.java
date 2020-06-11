@@ -44,9 +44,9 @@ public class CustomSshJConfig extends DefaultConfig
     public static void init() {
         Security.removeProvider("BC");
         Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(),
-                                  Security.getProviders().length+1);
+                                  Security.getProviders().length + 1);
         Security.insertProviderAt(new org.bouncycastle.jce.provider.BouncyCastleProvider(),
-                                  Security.getProviders().length+1);
+                                  Security.getProviders().length + 1);
     }
 
     // don't add ECDSA
@@ -55,7 +55,7 @@ public class CustomSshJConfig extends DefaultConfig
     }
 
     @Override
-    protected void initRandomFactory(boolean ignored) {
+    protected void initRandomFactory(final boolean ignored) {
         setRandomFactory(new SingletonRandomFactory(new JCERandom.Factory()));
     }
 }

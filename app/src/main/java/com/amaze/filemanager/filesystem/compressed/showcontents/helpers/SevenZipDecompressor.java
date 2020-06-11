@@ -36,13 +36,13 @@ import java.util.ArrayList;
 
 public class SevenZipDecompressor extends Decompressor {
 
-    public SevenZipDecompressor(@NonNull Context context) {
+    public SevenZipDecompressor(final @NonNull Context context) {
         super(context);
     }
 
     @Override
-    public SevenZipHelperTask changePath(String path, boolean addGoBackItem,
-                                         OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
+    public SevenZipHelperTask changePath(final String path, final boolean addGoBackItem,
+                                         final OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
         return new SevenZipHelperTask(filePath, path, addGoBackItem, onFinish);
     }
 }

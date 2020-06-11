@@ -41,7 +41,7 @@ public class FoldersPref extends PreferenceFragment implements Preference.OnPref
     private UtilsHandler utilsHandler;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (PreferencesActivity) getActivity();
 
@@ -86,9 +86,9 @@ public class FoldersPref extends PreferenceFragment implements Preference.OnPref
             default:
                 break;
             }
-        } else if(preference.getKey().equals(PreferencesConstants.PREFERENCE_SHORTCUT)) {
-            if(getPreferenceScreen().getPreferenceCount() >= findPreference(PreferencesConstants.PREFERENCE_SHORTCUT).getOrder())
-                findPreference(PreferencesConstants.PREFERENCE_SHORTCUT).setOrder(getPreferenceScreen().getPreferenceCount()+10);
+        } else if (preference.getKey().equals(PreferencesConstants.PREFERENCE_SHORTCUT)) {
+            if (getPreferenceScreen().getPreferenceCount() >= findPreference(PreferencesConstants.PREFERENCE_SHORTCUT).getOrder())
+                findPreference(PreferencesConstants.PREFERENCE_SHORTCUT).setOrder(getPreferenceScreen().getPreferenceCount() + 10);
 
             loadCreateDialog();
         }
@@ -100,7 +100,7 @@ public class FoldersPref extends PreferenceFragment implements Preference.OnPref
         int fab_skin = activity.getAccent();
 
         LayoutInflater li = LayoutInflater.from(activity);
-        final View v = li.inflate(R.layout.dialog_twoedittexts, null);// TODO: 29/4/2017 make this null not null
+        final View v = li.inflate(R.layout.dialog_twoedittexts, null); // TODO: 29/4/2017 make this null not null
         ((TextInputLayout) v.findViewById(R.id.text_input1)).setHint(getString(R.string.name));
         ((TextInputLayout) v.findViewById(R.id.text_input2)).setHint(getString(R.string.directory));
 
@@ -151,7 +151,7 @@ public class FoldersPref extends PreferenceFragment implements Preference.OnPref
         int fab_skin = activity.getAccent();
 
         LayoutInflater li = LayoutInflater.from(activity);
-        final View v = li.inflate(R.layout.dialog_twoedittexts, null);// TODO: 29/4/2017 make this null not null
+        final View v = li.inflate(R.layout.dialog_twoedittexts, null); // TODO: 29/4/2017 make this null not null
         ((TextInputLayout) v.findViewById(R.id.text_input1)).setHint(getString(R.string.name));
         ((TextInputLayout) v.findViewById(R.id.text_input2)).setHint(getString(R.string.directory));
 
@@ -236,10 +236,10 @@ public class FoldersPref extends PreferenceFragment implements Preference.OnPref
         dialog.show();
     }
 
-    private void disableButtonIfNotPath(EditText path, final MaterialDialog dialog) {
+    private void disableButtonIfNotPath(final EditText path, final MaterialDialog dialog) {
         path.addTextChangedListener(new SimpleTextWatcher() {
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(final Editable s) {
                 dialog.getActionButton(DialogAction.POSITIVE)
                 .setEnabled(FileUtils.isPathAccessible(s.toString(), sharedPrefs));
             }
@@ -249,7 +249,7 @@ public class FoldersPref extends PreferenceFragment implements Preference.OnPref
     private void disableButtonIfTitleEmpty(final EditText title, final MaterialDialog dialog) {
         title.addTextChangedListener(new SimpleTextWatcher() {
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(final Editable s) {
                 dialog.getActionButton(DialogAction.POSITIVE).setEnabled(title.length() > 0);
             }
         });

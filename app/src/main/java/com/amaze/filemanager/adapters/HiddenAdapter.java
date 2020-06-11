@@ -37,8 +37,8 @@ public class HiddenAdapter extends RecyclerView.Adapter<HiddenViewHolder> {
     private boolean hide;
     private DataUtils dataUtils = DataUtils.getInstance();
 
-    public HiddenAdapter(Context context, MainFragment mainFrag, SharedPreferences sharedPreferences,
-                         ArrayList<HybridFile> items, MaterialDialog materialDialog, boolean hide) {
+    public HiddenAdapter(final Context context, final MainFragment mainFrag, final SharedPreferences sharedPreferences,
+                         final ArrayList<HybridFile> items, final MaterialDialog materialDialog, final boolean hide) {
         this.c = context;
         this.context = mainFrag;
         sharedPrefs = sharedPreferences;
@@ -48,7 +48,7 @@ public class HiddenAdapter extends RecyclerView.Adapter<HiddenViewHolder> {
     }
 
     @Override
-    public HiddenViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public HiddenViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         LayoutInflater mInflater = (LayoutInflater) c
                                    .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         View view = mInflater.inflate(R.layout.bookmarkrow, parent, false);
@@ -57,7 +57,7 @@ public class HiddenAdapter extends RecyclerView.Adapter<HiddenViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(HiddenViewHolder holder, int position) {
+    public void onBindViewHolder(final HiddenViewHolder holder, final int position) {
         HybridFile file = items.get(position);
 
         holder.txtTitle.setText(file.getName());
@@ -99,12 +99,12 @@ public class HiddenAdapter extends RecyclerView.Adapter<HiddenViewHolder> {
         });
     }
 
-    public void updateDialog(MaterialDialog dialog) {
+    public void updateDialog(final MaterialDialog dialog) {
         materialDialog = dialog;
     }
 
     @Override
-    public long getItemId(int position) {
+    public long getItemId(final int position) {
         return position;
     }
 

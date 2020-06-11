@@ -19,31 +19,31 @@ public class PathSwitchPreference extends Preference {
 
     private int lastItemClicked = -1;
 
-    public PathSwitchPreference(Context context) {
+    public PathSwitchPreference(final Context context) {
         super(context);
     }
 
     @Override
-    protected View onCreateView(ViewGroup parent) {
+    protected View onCreateView(final ViewGroup parent) {
         setWidgetLayoutResource(R.layout.namepathswitch_preference);
         return super.onCreateView(parent);
     }
 
     @Override
-    protected void onBindView(View view) {
+    protected void onBindView(final View view) {
         setListener(view, R.id.edit, EDIT);
         setListener(view, R.id.delete, DELETE);
 
         view.setOnClickListener(null);
 
-        super.onBindView(view);//Keep this before things that need changing what's on screen
+        super.onBindView(view); //Keep this before things that need changing what's on screen
     }
 
     public int getLastItemClicked() {
         return lastItemClicked;
     }
 
-    private View.OnClickListener setListener(final View v, @IdRes int id, final int elem) {
+    private View.OnClickListener setListener(final View v, final @IdRes int id, final int elem) {
         final PathSwitchPreference t = this;
 
         View.OnClickListener l = view -> {

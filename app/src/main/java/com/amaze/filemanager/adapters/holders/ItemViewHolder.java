@@ -35,7 +35,7 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     public final ImageView checkImageViewGrid;
     public final RelativeLayout iconLayout;
 
-    public ItemViewHolder(View view) {
+    public ItemViewHolder(final View view) {
         super(view);
 
         txtTitle = view.findViewById(R.id.firstline);

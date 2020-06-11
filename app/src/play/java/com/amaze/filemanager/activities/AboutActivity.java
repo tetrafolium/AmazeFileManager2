@@ -40,7 +40,7 @@ public class AboutActivity extends BasicActivity implements View.OnClickListener
     private AppBarLayout mAppBarLayout;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private TextView mTitleTextView;
-    private int mCount=0;
+    private int mCount = 0;
     private Snackbar snackbar;
     private SharedPreferences mSharedPref;
     private View mAuthorsDivider, mDeveloper1Divider;
@@ -59,7 +59,7 @@ public class AboutActivity extends BasicActivity implements View.OnClickListener
     private static final String URL_REPO_RATE = "market://details?id=com.amaze.filemanager";
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(final @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (getAppTheme().equals(AppTheme.DARK)) {
@@ -117,7 +117,7 @@ public class AboutActivity extends BasicActivity implements View.OnClickListener
         float vidAspectRatio = (float) HEADER_WIDTH / (float) HEADER_HEIGHT;
         Log.d(TAG, vidAspectRatio + "");
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
-        float reqHeightAsPerAspectRatio = (float) screenWidth *vidAspectRatio;
+        float reqHeightAsPerAspectRatio = (float) screenWidth * vidAspectRatio;
         Log.d(TAG, reqHeightAsPerAspectRatio + "");
 
 
@@ -129,7 +129,7 @@ public class AboutActivity extends BasicActivity implements View.OnClickListener
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
         case android.R.id.home:
             onBackPressed();
@@ -150,14 +150,14 @@ public class AboutActivity extends BasicActivity implements View.OnClickListener
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
         switch (v.getId()) {
         case R.id.relative_layout_version:
             mCount++;
             if (mCount >= 5) {
                 String text = getResources().getString(R.string.easter_egg_title) + " : " + mCount;
 
-                if(snackbar != null && snackbar.isShown()) {
+                if (snackbar != null && snackbar.isShown()) {
                     snackbar.setText(text);
                 } else {
                     snackbar = Snackbar.make(v, text, Snackbar.LENGTH_SHORT);
@@ -190,7 +190,7 @@ public class AboutActivity extends BasicActivity implements View.OnClickListener
             .withAboutSpecial1Description(getString(R.string.amaze_license))
             .withLicenseShown(true);
 
-            switch(getAppTheme().getSimpleTheme()) {
+            switch (getAppTheme().getSimpleTheme()) {
             case LIGHT:
                 libsBuilder.withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR);
                 break;
@@ -243,7 +243,7 @@ public class AboutActivity extends BasicActivity implements View.OnClickListener
         }
     }
 
-    private void openURL(String url) {
+    private void openURL(final String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         startActivity(intent);

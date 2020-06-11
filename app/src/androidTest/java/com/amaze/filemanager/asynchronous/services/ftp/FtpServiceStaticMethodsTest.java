@@ -26,7 +26,7 @@ public class FtpServiceStaticMethodsTest {
      */
     @Test
     public void testGetLocalInetAddressMustNotBeEmpty() {
-        if(!FtpService.isConnectedToLocalNetwork(InstrumentationRegistry.getTargetContext()))
+        if (!FtpService.isConnectedToLocalNetwork(InstrumentationRegistry.getTargetContext()))
             fail("Please connect your device to network to run this test!");
         assertNotNull(FtpService.getLocalInetAddress(InstrumentationRegistry.getTargetContext()));
         assertNotNull(FtpService.getLocalInetAddress(InstrumentationRegistry.getTargetContext()).getHostAddress());
@@ -39,7 +39,7 @@ public class FtpServiceStaticMethodsTest {
      */
     @Test
     public void testGetLocalInetAddressMustBeAPAddress() {
-        if(!FtpService.isEnabledWifiHotspot(InstrumentationRegistry.getTargetContext()))
+        if (!FtpService.isEnabledWifiHotspot(InstrumentationRegistry.getTargetContext()))
             fail("Please enable wifi hotspot on your device to run this test!");
 
         assertEquals("192.168.43.1", FtpService.getLocalInetAddress(InstrumentationRegistry.getTargetContext()).getHostAddress());

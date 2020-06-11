@@ -133,7 +133,7 @@ public class CloudStreamSourceTest {
     @Test (expected = IOException.class)
     public void readClosedException() throws IOException {
         cs.close();
-        byte[] buff = new byte[(int)len];
+        byte[] buff = new byte[(int) len];
         int n = cs.read(buff);
     }
 
@@ -199,7 +199,7 @@ public class CloudStreamSourceTest {
      */
     @Test
     public void moveTo() throws IOException {
-        int readPosition = (int)len - 10;
+        int readPosition = (int) len - 10;
         byte[] buff = new byte[1];
 
         cs.moveTo(readPosition);
@@ -273,7 +273,7 @@ public class CloudStreamSourceTest {
     @Test
     public void available() throws IOException {
         int amount = 12;
-        cs.moveTo((int)len - amount);
+        cs.moveTo((int) len - amount);
         assertEquals(amount, cs.availableExact());
     }
 

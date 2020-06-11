@@ -94,7 +94,7 @@ public class ExtractService extends AbstractProgressiveService {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, final int startId) {
+    public int onStartCommand(final Intent intent, final int flags, final int startId) {
         String file = intent.getStringExtra(KEY_PATH_ZIP);
         String extractPath = intent.getStringExtra(KEY_PATH_EXTRACT);
         String[] entries = intent.getStringArrayExtra(KEY_ENTRIES_ZIP);
@@ -166,7 +166,7 @@ public class ExtractService extends AbstractProgressiveService {
 
     @Override
     @StringRes
-    protected int getTitle(boolean move) {
+    protected int getTitle(final boolean move) {
         return R.string.extracting;
     }
 
@@ -185,7 +185,7 @@ public class ExtractService extends AbstractProgressiveService {
     }
 
     @Override
-    public void setProgressListener(ProgressListener progressListener) {
+    public void setProgressListener(final ProgressListener progressListener) {
         this.progressListener = progressListener;
     }
 
@@ -208,7 +208,7 @@ public class ExtractService extends AbstractProgressiveService {
      * Method calculates zip file size to initiate progress
      * Supporting local file extraction progress for now
      */
-    private long getTotalSize(String filePath) {
+    private long getTotalSize(final String filePath) {
         return new File(filePath).length();
     }
 
@@ -221,8 +221,8 @@ public class ExtractService extends AbstractProgressiveService {
         private boolean paused = false;
         private boolean passwordProtected = false;
 
-        private DoWork(ExtractService extractService, ProgressHandler progressHandler, String cpath, String epath,
-                       String[] entries) {
+        private DoWork(final ExtractService extractService, final ProgressHandler progressHandler, final String cpath, final String epath,
+                       final String[] entries) {
             this.extractService = new WeakReference<>(extractService);
             this.progressHandler = progressHandler;
             compressedPath = cpath;
@@ -231,9 +231,9 @@ public class ExtractService extends AbstractProgressiveService {
         }
 
         @Override
-        protected Boolean doInBackground(Void... p) {
-            while(!isCancelled()) {
-                if(paused) continue;
+        protected Boolean doInBackground(final Void... p) {
+            while (!isCancelled()) {
+                if (paused) continue;
 
                 final ExtractService extractService = this.extractService.get();
                 if (extractService == null) return null;
@@ -261,7 +261,7 @@ public class ExtractService extends AbstractProgressiveService {
                     private int sourceFilesProcessed = 0;
 
                     @Override
-                    public void onStart(long totalBytes, String firstEntryName) {
+                    public void onStart(final long totalBytes, final String firstEntryName) {
                         // setting total bytes calculated from zip entries
                         progressHandler.setTotalSize(totalBytes);
 
@@ -273,7 +273,7 @@ public class ExtractService extends AbstractProgressiveService {
                     }
 
                     @Override
-                    public void onUpdate(String entryPath) {
+                    public void onUpdate(final String entryPath) {
                         progressHandler.setFileName(entryPath);
                         if (entriesToExtract != null) {
                             progressHandler.setSourceFilesProcessed(sourceFilesProcessed++);
@@ -304,8 +304,8 @@ public class ExtractService extends AbstractProgressiveService {
                     Log.d(TAG, "Corrupted LZMA input", e);
                     return false;
                 } catch (IOException e) {
-                    if(PasswordRequiredException.class.isAssignableFrom(e.getClass()) ||
-                            e.getCause() != null && ZipException.class.isAssignableFrom(e.getCause().getClass())) {
+                    if (PasswordRequiredException.class.isAssignableFrom(e.getClass())
+                            || e.getCause() != null && ZipException.class.isAssignableFrom(e.getCause().getClass())) {
                         Log.d(TAG, "Archive is password protected.", e);
                         passwordProtected = true;
                         paused = true;
@@ -322,14 +322,14 @@ public class ExtractService extends AbstractProgressiveService {
         }
 
         @Override
-        protected void onProgressUpdate(IOException... values) {
+        protected void onProgressUpdate(final IOException... values) {
             super.onProgressUpdate(values);
-            if(values.length < 1 || !passwordProtected) return;
+            if (values.length < 1 || !passwordProtected) return;
 
             IOException result = values[0];
             ArchivePasswordCache.getInstance().remove(compressedPath);
             GeneralDialogCreation.showPasswordDialog(AppConfig.getInstance().getMainActivityContext(),
-                    (MainActivity)AppConfig.getInstance().getMainActivityContext(),
+                    (MainActivity) AppConfig.getInstance().getMainActivityContext(),
                     AppConfig.getInstance().getUtilsProvider().getAppTheme(),
                     R.string.archive_password_prompt, R.string.authenticate_password,
             (dialog, which) -> {
@@ -349,9 +349,9 @@ public class ExtractService extends AbstractProgressiveService {
         }
 
         @Override
-        public void onPostExecute(Boolean hasInvalidEntries) {
+        public void onPostExecute(final Boolean hasInvalidEntries) {
             final ExtractService extractService = this.extractService.get();
-            if(extractService == null) return;
+            if (extractService == null) return;
 
             // check whether watcherutil was initialized. It was not initialized when we got exception
             // in extracting the file
@@ -361,11 +361,11 @@ public class ExtractService extends AbstractProgressiveService {
             extractService.sendBroadcast(intent);
             extractService.stopSelf();
 
-            if(!hasInvalidEntries)
+            if (!hasInvalidEntries)
                 AppConfig.toast(extractService, getString(R.string.multiple_invalid_archive_entries));
         }
 
-        private void toastOnParseError(IOException result) {
+        private void toastOnParseError(final IOException result) {
             Toast.makeText(AppConfig.getInstance().getMainActivityContext(),
                            AppConfig.getInstance().getResources().getString(R.string.cannot_extract_archive,
                                    compressedPath, result.getLocalizedMessage()), Toast.LENGTH_LONG).show();
@@ -378,13 +378,13 @@ public class ExtractService extends AbstractProgressiveService {
      */
     private BroadcastReceiver receiver1 = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(final Context context, final Intent intent) {
             progressHandler.setCancelled(true);
         }
     };
 
     @Override
-    public IBinder onBind(Intent intent) {
+    public IBinder onBind(final Intent intent) {
         return mBinder;
     }
 

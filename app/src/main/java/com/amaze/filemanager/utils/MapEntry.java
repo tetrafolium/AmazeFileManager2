@@ -13,7 +13,7 @@ public class MapEntry extends ImmutableEntry<ImmutableEntry<Integer, Integer>, I
      * @param key object of {@link ImmutableEntry} which is another key/value pair
      * @param value integer object in the pair
      */
-    public MapEntry(ImmutableEntry<Integer, Integer> key, Integer value) {
+    public MapEntry(final ImmutableEntry<Integer, Integer> key, final Integer value) {
         super(key, value);
     }
 }

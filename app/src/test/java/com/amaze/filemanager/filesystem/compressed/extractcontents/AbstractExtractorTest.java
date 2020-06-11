@@ -48,7 +48,7 @@ public abstract class AbstractExtractorTest {
     public void tearDown() throws Exception {
         ArchivePasswordCache.getInstance().clear();
         File extractedArchiveRoot = new File(Environment.getExternalStorageDirectory(), "test-archive");
-        if(extractedArchiveRoot.exists()) {
+        if (extractedArchiveRoot.exists()) {
             Files.walk(Paths.get(extractedArchiveRoot.getAbsolutePath()))
             .map(Path::toFile)
             .forEach(File::delete);
@@ -93,12 +93,12 @@ public abstract class AbstractExtractorTest {
         Environment.getExternalStorageDirectory().getAbsolutePath(), new Extractor.OnUpdate() {
 
             @Override
-            public void onStart(long totalBytes, String firstEntryName) {
+            public void onStart(final long totalBytes, final String firstEntryName) {
 
             }
 
             @Override
-            public void onUpdate(String entryPath) {
+            public void onUpdate(final String entryPath) {
 
             }
 
@@ -107,7 +107,7 @@ public abstract class AbstractExtractorTest {
                 latch.countDown();
                 try {
                     verifyExtractedArchiveContents();
-                } catch(IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                     fail("Error verifying extracted archive contents");
                 }
@@ -145,7 +145,7 @@ public abstract class AbstractExtractorTest {
     }
 
     private void copyArchivesToStorage() throws IOException {
-        for(File f : new File("src/test/resources").listFiles()) {
+        for (File f : new File("src/test/resources").listFiles()) {
             IOUtils.copy(new FileInputStream(f), new FileOutputStream(new File(Environment.getExternalStorageDirectory(), f.getName())));
         }
     }

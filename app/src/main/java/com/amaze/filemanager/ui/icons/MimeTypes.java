@@ -50,7 +50,7 @@ public final class MimeTypes {
     public static final String ALL_MIME_TYPES = "*/*";
 
     // construct a with an approximation of the capacity
-    private static final HashMap<String, String> MIME_TYPES = new HashMap<>(1 + (int)(68 / 0.75));
+    private static final HashMap<String, String> MIME_TYPES = new HashMap<>(1 + (int) (68 / 0.75));
 
     static {
 
@@ -148,7 +148,7 @@ public final class MimeTypes {
      * @param path the file of which mime type to get
      * @return Mime type in form of String
      */
-    public static String getMimeType(String path, boolean isDirectory) {
+    public static String getMimeType(final String path, final boolean isDirectory) {
         if (isDirectory) {
             return null;
         }
@@ -166,11 +166,11 @@ public final class MimeTypes {
                 type = MIME_TYPES.get(extensionLowerCase);
             }
         }
-        if(type == null) type = ALL_MIME_TYPES;
+        if (type == null) type = ALL_MIME_TYPES;
         return type;
     }
 
-    public static boolean mimeTypeMatch(String mime, String input) {
+    public static boolean mimeTypeMatch(final String mime, final String input) {
         return Pattern.matches(mime.replace("*", ".*"), input);
     }
 
@@ -181,8 +181,8 @@ public final class MimeTypes {
      * @param path the path of file
      * @return extension extracted from name in lowercase
      */
-    public static String getExtension(String path) {
-        if(path.contains(".")) return path.substring(path.lastIndexOf(".") + 1).toLowerCase();
+    public static String getExtension(final String path) {
+        if (path.contains(".")) return path.substring(path.lastIndexOf(".") + 1).toLowerCase();
         else return "";
     }
 

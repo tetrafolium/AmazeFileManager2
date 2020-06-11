@@ -18,7 +18,7 @@ public abstract class AbstractExtractorPasswordProtectedArchivesTest extends Abs
         ArchivePasswordCache.getInstance().clear();
         try {
             doTestExtractFiles();
-        } catch(IOException e) {
+        } catch (IOException e) {
             assertExceptionIsExpected(e);
             throw e;
         }
@@ -30,7 +30,7 @@ public abstract class AbstractExtractorPasswordProtectedArchivesTest extends Abs
         ArchivePasswordCache.getInstance().put(getArchiveFile().getAbsolutePath(), "abcdef");
         try {
             doTestExtractFiles();
-        } catch(IOException e) {
+        } catch (IOException e) {
             assertExceptionIsExpected(e);
             throw e;
         }
@@ -42,14 +42,14 @@ public abstract class AbstractExtractorPasswordProtectedArchivesTest extends Abs
         ArchivePasswordCache.getInstance().put(getArchiveFile().getAbsolutePath(), "abcdef");
         try {
             doTestExtractFiles();
-        } catch(IOException e) {
+        } catch (IOException e) {
             assertExceptionIsExpected(e);
             throw e;
         }
         ArchivePasswordCache.getInstance().put(getArchiveFile().getAbsolutePath(), "pqrstuv");
         try {
             doTestExtractFiles();
-        } catch(IOException e) {
+        } catch (IOException e) {
             assertExceptionIsExpected(e);
             throw e;
         }
@@ -69,10 +69,10 @@ public abstract class AbstractExtractorPasswordProtectedArchivesTest extends Abs
 
     protected abstract Class[] expectedRootExceptionClass();
 
-    protected void assertExceptionIsExpected(IOException e) throws IOException {
-        for(Class<? extends Throwable> c : expectedRootExceptionClass()) {
-            if(e.getCause() != null ? (c.isAssignableFrom(e.getCause().getClass())) :
-                    c.isAssignableFrom(e.getClass()))
+    protected void assertExceptionIsExpected(final IOException e) throws IOException {
+        for (Class<? extends Throwable> c : expectedRootExceptionClass()) {
+            if (e.getCause() != null ? (c.isAssignableFrom(e.getCause().getClass()))
+                    : c.isAssignableFrom(e.getClass()))
                 return;
         }
         fail("Exception verification failed.");

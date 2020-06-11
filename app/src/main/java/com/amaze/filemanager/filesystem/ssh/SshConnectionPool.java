@@ -73,7 +73,7 @@ public class SshConnectionPool
      * @return {@link SshConnectionPool} instance
      */
     public static final SshConnectionPool getInstance() {
-        if(instance == null)
+        if (instance == null)
             instance = new SshConnectionPool();
 
         return instance;
@@ -89,21 +89,21 @@ public class SshConnectionPool
      * @return {@link SSHClient} connection, already opened and authenticated
      * @throws IOException IOExceptions that occur during connection setup
      */
-    public SSHClient getConnection(@NonNull String url)  {
+    public SSHClient getConnection(final @NonNull String url)  {
         url = SshClientUtils.extractBaseUriFrom(url);
 
         SSHClient client = connections.get(url);
-        if(client == null) {
+        if (client == null) {
             client = create(url);
-            if(client != null)
+            if (client != null)
                 connections.put(url, client);
         } else {
-            if(!validate(client)) {
+            if (!validate(client)) {
                 Log.d(TAG, "Connection no longer usable. Reconnecting...");
                 expire(client);
                 connections.remove(url);
                 client = create(url);
-                if(client != null)
+                if (client != null)
                     connections.put(url, client);
             }
         }
@@ -127,24 +127,24 @@ public class SshConnectionPool
      * @param keyPair {@link KeyPair}, required if using key-based authentication
      * @return {@link SSHClient} connection
      */
-    public SSHClient getConnection(@NonNull String host, int port, @NonNull String hostFingerprint,
-                                   @NonNull String username, @Nullable String password,
-                                   @Nullable KeyPair keyPair) {
+    public SSHClient getConnection(final @NonNull String host, final int port, final @NonNull String hostFingerprint,
+                                   final @NonNull String username, final @Nullable String password,
+                                   final @Nullable KeyPair keyPair) {
 
         String url = SshClientUtils.deriveSftpPathFrom(host, port, username, password, keyPair);
 
         SSHClient client = connections.get(url);
-        if(client == null) {
+        if (client == null) {
             client = create(host, port, hostFingerprint, username, password, keyPair);
-            if(client != null)
+            if (client != null)
                 connections.put(url, client);
         } else {
-            if(!validate(client)) {
+            if (!validate(client)) {
                 Log.d(TAG, "Connection no longer usable. Reconnecting...");
                 expire(client);
                 connections.remove(url);
                 client = create(host, port, hostFingerprint, username, password, keyPair);
-                if(client != null)
+                if (client != null)
                     connections.put(url, client);
             }
         }
@@ -159,7 +159,7 @@ public class SshConnectionPool
      */
     public void expungeAllConnections() {
         AppConfig.runInBackground(() -> {
-            if(!connections.isEmpty()) {
+            if (!connections.isEmpty()) {
                 for (SSHClient connection : connections.values()) {
                     SshClientUtils.tryDisconnect(connection);
                 }
@@ -170,14 +170,14 @@ public class SshConnectionPool
 
     // Logic for creating SSH connection. Depends on password existence in given Uri password or
     // key-based authentication
-    private SSHClient create(@NonNull String url) {
+    private SSHClient create(final @NonNull String url) {
         ConnectionInfo connInfo = new ConnectionInfo(url);
 
         UtilsHandler utilsHandler = AppConfig.getInstance().getUtilsHandler();
         String pem = utilsHandler.getSshAuthPrivateKey(url);
 
         AtomicReference<KeyPair> keyPair = new AtomicReference<>(null);
-        if(pem != null && !pem.isEmpty()) {
+        if (pem != null && !pem.isEmpty()) {
             try {
                 CountDownLatch latch = new CountDownLatch(1);
                 new PemToKeyPairTask(pem, result -> {
@@ -185,22 +185,22 @@ public class SshConnectionPool
                     latch.countDown();
                 }).execute();
                 latch.await();
-            } catch(InterruptedException e) {
+            } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
 
         String hostKey = utilsHandler.getSshHostKey(url);
-        if(hostKey == null)
+        if (hostKey == null)
             return null;
 
         return create(connInfo.host, connInfo.port, hostKey, connInfo.username, connInfo.password,
                       keyPair.get());
     }
 
-    private SSHClient create(@NonNull String host, int port, @NonNull String hostKey,
-                             @NonNull String username, @Nullable String password,
-                             @Nullable KeyPair keyPair) {
+    private SSHClient create(final @NonNull String host, final int port, final @NonNull String hostKey,
+                             final @NonNull String username, final @Nullable String password,
+                             final @Nullable KeyPair keyPair) {
 
         try {
             AsyncTaskResult<SSHClient> taskResult = new SshAuthenticationTask(host, port,
@@ -208,20 +208,20 @@ public class SshConnectionPool
 
             SSHClient client = taskResult.result;
             return client;
-        } catch(InterruptedException e) {
+        } catch (InterruptedException e) {
             //FIXME: proper handling
             throw new RuntimeException(e);
-        } catch(ExecutionException e) {
+        } catch (ExecutionException e) {
             //FIXME: proper handling
             throw new RuntimeException(e);
         }
     }
 
-    private boolean validate(@NonNull SSHClient client) {
+    private boolean validate(final @NonNull SSHClient client) {
         return client.isConnected() && client.isAuthenticated();
     }
 
-    private void expire(@NonNull SSHClient client) {
+    private void expire(final @NonNull SSHClient client) {
         SshClientUtils.tryDisconnect(client);
     }
 
@@ -242,19 +242,19 @@ public class SshConnectionPool
         final String password;
 
         //FIXME: Crude assumption
-        ConnectionInfo(@NonNull String url) {
-            if(!url.startsWith(SSH_URI_PREFIX))
+        ConnectionInfo(final @NonNull String url) {
+            if (!url.startsWith(SSH_URI_PREFIX))
                 throw new IllegalArgumentException("Argument is not a SSH URI: " + url);
 
-            this.host = url.substring(url.lastIndexOf('@')+1, url.lastIndexOf(':'));
-            int port = Integer.parseInt(url.substring(url.lastIndexOf(':')+1));
+            this.host = url.substring(url.lastIndexOf('@') + 1, url.lastIndexOf(':'));
+            int port = Integer.parseInt(url.substring(url.lastIndexOf(':') + 1));
             //If the uri is fetched from the app's database storage, we assume it will never be empty
             String authString = url.substring(SSH_URI_PREFIX.length(), url.lastIndexOf('@'));
             String[] userInfo = authString.split(":");
             this.username = userInfo[0];
             this.password = userInfo.length > 1 ? userInfo[1] : null;
 
-            if(port < 0)
+            if (port < 0)
                 port = SSH_DEFAULT_PORT;
 
             this.port = port;

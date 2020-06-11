@@ -54,8 +54,7 @@ public class AppThemeTest {
         int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         if (hour <= 6 || hour >= 18) {
             assertEquals(Theme.DARK, apptheme.getMaterialDialogTheme());
-        }
-        else
+        } else
             assertEquals(Theme.LIGHT, apptheme.getMaterialDialogTheme());
     }
 
@@ -83,8 +82,7 @@ public class AppThemeTest {
         int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         if (hour <= 6 || hour >= 18) {
             assertEquals(AppTheme.DARK, apptheme.getSimpleTheme());
-        }
-        else
+        } else
             assertEquals(AppTheme.LIGHT, apptheme.getSimpleTheme());
     }
 
@@ -98,27 +96,27 @@ public class AppThemeTest {
     public void getIdLIGHTTest() {
         int index = 0;
         AppTheme apptheme = AppTheme.getTheme(index);
-        assertEquals(index, apptheme.getId()) ;
+        assertEquals(index, apptheme.getId());
     }
 
     @Test
     public void getIdDARKTest() {
         int index = 1;
         AppTheme apptheme = AppTheme.getTheme(index);
-        assertEquals(index, apptheme.getId()) ;
+        assertEquals(index, apptheme.getId());
     }
 
     @Test
     public void getIdTIMEDTest() {
         int index = 2;
         AppTheme apptheme = AppTheme.getTheme(index);
-        assertEquals(index, apptheme.getId()) ;
+        assertEquals(index, apptheme.getId());
     }
 
     @Test
     public void getIdBLACKTest() {
         int index = 3;
         AppTheme apptheme = AppTheme.getTheme(index);
-        assertEquals(index, apptheme.getId()) ;
+        assertEquals(index, apptheme.getId());
     }
 }

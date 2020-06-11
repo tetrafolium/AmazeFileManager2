@@ -25,7 +25,7 @@ public class CompressedItemViewHolder extends RecyclerView.ViewHolder {
     public final View rl;
     public final ImageView checkImageView;
 
-    public CompressedItemViewHolder(View view) {
+    public CompressedItemViewHolder(final View view) {
         super(view);
         txtTitle = view.findViewById(R.id.firstline);
         pictureIcon = view.findViewById(R.id.picture_icon);

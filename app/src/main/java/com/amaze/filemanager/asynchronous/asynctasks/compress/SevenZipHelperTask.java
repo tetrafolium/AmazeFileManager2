@@ -52,22 +52,22 @@ public class SevenZipHelperTask extends CompressedHelperTask {
 
     private boolean paused = false;
 
-    public SevenZipHelperTask(String filePath, String relativePath, boolean goBack,
-                              OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> l) {
+    public SevenZipHelperTask(final String filePath, final String relativePath, final boolean goBack,
+                              final OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> l) {
         super(goBack, l);
         this.filePath = filePath;
         this.relativePath = relativePath;
     }
 
     @Override
-    void addElements(@NonNull ArrayList<CompressedObjectParcelable> elements) throws ArchiveException {
-        while(true) {
+    void addElements(final @NonNull ArrayList<CompressedObjectParcelable> elements) throws ArchiveException {
+        while (true) {
             if (paused) continue;
 
             try {
-                SevenZFile sevenzFile = (ArchivePasswordCache.getInstance().containsKey(filePath)) ?
-                                        new SevenZFile(new File(filePath), ArchivePasswordCache.getInstance().get(filePath).toCharArray()) :
-                                        new SevenZFile(new File(filePath));
+                SevenZFile sevenzFile = (ArchivePasswordCache.getInstance().containsKey(filePath))
+                                        ? new SevenZFile(new File(filePath), ArchivePasswordCache.getInstance().get(filePath).toCharArray())
+                                        : new SevenZFile(new File(filePath));
 
                 for (SevenZArchiveEntry entry : sevenzFile.getEntries()) {
                     String name = entry.getName();
@@ -92,17 +92,17 @@ public class SevenZipHelperTask extends CompressedHelperTask {
     }
 
     @Override
-    protected void onProgressUpdate(IOException... values) {
+    protected void onProgressUpdate(final IOException... values) {
         super.onProgressUpdate(values);
         if (values.length < 1) return;
 
         IOException result = values[0];
         //We only handle PasswordRequiredException here.
-        if(result instanceof PasswordRequiredException || result instanceof CorruptedInputException)
+        if (result instanceof PasswordRequiredException || result instanceof CorruptedInputException)
         {
             ArchivePasswordCache.getInstance().remove(filePath);
             GeneralDialogCreation.showPasswordDialog(AppConfig.getInstance().getMainActivityContext(),
-                    (MainActivity)AppConfig.getInstance().getMainActivityContext(),
+                    (MainActivity) AppConfig.getInstance().getMainActivityContext(),
                     AppConfig.getInstance().getUtilsProvider().getAppTheme(),
                     R.string.archive_password_prompt, R.string.authenticate_password,
             ((dialog, which) -> {

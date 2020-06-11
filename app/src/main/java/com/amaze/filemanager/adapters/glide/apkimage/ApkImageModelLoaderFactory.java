@@ -16,12 +16,12 @@ public class ApkImageModelLoaderFactory implements ModelLoaderFactory<String, Dr
 
     private PackageManager packageManager;
 
-    public ApkImageModelLoaderFactory(PackageManager packageManager) {
+    public ApkImageModelLoaderFactory(final PackageManager packageManager) {
         this.packageManager = packageManager;
     }
 
     @Override
-    public ModelLoader<String, Drawable> build(MultiModelLoaderFactory multiFactory) {
+    public ModelLoader<String, Drawable> build(final MultiModelLoaderFactory multiFactory) {
         return new ApkImageModelLoader(packageManager);
     }
 

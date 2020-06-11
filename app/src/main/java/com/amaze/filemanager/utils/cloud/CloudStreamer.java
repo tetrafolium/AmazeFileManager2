@@ -27,7 +27,7 @@ public class CloudStreamer extends CloudStreamServer {
     // private CBItem source;
     // private String mime;
 
-    protected CloudStreamer(int port) throws IOException {
+    protected CloudStreamer(final int port) throws IOException {
         super(port, new File("."));
     }
 
@@ -41,11 +41,11 @@ public class CloudStreamer extends CloudStreamServer {
         return instance;
     }
 
-    public static boolean isStreamMedia(SmbFile file) {
+    public static boolean isStreamMedia(final SmbFile file) {
         return pattern.matcher(file.getName()).matches();
     }
 
-    public void setStreamSrc(InputStream inputStream, String fileName, long length) {
+    public void setStreamSrc(final InputStream inputStream, final String fileName, final long length) {
         this.inputStream = inputStream;
         this.fileName = fileName;
         this.length = length;
@@ -58,7 +58,7 @@ public class CloudStreamer extends CloudStreamServer {
     }
 
     @Override
-    public CloudStreamServer.Response serve(String uri, String method, Properties header, Properties parms, Properties files) {
+    public CloudStreamServer.Response serve(final String uri, final String method, final Properties header, final Properties parms, final Properties files) {
         CloudStreamServer.Response res = null;
 
         if (inputStream == null)

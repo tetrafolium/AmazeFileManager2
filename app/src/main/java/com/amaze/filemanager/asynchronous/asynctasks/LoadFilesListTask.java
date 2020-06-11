@@ -70,9 +70,9 @@ public class LoadFilesListTask extends AsyncTask<Void, Void, Pair<OpenMode, Arra
     private DataUtils dataUtils = DataUtils.getInstance();
     private OnAsyncTaskFinished<Pair<OpenMode, ArrayList<LayoutElementParcelable>>> listener;
 
-    public LoadFilesListTask(Context c, String path, MainFragment ma, OpenMode openmode,
-                             boolean showThumbs, boolean showHiddenFiles,
-                             OnAsyncTaskFinished<Pair<OpenMode, ArrayList<LayoutElementParcelable>>> l) {
+    public LoadFilesListTask(final Context c, final String path, final MainFragment ma, final OpenMode openmode,
+                             final boolean showThumbs, final boolean showHiddenFiles,
+                             final OnAsyncTaskFinished<Pair<OpenMode, ArrayList<LayoutElementParcelable>>> l) {
         this.path = path;
         this.ma = ma;
         this.openmode = openmode;
@@ -83,7 +83,7 @@ public class LoadFilesListTask extends AsyncTask<Void, Void, Pair<OpenMode, Arra
     }
 
     @Override
-    protected Pair<OpenMode, ArrayList<LayoutElementParcelable>> doInBackground(Void... p) {
+    protected Pair<OpenMode, ArrayList<LayoutElementParcelable>> doInBackground(final Void... p) {
         HybridFile hFile = null;
 
         if (openmode == OpenMode.UNKNOWN) {
@@ -96,7 +96,7 @@ public class LoadFilesListTask extends AsyncTask<Void, Void, Pair<OpenMode, Arra
             }
         }
 
-        if(isCancelled()) return null;
+        if (isCancelled()) return null;
 
         ma.folder_count = 0;
         ma.file_count = 0;
@@ -168,7 +168,7 @@ public class LoadFilesListTask extends AsyncTask<Void, Void, Pair<OpenMode, Arra
             list = new ArrayList<>();
             listOtg(path, file -> {
                 LayoutElementParcelable elem = createListParcelables(file);
-                if(elem != null) list.add(elem);
+                if (elem != null) list.add(elem);
             });
             openmode = OpenMode.OTG;
             break;
@@ -182,7 +182,7 @@ public class LoadFilesListTask extends AsyncTask<Void, Void, Pair<OpenMode, Arra
             try {
                 listCloud(path, cloudStorage, openmode, file -> {
                     LayoutElementParcelable elem = createListParcelables(file);
-                    if(elem != null) list.add(elem);
+                    if (elem != null) list.add(elem);
                 });
             } catch (CloudPluginException e) {
                 e.printStackTrace();
@@ -196,7 +196,7 @@ public class LoadFilesListTask extends AsyncTask<Void, Void, Pair<OpenMode, Arra
             RootHelper.getFiles(path, ma.getMainActivity().isRootExplorer(), showHiddenFiles,
             mode -> openmode = mode, file -> {
                 LayoutElementParcelable elem = createListParcelables(file);
-                if(elem != null) list.add(elem);
+                if (elem != null) list.add(elem);
             });
             break;
         }
@@ -219,15 +219,15 @@ public class LoadFilesListTask extends AsyncTask<Void, Void, Pair<OpenMode, Arra
     }
 
     @Override
-    protected void onPostExecute(Pair<OpenMode, ArrayList<LayoutElementParcelable>> list) {
+    protected void onPostExecute(final Pair<OpenMode, ArrayList<LayoutElementParcelable>> list) {
         super.onPostExecute(list);
         listener.onAsyncTaskFinished(list);
     }
 
-    private LayoutElementParcelable createListParcelables(HybridFileParcelable baseFile) {
+    private LayoutElementParcelable createListParcelables(final HybridFileParcelable baseFile) {
         if (!dataUtils.isFileHidden(baseFile.getPath())) {
             String size = "";
-            long longSize= 0;
+            long longSize = 0;
 
             if (baseFile.isDirectory()) {
                 ma.folder_count++;
@@ -268,7 +268,7 @@ public class LoadFilesListTask extends AsyncTask<Void, Void, Pair<OpenMode, Arra
                 HybridFileParcelable strings = RootHelper.generateBaseFile(new File(path), showHiddenFiles);
                 if (strings != null) {
                     LayoutElementParcelable parcelable = createListParcelables(strings);
-                    if(parcelable != null) images.add(parcelable);
+                    if (parcelable != null) images.add(parcelable);
                 }
             } while (cursor.moveToNext());
         }
@@ -290,7 +290,7 @@ public class LoadFilesListTask extends AsyncTask<Void, Void, Pair<OpenMode, Arra
                 HybridFileParcelable strings = RootHelper.generateBaseFile(new File(path), showHiddenFiles);
                 if (strings != null) {
                     LayoutElementParcelable parcelable = createListParcelables(strings);
-                    if(parcelable != null) videos.add(parcelable);
+                    if (parcelable != null) videos.add(parcelable);
                 }
             } while (cursor.moveToNext());
         }
@@ -321,7 +321,7 @@ public class LoadFilesListTask extends AsyncTask<Void, Void, Pair<OpenMode, Arra
                 HybridFileParcelable strings = RootHelper.generateBaseFile(new File(path), showHiddenFiles);
                 if (strings != null) {
                     LayoutElementParcelable parcelable = createListParcelables(strings);
-                    if(parcelable != null) songs.add(parcelable);
+                    if (parcelable != null) songs.add(parcelable);
                 }
             } while (cursor.moveToNext());
         }
@@ -348,7 +348,7 @@ public class LoadFilesListTask extends AsyncTask<Void, Void, Pair<OpenMode, Arra
                     HybridFileParcelable strings = RootHelper.generateBaseFile(new File(path), showHiddenFiles);
                     if (strings != null) {
                         LayoutElementParcelable parcelable = createListParcelables(strings);
-                        if(parcelable != null) docs.add(parcelable);
+                        if (parcelable != null) docs.add(parcelable);
                     }
                 }
             } while (cursor.moveToNext());
@@ -378,7 +378,7 @@ public class LoadFilesListTask extends AsyncTask<Void, Void, Pair<OpenMode, Arra
                     HybridFileParcelable strings = RootHelper.generateBaseFile(new File(path), showHiddenFiles);
                     if (strings != null) {
                         LayoutElementParcelable parcelable = createListParcelables(strings);
-                        if(parcelable != null) apks.add(parcelable);
+                        if (parcelable != null) apks.add(parcelable);
                     }
                 }
             } while (cursor.moveToNext());
@@ -426,7 +426,7 @@ public class LoadFilesListTask extends AsyncTask<Void, Void, Pair<OpenMode, Arra
                     HybridFileParcelable strings = RootHelper.generateBaseFile(new File(path), showHiddenFiles);
                     if (strings != null) {
                         LayoutElementParcelable parcelable = createListParcelables(strings);
-                        if(parcelable != null) recentFiles.add(parcelable);
+                        if (parcelable != null) recentFiles.add(parcelable);
                     }
                 }
             } while (cursor.moveToNext());
@@ -446,12 +446,12 @@ public class LoadFilesListTask extends AsyncTask<Void, Void, Pair<OpenMode, Arra
      * @param path the path to the directory tree, starts with prefix {@link com.amaze.filemanager.utils.OTGUtil#PREFIX_OTG}
      *             Independent of URI (or mount point) for the OTG
      */
-    private void listOtg(String path, OnFileFound fileFound) {
+    private void listOtg(final String path, final OnFileFound fileFound) {
         OTGUtil.getDocumentFiles(path, c, fileFound);
     }
 
-    private void listCloud(String path, CloudStorage cloudStorage, OpenMode openMode,
-                           OnFileFound fileFoundCallback) throws CloudPluginException {
+    private void listCloud(final String path, final CloudStorage cloudStorage, final OpenMode openMode,
+                           final OnFileFound fileFoundCallback) throws CloudPluginException {
         if (!CloudSheetFragment.isCloudProviderAvailable(c)) {
             throw new CloudPluginException();
         }

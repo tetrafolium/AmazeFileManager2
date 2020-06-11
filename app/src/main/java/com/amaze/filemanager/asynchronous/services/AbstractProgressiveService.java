@@ -31,7 +31,7 @@ public abstract class AbstractProgressiveService extends Service implements Serv
     private boolean isNotificationTitleSet = false;
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(final Intent intent, final int flags, final int startId) {
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -89,7 +89,7 @@ public abstract class AbstractProgressiveService extends Service implements Serv
      * @param isComplete     whether operation completed or ongoing (not supported at the moment)
      * @param move           if the files are to be moved
      */
-    public final void publishResults(long speed, boolean isComplete, boolean move) {
+    public final void publishResults(final long speed, final boolean isComplete, final boolean move) {
         if (!getProgressHandler().getCancelled()) {
             String fileName = getProgressHandler().getFileName();
             long totalSize = getProgressHandler().getTotalSize();
@@ -102,8 +102,8 @@ public abstract class AbstractProgressiveService extends Service implements Serv
 
             if (ServiceWatcherUtil.state != ServiceWatcherUtil.ServiceWatcherInteractionInterface.STATE_HALTED) {
 
-                String written = Formatter.formatFileSize(this, writtenSize) + "/" +
-                                 Formatter.formatFileSize(this, totalSize);
+                String written = Formatter.formatFileSize(this, writtenSize) + "/"
+                                 + Formatter.formatFileSize(this, totalSize);
                 getNotificationCustomViewBig().setTextViewText(R.id.notification_service_textView_filename_big, fileName);
                 getNotificationCustomViewSmall().setTextViewText(R.id.notification_service_textView_filename_small, fileName);
                 getNotificationCustomViewBig().setTextViewText(R.id.notification_service_textView_written_big, written);
@@ -113,7 +113,7 @@ public abstract class AbstractProgressiveService extends Service implements Serv
 
                 String remainingTime;
                 if (speed != 0) {
-                    remainingTime = Utils.formatTimer(Math.round((totalSize-writtenSize)/speed));
+                    remainingTime = Utils.formatTimer(Math.round((totalSize - writtenSize) / speed));
                 } else {
                     remainingTime = getString(R.string.unknown);
                 }
@@ -162,7 +162,7 @@ public abstract class AbstractProgressiveService extends Service implements Serv
         } else publishCompletedResult(getNotificationId());
     }
 
-    private void publishCompletedResult(int id1) {
+    private void publishCompletedResult(final int id1) {
         try {
             getNotificationManager().cancel(id1);
         } catch (Exception e) {
@@ -170,8 +170,8 @@ public abstract class AbstractProgressiveService extends Service implements Serv
         }
     }
 
-    protected void addFirstDatapoint(String name, int amountOfFiles, long totalBytes, boolean move) {
-        if(!getDataPackages().isEmpty()) {
+    protected void addFirstDatapoint(final String name, final int amountOfFiles, final long totalBytes, final boolean move) {
+        if (!getDataPackages().isEmpty()) {
             throw new IllegalStateException("This is not the first datapoint!");
         }
 
@@ -179,8 +179,8 @@ public abstract class AbstractProgressiveService extends Service implements Serv
         putDataPackage(intent1);
     }
 
-    protected void addDatapoint(DatapointParcelable datapoint) {
-        if(getDataPackages().isEmpty()) {
+    protected void addDatapoint(final DatapointParcelable datapoint) {
+        if (getDataPackages().isEmpty()) {
             throw new IllegalStateException("This is the first datapoint!");
         }
 
@@ -198,7 +198,7 @@ public abstract class AbstractProgressiveService extends Service implements Serv
      * by {@link ServiceWatcherUtil#handlerThread} while {@link MainActivity#runOnUiThread(Runnable)}
      * is executing the callbacks in {@link ProcessViewerFragment}
      */
-    public final synchronized DatapointParcelable getDataPackage(int index) {
+    public final synchronized DatapointParcelable getDataPackage(final int index) {
         return getDataPackages().get(index);
     }
 
@@ -212,7 +212,7 @@ public abstract class AbstractProgressiveService extends Service implements Serv
      * by {@link ServiceWatcherUtil#handlerThread} while {@link MainActivity#runOnUiThread(Runnable)}
      * is executing the callbacks in {@link ProcessViewerFragment}
      */
-    private synchronized void putDataPackage(DatapointParcelable dataPackage) {
+    private synchronized void putDataPackage(final DatapointParcelable dataPackage) {
         getDataPackages().add(dataPackage);
     }
 
@@ -229,11 +229,11 @@ public abstract class AbstractProgressiveService extends Service implements Serv
     /**
      * Displays a notification, sends intent and cancels progress if there were some failures
      */
-    void finalizeNotification(ArrayList<HybridFile> failedOps, boolean move) {
+    void finalizeNotification(final ArrayList<HybridFile> failedOps, final boolean move) {
         if (!move) getNotificationManager().cancelAll();
 
-        if(failedOps.size()==0)return;
-        NotificationCompat.Builder mBuilder=new NotificationCompat.Builder(getApplicationContext(), NotificationConstants.CHANNEL_NORMAL_ID);
+        if (failedOps.size() == 0) return;
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), NotificationConstants.CHANNEL_NORMAL_ID);
         mBuilder.setContentTitle(getString(R.string.operationunsuccesful));
 
         mBuilder.setContentText(getString(R.string.copy_error, getString(getTitle(move)).toLowerCase()));
@@ -241,18 +241,18 @@ public abstract class AbstractProgressiveService extends Service implements Serv
 
         getProgressHandler().setCancelled(true);
 
-        Intent intent= new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(MainActivity.TAG_INTENT_FILTER_FAILED_OPS, failedOps);
         intent.putExtra("move", move);
 
-        PendingIntent pIntent = PendingIntent.getActivity(this, 101, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pIntent = PendingIntent.getActivity(this, 101, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         mBuilder.setContentIntent(pIntent);
         mBuilder.setSmallIcon(R.drawable.ic_folder_lock_open_white_36dp);
 
-        getNotificationManager().notify(NotificationConstants.FAILED_ID,mBuilder.build());
+        getNotificationManager().notify(NotificationConstants.FAILED_ID, mBuilder.build());
 
-        intent=new Intent(MainActivity.TAG_INTENT_FILTER_GENERAL);
+        intent = new Intent(MainActivity.TAG_INTENT_FILTER_GENERAL);
         intent.putExtra(MainActivity.TAG_INTENT_FILTER_FAILED_OPS, failedOps);
 
         sendBroadcast(intent);
@@ -267,7 +267,7 @@ public abstract class AbstractProgressiveService extends Service implements Serv
         getNotificationCustomViewSmall().setTextViewText(R.id.notification_service_textView_filename_small,
                 getString(R.string.processing));
 
-        String zeroBytesFormat = Formatter.formatFileSize(this, 0l);
+        String zeroBytesFormat = Formatter.formatFileSize(this, 0L);
 
         getNotificationCustomViewBig().setTextViewText(R.id.notification_service_textView_written_big,
                 zeroBytesFormat);

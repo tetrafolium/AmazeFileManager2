@@ -79,7 +79,7 @@ class BoundedFileChannelInputStream extends InputStream {
         return bytesRead;
     }
 
-    private int read(int len) throws IOException {
+    private int read(final int len) throws IOException {
         buffer.rewind().limit(len);
         int read = channel.read(buffer);
         buffer.flip();

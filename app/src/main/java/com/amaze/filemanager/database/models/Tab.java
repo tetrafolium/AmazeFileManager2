@@ -32,14 +32,14 @@ public class Tab {
     public final String path;
     public final String home;
 
-    public Tab(int tabNo, String path, String home) {
+    public Tab(final int tabNo, final String path, final String home) {
         this.tabNumber = tabNo;
         this.path = path;
         this.home = home;
     }
 
-    public String getOriginalPath(boolean savePaths, SharedPreferences sharedPreferences) {
-        if(savePaths && FileUtils.isPathAccessible(path, sharedPreferences)) {
+    public String getOriginalPath(final boolean savePaths, final SharedPreferences sharedPreferences) {
+        if (savePaths && FileUtils.isPathAccessible(path, sharedPreferences)) {
             return path;
         } else {
             return home;

@@ -197,7 +197,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
     private LayoutElementParcelable back = null;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setRetainInstance(true);
@@ -232,7 +232,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.main_frag, container, false);
         setRetainInstance(true);
         listView = rootView.findViewById(R.id.listView);
@@ -334,13 +334,13 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
         }
     }
 
-    void setGridLayoutSpanSizeLookup(GridLayoutManager mLayoutManagerGrid) {
+    void setGridLayoutSpanSizeLookup(final GridLayoutManager mLayoutManagerGrid) {
 
         mLayoutManagerGrid.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 
             @Override
-            public int getSpanSize(int position) {
-                switch(adapter.getItemViewType(position)) {
+            public int getSpanSize(final int position) {
+                switch (adapter.getItemViewType(position)) {
                 case RecyclerAdapter.TYPE_HEADER_FILES:
                 case RecyclerAdapter.TYPE_HEADER_FOLDERS:
                     return columns;
@@ -392,7 +392,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
 
         int index;
@@ -447,7 +447,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
             file_count = savedInstanceState.getInt("file_count", 0);
             results = savedInstanceState.getBoolean("results");
             getMainActivity().getAppbar().getBottomBar().updatePath(CURRENT_PATH, results, MainActivityHelper.SEARCH_TEXT, openMode, folder_count, file_count, this);
-            reloadListElements( true, results, !IS_LIST);
+            reloadListElements(true, results, !IS_LIST);
             if (savedInstanceState.getBoolean("selection")) {
                 for (Integer index : savedInstanceState.getIntegerArrayList("position")) {
                     adapter.toggleChecked(index, null);
@@ -457,17 +457,17 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
     }
 
     public ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-        private void hideOption(int id, Menu menu) {
+        private void hideOption(final int id, final Menu menu) {
             MenuItem item = menu.findItem(id);
             item.setVisible(false);
         }
 
-        private void showOption(int id, Menu menu) {
+        private void showOption(final int id, final Menu menu) {
             MenuItem item = menu.findItem(id);
             item.setVisible(true);
         }
 
-        void initMenu(Menu menu) {
+        void initMenu(final Menu menu) {
             /*
             menu.findItem(R.id.cpy).setIcon(icons.getCopyDrawable());
             menu.findItem(R.id.cut).setIcon(icons.getCutDrawable());
@@ -477,7 +477,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
         }
 
         // called when the action mode is created; startActionMode() was called
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        public boolean onCreateActionMode(final ActionMode mode, final Menu menu) {
             // Inflate a menu resource providing context menu items
             MenuInflater inflater = mode.getMenuInflater();
             actionModeView = getActivity().getLayoutInflater().inflate(R.layout.actionmode, null);
@@ -515,15 +515,15 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
          * onCreateActionMode, but
          * may be called multiple times if the mode is invalidated.
          */
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        public boolean onPrepareActionMode(final ActionMode mode, final Menu menu) {
             ArrayList<LayoutElementParcelable> positions = adapter.getCheckedItems();
             TextView textView1 = actionModeView.findViewById(R.id.item_count);
             textView1.setText(String.valueOf(positions.size()));
             textView1.setOnClickListener(null);
             mode.setTitle(positions.size() + "");
             hideOption(R.id.openmulti, menu);
-            menu.findItem(R.id.all).setTitle(positions.size() == folder_count + file_count ?
-                                             R.string.deselect_all : R.string.selectall);
+            menu.findItem(R.id.all).setTitle(positions.size() == folder_count + file_count
+                                             ? R.string.deselect_all : R.string.selectall);
 
             if (openMode != OpenMode.FILE) {
                 hideOption(R.id.addshortcut, menu);
@@ -618,7 +618,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
         }
 
         // called when the user selects a contextual menu item
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        public boolean onActionItemClicked(final ActionMode mode, final MenuItem item) {
             computeScroll();
             ArrayList<LayoutElementParcelable> checkedItems = adapter.getCheckedItems();
             switch (item.getItemId()) {
@@ -720,7 +720,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
                 for (int i = 0; i < checkedItems.size(); i++) {
                     copies[i] = checkedItems.get(i).generateBaseFile();
                 }
-                int op = item.getItemId() == R.id.cpy? PasteHelper.OPERATION_COPY:PasteHelper.OPERATION_CUT;
+                int op = item.getItemId() == R.id.cpy ? PasteHelper.OPERATION_COPY : PasteHelper.OPERATION_CUT;
 
                 PasteHelper pasteHelper = new PasteHelper(op, copies);
                 getMainActivity().setPaste(pasteHelper);
@@ -750,7 +750,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
         }
 
         // called when the user exits the action mode
-        public void onDestroyActionMode(ActionMode mode) {
+        public void onDestroyActionMode(final ActionMode mode) {
             mActionMode = null;
             selection = false;
 
@@ -762,8 +762,8 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
             else adapter.toggleChecked(false);
             getMainActivity().setPagingEnabled(true);
 
-            getMainActivity().updateViews(new ColorDrawable(MainActivity.currentTab == 1 ?
-                                          primaryTwoColor : primaryColor));
+            getMainActivity().updateViews(new ColorDrawable(MainActivity.currentTab == 1
+                                          ? primaryTwoColor : primaryColor));
 
             if (getMainActivity().getDrawer().isLocked()) {
                 getMainActivity().getDrawer().unlockIfNotOnTablet();
@@ -774,7 +774,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
     private BroadcastReceiver receiver2 = new BroadcastReceiver() {
 
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(final Context context, final Intent intent) {
             // load the list on a load broadcast
             switch (openMode) {
             case ROOT:
@@ -800,7 +800,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
                             }
 
                             @Override
-                            public void onScanCompleted(String path, Uri uri) {
+                            public void onScanCompleted(final String path, final Uri uri) {
 
                                 Log.d("SCAN completed", path);
                             }
@@ -825,7 +825,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
 
     private BroadcastReceiver decryptReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(final Context context, final Intent intent) {
 
             if (isEncryptOpen && encryptBaseFile != null) {
                 FileUtils.openFile(new File(encryptBaseFile.getPath()), getMainActivity(), sharedPref);
@@ -846,7 +846,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
      * @param e the list item
      * @param imageView the check {@link RoundedImageView} that is to be animated
      */
-    public void onListItemClicked(boolean isBackButton, int position, LayoutElementParcelable e, ImageView imageView) {
+    public void onListItemClicked(final boolean isBackButton, final int position, final LayoutElementParcelable e, final ImageView imageView) {
         if (results) {
             // check to initialize search results
             // if search task is been running, cancel it
@@ -878,7 +878,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
                 adapter.toggleChecked(position, imageView);
             }
         } else {
-            if(isBackButton) {
+            if (isBackButton) {
                 goBackItemClick();
             } else {
                 // hiding search view if visible
@@ -886,7 +886,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
                     getMainActivity().getAppbar().getSearchView().hideSearchView();
                 }
 
-                String path = !e.hasSymlink()? e.desc:e.symlink;
+                String path = !e.hasSymlink() ? e.desc : e.symlink;
 
                 if (e.isDirectory) {
                     computeScroll();
@@ -945,7 +945,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
      * @param path the path to match with
      * @return the entry
      */
-    private static EncryptedEntry findEncryptedEntry(Context context, String path) throws Exception {
+    private static EncryptedEntry findEncryptedEntry(final Context context, final String path) throws Exception {
 
         CryptHandler handler = new CryptHandler(context);
 
@@ -962,7 +962,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
         return matchedEntry;
     }
 
-    public void updateTabWithDb(Tab tab) {
+    public void updateTabWithDb(final Tab tab) {
         CURRENT_PATH = tab.path;
         home = tab.home;
         loadlist(CURRENT_PATH, false, OpenMode.UNKNOWN);
@@ -971,7 +971,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
     /**
      * Returns the intent with uri corresponding to specific {@link HybridFileParcelable} back to external app
      */
-    public void returnIntentResults(HybridFileParcelable baseFile) {
+    public void returnIntentResults(final HybridFileParcelable baseFile) {
 
         getMainActivity().mReturnIntent = false;
 
@@ -1060,8 +1060,8 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
      * @param results  is the list of elements a result from search
      * @param grid     whether to set grid view or list view
      */
-    public void setListElements(ArrayList<LayoutElementParcelable> bitmap, boolean back, String path,
-                                final OpenMode openMode, boolean results, boolean grid) {
+    public void setListElements(final ArrayList<LayoutElementParcelable> bitmap, final boolean back, final String path,
+                                final OpenMode openMode, final boolean results, final boolean grid) {
         if (bitmap != null) {
             LIST_ELEMENTS = bitmap;
             CURRENT_PATH = path;
@@ -1074,7 +1074,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
         }
     }
 
-    public void reloadListElements(boolean back, boolean results, boolean grid) {
+    public void reloadListElements(final boolean back, final boolean results, final boolean grid) {
         if (isAdded()) {
             boolean isOtg = CURRENT_PATH.equals(OTGUtil.PREFIX_OTG + "/"),
                     isOnTheCloud = CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE + "/")
@@ -1145,7 +1145,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
 
             getMainActivity().updatePaths(no);
             listView.stopScroll();
-            fastScroller.setRecyclerView(listView, IS_LIST? 1:columns);
+            fastScroller.setRecyclerView(listView, IS_LIST ? 1 : columns);
             mToolbarContainer.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
                 fastScroller.updateHandlePosition(verticalOffset, 112);
             });
@@ -1176,7 +1176,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
         switch (openMode) {
         case ROOT:
         case FILE:
-            if(customFileObserver != null && !customFileObserver.wasStopped()
+            if (customFileObserver != null && !customFileObserver.wasStopped()
                     && customFileObserver.getPath().equals(getCurrentPath())) {
                 return;
             }
@@ -1222,7 +1222,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
             }
             getMainActivity().mainActivityHelper.rename(openMode, f.getPath(),
                     CURRENT_PATH + "/" + name1, getActivity(), getMainActivity().isRootExplorer());
-        }, (text)-> {
+        }, (text) -> {
             boolean isValidFilename = FileUtil.isValidFilename(text);
 
             if (!isValidFilename) {
@@ -1285,12 +1285,12 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
                         }
 
                     } else if (openMode == OpenMode.SFTP) {
-                        if(!CURRENT_PATH.substring("ssh://".length()).contains("/"))
+                        if (!CURRENT_PATH.substring("ssh://".length()).contains("/"))
                             loadlist(home, false, OpenMode.FILE);
                         else
                             loadlist(currentFile.getParent(getContext()), true, openMode);
-                    } else if (CURRENT_PATH.equals("/") || CURRENT_PATH.equals(home) ||
-                               CURRENT_PATH.equals(OTGUtil.PREFIX_OTG + "/")
+                    } else if (CURRENT_PATH.equals("/") || CURRENT_PATH.equals(home)
+                               || CURRENT_PATH.equals(OTGUtil.PREFIX_OTG + "/")
                                || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_BOX + "/")
                                || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_DROPBOX + "/")
                                || CURRENT_PATH.equals(CloudHandler.CLOUD_PREFIX_GOOGLE_DRIVE + "/")
@@ -1431,7 +1431,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
     public void onPause() {
         super.onPause();
         (getActivity()).unregisterReceiver(receiver2);
-        if(customFileObserver != null) {
+        if (customFileObserver != null) {
             customFileObserver.stopWatching();
         }
 
@@ -1456,7 +1456,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
         }
     }
 
-    public ArrayList<LayoutElementParcelable> addToSmb(SmbFile[] mFile, String path, boolean showHiddenFiles) throws SmbException {
+    public ArrayList<LayoutElementParcelable> addToSmb(final SmbFile[] mFile, final String path, final boolean showHiddenFiles) throws SmbException {
         ArrayList<LayoutElementParcelable> smbFileList = new ArrayList<>();
         if (searchHelper.size() > 500) searchHelper.clear();
         for (SmbFile aMFile : mFile) {
@@ -1494,7 +1494,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
     }
 
     // method to add search result entry to the LIST_ELEMENT arrayList
-    private LayoutElementParcelable addTo(HybridFileParcelable mFile) {
+    private LayoutElementParcelable addTo(final HybridFileParcelable mFile) {
         File f = new File(mFile.getPath());
         String size = "";
         if (!dataUtils.isFileHidden(mFile.getPath())) {
@@ -1546,7 +1546,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
         // please move code to onStop
     }
 
-    public void hide(String path) {
+    public void hide(final String path) {
 
         dataUtils.addHiddenFile(path);
         File file = new File(path);
@@ -1568,7 +1568,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
         return CURRENT_PATH;
     }
 
-    private void addShortcut(LayoutElementParcelable path) {
+    private void addShortcut(final LayoutElementParcelable path) {
         //Adding shortcut for MainActivity
         //on Home screen
         final Context ctx = getContext();
@@ -1598,7 +1598,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
     }
 
     // This method is used to implement the modification for the pre Searching
-    public void onSearchPreExecute(String query) {
+    public void onSearchPreExecute(final String query) {
         getMainActivity().getAppbar().getBottomBar().setPathText("");
         getMainActivity().getAppbar().getBottomBar().setFullPathText(getString(R.string.searching, query));
     }
@@ -1606,7 +1606,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
 
     // adds search results based on result boolean. If false, the adapter is initialised with initial
     // values, if true, new values are added to the adapter.
-    public void addSearchResult(HybridFileParcelable a, String query) {
+    public void addSearchResult(final HybridFileParcelable a, final String query) {
         if (listView != null) {
 
             // initially clearing the array for new result set
@@ -1637,14 +1637,14 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
         }
         new AsyncTask<Void, Void, Void>() {
             @Override
-            protected Void doInBackground(Void... params) {
+            protected Void doInBackground(final Void... params) {
                 Collections.sort(LIST_ELEMENTS, new FileListSorter(dsort, sortby, asc));
                 return null;
             }
 
             @Override
-            public void onPostExecute(Void c) {
-                reloadListElements(true, true, !IS_LIST);// TODO: 7/7/2017 this is really inneffient, use RecycleAdapter's createHeaders()
+            public void onPostExecute(final Void c) {
+                reloadListElements(true, true, !IS_LIST); // TODO: 7/7/2017 this is really inneffient, use RecycleAdapter's createHeaders()
                 getMainActivity().getAppbar().getBottomBar().setPathText("");
                 getMainActivity().getAppbar().getBottomBar().setFullPathText(getString(R.string.searchresults, query));
             }
@@ -1706,7 +1706,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
     }
 
     @Override
-    public void changePath(String path) {
+    public void changePath(final String path) {
         loadlist(path, false, openMode);
     }
 
@@ -1720,7 +1720,7 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
         return R.drawable.ic_root_white_24px;
     }
 
-    private boolean getBoolean(String key) {
+    private boolean getBoolean(final String key) {
         return getMainActivity().getBoolean(key);
     }
 

@@ -94,8 +94,8 @@ class AES256SHA256Decoder extends CoderBase {
                     isInitialized = true;
                     return cipherInputStream;
                 } catch (final GeneralSecurityException generalSecurityException) {
-                    throw new IOException("Decryption error " +
-                                          "(do you have the JCE Unlimited Strength Jurisdiction Policy Files installed?)",
+                    throw new IOException("Decryption error "
+                                          + "(do you have the JCE Unlimited Strength Jurisdiction Policy Files installed?)",
                                           generalSecurityException);
                 }
             }

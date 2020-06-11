@@ -17,19 +17,19 @@ public class ApkImageModelLoader implements ModelLoader<String, Drawable> {
 
     private PackageManager packageManager;
 
-    public ApkImageModelLoader(PackageManager packageManager) {
+    public ApkImageModelLoader(final PackageManager packageManager) {
         this.packageManager = packageManager;
     }
 
     @Nullable
     @Override
-    public LoadData<Drawable> buildLoadData(String s, int width, int height, Options options) {
+    public LoadData<Drawable> buildLoadData(final String s, final int width, final int height, final Options options) {
         return new LoadData<>(new ObjectKey(s), new ApkImageDataFetcher(packageManager, s));
     }
 
     @Override
-    public boolean handles(String s) {
-        return s.substring(s.length()-4, s.length()).toLowerCase().equals(".apk");
+    public boolean handles(final String s) {
+        return s.substring(s.length() - 4, s.length()).toLowerCase().equals(".apk");
     }
 
 }

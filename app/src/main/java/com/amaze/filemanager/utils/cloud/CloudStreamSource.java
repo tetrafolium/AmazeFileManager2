@@ -15,7 +15,7 @@ public class CloudStreamSource extends RandomAccessStream {
     protected String name;
     private InputStream inputStream;
 
-    public CloudStreamSource(String fileName, long length, InputStream inputStream) {
+    public CloudStreamSource(final String fileName, final long length, final InputStream inputStream) {
         super(length);
 
         fp = 0;
@@ -50,7 +50,7 @@ public class CloudStreamSource extends RandomAccessStream {
      */
     public void open() throws IOException {
         try {
-            if(fp>0)
+            if (fp > 0)
                 inputStream.skip(fp);
         } catch (Exception e) {
             throw new IOException(e);
@@ -60,12 +60,12 @@ public class CloudStreamSource extends RandomAccessStream {
     @Override
     public int read() throws IOException {
         int read = inputStream.read();
-        if(read != -1) fp++;
+        if (read != -1) fp++;
         return read;
     }
 
     @Override
-    public int read(byte[] bytes, int start, int offs) throws IOException {
+    public int read(final byte[] bytes, final int start, final int offs) throws IOException {
         int read =  inputStream.read(bytes, start, offs);
         fp += read;
         return read;
@@ -85,8 +85,8 @@ public class CloudStreamSource extends RandomAccessStream {
     }
 
     @Override
-    public void moveTo(long position) {
-        if(position < 0 || length() < position) {
+    public void moveTo(final long position) {
+        if (position < 0 || length() < position) {
             throw new IllegalArgumentException("Position out of the bounds of the file!");
         }
 

@@ -27,12 +27,12 @@ class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> {
     private ArrayList<Drawable> drawables;
     private Context context;
 
-    void updateMatDialog(MaterialDialog b) {
+    void updateMatDialog(final MaterialDialog b) {
         this.dialog = b;
     }
 
-    ShareAdapter(Context context, ArrayList<Intent> intents, ArrayList<String> labels,
-                 ArrayList<Drawable> arrayList1) {
+    ShareAdapter(final Context context, final ArrayList<Intent> intents, final ArrayList<String> labels,
+                 final ArrayList<Drawable> arrayList1) {
         items = new ArrayList<>(intents);
         this.context = context;
         this.labels = labels;
@@ -40,14 +40,14 @@ class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> {
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.simplerow, parent, false);
 
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.render(position);
     }
 
@@ -57,7 +57,7 @@ class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> {
         private TextView textView;
         private ImageView imageView;
 
-        ViewHolder(View view) {
+        ViewHolder(final View view) {
             super(view);
 
             rootView = view;
@@ -79,7 +79,7 @@ class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> {
     }
 
     @Override
-    public long getItemId(int position) {
+    public long getItemId(final int position) {
         return position;
     }
 

@@ -49,8 +49,8 @@ public class GzipHelperTask extends CompressedHelperTask {
     private WeakReference<Context> context;
     private String filePath, relativePath;
 
-    public GzipHelperTask(Context context, String filePath, String relativePath, boolean goBack,
-                          OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> l) {
+    public GzipHelperTask(final Context context, final String filePath, final String relativePath, final boolean goBack,
+                          final OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> l) {
         super(goBack, l);
         this.context = new WeakReference<>(context);
         this.filePath = filePath;
@@ -58,7 +58,7 @@ public class GzipHelperTask extends CompressedHelperTask {
     }
 
     @Override
-    void addElements(@NonNull ArrayList<CompressedObjectParcelable> elements) throws ArchiveException {
+    void addElements(final @NonNull ArrayList<CompressedObjectParcelable> elements) throws ArchiveException {
         TarArchiveInputStream tarInputStream = null;
         try {
             tarInputStream = new TarArchiveInputStream(

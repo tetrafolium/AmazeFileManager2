@@ -74,7 +74,7 @@ public class TextEditorActivityTest {
         assertEquals(fileContents, text.getText().toString().trim());
     }
 
-    private void generateActivity(Intent intent) {
+    private void generateActivity(final Intent intent) {
         ActivityController<TextEditorActivity> controller = Robolectric.buildActivity(TextEditorActivity.class, intent)
                 .create().start().visible();
 
@@ -89,7 +89,7 @@ public class TextEditorActivityTest {
 
         file.createNewFile();
 
-        if(!file.canWrite()) file.setWritable(true);
+        if (!file.canWrite()) file.setWritable(true);
         assertThat(file.canWrite(), is(true));
 
         PrintWriter out = new PrintWriter(file);
@@ -100,7 +100,7 @@ public class TextEditorActivityTest {
         return file;
     }
 
-    private Uri getFileContentUri(Context context, File file) {
+    private Uri getFileContentUri(final Context context, final File file) {
         fail("Cannot create content URI");
         return null;
     }

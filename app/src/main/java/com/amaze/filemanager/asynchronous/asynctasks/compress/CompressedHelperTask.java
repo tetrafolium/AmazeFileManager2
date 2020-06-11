@@ -40,13 +40,13 @@ public abstract class CompressedHelperTask extends AsyncTask<Void, IOException, 
     private boolean createBackItem;
     private OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish;
 
-    CompressedHelperTask(boolean goBack, OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> l) {
+    CompressedHelperTask(final boolean goBack, final OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> l) {
         createBackItem = goBack;
         onFinish = l;
     }
 
     @Override
-    protected final AsyncTaskResult<ArrayList<CompressedObjectParcelable>> doInBackground(Void... voids) {
+    protected final AsyncTaskResult<ArrayList<CompressedObjectParcelable>> doInBackground(final Void... voids) {
         AsyncTaskResult<ArrayList<CompressedObjectParcelable>> result = null;
         ArrayList<CompressedObjectParcelable> elements = new ArrayList<>();
         if (createBackItem) elements.add(0, new CompressedObjectParcelable());
@@ -62,7 +62,7 @@ public abstract class CompressedHelperTask extends AsyncTask<Void, IOException, 
     }
 
     @Override
-    protected final void onPostExecute(AsyncTaskResult<ArrayList<CompressedObjectParcelable>> zipEntries) {
+    protected final void onPostExecute(final AsyncTaskResult<ArrayList<CompressedObjectParcelable>> zipEntries) {
         super.onPostExecute(zipEntries);
         onFinish.onAsyncTaskFinished(zipEntries);
     }

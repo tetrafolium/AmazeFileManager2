@@ -83,22 +83,22 @@ public class PemToKeyPairTask extends AsyncTask<Void, IOException, KeyPair>
 
     private final AsyncTaskResult.Callback<KeyPair> callback;
 
-    public PemToKeyPairTask(@NonNull InputStream pemFile, AsyncTaskResult.Callback<KeyPair> callback) throws IOException {
+    public PemToKeyPairTask(final @NonNull InputStream pemFile, final AsyncTaskResult.Callback<KeyPair> callback) throws IOException {
         this(IOUtils.readFully(pemFile).toByteArray(), callback);
     }
 
-    public PemToKeyPairTask(@NonNull String pemContent, AsyncTaskResult.Callback<KeyPair> callback) {
+    public PemToKeyPairTask(final @NonNull String pemContent, final AsyncTaskResult.Callback<KeyPair> callback) {
         this(pemContent.getBytes(), callback);
     }
 
-    private PemToKeyPairTask(@NonNull byte[] pemContent, AsyncTaskResult.Callback<KeyPair> callback) {
+    private PemToKeyPairTask(final @NonNull byte[] pemContent, final AsyncTaskResult.Callback<KeyPair> callback) {
         this.pemFile = pemContent;
         this.callback = callback;
     }
 
     @Override
-    protected KeyPair doInBackground(Void... voids) {
-        while(true) {
+    protected KeyPair doInBackground(final Void... voids) {
+        while (true) {
             if (isCancelled()) return null;
             if (paused) continue;
 
@@ -120,7 +120,7 @@ public class PemToKeyPairTask extends AsyncTask<Void, IOException, KeyPair>
     }
 
     @Override
-    protected void onProgressUpdate(IOException... values) {
+    protected void onProgressUpdate(final IOException... values) {
         super.onProgressUpdate(values);
         if (values.length < 1) return;
 
@@ -138,12 +138,12 @@ public class PemToKeyPairTask extends AsyncTask<Void, IOException, KeyPair>
         .onPositive(((dialog, which) -> {
             this.passwordFinder = new PasswordFinder() {
                 @Override
-                public char[] reqPassword(Resource<?> resource) {
+                public char[] reqPassword(final Resource<?> resource) {
                     return textfield.getText().toString().toCharArray();
                 }
 
                 @Override
-                public boolean shouldRetry(Resource<?> resource) {
+                public boolean shouldRetry(final Resource<?> resource) {
                     return false;
                 }
             };
@@ -173,20 +173,20 @@ public class PemToKeyPairTask extends AsyncTask<Void, IOException, KeyPair>
     }
 
     @Override
-    protected void onPostExecute(KeyPair result) {
-        if(callback != null) {
+    protected void onPostExecute(final KeyPair result) {
+        if (callback != null) {
             callback.onResult(result);
         }
     }
 
-    private void toastOnParseError(IOException result) {
+    private void toastOnParseError(final IOException result) {
         Toast.makeText(AppConfig.getInstance().getMainActivityContext(),
                        AppConfig.getInstance().getResources().getString(R.string.ssh_pem_key_parse_error,
                                result.getLocalizedMessage()), Toast.LENGTH_LONG).show();
     }
 
     private abstract class PemToKeyPairConverter {
-        KeyPair convert(String source) {
+        KeyPair convert(final String source) {
             try {
                 return throwingConvert(source);
             } catch (Exception e) {
@@ -200,7 +200,7 @@ public class PemToKeyPairTask extends AsyncTask<Void, IOException, KeyPair>
 
     private class JcaPemToKeyPairConverter extends PemToKeyPairConverter {
         @Override
-        public KeyPair throwingConvert(String source) throws Exception {
+        public KeyPair throwingConvert(final String source) throws Exception {
             PEMParser pemParser = new PEMParser(new StringReader(source));
             PEMKeyPair keyPair = (PEMKeyPair) pemParser.readObject();
             JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
@@ -210,7 +210,7 @@ public class PemToKeyPairTask extends AsyncTask<Void, IOException, KeyPair>
 
     private class OpenSshPemToKeyPairConverter extends PemToKeyPairConverter {
         @Override
-        public KeyPair throwingConvert(String source) throws Exception {
+        public KeyPair throwingConvert(final String source) throws Exception {
             OpenSSHKeyFile converter = new OpenSSHKeyFile();
             converter.init(new StringReader(source), passwordFinder);
             return new KeyPair(converter.getPublic(), converter.getPrivate());
@@ -219,7 +219,7 @@ public class PemToKeyPairTask extends AsyncTask<Void, IOException, KeyPair>
 
     private class OpenSshV1PemToKeyPairConverter extends PemToKeyPairConverter {
         @Override
-        public KeyPair throwingConvert(String source) throws Exception {
+        public KeyPair throwingConvert(final String source) throws Exception {
             OpenSSHKeyV1KeyFile converter = new OpenSSHKeyV1KeyFile();
             converter.init(new StringReader(source), passwordFinder);
             return new KeyPair(converter.getPublic(), converter.getPrivate());
@@ -228,7 +228,7 @@ public class PemToKeyPairTask extends AsyncTask<Void, IOException, KeyPair>
 
     private class PuttyPrivateKeyToKeyPairConverter extends PemToKeyPairConverter {
         @Override
-        public KeyPair throwingConvert(String source) throws Exception {
+        public KeyPair throwingConvert(final String source) throws Exception {
             PuTTYKeyFile converter = new PuTTYKeyFile();
             converter.init(new StringReader(source), passwordFinder);
             return new KeyPair(converter.getPublic(), converter.getPrivate());

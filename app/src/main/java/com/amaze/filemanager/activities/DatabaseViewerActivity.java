@@ -76,7 +76,7 @@ public class DatabaseViewerActivity extends ThemedActivity {
     public SQLiteDatabase sqLiteDatabase;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -143,7 +143,7 @@ public class DatabaseViewerActivity extends ThemedActivity {
 
     }
 
-    private ArrayList<String> getDbTableNames(Cursor c) {
+    private ArrayList<String> getDbTableNames(final Cursor c) {
         ArrayList<String> result = new ArrayList<>();
         for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
             for (int i = 0; i < c.getColumnCount(); i++) {
@@ -197,13 +197,13 @@ public class DatabaseViewerActivity extends ThemedActivity {
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
+    public boolean onPrepareOptionsMenu(final Menu menu) {
         toolbar.setTitle(pathFile.getName());
         return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             toolbar.setTitle(pathFile.getName());

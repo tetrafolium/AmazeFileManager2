@@ -20,11 +20,11 @@ public class ShadowSmbFile {
     private File file = null;
 
     @Implementation
-    public void __constructor__(URL url, NtlmPasswordAuthentication auth) {
+    public void __constructor__(final URL url, final NtlmPasswordAuthentication auth) {
         //intentionally empty
     }
 
-    public void setFile(File file) {
+    public void setFile(final File file) {
         this.file = file;
     }
 

@@ -55,22 +55,22 @@ public class CloudUtil {
     /**
      * @deprecated use getCloudFiles()
      */
-    public static ArrayList<HybridFileParcelable> listFiles(String path, CloudStorage cloudStorage,
-            OpenMode openMode) throws CloudPluginException {
+    public static ArrayList<HybridFileParcelable> listFiles(final String path, final CloudStorage cloudStorage,
+            final OpenMode openMode) throws CloudPluginException {
         final ArrayList<HybridFileParcelable> baseFiles = new ArrayList<>();
         getCloudFiles(path, cloudStorage, openMode, baseFiles::add);
         return baseFiles;
     }
 
-    public static void getCloudFiles(String path, CloudStorage cloudStorage, OpenMode openMode,
-                                     OnFileFound fileFoundCallback) throws CloudPluginException {
+    public static void getCloudFiles(final String path, final CloudStorage cloudStorage, final OpenMode openMode,
+                                     final OnFileFound fileFoundCallback) throws CloudPluginException {
         String strippedPath = stripPath(openMode, path);
         try {
             for (CloudMetaData cloudMetaData : cloudStorage.getChildren(strippedPath)) {
                 HybridFileParcelable baseFile = new HybridFileParcelable(
                     path + "/" + cloudMetaData.getName(),
                     "",
-                    (cloudMetaData.getModifiedAt() == null) ? 0l : cloudMetaData.getModifiedAt(),
+                    (cloudMetaData.getModifiedAt() == null) ? 0L : cloudMetaData.getModifiedAt(),
                     cloudMetaData.getSize(),
                     cloudMetaData.getFolder());
                 baseFile.setName(cloudMetaData.getName());
@@ -86,7 +86,7 @@ public class CloudUtil {
     /**
      * Strips down the cloud path to remove any prefix
      */
-    public static String stripPath(OpenMode openMode, String path) {
+    public static String stripPath(final OpenMode openMode, final String path) {
         String strippedPath = path;
         switch (openMode) {
         case DROPBOX:
@@ -142,7 +142,7 @@ public class CloudUtil {
                         File file = new File(Uri.parse(CloudUtil.stripPath(serviceType, baseFile.getPath())).getPath());
                         Uri uri = Uri.parse(CloudStreamer.URL + Uri.fromFile(file).getEncodedPath());
                         Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setDataAndType(uri, MimeTypes.getMimeType(baseFile.getPath(),baseFile.isDirectory()));
+                        i.setDataAndType(uri, MimeTypes.getMimeType(baseFile.getPath(), baseFile.isDirectory()));
                         PackageManager packageManager = activity.getPackageManager();
                         List<ResolveInfo> resInfos = packageManager.queryIntentActivities(i, 0);
                         if (resInfos != null && resInfos.size() > 0)
@@ -169,7 +169,7 @@ public class CloudUtil {
      * @param path the path of item in drawer
      * @param mainActivity reference to main activity to fire callbacks to delete/add connection
      */
-    public static void checkToken(String path, final MainActivity mainActivity) {
+    public static void checkToken(final String path, final MainActivity mainActivity) {
 
         new AsyncTask<String, Void, Boolean>() {
 
@@ -177,7 +177,7 @@ public class CloudUtil {
             private DataUtils dataUtils = DataUtils.getInstance();
 
             @Override
-            protected Boolean doInBackground(String... params) {
+            protected Boolean doInBackground(final String... params) {
                 boolean isTokenValid = true;
                 String path = params[0];
 
@@ -234,7 +234,7 @@ public class CloudUtil {
             }
 
             @Override
-            protected void onPostExecute(Boolean aBoolean) {
+            protected void onPostExecute(final Boolean aBoolean) {
                 super.onPostExecute(aBoolean);
 
                 if (!aBoolean) {
@@ -254,7 +254,7 @@ public class CloudUtil {
      * @param path
      * @return
      */
-    public static InputStream getThumbnailInputStreamForCloud(Context context, String path) {
+    public static InputStream getThumbnailInputStreamForCloud(final Context context, final String path) {
         InputStream inputStream;
         HybridFile hybridFile = new HybridFile(OpenMode.UNKNOWN, path);
         hybridFile.generateMode(context);
@@ -266,14 +266,13 @@ public class CloudUtil {
                 @Override
                 public InputStream execute(final SFTPClient client) throws IOException {
                     final RemoteFile rf = client.open(SshClientUtils.extractRemotePathFrom(hybridFile.getPath()));
-                    return rf. new RemoteFileInputStream() {
+                    return rf.new RemoteFileInputStream() {
                         @Override
                         public void close() throws IOException {
                             try
                             {
                                 super.close();
-                            }
-                            finally
+                            } finally
                             {
                                 rf.close();
                                 client.close();

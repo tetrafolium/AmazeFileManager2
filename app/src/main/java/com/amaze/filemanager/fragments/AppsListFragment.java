@@ -66,7 +66,7 @@ public class AppsListFragment extends ListFragment implements LoaderManager.Load
     private AppsAdapterPreloadModel modelProvider;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         utilsProvider = ((BasicActivity) getActivity()).getUtilsProvider();
 
@@ -74,7 +74,7 @@ public class AppsListFragment extends ListFragment implements LoaderManager.Load
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setRetainInstance(true);
         MainActivity mainActivity = (MainActivity) getActivity();
@@ -114,7 +114,7 @@ public class AppsListFragment extends ListFragment implements LoaderManager.Load
 
 
     @Override
-    public void onSaveInstanceState(Bundle b) {
+    public void onSaveInstanceState(final Bundle b) {
         super.onSaveInstanceState(b);
 
         if (vl != null) {
@@ -126,7 +126,7 @@ public class AppsListFragment extends ListFragment implements LoaderManager.Load
         }
     }
 
-    public boolean unin(String pkg) {
+    public boolean unin(final String pkg) {
         try {
             Intent intent = new Intent(Intent.ACTION_DELETE);
             intent.setData(Uri.parse("package:" + pkg));
@@ -158,12 +158,12 @@ public class AppsListFragment extends ListFragment implements LoaderManager.Load
     }
 
     @Override
-    public Loader<AppListLoader.AppsDataPair> onCreateLoader(int id, Bundle args) {
+    public Loader<AppListLoader.AppsDataPair> onCreateLoader(final int id, final Bundle args) {
         return new AppListLoader(getContext(), sortby, asc);
     }
 
     @Override
-    public void onLoadFinished(Loader<AppListLoader.AppsDataPair> loader, AppListLoader.AppsDataPair data) {
+    public void onLoadFinished(final Loader<AppListLoader.AppsDataPair> loader, final AppListLoader.AppsDataPair data) {
         // set new data to adapter
         adapter.setData(data.first);
         modelProvider.setItemList(data.second);
@@ -179,7 +179,7 @@ public class AppsListFragment extends ListFragment implements LoaderManager.Load
     }
 
     @Override
-    public void onLoaderReset(Loader<AppListLoader.AppsDataPair> loader) {
+    public void onLoaderReset(final Loader<AppListLoader.AppsDataPair> loader) {
         adapter.setData(null);
     }
 

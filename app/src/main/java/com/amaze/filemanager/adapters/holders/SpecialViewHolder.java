@@ -23,8 +23,8 @@ public class SpecialViewHolder extends RecyclerView.ViewHolder {
     public final TextView txtTitle;
     public final int type;
 
-    public SpecialViewHolder(Context c, View view, UtilitiesProvider utilsProvider,
-                             int type) {
+    public SpecialViewHolder(final Context c, final View view, final UtilitiesProvider utilsProvider,
+                             final int type) {
         super(view);
 
         this.type = type;

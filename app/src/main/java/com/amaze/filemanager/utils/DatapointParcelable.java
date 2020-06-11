@@ -53,7 +53,7 @@ public class DatapointParcelable implements Parcelable {
      * @param totalSize total size of all source files combined
      * @param move allows changing the text from "Copying" to "Moving" in case of copy
      */
-    public DatapointParcelable(String name, int amountOfSourceFiles, long totalSize, boolean move) {
+    public DatapointParcelable(final String name, final int amountOfSourceFiles, final long totalSize, final boolean move) {
         this.name = name;
         sourceFiles = amountOfSourceFiles;
         this.totalSize = totalSize;
@@ -75,8 +75,8 @@ public class DatapointParcelable implements Parcelable {
      * @param speedRaw bytes being copied per sec
      * @param completed if the operation has finished
      */
-    public DatapointParcelable(String name, int amountOfSourceFiles, int sourceProgress,
-                               long totalSize, long byteProgress, long speedRaw, boolean completed) {
+    public DatapointParcelable(final String name, final int amountOfSourceFiles, final int sourceProgress,
+                               final long totalSize, final long byteProgress, final long speedRaw, final boolean completed) {
         this.name = name;
         sourceFiles = amountOfSourceFiles;
         this.sourceProgress = sourceProgress;
@@ -101,9 +101,9 @@ public class DatapointParcelable implements Parcelable {
      * @param move allows changing the text from "Copying" to "Moving" in case of copy
      * @param completed if the operation has finished
      */
-    public DatapointParcelable(String name, int amountOfSourceFiles, int sourceProgress,
-                               long totalSize, long byteProgress, long speedRaw, boolean move,
-                               boolean completed) {
+    public DatapointParcelable(final String name, final int amountOfSourceFiles, final int sourceProgress,
+                               final long totalSize, final long byteProgress, final long speedRaw, final boolean move,
+                               final boolean completed) {
         this.name = name;
         sourceFiles = amountOfSourceFiles;
         this.sourceProgress = sourceProgress;
@@ -114,7 +114,7 @@ public class DatapointParcelable implements Parcelable {
         this.completed = completed;
     }
 
-    protected DatapointParcelable(Parcel in) {
+    protected DatapointParcelable(final Parcel in) {
         sourceProgress = in.readInt();
         byteProgress = in.readLong();
         sourceFiles = in.readInt();
@@ -127,12 +127,12 @@ public class DatapointParcelable implements Parcelable {
 
     public static final Creator<DatapointParcelable> CREATOR = new Creator<DatapointParcelable>() {
         @Override
-        public DatapointParcelable createFromParcel(Parcel in) {
+        public DatapointParcelable createFromParcel(final Parcel in) {
             return new DatapointParcelable(in);
         }
 
         @Override
-        public DatapointParcelable[] newArray(int size) {
+        public DatapointParcelable[] newArray(final int size) {
             return new DatapointParcelable[size];
         }
     };
@@ -143,7 +143,7 @@ public class DatapointParcelable implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeInt(sourceProgress);
         dest.writeLong(byteProgress);
         dest.writeInt(sourceFiles);

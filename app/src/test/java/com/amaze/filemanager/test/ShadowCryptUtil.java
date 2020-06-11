@@ -38,7 +38,7 @@ public class ShadowCryptUtil {
      * Method handles encryption of plain text on various APIs
      */
     @Implementation
-    public static String encryptPassword(Context context, String plainText) throws GeneralSecurityException, IOException {
+    public static String encryptPassword(final Context context, final String plainText) throws GeneralSecurityException, IOException {
         return aesEncryptPassword(plainText);
     }
 
@@ -46,14 +46,14 @@ public class ShadowCryptUtil {
      * Method handles decryption of cipher text on various APIs
      */
     @Implementation
-    public static String decryptPassword(Context context, String cipherText) throws GeneralSecurityException, IOException {
+    public static String decryptPassword(final Context context, final String cipherText) throws GeneralSecurityException, IOException {
         return aesDecryptPassword(cipherText);
     }
 
     /**
      * Helper method to encrypt plain text password
      */
-    private static String aesEncryptPassword(String plainTextPassword)
+    private static String aesEncryptPassword(final String plainTextPassword)
     throws GeneralSecurityException {
 
         Cipher cipher = Cipher.getInstance(ALGO_AES, "BC");
@@ -67,7 +67,7 @@ public class ShadowCryptUtil {
     /**
      * Helper method to decrypt cipher text password
      */
-    private static String aesDecryptPassword(String cipherPassword) throws GeneralSecurityException {
+    private static String aesDecryptPassword(final String cipherPassword) throws GeneralSecurityException {
 
         Cipher cipher = Cipher.getInstance(ALGO_AES, "BC");
         GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(128, IV.getBytes());

@@ -39,16 +39,16 @@ import java.util.ArrayList;
 
 public class SevenZipExtractor extends Extractor {
 
-    public SevenZipExtractor(@NonNull Context context, @NonNull String filePath, @NonNull String outputPath, @NonNull OnUpdate listener) {
+    public SevenZipExtractor(final @NonNull Context context, final @NonNull String filePath, final @NonNull String outputPath, final @NonNull OnUpdate listener) {
         super(context, filePath, outputPath, listener);
     }
 
     @Override
-    protected void extractWithFilter(@NonNull Filter filter) throws IOException {
+    protected void extractWithFilter(final @NonNull Filter filter) throws IOException {
         long totalBytes = 0;
-        SevenZFile sevenzFile = (ArchivePasswordCache.getInstance().containsKey(filePath)) ?
-                                new SevenZFile(new File(filePath), ArchivePasswordCache.getInstance().get(filePath).toCharArray()) :
-                                new SevenZFile(new File(filePath));
+        SevenZFile sevenzFile = (ArchivePasswordCache.getInstance().containsKey(filePath))
+                                ? new SevenZFile(new File(filePath), ArchivePasswordCache.getInstance().get(filePath).toCharArray())
+                                : new SevenZFile(new File(filePath));
 
         ArrayList<SevenZArchiveEntry> arrayList = new ArrayList<>();
 
@@ -77,7 +77,7 @@ public class SevenZipExtractor extends Extractor {
         listener.onFinish();
     }
 
-    private void extractEntry(@NonNull final Context context, SevenZFile sevenzFile, SevenZArchiveEntry entry, String outputDir)
+    private void extractEntry(@NonNull final Context context, final SevenZFile sevenzFile, final SevenZArchiveEntry entry, final String outputDir)
     throws IOException {
         String name = entry.getName();
 
@@ -94,16 +94,16 @@ public class SevenZipExtractor extends Extractor {
             FileUtil.getOutputStream(outputFile, context));
 
         byte[] content = new byte[GenericCopyUtil.DEFAULT_BUFFER_SIZE];
-        long progress=0;
+        long progress = 0;
         try {
-            while (progress<entry.getSize()) {
+            while (progress < entry.getSize()) {
                 int length;
-                int bytesLeft = Long.valueOf(entry.getSize()-progress).intValue();
+                int bytesLeft = Long.valueOf(entry.getSize() - progress).intValue();
                 length = sevenzFile.read(content, 0,
-                                         bytesLeft>GenericCopyUtil.DEFAULT_BUFFER_SIZE ? GenericCopyUtil.DEFAULT_BUFFER_SIZE : bytesLeft);
+                                         bytesLeft > GenericCopyUtil.DEFAULT_BUFFER_SIZE ? GenericCopyUtil.DEFAULT_BUFFER_SIZE : bytesLeft);
                 outputStream.write(content, 0, length);
-                ServiceWatcherUtil.position+=length;
-                progress+=length;
+                ServiceWatcherUtil.position += length;
+                progress += length;
             }
         } finally {
             outputStream.close();

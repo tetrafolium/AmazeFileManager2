@@ -46,8 +46,8 @@ public class ItemPopupMenu extends PopupMenu implements PopupMenu.OnMenuItemClic
     private LayoutElementParcelable rowItem;
     private int accentColor;
 
-    public ItemPopupMenu(Context c, MainActivity ma, UtilitiesProvider up, MainFragment mainFragment,
-                         LayoutElementParcelable ri, View anchor, SharedPreferences sharedPreferences) {
+    public ItemPopupMenu(final Context c, final MainActivity ma, final UtilitiesProvider up, final MainFragment mainFragment,
+                         final LayoutElementParcelable ri, final View anchor, final SharedPreferences sharedPreferences) {
         super(c, anchor);
 
         context = c;
@@ -63,7 +63,7 @@ public class ItemPopupMenu extends PopupMenu implements PopupMenu.OnMenuItemClic
 
 
     @Override
-    public boolean onMenuItemClick(MenuItem item) {
+    public boolean onMenuItemClick(final MenuItem item) {
         switch (item.getItemId()) {
         case R.id.about:
             GeneralDialogCreation.showPropertiesDialogWithPermissions((rowItem).generateBaseFile(),
@@ -101,7 +101,7 @@ public class ItemPopupMenu extends PopupMenu implements PopupMenu.OnMenuItemClic
             return true;
         case R.id.cpy:
         case R.id.cut: {
-            int op = item.getItemId() == R.id.cpy? PasteHelper.OPERATION_COPY:PasteHelper.OPERATION_CUT;
+            int op = item.getItemId() == R.id.cpy ? PasteHelper.OPERATION_COPY : PasteHelper.OPERATION_CUT;
             PasteHelper pasteHelper = new PasteHelper(op, new HybridFileParcelable[] {rowItem.generateBaseFile()});
             mainFragment.getMainActivity().setPaste(pasteHelper);
             return true;
@@ -137,11 +137,11 @@ public class ItemPopupMenu extends PopupMenu implements PopupMenu.OnMenuItemClic
             final EncryptDecryptUtils.EncryptButtonCallbackInterface encryptButtonCallbackInterfaceAuthenticate =
             new EncryptDecryptUtils.EncryptButtonCallbackInterface() {
                 @Override
-                public void onButtonPressed(Intent intent) {
+                public void onButtonPressed(final Intent intent) {
                 }
 
                 @Override
-                public void onButtonPressed(Intent intent, String password) throws GeneralSecurityException, IOException {
+                public void onButtonPressed(final Intent intent, final String password) throws GeneralSecurityException, IOException {
                     EncryptDecryptUtils.startEncryption(context,
                                                         rowItem.generateBaseFile().getPath(), password, intent);
                 }
@@ -151,7 +151,7 @@ public class ItemPopupMenu extends PopupMenu implements PopupMenu.OnMenuItemClic
             new EncryptDecryptUtils.EncryptButtonCallbackInterface() {
 
                 @Override
-                public void onButtonPressed(Intent intent) throws GeneralSecurityException, IOException {
+                public void onButtonPressed(final Intent intent) throws GeneralSecurityException, IOException {
                     // check if a master password or fingerprint is set
                     if (!preferences.getString(PreferencesConstants.PREFERENCE_CRYPT_MASTER_PASSWORD,
                                                PreferencesConstants.PREFERENCE_CRYPT_MASTER_PASSWORD_DEFAULT).equals("")) {
@@ -170,7 +170,7 @@ public class ItemPopupMenu extends PopupMenu implements PopupMenu.OnMenuItemClic
                 }
 
                 @Override
-                public void onButtonPressed(Intent intent, String password) {
+                public void onButtonPressed(final Intent intent, final String password) {
                 }
             };
 

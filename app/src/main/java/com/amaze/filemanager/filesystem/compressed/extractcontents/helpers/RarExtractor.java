@@ -43,12 +43,12 @@ import java.util.ArrayList;
 
 public class RarExtractor extends Extractor {
 
-    public RarExtractor(@NonNull Context context, @NonNull String filePath, @NonNull String outputPath, @NonNull OnUpdate listener) {
+    public RarExtractor(final @NonNull Context context, final @NonNull String filePath, final @NonNull String outputPath, final @NonNull OnUpdate listener) {
         super(context, filePath, outputPath, listener);
     }
 
     @Override
-    protected void extractWithFilter(@NonNull Filter filter) throws IOException {
+    protected void extractWithFilter(final @NonNull Filter filter) throws IOException {
         try {
             long totalBytes = 0;
             Archive rarFile = new Archive(new File(filePath));
@@ -56,7 +56,7 @@ public class RarExtractor extends Extractor {
 
             // iterating archive elements to find file names that are to be extracted
             for (FileHeader header : rarFile.getFileHeaders()) {
-                if(CompressedHelper.isEntryPathValid(header.getFileNameString())) {
+                if (CompressedHelper.isEntryPathValid(header.getFileNameString())) {
                     if (filter.shouldExtract(header.getFileNameString(), header.isDirectory())) {
                         // header to be extracted is at least the entry path (may be more, when it is a directory)
                         arrayList.add(header);
@@ -81,7 +81,7 @@ public class RarExtractor extends Extractor {
         }
     }
 
-    private void extractEntry(@NonNull final Context context, Archive zipFile, FileHeader entry, String outputDir)
+    private void extractEntry(@NonNull final Context context, final Archive zipFile, final FileHeader entry, final String outputDir)
     throws RarException, IOException {
         String name = fixEntryName(entry.getFileNameString()).replaceAll("\\\\", CompressedHelper.SEPARATOR);
         File outputFile = new File(outputDir, name);
@@ -98,7 +98,7 @@ public class RarExtractor extends Extractor {
         if (!outputFile.getParentFile().exists()) {
             FileUtil.mkdir(outputFile.getParentFile(), context);
         }
-        //	Log.i("Amaze", "Extracting: " + entry);
+        //      Log.i("Amaze", "Extracting: " + entry);
         BufferedInputStream inputStream = new BufferedInputStream(
             zipFile.getInputStream(entry));
         BufferedOutputStream outputStream = new BufferedOutputStream(

@@ -76,7 +76,7 @@ public class PreferencesActivity extends ThemedActivity {
     private Parcelable[] fragmentsListViewParcelables = new Parcelable[NUMBER_OF_PREFERENCES];
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.prefsfrag);
 
@@ -89,7 +89,7 @@ public class PreferencesActivity extends ThemedActivity {
 
         if (savedInstanceState != null) {
             selectedItem = savedInstanceState.getInt(KEY_CURRENT_FRAG_OPEN, 0);
-        } else if(getIntent().getExtras() != null) {
+        } else if (getIntent().getExtras() != null) {
             selectItem(getIntent().getExtras().getInt(KEY_CURRENT_FRAG_OPEN));
         } else {
             selectItem(0);
@@ -97,15 +97,15 @@ public class PreferencesActivity extends ThemedActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(KEY_CURRENT_FRAG_OPEN, selectedItem);
     }
 
     @Override
     public void onBackPressed() {
-        if(currentFragment instanceof ColorPref) {
-            if(((ColorPref) currentFragment).onBackPressed()) return;
+        if (currentFragment instanceof ColorPref) {
+            if (((ColorPref) currentFragment).onBackPressed()) return;
         }
 
         if (selectedItem != START_PREFERENCE && restartActivity) {
@@ -122,10 +122,10 @@ public class PreferencesActivity extends ThemedActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
         case android.R.id.home:
-            if(currentFragment.onOptionsItemSelected(item)) return true;
+            if (currentFragment.onOptionsItemSelected(item)) return true;
 
             if (selectedItem != START_PREFERENCE && restartActivity) {
                 restartActivity(this);
@@ -161,14 +161,14 @@ public class PreferencesActivity extends ThemedActivity {
      *
      * We cannot save the Parcelable in the fragment because the fragment is destroyed.
      */
-    public void saveListViewState(int prefFragment, Parcelable listViewState) {
+    public void saveListViewState(final int prefFragment, final Parcelable listViewState) {
         fragmentsListViewParcelables[prefFragment] = listViewState;
     }
 
     /**
      * This is a hack see {@link PreferencesActivity#saveListViewState(int, Parcelable)}
      */
-    public Parcelable restoreListViewState(int prefFragment) {
+    public Parcelable restoreListViewState(final int prefFragment) {
         return fragmentsListViewParcelables[prefFragment];
     }
 
@@ -217,7 +217,7 @@ public class PreferencesActivity extends ThemedActivity {
             window.setStatusBarColor(tabStatusColor);
             if (colourednavigation) {
                 window.setNavigationBarColor(tabStatusColor);
-            } else if(window.getNavigationBarColor() != Color.BLACK) {
+            } else if (window.getNavigationBarColor() != Color.BLACK) {
                 window.setNavigationBarColor(Color.BLACK);
             }
         }
@@ -237,7 +237,7 @@ public class PreferencesActivity extends ThemedActivity {
         activity.overridePendingTransition(enter_anim, exit_anim);
         activity.finish();
         activity.overridePendingTransition(enter_anim, exit_anim);
-        if(selectedItem != START_PREFERENCE) {
+        if (selectedItem != START_PREFERENCE) {
             Intent i = activity.getIntent();
             i.putExtra(KEY_CURRENT_FRAG_OPEN, selectedItem);
         }
@@ -248,7 +248,7 @@ public class PreferencesActivity extends ThemedActivity {
      * When a Preference (that requires an independent fragment) is selected this is called.
      * @param item the Preference in question
      */
-    public void selectItem(int item) {
+    public void selectItem(final int item) {
         selectedItem = item;
         switch (item) {
         case START_PREFERENCE:
@@ -269,7 +269,7 @@ public class PreferencesActivity extends ThemedActivity {
         }
     }
 
-    private void loadPrefFragment(PreferenceFragment fragment, @StringRes int titleBarName) {
+    private void loadPrefFragment(final PreferenceFragment fragment, final @StringRes int titleBarName) {
         currentFragment = fragment;
 
         FragmentTransaction t = getFragmentManager().beginTransaction();

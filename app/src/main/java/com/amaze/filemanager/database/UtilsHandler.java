@@ -54,7 +54,7 @@ public class UtilsHandler extends SQLiteOpenHelper {
     private static final String COLUMN_HOST_PUBKEY = "pub_key";
     private static final String COLUMN_PRIVATE_KEY_NAME = "ssh_key_name";
     private static final String COLUMN_PRIVATE_KEY = "ssh_key";
-    private final String TEMP_TABLE_PREFIX ="temp_";
+    private final String TEMP_TABLE_PREFIX = "temp_";
 
     private String queryHistory = "CREATE TABLE IF NOT EXISTS " + TABLE_HISTORY + " ("
                                   + COLUMN_ID + " INTEGER PRIMARY KEY,"
@@ -97,13 +97,13 @@ public class UtilsHandler extends SQLiteOpenHelper {
                                             + COLUMN_PRIVATE_KEY + " TEXT"
                                             + ");";
 
-    public UtilsHandler(Context context) {
+    public UtilsHandler(final Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void onCreate(final SQLiteDatabase db) {
         db.execSQL(queryHistory);
         db.execSQL(queryHidden);
         db.execSQL(queryList);
@@ -114,8 +114,8 @@ public class UtilsHandler extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        switch(oldVersion) {
+    public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
+        switch (oldVersion) {
         case 1:
             db.execSQL(querySftp);
         case 2:
@@ -175,7 +175,7 @@ public class UtilsHandler extends SQLiteOpenHelper {
         SFTP
     }
 
-    public void saveToDatabase(OperationData operationData) {
+    public void saveToDatabase(final OperationData operationData) {
         AppConfig.runInBackground(() -> {
             switch (operationData.type) {
             case HIDDEN:
@@ -198,7 +198,7 @@ public class UtilsHandler extends SQLiteOpenHelper {
         });
     }
 
-    public void removeFromDatabase(OperationData operationData) {
+    public void removeFromDatabase(final OperationData operationData) {
         AppConfig.runInBackground(() -> {
             switch (operationData.type) {
             case HIDDEN:
@@ -238,13 +238,13 @@ public class UtilsHandler extends SQLiteOpenHelper {
         }
     }
 
-    public void addSsh(String name, String path, String hostKey, String sshKeyName, String sshKey) {
+    public void addSsh(final String name, final String path, final String hostKey, final String sshKeyName, final String sshKey) {
         SQLiteDatabase database = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME, name);
         values.put(COLUMN_PATH, path);
         values.put(COLUMN_HOST_PUBKEY, hostKey);
-        if(sshKey != null && !"".equals(sshKey))
+        if (sshKey != null && !"".equals(sshKey))
         {
             values.put(COLUMN_PRIVATE_KEY_NAME, sshKeyName);
             values.put(COLUMN_PRIVATE_KEY, sshKey);
@@ -253,15 +253,15 @@ public class UtilsHandler extends SQLiteOpenHelper {
         database.insert(getTableForOperation(Operation.SFTP), null, values);
     }
 
-    public void updateSsh(String connectionName, String oldConnectionName, String path,
-                          String sshKeyName, String sshKey) {
+    public void updateSsh(final String connectionName, final String oldConnectionName, final String path,
+                          final String sshKeyName, final String sshKey) {
 
         SQLiteDatabase database = getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME, connectionName);
         values.put(COLUMN_PATH, path);
-        if(sshKeyName != null && sshKey != null) {
+        if (sshKeyName != null && sshKey != null) {
             values.put(COLUMN_PRIVATE_KEY_NAME, sshKeyName);
             values.put(COLUMN_PRIVATE_KEY, sshKey);
         }
@@ -362,16 +362,16 @@ public class UtilsHandler extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
 
         Cursor cursor = sqLiteDatabase.query(getTableForOperation(Operation.SFTP),
-                                             new String[] {COLUMN_NAME,COLUMN_PATH},
+                                             new String[] {COLUMN_NAME, COLUMN_PATH},
                                              null, null, null, null, COLUMN_ID);
 
         boolean hasNext = cursor.moveToFirst();
         ArrayList<String[]> retval = new ArrayList<String[]>();
-        while(hasNext)
+        while (hasNext)
         {
             String path = SshClientUtils.decryptSshPathAsNecessary(cursor.getString(cursor.getColumnIndex(COLUMN_PATH)));
 
-            if(path == null) {
+            if (path == null) {
                 Log.e("ERROR", "Error decrypting path: " + cursor.getString(cursor.getColumnIndex(COLUMN_PATH)));
 
                 // failing to decrypt the path, removing entry from database
@@ -393,66 +393,62 @@ public class UtilsHandler extends SQLiteOpenHelper {
         return retval;
     }
 
-    public String getSshHostKey(String uri)
+    public String getSshHostKey(final String uri)
     {
         uri = SshClientUtils.encryptSshPathAsNecessary(uri);
-        if(uri != null)
+        if (uri != null)
         {
             SQLiteDatabase sqLiteDatabase = getReadableDatabase();
 
             Cursor result = sqLiteDatabase.query(TABLE_SFTP, new String[] {COLUMN_HOST_PUBKEY},
                                                  COLUMN_PATH + " = ?", new String[] {uri},
                                                  null, null, null);
-            if(result.moveToFirst())
+            if (result.moveToFirst())
             {
                 String retval = result.getString(0);
                 result.close();
                 return retval;
-            }
-            else
+            } else
             {
                 result.close();
                 return null;
             }
-        }
-        else
+        } else
         {
             return null;
         }
     }
 
-    public String getSshAuthPrivateKeyName(String uri)
+    public String getSshAuthPrivateKeyName(final String uri)
     {
         return getSshAuthPrivateKeyColumn(uri, COLUMN_PRIVATE_KEY_NAME);
     }
 
-    public String getSshAuthPrivateKey(String uri)
+    public String getSshAuthPrivateKey(final String uri)
     {
         return getSshAuthPrivateKeyColumn(uri, COLUMN_PRIVATE_KEY);
     }
 
-    private String getSshAuthPrivateKeyColumn(String uri, String columnName) {
+    private String getSshAuthPrivateKeyColumn(final String uri, final String columnName) {
         //If connection is using key authentication, no need to decrypt the path at all
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         Cursor result = sqLiteDatabase.query(TABLE_SFTP, new String[] {columnName},
                                              COLUMN_PATH + " = ?", new String[] {uri},
                                              null, null, null);
-        if(result.moveToFirst())
+        if (result.moveToFirst())
         {
             try {
                 return result.getString(0);
-            }
-            finally {
+            } finally {
                 result.close();
             }
-        }
-        else {
+        } else {
             result.close();
             return null;
         }
     }
 
-    private void removeBookmarksPath(String name, String path) {
+    private void removeBookmarksPath(final String name, final String path) {
 
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 
@@ -465,7 +461,7 @@ public class UtilsHandler extends SQLiteOpenHelper {
      * @param path the path we get from saved runtime variables is a decrypted, to remove entry,
      *             we must encrypt it's password fiend first first
      */
-    private void removeSmbPath(String name, String path) {
+    private void removeSmbPath(final String name, final String path) {
 
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 
@@ -486,7 +482,7 @@ public class UtilsHandler extends SQLiteOpenHelper {
         }
     }
 
-    private void removeSftpPath(String name, String path) {
+    private void removeSftpPath(final String name, final String path) {
 
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 
@@ -500,8 +496,7 @@ public class UtilsHandler extends SQLiteOpenHelper {
             sqLiteDatabase.delete(TABLE_SFTP, COLUMN_NAME + " = ? AND " + COLUMN_PATH + " = ?",
                                   new String[] {name, SshClientUtils.encryptSshPathAsNecessary(path)});
 
-        }
-        catch (IOException e)
+        } catch (IOException e)
         {
             e.printStackTrace();
             // force remove entry, we end up deleting all entries with same name
@@ -510,26 +505,26 @@ public class UtilsHandler extends SQLiteOpenHelper {
         }
     }
 
-    public void renameBookmark(String oldName, String oldPath, String newName, String newPath) {
+    public void renameBookmark(final String oldName, final String oldPath, final String newName, final String newPath) {
         renamePath(Operation.BOOKMARKS, oldName, oldPath, newName, newPath);
     }
 
-    public void renameSMB(String oldName, String oldPath, String newName, String newPath) {
+    public void renameSMB(final String oldName, final String oldPath, final String newName, final String newPath) {
         renamePath(Operation.SMB, oldName, oldPath, newName, newPath);
     }
 
-    private void setPath(Operation operation, String path) {
+    private void setPath(final Operation operation, final String path) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_PATH, path);
 
-        if(Operation.HISTORY.equals(operation))
+        if (Operation.HISTORY.equals(operation))
             sqLiteDatabase.delete(getTableForOperation(operation), "path = ?", new String[] {path});
 
         sqLiteDatabase.insert(getTableForOperation(operation), null, contentValues);
     }
 
-    private void setPath(Operation operation, String name, String path) {
+    private void setPath(final Operation operation, final String name, final String path) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_NAME, name);
@@ -538,7 +533,7 @@ public class UtilsHandler extends SQLiteOpenHelper {
         sqLiteDatabase.insert(getTableForOperation(operation), null, contentValues);
     }
 
-    private ArrayList<String> getPath(Operation operation) {
+    private ArrayList<String> getPath(final Operation operation) {
 
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         Cursor cursor = sqLiteDatabase.query(getTableForOperation(operation), null,
@@ -561,7 +556,7 @@ public class UtilsHandler extends SQLiteOpenHelper {
         }
     }
 
-    private void removePath(Operation operation, String path) {
+    private void removePath(final Operation operation, final String path) {
 
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 
@@ -569,11 +564,11 @@ public class UtilsHandler extends SQLiteOpenHelper {
                               new String[] {path});
     }
 
-    public void clearTable(Operation table) {
+    public void clearTable(final Operation table) {
         getWritableDatabase().delete(getTableForOperation(table), null, null);
     }
 
-    private void renamePath(Operation operation, String name, String path) {
+    private void renamePath(final Operation operation, final String name, final String path) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_NAME, name);
@@ -583,8 +578,8 @@ public class UtilsHandler extends SQLiteOpenHelper {
                               COLUMN_PATH + "=?", new String[] {name});
     }
 
-    private void renamePath(Operation operation, String oldName, String oldPath,
-                            String newName, String newPath) {
+    private void renamePath(final Operation operation, final String oldName, final String oldPath,
+                            final String newName, final String newPath) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_NAME, newName);
@@ -597,7 +592,7 @@ public class UtilsHandler extends SQLiteOpenHelper {
     /**
      * Return table string for corresponding {@link Operation}
      */
-    private String getTableForOperation(Operation operation) {
+    private String getTableForOperation(final Operation operation) {
 
         switch (operation) {
         case HISTORY:

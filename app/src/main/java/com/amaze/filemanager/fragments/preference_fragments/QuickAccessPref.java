@@ -32,7 +32,7 @@ public class QuickAccessPref extends PreferenceFragment implements Preference.On
     private static Map<String, Integer> prefPos = new HashMap<>();
     static {
         Map<String, Integer> mem = new HashMap<>();
-        for(int i = 0; i < KEYS.length; i++)
+        for (int i = 0; i < KEYS.length; i++)
             mem.put(KEYS[i], i);
         prefPos = Collections.unmodifiableMap(mem);
     }
@@ -41,7 +41,7 @@ public class QuickAccessPref extends PreferenceFragment implements Preference.On
     private Boolean[] currentValue;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Load the preferences from an XML resource
@@ -56,7 +56,7 @@ public class QuickAccessPref extends PreferenceFragment implements Preference.On
     }
 
     @Override
-    public boolean onPreferenceClick(Preference preference) {
+    public boolean onPreferenceClick(final Preference preference) {
         currentValue[prefPos.get(preference.getKey())] = ((SwitchPreference) preference).isChecked();
         TinyDB.putBooleanArray(preferences, KEY, currentValue);
         return true;

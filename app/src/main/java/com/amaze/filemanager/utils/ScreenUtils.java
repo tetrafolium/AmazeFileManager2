@@ -10,15 +10,15 @@ public class ScreenUtils {
 
     private Activity activity;
 
-    public ScreenUtils(Activity activity) {
+    public ScreenUtils(final Activity activity) {
         this.activity = activity;
     }
 
-    public int convertDbToPx(float dp) {
+    public int convertDbToPx(final float dp) {
         return Math.round(activity.getResources().getDisplayMetrics().density * dp);
     }
 
-    public int convertPxToDb(float px) {
+    public int convertPxToDb(final float px) {
         return Math.round(px / activity.getResources().getDisplayMetrics().density);
     }
 

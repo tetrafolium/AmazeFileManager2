@@ -126,7 +126,7 @@ public class CLI {
         }
         try (final SevenZFile archive = new SevenZFile(f)) {
             SevenZArchiveEntry ae;
-            while((ae=archive.getNextEntry()) != null) {
+            while ((ae = archive.getNextEntry()) != null) {
                 mode.takeAction(archive, ae);
             }
         }

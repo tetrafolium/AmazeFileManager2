@@ -33,14 +33,14 @@ public class Icons {
                             SPREADSHEETS = 11, DOCUMENTS = 12, TEXT = 13, VIDEO = 14, ENCRYPTED = 15, GIF = 16;
 
     // construct a with an approximation of the capacity
-    private static HashMap<String, Integer> sMimeIconIds = new HashMap<>(1 + (int)(114 / 0.75));
-    private static void put(String mimeType, int resId) {
+    private static HashMap<String, Integer> sMimeIconIds = new HashMap<>(1 + (int) (114 / 0.75));
+    private static void put(final String mimeType, final int resId) {
         if (sMimeIconIds.put(mimeType, resId) != null) {
             throw new RuntimeException(mimeType + " already registered!");
         }
     }
 
-    private static void putKeys(int resId, String... mimeTypes) {
+    private static void putKeys(final int resId, final String... mimeTypes) {
         for (String type : mimeTypes) {
             put(type, resId);
         }
@@ -199,9 +199,9 @@ public class Icons {
                );
     }
 
-    public static @DrawableRes int loadMimeIcon(String path, boolean isDirectory) {
-        if(path.equals("..")) return R.drawable.ic_arrow_left_white_24dp;
-        if(CompressedHelper.isFileExtractable(path)) return R.drawable.ic_compressed_white_24dp;
+    public static @DrawableRes int loadMimeIcon(final String path, final boolean isDirectory) {
+        if (path.equals("..")) return R.drawable.ic_arrow_left_white_24dp;
+        if (CompressedHelper.isFileExtractable(path)) return R.drawable.ic_compressed_white_24dp;
 
         int type = getTypeOfFile(path, isDirectory);
 
@@ -227,30 +227,30 @@ public class Icons {
         case ENCRYPTED:
             return R.drawable.ic_folder_lock_white_36dp;
         default:
-            if(isDirectory) return R.drawable.ic_grid_folder_new;
+            if (isDirectory) return R.drawable.ic_grid_folder_new;
             else {
                 return R.drawable.ic_doc_generic_am;
             }
         }
     }
 
-    public static int getTypeOfFile(String path, boolean isDirectory) {
+    public static int getTypeOfFile(final String path, final boolean isDirectory) {
         String mimeType = MimeTypes.getMimeType(path, isDirectory);
-        if(mimeType == null) return NOT_KNOWN;
+        if (mimeType == null) return NOT_KNOWN;
 
         Integer type = sMimeIconIds.get(mimeType);
-        if(type != null) return type;
+        if (type != null) return type;
         else {
-            if(checkType(mimeType, "text")) return TEXT;
+            if (checkType(mimeType, "text")) return TEXT;
             else if (checkType(mimeType, "image")) return IMAGE;
-            else if(checkType(mimeType, "video")) return VIDEO;
-            else if(checkType(mimeType, "audio")) return AUDIO;
+            else if (checkType(mimeType, "video")) return VIDEO;
+            else if (checkType(mimeType, "audio")) return AUDIO;
             else if (checkType(mimeType, "crypt")) return ENCRYPTED;
             else return NOT_KNOWN;
         }
     }
 
-    private static boolean checkType(String mime, String check) {
+    private static boolean checkType(final String mime, final String check) {
         return mime != null && mime.contains("/") && check.equals(mime.substring(0, mime.indexOf("/")));
     }
 

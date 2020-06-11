@@ -36,13 +36,13 @@ import java.util.ArrayList;
 
 public class GzipDecompressor extends Decompressor {
 
-    public GzipDecompressor(Context context) {
+    public GzipDecompressor(final Context context) {
         super(context);
     }
 
     @Override
-    public CompressedHelperTask changePath(String path, boolean addGoBackItem,
-                                           OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
+    public CompressedHelperTask changePath(final String path, final boolean addGoBackItem,
+                                           final OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
         return new GzipHelperTask(context, filePath, path, addGoBackItem, onFinish);
     }
 

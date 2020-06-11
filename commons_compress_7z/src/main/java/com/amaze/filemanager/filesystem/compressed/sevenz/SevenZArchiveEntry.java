@@ -496,7 +496,7 @@ public class SevenZArchiveEntry implements ArchiveEntry {
         ntfsEpoch.setTimeZone(TimeZone.getTimeZone("GMT+0"));
         ntfsEpoch.set(1601, 0, 1, 0, 0, 0);
         ntfsEpoch.set(Calendar.MILLISECOND, 0);
-        final long realTime = ntfsEpoch.getTimeInMillis() + (ntfsTime / (10*1000));
+        final long realTime = ntfsEpoch.getTimeInMillis() + (ntfsTime / (10 * 1000));
         return new Date(realTime);
     }
 
@@ -510,6 +510,6 @@ public class SevenZArchiveEntry implements ArchiveEntry {
         ntfsEpoch.setTimeZone(TimeZone.getTimeZone("GMT+0"));
         ntfsEpoch.set(1601, 0, 1, 0, 0, 0);
         ntfsEpoch.set(Calendar.MILLISECOND, 0);
-        return ((date.getTime() - ntfsEpoch.getTimeInMillis())* 1000 * 10);
+        return ((date.getTime() - ntfsEpoch.getTimeInMillis()) * 1000 * 10);
     }
 }

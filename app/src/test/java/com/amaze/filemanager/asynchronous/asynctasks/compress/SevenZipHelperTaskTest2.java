@@ -23,12 +23,12 @@ public class SevenZipHelperTaskTest2 extends AbstractCompressedHelperTaskTest {
     }
 
     @Test @Override @Ignore("Not testing this one")
-    public void testSublevels() {}
+    public void testSublevels() { }
 
     @Override
-    protected CompressedHelperTask createTask(String relativePath) {
+    protected CompressedHelperTask createTask(final String relativePath) {
         return new SevenZipHelperTask(new File(Environment.getExternalStorageDirectory(),
                                                "compress.7z").getAbsolutePath(),
-                                      relativePath, false, (data) -> {});
+                                      relativePath, false, (data) -> { });
     }
 }

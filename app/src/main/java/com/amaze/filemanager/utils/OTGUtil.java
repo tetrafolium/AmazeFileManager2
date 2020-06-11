@@ -42,7 +42,7 @@ public class OTGUtil {
      * @return an array of list of files at the path
      * @deprecated use getDocumentFiles()
      */
-    public static ArrayList<HybridFileParcelable> getDocumentFilesList(String path, Context context) {
+    public static ArrayList<HybridFileParcelable> getDocumentFilesList(final String path, final Context context) {
         final ArrayList<HybridFileParcelable> files = new ArrayList<>();
         getDocumentFiles(path, context, files::add);
         return files;
@@ -55,9 +55,9 @@ public class OTGUtil {
      *                Independent of URI (or mount point) for the OTG
      * @param context context for loading
      */
-    public static void getDocumentFiles(String path, Context context, OnFileFound fileFound) {
+    public static void getDocumentFiles(final String path, final Context context, final OnFileFound fileFound) {
         Uri rootUriString = SingletonUsbOtg.getInstance().getUsbOtgRoot();
-        if(rootUriString == null) throw new NullPointerException("USB OTG root not set!");
+        if (rootUriString == null) throw new NullPointerException("USB OTG root not set!");
 
         DocumentFile rootUri = DocumentFile.fromTreeUri(context, rootUriString);
 
@@ -92,9 +92,9 @@ public class OTGUtil {
      * @param createRecursive flag used to determine whether to create new file while traversing to path,
      *                        in case path is not present. Notably useful in opening an output stream.
      */
-    public static DocumentFile getDocumentFile(String path, Context context, boolean createRecursive) {
+    public static DocumentFile getDocumentFile(final String path, final Context context, final boolean createRecursive) {
         Uri rootUriString = SingletonUsbOtg.getInstance().getUsbOtgRoot();
-        if(rootUriString == null) throw new NullPointerException("USB OTG root not set!");
+        if (rootUriString == null) throw new NullPointerException("USB OTG root not set!");
 
         // start with root of SD card and then parse through document tree.
         DocumentFile rootUri = DocumentFile.fromTreeUri(context, rootUriString);
@@ -119,7 +119,7 @@ public class OTGUtil {
      * Check if the usb uri is still accessible
      */
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public static boolean isUsbUriAccessible(Context context) {
+    public static boolean isUsbUriAccessible(final Context context) {
         Uri rootUriString = SingletonUsbOtg.getInstance().getUsbOtgRoot();
         return DocumentsContract.isDocumentUri(context, rootUriString);
     }
@@ -130,7 +130,7 @@ public class OTGUtil {
     @NonNull
     public static List<UsbOtgRepresentation> getMassStorageDevicesConnected(@NonNull final Context context) {
         UsbManager usbManager = (UsbManager) context.getSystemService(USB_SERVICE);
-        if(usbManager == null) return Collections.emptyList();
+        if (usbManager == null) return Collections.emptyList();
 
         HashMap<String, UsbDevice> devices = usbManager.getDeviceList();
         ArrayList<UsbOtgRepresentation> usbOtgRepresentations = new ArrayList<>();
@@ -141,7 +141,7 @@ public class OTGUtil {
             for (int i = 0; i < device.getInterfaceCount(); i++) {
                 if (device.getInterface(i).getInterfaceClass() == UsbConstants.USB_CLASS_MASS_STORAGE) {
                     final @Nullable String serial =
-                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP? device.getSerialNumber():null;
+                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? device.getSerialNumber() : null;
 
                     UsbOtgRepresentation usb = new UsbOtgRepresentation(device.getProductId(), device.getVendorId(), serial);
                     usbOtgRepresentations.add(usb);

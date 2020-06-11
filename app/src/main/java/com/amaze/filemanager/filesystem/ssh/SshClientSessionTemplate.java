@@ -36,7 +36,7 @@ public abstract class SshClientSessionTemplate
      *
      * @param url SSH connection URL, in the form of <code>ssh://&lt;username&gt;:&lt;password&gt;@&lt;host&gt;:&lt;port&gt;</code> or <code>ssh://&lt;username&gt;@&lt;host&gt;:&lt;port&gt;</code>
      */
-    public SshClientSessionTemplate(@NonNull String url)
+    public SshClientSessionTemplate(final @NonNull String url)
     {
         this.url = url;
     }

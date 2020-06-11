@@ -8,7 +8,7 @@ public class SingletonUsbOtg {
     private static SingletonUsbOtg instance = null;
 
     public static SingletonUsbOtg getInstance() {
-        if(instance == null) instance = new SingletonUsbOtg();
+        if (instance == null) instance = new SingletonUsbOtg();
         return instance;
     }
 
@@ -17,7 +17,7 @@ public class SingletonUsbOtg {
 
     private SingletonUsbOtg() { }
 
-    public void setConnectedDevice(UsbOtgRepresentation connectedDevice) {
+    public void setConnectedDevice(final UsbOtgRepresentation connectedDevice) {
         this.connectedDevice = connectedDevice;
     }
 
@@ -25,8 +25,8 @@ public class SingletonUsbOtg {
         return connectedDevice != null;
     }
 
-    public void setUsbOtgRoot(@Nullable Uri root) {
-        if(connectedDevice == null) throw new IllegalStateException("No device connected!");
+    public void setUsbOtgRoot(final @Nullable Uri root) {
+        if (connectedDevice == null) throw new IllegalStateException("No device connected!");
         usbOtgRoot = root;
     }
 
@@ -39,7 +39,7 @@ public class SingletonUsbOtg {
         return usbOtgRoot;
     }
 
-    public boolean checkIfRootIsFromDevice(@NonNull UsbOtgRepresentation device) {
+    public boolean checkIfRootIsFromDevice(final @NonNull UsbOtgRepresentation device) {
         return usbOtgRoot != null && connectedDevice.hashCode() == device.hashCode();
     }
 

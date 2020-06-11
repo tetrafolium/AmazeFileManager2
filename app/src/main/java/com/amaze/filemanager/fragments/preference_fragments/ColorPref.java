@@ -53,13 +53,13 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
     private PreferencesActivity activity;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         activity = (PreferencesActivity) getActivity();
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             loadSection0();
             reloadListeners();
         } else {
@@ -77,7 +77,7 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
      * Deal with the "up" button going to last fragment, instead of section 0.
      */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         if (item.getItemId() == android.R.id.home && currentSection != SECTION_0) {
             switchSections();
             return true;
@@ -87,9 +87,9 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
     }
 
     public boolean onBackPressed() {
-        if(currentSection != SECTION_0) {
+        if (currentSection != SECTION_0) {
             switchSections();
-            return true;//dealt with click
+            return true; //dealt with click
         } else {
             return false;
         }
@@ -97,7 +97,7 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
 
     @Override
     public boolean onPreferenceClick(final Preference preference) {
-        switch(preference.getKey()) {
+        switch (preference.getKey()) {
         case KEY_COLOREDNAV:
             activity.invalidateNavBar();
             break;
@@ -115,12 +115,12 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
         return false;
     }
 
-    private void colorChangeDialog(String colorPrefKey) {
+    private void colorChangeDialog(final String colorPrefKey) {
         final UserColorPreferences userColorPreferences = activity.getCurrentColorPreference();
         if (userColorPreferences != null) {
             @ColorInt int currentColor = 0;
 
-            switch(colorPrefKey) {
+            switch (colorPrefKey) {
             case PreferencesConstants.PREFERENCE_SKIN:
                 currentColor = userColorPreferences.primaryFirstTab;
                 break;
@@ -143,7 +143,7 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
                 accent = userColorPreferences.accent,
                 iconSkin = userColorPreferences.iconSkin;
 
-                switch(colorPrefKey) {
+                switch (colorPrefKey) {
                 case PreferencesConstants.PREFERENCE_SKIN:
                     primaryFirst = selectedColor;
                     break;
@@ -180,7 +180,7 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
             .neutralText(R.string.defualt)
             .callback(new MaterialDialog.ButtonCallback() {
                 @Override
-                public void onNeutral(MaterialDialog dialog) {
+                public void onNeutral(final MaterialDialog dialog) {
                     super.onNeutral(dialog);
                     if (activity != null) activity.setRestartActivity();
                     activity.getColorPreference().saveColorPreferences(sharedPref, userColorPreferences);
@@ -195,10 +195,10 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
     private void switchSections() {
         getPreferenceScreen().removeAll();
 
-        if(currentSection == SECTION_0) {
+        if (currentSection == SECTION_0) {
             currentSection = SECTION_1;
             loadSection1();
-        } else if(currentSection == SECTION_1) {
+        } else if (currentSection == SECTION_1) {
             currentSection = SECTION_0;
             loadSection0();
         }
@@ -207,7 +207,7 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
     }
 
     private void loadSection0() {
-        if(((PreferencesActivity) getActivity()).getRestartActivity()) {
+        if (((PreferencesActivity) getActivity()).getRestartActivity()) {
             ((PreferencesActivity) getActivity()).restartActivity(getActivity());
         }
 
@@ -229,7 +229,7 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
             invalidateEverything();
 
             int colorPickerPref = sharedPref.getInt(PreferencesConstants.PREFERENCE_COLOR_CONFIG, ColorPickerDialog.NO_DATA);
-            if(colorPickerPref == ColorPickerDialog.RANDOM_INDEX) {
+            if (colorPickerPref == ColorPickerDialog.RANDOM_INDEX) {
                 Toast.makeText(getActivity(), R.string.setRandom, Toast.LENGTH_LONG).show();
             }
         });
@@ -250,8 +250,8 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
     }
 
     private void reloadListeners() {
-        for (final String PREFERENCE_KEY :
-                (currentSection == SECTION_0? PREFERENCE_KEYS_SECTION_0:PREFERENCE_KEYS_SECTION_1)) {
+        for (final String PREFERENCE_KEY
+                : (currentSection == SECTION_0 ? PREFERENCE_KEYS_SECTION_0 : PREFERENCE_KEYS_SECTION_1)) {
             findPreference(PREFERENCE_KEY).setOnPreferenceClickListener(this);
         }
     }
@@ -260,7 +260,7 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
         activity.invalidateRecentsColorAndIcon();
         activity.invalidateToolbarColor();
         activity.invalidateNavBar();
-        if(currentSection == SECTION_1) {
+        if (currentSection == SECTION_1) {
             ColorPickerDialog selectedColors = (ColorPickerDialog) findPreference(KEY_PRESELECTED_CONFIGS);
             if (selectedColors != null) {
                 invalidateColorPreference(selectedColors);
@@ -271,12 +271,12 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
         }
     }
 
-    private void invalidateColorPreference(ColorPickerDialog selectedColors) {
+    private void invalidateColorPreference(final ColorPickerDialog selectedColors) {
         int colorPickerPref = sharedPref.getInt(PreferencesConstants.PREFERENCE_COLOR_CONFIG, ColorPickerDialog.NO_DATA);
         boolean isColor = colorPickerPref != ColorPickerDialog.CUSTOM_INDEX
                           && colorPickerPref != ColorPickerDialog.RANDOM_INDEX;
 
-        if(isColor) {
+        if (isColor) {
             selectedColors.setColorsVisibility(View.VISIBLE);
             UserColorPreferences userColorPreferences = activity.getCurrentColorPreference();
 
@@ -284,7 +284,7 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
                                      userColorPreferences.primarySecondTab, userColorPreferences.accent,
                                      userColorPreferences.iconSkin);
 
-            if(activity.getAppTheme().getMaterialDialogTheme() == Theme.LIGHT) {
+            if (activity.getAppTheme().getMaterialDialogTheme() == Theme.LIGHT) {
                 selectedColors.setDividerColor(Color.WHITE);
             } else {
                 selectedColors.setDividerColor(Color.BLACK);
@@ -295,15 +295,15 @@ public class ColorPref extends PreferenceFragment implements Preference.OnPrefer
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
 
         outState.putInt(KEY_SECTION, currentSection);
     }
 
-    private void onRestoreInstanceState(Bundle inState) {
+    private void onRestoreInstanceState(final Bundle inState) {
         currentSection = inState.getInt(KEY_SECTION, SECTION_0);
-        if(currentSection == SECTION_0) {
+        if (currentSection == SECTION_0) {
             loadSection0();
             reloadListeners();
         } else {

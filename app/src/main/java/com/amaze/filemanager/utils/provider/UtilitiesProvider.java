@@ -17,7 +17,7 @@ public class UtilitiesProvider {
     private ColorPreferenceHelper colorPreference;
     private AppThemeManager appThemeManager;
 
-    public UtilitiesProvider(Context context) {
+    public UtilitiesProvider(final Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         colorPreference = new ColorPreferenceHelper();

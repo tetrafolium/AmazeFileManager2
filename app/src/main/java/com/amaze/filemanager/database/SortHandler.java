@@ -31,7 +31,7 @@ public class SortHandler extends SQLiteOpenHelper {
     public static final String COLUMN_SORT_PATH = "path";
     public static final String COLUMN_SORT_TYPE = "type";
 
-    public static int getSortType(Context context, String path) {
+    public static int getSortType(final Context context, final String path) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         final Set<String> onlyThisFloders = sharedPref.getStringSet(PREFERENCE_SORTBY_ONLY_THIS, new HashSet<>());
         final boolean onlyThis = onlyThisFloders.contains(path);
@@ -47,12 +47,12 @@ public class SortHandler extends SQLiteOpenHelper {
         return sort.type;
     }
 
-    public SortHandler(Context context) {
+    public SortHandler(final Context context) {
         super(context, DATABASE_NAME, null, TabHandler.DATABASE_VERSION);
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void onCreate(final SQLiteDatabase db) {
         String CREATE_TABLE_SORT = "CREATE TABLE " + TABLE_SORT + "("
                                    + COLUMN_SORT_PATH
                                    + " TEXT PRIMARY KEY,"
@@ -62,11 +62,11 @@ public class SortHandler extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
         onCreate(db);
     }
 
-    public void addEntry(Sort sort) {
+    public void addEntry(final Sort sort) {
         if (TextUtils.isEmpty(sort.path)) {
             return;
         }
@@ -78,7 +78,7 @@ public class SortHandler extends SQLiteOpenHelper {
         sqLiteDatabase.insert(TABLE_SORT, null, contentValues);
     }
 
-    public void clear(String path) {
+    public void clear(final String path) {
         try {
             SQLiteDatabase sqLiteDatabase = getWritableDatabase();
             sqLiteDatabase.delete(TABLE_SORT, COLUMN_SORT_PATH + " = ?", new String[] {path});
@@ -87,7 +87,7 @@ public class SortHandler extends SQLiteOpenHelper {
         }
     }
 
-    public void updateEntry(Sort oldSort, Sort newSort) {
+    public void updateEntry(final Sort oldSort, final Sort newSort) {
         if (TextUtils.isEmpty(oldSort.path) || TextUtils.isEmpty(newSort.path)) {
             return;
         }
@@ -102,7 +102,7 @@ public class SortHandler extends SQLiteOpenHelper {
     }
 
     @Nullable
-    public Sort findEntry(String path) {
+    public Sort findEntry(final String path) {
         if (TextUtils.isEmpty(path)) {
             return null;
         }

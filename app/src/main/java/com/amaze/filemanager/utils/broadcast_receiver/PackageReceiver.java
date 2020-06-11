@@ -18,7 +18,7 @@ public class PackageReceiver extends BroadcastReceiver {
 
     private AppListLoader listLoader;
 
-    public PackageReceiver(AppListLoader listLoader) {
+    public PackageReceiver(final AppListLoader listLoader) {
 
         this.listLoader = listLoader;
 
@@ -35,7 +35,7 @@ public class PackageReceiver extends BroadcastReceiver {
     }
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(final Context context, final Intent intent) {
         listLoader.onContentChanged();
     }
 }

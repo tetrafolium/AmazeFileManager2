@@ -20,16 +20,16 @@ public class IconDataParcelable implements Parcelable {
     public final @DrawableRes int loadingImage;
     private boolean isImageBroken = false;
 
-    public IconDataParcelable(int type, @DrawableRes int img) {
-        if(type == IMAGE_FROMFILE) throw new IllegalArgumentException();
+    public IconDataParcelable(final int type, final @DrawableRes int img) {
+        if (type == IMAGE_FROMFILE) throw new IllegalArgumentException();
         this.type = type;
         this.image = img;
         this.loadingImage = -1;
         this.path = null;
     }
 
-    public IconDataParcelable(int type, String path, @DrawableRes int loadingImages) {
-        if(type == IMAGE_RES) throw new IllegalArgumentException();
+    public IconDataParcelable(final int type, final String path, final @DrawableRes int loadingImages) {
+        if (type == IMAGE_RES) throw new IllegalArgumentException();
         this.type = type;
         this.path = path;
         this.loadingImage = loadingImages;
@@ -40,7 +40,7 @@ public class IconDataParcelable implements Parcelable {
         return isImageBroken;
     }
 
-    public void setImageBroken(boolean imageBroken) {
+    public void setImageBroken(final boolean imageBroken) {
         isImageBroken = imageBroken;
     }
 
@@ -50,15 +50,15 @@ public class IconDataParcelable implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    public void writeToParcel(final Parcel parcel, final int i) {
         parcel.writeInt(type);
         parcel.writeString(path);
         parcel.writeInt(image);
         parcel.writeInt(loadingImage);
-        parcel.writeInt(isImageBroken? 1:0);
+        parcel.writeInt(isImageBroken ? 1 : 0);
     }
 
-    public IconDataParcelable(Parcel im) {
+    public IconDataParcelable(final Parcel im) {
         type = im.readInt();
         path = im.readString();
         image = im.readInt();
@@ -68,11 +68,11 @@ public class IconDataParcelable implements Parcelable {
 
     public static final Parcelable.Creator<IconDataParcelable> CREATOR =
     new Parcelable.Creator<IconDataParcelable>() {
-        public IconDataParcelable createFromParcel(Parcel in) {
+        public IconDataParcelable createFromParcel(final Parcel in) {
             return new IconDataParcelable(in);
         }
 
-        public IconDataParcelable[] newArray(int size) {
+        public IconDataParcelable[] newArray(final int size) {
             return new IconDataParcelable[size];
         }
     };

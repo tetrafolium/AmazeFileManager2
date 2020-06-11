@@ -12,13 +12,13 @@ public class StreamNotFoundException extends Exception {
     public StreamNotFoundException() {
         super(MESSAGE);
     }
-    public StreamNotFoundException(String message) {
+    public StreamNotFoundException(final String message) {
         super(message);
     }
-    public StreamNotFoundException(String message, Throwable cause) {
+    public StreamNotFoundException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    public StreamNotFoundException(Throwable cause) {
+    public StreamNotFoundException(final Throwable cause) {
         super(MESSAGE, cause);
     }
 }

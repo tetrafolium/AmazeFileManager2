@@ -28,9 +28,9 @@ public class SearchAsyncTask extends AsyncTask<String, HybridFileParcelable, Voi
     private OpenMode mOpenMode;
     private boolean mRootMode, isRegexEnabled, isMatchesEnabled;
 
-    public SearchAsyncTask(Activity a, SearchWorkerFragment.HelperCallbacks l,
-                           String input, OpenMode openMode, boolean root, boolean regex,
-                           boolean matches) {
+    public SearchAsyncTask(final Activity a, final SearchWorkerFragment.HelperCallbacks l,
+                           final String input, final OpenMode openMode, final boolean root, final boolean regex,
+                           final boolean matches) {
         activity = new WeakReference<>(a);
         mCallbacks = l;
         mInput = input;
@@ -55,7 +55,7 @@ public class SearchAsyncTask extends AsyncTask<String, HybridFileParcelable, Voi
     // mCallbacks not checked for null because of possibility of
     // race conditions b/w worker thread main thread
     @Override
-    protected Void doInBackground(String... params) {
+    protected Void doInBackground(final String... params) {
 
         String path = params[0];
         HybridFile file = new HybridFile(mOpenMode, path);
@@ -77,7 +77,7 @@ public class SearchAsyncTask extends AsyncTask<String, HybridFileParcelable, Voi
     }
 
     @Override
-    public void onPostExecute(Void c) {
+    public void onPostExecute(final Void c) {
         if (mCallbacks != null) {
             mCallbacks.onPostExecute(mInput);
         }
@@ -89,7 +89,7 @@ public class SearchAsyncTask extends AsyncTask<String, HybridFileParcelable, Voi
     }
 
     @Override
-    public void onProgressUpdate(HybridFileParcelable... val) {
+    public void onProgressUpdate(final HybridFileParcelable... val) {
         if (!isCancelled() && mCallbacks != null) {
             mCallbacks.onProgressUpdate(val[0], mInput);
         }
@@ -100,8 +100,8 @@ public class SearchAsyncTask extends AsyncTask<String, HybridFileParcelable, Voi
      *
      * @param directory the current path
      */
-    private void search(HybridFile directory, final SearchFilter filter) {
-        if (directory.isDirectory(activity.get())) {// do you have permission to read this directory?
+    private void search(final HybridFile directory, final SearchFilter filter) {
+        if (directory.isDirectory(activity.get())) { // do you have permission to read this directory?
             directory.forEachChildrenFile(activity.get(), mRootMode, file -> {
                 if (!isCancelled()) {
                     if (filter.searchFilter(file.getName())) {
@@ -124,7 +124,7 @@ public class SearchAsyncTask extends AsyncTask<String, HybridFileParcelable, Voi
      * @param file  the current path
      * @param query the searched text
      */
-    private void search(HybridFile file, final String query) {
+    private void search(final HybridFile file, final String query) {
         search(file, fileName -> fileName.toLowerCase().contains(query.toLowerCase()));
     }
 
@@ -134,7 +134,7 @@ public class SearchAsyncTask extends AsyncTask<String, HybridFileParcelable, Voi
      * @param file    the current file
      * @param pattern the compiled java regex
      */
-    private void searchRegExFind(HybridFile file, final Pattern pattern) {
+    private void searchRegExFind(final HybridFile file, final Pattern pattern) {
         search(file, fileName -> pattern.matcher(fileName).find());
     }
 
@@ -144,7 +144,7 @@ public class SearchAsyncTask extends AsyncTask<String, HybridFileParcelable, Voi
      * @param file    the current file
      * @param pattern the compiled java regex
      */
-    private void searchRegExMatch(HybridFile file, final Pattern pattern) {
+    private void searchRegExMatch(final HybridFile file, final Pattern pattern) {
         search(file, fileName -> pattern.matcher(fileName).matches());
     }
 
@@ -153,7 +153,7 @@ public class SearchAsyncTask extends AsyncTask<String, HybridFileParcelable, Voi
      *
      * @return converted string
      */
-    private String bashRegexToJava(String originalString) {
+    private String bashRegexToJava(final String originalString) {
         StringBuilder stringBuilder = new StringBuilder();
 
         for (int i = 0; i < originalString.length(); i++) {

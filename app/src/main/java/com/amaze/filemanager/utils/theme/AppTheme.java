@@ -20,7 +20,7 @@ public enum AppTheme {
 
     private int id;
 
-    AppTheme(int id) {
+    AppTheme(final int id) {
         this.id = id;
     }
 
@@ -30,7 +30,7 @@ public enum AppTheme {
      * @param index The theme index
      * @return The AppTheme for the given index
      */
-    public static AppTheme getTheme(int index) {
+    public static AppTheme getTheme(final int index) {
         switch (index) {
         default:
         case LIGHT_INDEX:

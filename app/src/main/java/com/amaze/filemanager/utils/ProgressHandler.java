@@ -52,7 +52,7 @@ public class ProgressHandler {
      * Constructor to start an instance
      * @param sourceFiles the total number of source files selected by the user for operation
      */
-    public ProgressHandler(int sourceFiles, long totalSize) {
+    public ProgressHandler(final int sourceFiles, final long totalSize) {
         this.sourceFiles = sourceFiles;
         this.totalSize = totalSize;
     }
@@ -69,14 +69,14 @@ public class ProgressHandler {
      *
      * @param newPosition the position of byte for file being processed
      */
-    public synchronized void addWrittenLength(long newPosition) {
+    public synchronized void addWrittenLength(final long newPosition) {
         long speedRaw = (newPosition - writtenSize);
         this.writtenSize = newPosition;
 
         progressListener.onProgressed(speedRaw);
     }
 
-    public void setFileName(String fileName) {
+    public void setFileName(final String fileName) {
         this.fileName = fileName;
     }
 
@@ -84,7 +84,7 @@ public class ProgressHandler {
         return fileName;
     }
 
-    public void setSourceFilesProcessed(int sourceFilesProcessed) {
+    public void setSourceFilesProcessed(final int sourceFilesProcessed) {
         this.sourceFilesProcessed = sourceFilesProcessed;
     }
 
@@ -92,7 +92,7 @@ public class ProgressHandler {
         return sourceFilesProcessed;
     }
 
-    public void setSourceSize(int sourceFiles) {
+    public void setSourceSize(final int sourceFiles) {
         this.sourceFiles = sourceFiles;
     }
 
@@ -101,7 +101,7 @@ public class ProgressHandler {
     }
 
     // dynamically setting total size, useful in case files are compressed
-    public void setTotalSize(long totalSize) {
+    public void setTotalSize(final long totalSize) {
         this.totalSize = totalSize;
     }
 
@@ -109,7 +109,7 @@ public class ProgressHandler {
         return this.totalSize;
     }
 
-    public void setCancelled(boolean isCancelled) {
+    public void setCancelled(final boolean isCancelled) {
         this.isCancelled = isCancelled;
     }
 
@@ -121,12 +121,12 @@ public class ProgressHandler {
         return writtenSize;
     }
 
-    public void setProgressListener(ProgressListener progressListener) {
+    public void setProgressListener(final ProgressListener progressListener) {
         this.progressListener = progressListener;
     }
 
     public synchronized float getPercentProgress() {
-        if(totalSize == 0) return 0f;//Sometimes the total size is 0, because of metadata not being measured
+        if (totalSize == 0) return 0f; //Sometimes the total size is 0, because of metadata not being measured
         return ((float) writtenSize / totalSize) * 100;
     }
 

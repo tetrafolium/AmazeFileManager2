@@ -114,8 +114,8 @@ public class CryptUtil {
      *
      * @param sourceFile the file to encrypt
      */
-    public CryptUtil(Context context, HybridFileParcelable sourceFile, ProgressHandler progressHandler,
-                     ArrayList<HybridFile> failedOps, String targetFilename) throws GeneralSecurityException, IOException {
+    public CryptUtil(final Context context, final HybridFileParcelable sourceFile, final ProgressHandler progressHandler,
+                     final ArrayList<HybridFile> failedOps, final String targetFilename) throws GeneralSecurityException, IOException {
 
         this.progressHandler = progressHandler;
         this.failedOps = failedOps;
@@ -137,8 +137,8 @@ public class CryptUtil {
      * @param targetPath the directory in which file is to be decrypted
      *                   the source's parent in normal case
      */
-    public CryptUtil(Context context, HybridFileParcelable baseFile, String targetPath,
-                     ProgressHandler progressHandler, ArrayList<HybridFile> failedOps) throws GeneralSecurityException, IOException {
+    public CryptUtil(final Context context, final HybridFileParcelable baseFile, final String targetPath,
+                     final ProgressHandler progressHandler, final ArrayList<HybridFile> failedOps) throws GeneralSecurityException, IOException {
 
         this.progressHandler = progressHandler;
         this.failedOps = failedOps;
@@ -159,7 +159,7 @@ public class CryptUtil {
      * @param sourceFile        the source file to decrypt
      * @param targetDirectory   the target directory inside which we're going to decrypt
      */
-    private void decrypt(final Context context, HybridFileParcelable sourceFile, HybridFile targetDirectory)
+    private void decrypt(final Context context, final HybridFileParcelable sourceFile, final HybridFile targetDirectory)
     throws GeneralSecurityException, IOException {
         if (progressHandler.getCancelled()) return;
         if (sourceFile.isDirectory()) {
@@ -208,7 +208,7 @@ public class CryptUtil {
      * @param sourceFile        the source file to encrypt
      * @param targetDirectory   the target directory in which we're going to encrypt
      */
-    private void encrypt(final Context context, HybridFileParcelable sourceFile, HybridFile targetDirectory, String targetFilename)
+    private void encrypt(final Context context, final HybridFileParcelable sourceFile, final HybridFile targetDirectory, final String targetFilename)
     throws GeneralSecurityException, IOException {
 
         if (progressHandler.getCancelled()) return;
@@ -224,7 +224,7 @@ public class CryptUtil {
                 try {
                     encrypt(context, file, hFile, file.getName().concat(CRYPT_EXTENSION));
                 } catch (IOException | GeneralSecurityException e) {
-                    throw new IllegalStateException(e);//throw unchecked exception, no throws needed
+                    throw new IllegalStateException(e); //throw unchecked exception, no throws needed
                 }
             });
         } else {
@@ -259,7 +259,7 @@ public class CryptUtil {
      * Helper method to encrypt plain text password
      */
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private static String aesEncryptPassword(String plainTextPassword)
+    private static String aesEncryptPassword(final String plainTextPassword)
     throws GeneralSecurityException, IOException {
 
         Cipher cipher = Cipher.getInstance(ALGO_AES);
@@ -274,7 +274,7 @@ public class CryptUtil {
      * Helper method to decrypt cipher text password
      */
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private static String aesDecryptPassword(String cipherPassword) throws GeneralSecurityException, IOException {
+    private static String aesDecryptPassword(final String cipherPassword) throws GeneralSecurityException, IOException {
 
         Cipher cipher = Cipher.getInstance(ALGO_AES);
         GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(128, IV.getBytes());
@@ -290,7 +290,7 @@ public class CryptUtil {
      * @param outputStream stream associated with new output encrypted file
      */
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private void aesEncrypt(BufferedInputStream inputStream, BufferedOutputStream outputStream)
+    private void aesEncrypt(final BufferedInputStream inputStream, final BufferedOutputStream outputStream)
     throws GeneralSecurityException, IOException {
 
         Cipher cipher = Cipher.getInstance(ALGO_AES);
@@ -309,7 +309,7 @@ public class CryptUtil {
             while ((count = inputStream.read(buffer)) != -1) {
                 if (!progressHandler.getCancelled()) {
                     cipherOutputStream.write(buffer, 0, count);
-                    ServiceWatcherUtil.position +=count;
+                    ServiceWatcherUtil.position += count;
                 } else break;
             }
         } finally {
@@ -326,7 +326,7 @@ public class CryptUtil {
      * @param outputStream stream associated with new output decrypted file
      */
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private void aesDecrypt(BufferedInputStream inputStream, BufferedOutputStream outputStream)
+    private void aesDecrypt(final BufferedInputStream inputStream, final BufferedOutputStream outputStream)
     throws GeneralSecurityException, IOException {
 
         Cipher cipher = Cipher.getInstance(ALGO_AES);
@@ -343,7 +343,7 @@ public class CryptUtil {
             while ((count = cipherInputStream.read(buffer)) != -1) {
                 if (!progressHandler.getCancelled()) {
                     outputStream.write(buffer, 0, count);
-                    ServiceWatcherUtil.position +=count;
+                    ServiceWatcherUtil.position += count;
                 } else break;
             }
         } finally {
@@ -381,7 +381,7 @@ public class CryptUtil {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private void rsaEncrypt(Context context, BufferedInputStream inputStream, BufferedOutputStream outputStream)
+    private void rsaEncrypt(final Context context, final BufferedInputStream inputStream, final BufferedOutputStream outputStream)
     throws GeneralSecurityException, IOException {
 
         Cipher cipher = Cipher.getInstance(ALGO_AES, "BC");
@@ -399,7 +399,7 @@ public class CryptUtil {
             while ((count = inputStream.read(buffer)) != -1) {
                 if (!progressHandler.getCancelled()) {
                     cipherOutputStream.write(buffer, 0, count);
-                    ServiceWatcherUtil.position +=count;
+                    ServiceWatcherUtil.position += count;
                 } else break;
             }
         } finally {
@@ -411,8 +411,8 @@ public class CryptUtil {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private void rsaDecrypt(Context context, BufferedInputStream inputStream,
-                            BufferedOutputStream outputStream) throws GeneralSecurityException, IOException {
+    private void rsaDecrypt(final Context context, final BufferedInputStream inputStream,
+                            final BufferedOutputStream outputStream) throws GeneralSecurityException, IOException {
 
         Cipher cipher = Cipher.getInstance(ALGO_AES, "BC");
         RSAKeygen keygen = new RSAKeygen(context);
@@ -429,7 +429,7 @@ public class CryptUtil {
             while ((count = cipherInputStream.read(buffer)) != -1) {
                 if (!progressHandler.getCancelled()) {
                     outputStream.write(buffer, 0, count);
-                    ServiceWatcherUtil.position +=count;
+                    ServiceWatcherUtil.position += count;
                 } else break;
             }
         } finally {
@@ -441,7 +441,7 @@ public class CryptUtil {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private static String rsaEncryptPassword(Context context, String password) throws GeneralSecurityException, IOException {
+    private static String rsaEncryptPassword(final Context context, final String password) throws GeneralSecurityException, IOException {
 
         Cipher cipher = Cipher.getInstance(ALGO_AES, "BC");
         RSAKeygen keygen = new RSAKeygen(context);
@@ -453,7 +453,7 @@ public class CryptUtil {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private static String rsaDecryptPassword(Context context, String cipherText) throws GeneralSecurityException, IOException {
+    private static String rsaDecryptPassword(final Context context, final String cipherText) throws GeneralSecurityException, IOException {
 
         Cipher cipher = Cipher.getInstance(ALGO_AES, "BC");
         RSAKeygen keygen = new RSAKeygen(context);
@@ -467,7 +467,7 @@ public class CryptUtil {
     /**
      * Method handles encryption of plain text on various APIs
      */
-    public static String encryptPassword(Context context, String plainText) throws GeneralSecurityException, IOException {
+    public static String encryptPassword(final Context context, final String plainText) throws GeneralSecurityException, IOException {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return aesEncryptPassword(plainText);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -479,7 +479,7 @@ public class CryptUtil {
     /**
      * Method handles decryption of cipher text on various APIs
      */
-    public static String decryptPassword(Context context, String cipherText) throws GeneralSecurityException, IOException {
+    public static String decryptPassword(final Context context, final String cipherText) throws GeneralSecurityException, IOException {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return aesDecryptPassword(cipherText);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -490,7 +490,7 @@ public class CryptUtil {
     /**
      * Method initializes a Cipher to be used by {@link android.hardware.fingerprint.FingerprintManager}
      */
-    public static Cipher initCipher(Context context) throws GeneralSecurityException, IOException {
+    public static Cipher initCipher(final Context context) throws GeneralSecurityException, IOException {
         Cipher cipher = null;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -514,7 +514,7 @@ public class CryptUtil {
         private Context context;
 
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-        RSAKeygen(Context context) {
+        RSAKeygen(final Context context) {
 
             this.context = context;
 
@@ -530,7 +530,7 @@ public class CryptUtil {
          * Generates a RSA public/private key pair to encrypt AES key
          */
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-        private void generateKeyPair(Context context) throws GeneralSecurityException, IOException {
+        private void generateKeyPair(final Context context) throws GeneralSecurityException, IOException {
 
             KeyStore keyStore = KeyStore.getInstance(KEY_STORE_ANDROID);
             keyStore.load(null);
@@ -564,7 +564,7 @@ public class CryptUtil {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
             String encodedAesKey = preferences.getString(PREFERENCE_KEY, null);
 
-            if (encodedAesKey==null) {
+            if (encodedAesKey == null) {
                 // generate encrypted aes key and save to preference
 
                 byte[] key = new byte[16];
@@ -580,7 +580,7 @@ public class CryptUtil {
         /**
          * Encrypts randomly generated AES key using RSA public key
          */
-        private byte[] encryptAESKey(byte[] secretKey) throws GeneralSecurityException, IOException {
+        private byte[] encryptAESKey(final byte[] secretKey) throws GeneralSecurityException, IOException {
 
             KeyStore keyStore = KeyStore.getInstance(KEY_STORE_ANDROID);
             keyStore.load(null);
@@ -618,7 +618,7 @@ public class CryptUtil {
         /**
          * Decrypts AES decoded key from preference using RSA private key
          */
-        private byte[] decryptAESKey(byte[] encodedBytes) throws GeneralSecurityException, IOException {
+        private byte[] decryptAESKey(final byte[] encodedBytes) throws GeneralSecurityException, IOException {
 
             KeyStore keyStore = KeyStore.getInstance(KEY_STORE_ANDROID);
             keyStore.load(null);
@@ -636,7 +636,7 @@ public class CryptUtil {
             }
 
             byte[] decryptedBytes = new byte[bytes.size()];
-            for (int i=0; i<bytes.size(); i++) {
+            for (int i = 0; i < bytes.size(); i++) {
 
                 decryptedBytes[i] = bytes.get(i).byteValue();
             }

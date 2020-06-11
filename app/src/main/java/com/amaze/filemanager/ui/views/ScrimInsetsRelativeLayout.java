@@ -38,22 +38,22 @@ public class ScrimInsetsRelativeLayout extends RelativeLayout {
     private Rect mTempRect = new Rect();
     private OnInsetsCallback mOnInsetsCallback;
 
-    public ScrimInsetsRelativeLayout(Context context) {
+    public ScrimInsetsRelativeLayout(final Context context) {
         super(context);
         init(context, null, 0);
     }
 
-    public ScrimInsetsRelativeLayout(Context context, AttributeSet attrs) {
+    public ScrimInsetsRelativeLayout(final Context context, final AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs, 0);
     }
 
-    public ScrimInsetsRelativeLayout(Context context, AttributeSet attrs, int defStyle) {
+    public ScrimInsetsRelativeLayout(final Context context, final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
         init(context, attrs, defStyle);
     }
 
-    private void init(Context context, AttributeSet attrs, int defStyle) {
+    private void init(final Context context, final AttributeSet attrs, final int defStyle) {
         final TypedArray a = context.obtainStyledAttributes(attrs,
                              R.styleable.ScrimInsetsFrameLayout, defStyle, 0);
         if (a == null) {
@@ -66,7 +66,7 @@ public class ScrimInsetsRelativeLayout extends RelativeLayout {
     }
 
     @Override
-    protected boolean fitSystemWindows(Rect insets) {
+    protected boolean fitSystemWindows(final Rect insets) {
         mInsets = new Rect(insets);
         setWillNotDraw(mInsetForeground == null);
         ViewCompat.postInvalidateOnAnimation(this);
@@ -77,7 +77,7 @@ public class ScrimInsetsRelativeLayout extends RelativeLayout {
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(final Canvas canvas) {
         super.draw(canvas);
 
         int width = getWidth();
@@ -132,7 +132,7 @@ public class ScrimInsetsRelativeLayout extends RelativeLayout {
      * UI chrome insets (e.g. a Google Map or a ListView). When using with ListView or GridView, remember to set
      * clipToPadding to false.
      */
-    public void setOnInsetsCallback(OnInsetsCallback onInsetsCallback) {
+    public void setOnInsetsCallback(final OnInsetsCallback onInsetsCallback) {
         mOnInsetsCallback = onInsetsCallback;
     }
 

@@ -81,12 +81,12 @@ public class ArchivePasswordCache implements Map<String, String> {
     }
 
     @Override
-    public boolean containsKey(@Nullable Object key) {
+    public boolean containsKey(final @Nullable Object key) {
         return entries.containsKey(key);
     }
 
     @Override
-    public boolean containsValue(@Nullable Object value) {
+    public boolean containsValue(final @Nullable Object value) {
         return entries.containsValue(value);
     }
 
@@ -98,23 +98,23 @@ public class ArchivePasswordCache implements Map<String, String> {
 
     @Nullable
     @Override
-    public String get(@Nullable Object key) {
+    public String get(final @Nullable Object key) {
         return entries.get(key);
     }
 
     @Nullable
     @Override
-    public String put(@NonNull String key, @NonNull String value) {
+    public String put(final @NonNull String key, final @NonNull String value) {
         return entries.put(key, value);
     }
 
     @Override
-    public String remove(@Nullable Object key) {
+    public String remove(final @Nullable Object key) {
         return entries.remove(key);
     }
 
     @Override
-    public void putAll(@NonNull Map<? extends String, ? extends String> m) {
+    public void putAll(final @NonNull Map<? extends String, ? extends String> m) {
         entries.putAll(m);
     }
 
@@ -147,7 +147,7 @@ public class ArchivePasswordCache implements Map<String, String> {
     }
 
     @Override
-    public boolean equals(@Nullable Object obj) {
+    public boolean equals(final @Nullable Object obj) {
         return entries.equals(obj);
     }
 }

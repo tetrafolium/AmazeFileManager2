@@ -31,7 +31,7 @@ public class AppBar {
 
     private AppBarLayout appbarLayout;
 
-    public AppBar(MainActivity a, SharedPreferences sharedPref, SearchView.SearchListener searchListener) {
+    public AppBar(final MainActivity a, final SharedPreferences sharedPref, final SearchView.SearchListener searchListener) {
         toolbar = a.findViewById(R.id.action_bar);
         searchView = new SearchView(this, a, searchListener);
         bottomBar = new BottomBar(this, a);
@@ -65,11 +65,11 @@ public class AppBar {
         return appbarLayout;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         if (toolbar != null) toolbar.setTitle(title);
     }
 
-    public void setTitle(@StringRes int title) {
+    public void setTitle(final @StringRes int title) {
         if (toolbar != null) toolbar.setTitle(title);
     }
 

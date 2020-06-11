@@ -24,7 +24,7 @@ public class CountItemsOrAndSizeTask extends AsyncTask<Void, Pair<Integer, Long>
     private HybridFileParcelable file;
     private boolean isStorage;
 
-    public CountItemsOrAndSizeTask(Context c, TextView itemsText, HybridFileParcelable f, boolean storage) {
+    public CountItemsOrAndSizeTask(final Context c, final TextView itemsText, final HybridFileParcelable f, final boolean storage) {
         this.context = c;
         this.itemsText = itemsText;
         file = f;
@@ -32,7 +32,7 @@ public class CountItemsOrAndSizeTask extends AsyncTask<Void, Pair<Integer, Long>
     }
 
     @Override
-    protected String doInBackground(Void[] params) {
+    protected String doInBackground(final Void[] params) {
         String items = "";
         long fileLength = file.length(context);
 
@@ -42,7 +42,7 @@ public class CountItemsOrAndSizeTask extends AsyncTask<Void, Pair<Integer, Long>
             final int folderLength = x.intValue();
             long folderSize;
 
-            if(isStorage) {
+            if (isStorage) {
                 folderSize = file.getUsableSpace();
             } else {
                 folderSize = FileUtils.folderSize(file, data -> publishProgress(new Pair<>(folderLength, data)));
@@ -59,20 +59,20 @@ public class CountItemsOrAndSizeTask extends AsyncTask<Void, Pair<Integer, Long>
     }
 
     @Override
-    protected void onProgressUpdate(Pair<Integer, Long>[] dataArr) {
+    protected void onProgressUpdate(final Pair<Integer, Long>[] dataArr) {
         Pair<Integer, Long> data = dataArr[0];
 
         itemsText.setText(getText(data.first, data.second, true));
     }
 
-    private String getText(int filesInFolder, long length, boolean loading) {
-        String numOfItems = (filesInFolder != 0? filesInFolder + " ":"")
-                            + context.getResources().getQuantityString(R.plurals.items, filesInFolder) ;
+    private String getText(final int filesInFolder, final long length, final boolean loading) {
+        String numOfItems = (filesInFolder != 0 ? filesInFolder + " " : "")
+                            + context.getResources().getQuantityString(R.plurals.items, filesInFolder);
 
-        return numOfItems + "; " + (loading? ">":"") + Formatter.formatFileSize(context, length);
+        return numOfItems + "; " + (loading ? ">" : "") + Formatter.formatFileSize(context, length);
     }
 
-    protected void onPostExecute(String items) {
+    protected void onPostExecute(final String items) {
         itemsText.setText(items);
     }
 }

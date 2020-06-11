@@ -50,7 +50,7 @@ public class PreferenceActivity extends BasicActivity {
         return getBoolean(PREFERENCE_ROOTMODE);
     }
 
-    public boolean getBoolean(String key) {
+    public boolean getBoolean(final String key) {
         boolean defaultValue;
 
         switch (key) {

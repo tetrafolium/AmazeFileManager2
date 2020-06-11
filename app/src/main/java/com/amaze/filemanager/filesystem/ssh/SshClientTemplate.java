@@ -42,7 +42,7 @@ public abstract class SshClientTemplate
      *
      * @param url SSH connection URL, in the form of <code>ssh://&lt;username&gt;:&lt;password&gt;@&lt;host&gt;:&lt;port&gt;</code> or <code>ssh://&lt;username&gt;@&lt;host&gt;:&lt;port&gt;</code>
      */
-    public SshClientTemplate(@NonNull String url)
+    public SshClientTemplate(final @NonNull String url)
     {
         this(url, true);
     }
@@ -53,7 +53,7 @@ public abstract class SshClientTemplate
      * @param url SSH connection URL, in the form of <code>ssh://&lt;username&gt;:&lt;password&gt;@&lt;host&gt;:&lt;port&gt;</code> or <code>ssh://&lt;username&gt;@&lt;host&gt;:&lt;port&gt;</code>
      * @param closeClientOnFinish if set to false, connection will be kept on after <code>execute</code> finishes. This is useful for other calls to reuse the connection.
      */
-    public SshClientTemplate(@NonNull String url, boolean closeClientOnFinish)
+    public SshClientTemplate(final @NonNull String url, final boolean closeClientOnFinish)
     {
         this.url = url;
         this.closeClientOnFinish = closeClientOnFinish;

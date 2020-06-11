@@ -12,14 +12,14 @@ public class CloudEntry {
     private OpenMode serviceType;
     private String persistData;
 
-    public CloudEntry() {}
+    public CloudEntry() { }
 
-    public CloudEntry(OpenMode serviceType, String persistData) {
+    public CloudEntry(final OpenMode serviceType, final String persistData) {
         this.serviceType = serviceType;
         this.persistData = persistData;
     }
 
-    public void setId(int _id) {
+    public void setId(final int _id) {
         this._id = _id;
     }
 
@@ -27,7 +27,7 @@ public class CloudEntry {
         return this._id;
     }
 
-    public void setPersistData(String persistData) {
+    public void setPersistData(final String persistData) {
         this.persistData = persistData;
     }
 
@@ -39,7 +39,7 @@ public class CloudEntry {
      * Set the service type
      * Support values from {@link com.amaze.filemanager.utils.OpenMode}
      */
-    public void setServiceType(OpenMode openMode) {
+    public void setServiceType(final OpenMode openMode) {
         this.serviceType = openMode;
     }
 

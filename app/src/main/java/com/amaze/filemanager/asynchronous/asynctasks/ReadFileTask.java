@@ -38,9 +38,9 @@ public class ReadFileTask extends AsyncTask<Void, Void, ReadFileTask.ReturnedVal
 
     private File cachedFile = null;
 
-    public ReadFileTask(ContentResolver contentResolver, EditableFileAbstraction file,
-                        File cacheDir, boolean isRootExplorer,
-                        OnAsyncTaskFinished<ReturnedValues> onAsyncTaskFinished) {
+    public ReadFileTask(final ContentResolver contentResolver, final EditableFileAbstraction file,
+                        final File cacheDir, final boolean isRootExplorer,
+                        final OnAsyncTaskFinished<ReturnedValues> onAsyncTaskFinished) {
         this.contentResolver = contentResolver;
         this.fileAbstraction = file;
         this.externalCacheDir = cacheDir;
@@ -49,7 +49,7 @@ public class ReadFileTask extends AsyncTask<Void, Void, ReadFileTask.ReturnedVal
     }
 
     @Override
-    protected ReturnedValues doInBackground(Void... params) {
+    protected ReturnedValues doInBackground(final Void... params) {
         StringBuilder stringBuilder = new StringBuilder();
 
         try {
@@ -57,13 +57,13 @@ public class ReadFileTask extends AsyncTask<Void, Void, ReadFileTask.ReturnedVal
 
             switch (fileAbstraction.scheme) {
             case EditableFileAbstraction.SCHEME_CONTENT:
-                if(fileAbstraction.uri == null) throw new NullPointerException("Something went really wrong!");
+                if (fileAbstraction.uri == null) throw new NullPointerException("Something went really wrong!");
 
                 inputStream = contentResolver.openInputStream(fileAbstraction.uri);
                 break;
             case EditableFileAbstraction.SCHEME_FILE:
                 final HybridFileParcelable hybridFileParcelable = fileAbstraction.hybridFileParcelable;
-                if(hybridFileParcelable == null) throw new NullPointerException("Something went really wrong!");
+                if (hybridFileParcelable == null) throw new NullPointerException("Something went really wrong!");
 
                 File file = hybridFileParcelable.getFile();
 
@@ -96,7 +96,7 @@ public class ReadFileTask extends AsyncTask<Void, Void, ReadFileTask.ReturnedVal
             }
 
 
-            if(inputStream == null) throw new StreamNotFoundException();
+            if (inputStream == null) throw new StreamNotFoundException();
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -119,7 +119,7 @@ public class ReadFileTask extends AsyncTask<Void, Void, ReadFileTask.ReturnedVal
     }
 
     @Override
-    protected void onPostExecute(ReturnedValues s) {
+    protected void onPostExecute(final ReturnedValues s) {
         super.onPostExecute(s);
 
         onAsyncTaskFinished.onAsyncTaskFinished(s);
@@ -130,14 +130,14 @@ public class ReadFileTask extends AsyncTask<Void, Void, ReadFileTask.ReturnedVal
         public final int error;
         public final File cachedFile;
 
-        private ReturnedValues(String fileContents, File cachedFile) {
+        private ReturnedValues(final String fileContents, final File cachedFile) {
             this.fileContents = fileContents;
             this.cachedFile = cachedFile;
 
             this.error = NORMAL;
         }
 
-        private ReturnedValues(int error) {
+        private ReturnedValues(final int error) {
             this.error = error;
 
             this.fileContents = null;

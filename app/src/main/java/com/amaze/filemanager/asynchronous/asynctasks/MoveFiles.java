@@ -66,10 +66,10 @@ public class MoveFiles extends AsyncTask<ArrayList<String>, String, Boolean> {
     private ArrayList<String> paths;
     private Context context;
     private OpenMode mode;
-    private long totalBytes = 0l;
-    private long destinationSize = 0l;
+    private long totalBytes = 0L;
+    private long destinationSize = 0L;
 
-    public MoveFiles(ArrayList<ArrayList<HybridFileParcelable>> files, MainFragment ma, Context context, OpenMode mode) {
+    public MoveFiles(final ArrayList<ArrayList<HybridFileParcelable>> files, final MainFragment ma, final Context context, final OpenMode mode) {
         mainFrag = ma;
         this.context = context;
         this.files = files;
@@ -77,7 +77,7 @@ public class MoveFiles extends AsyncTask<ArrayList<String>, String, Boolean> {
     }
 
     @Override
-    protected Boolean doInBackground(ArrayList<String>... strings) {
+    protected Boolean doInBackground(final ArrayList<String>... strings) {
         paths = strings[0];
 
         if (files.size() == 0) return true;
@@ -131,7 +131,7 @@ public class MoveFiles extends AsyncTask<ArrayList<String>, String, Boolean> {
         case BOX:
         case ONEDRIVE:
         case GDRIVE:
-            for (int i=0; i<paths.size(); i++) {
+            for (int i = 0; i < paths.size(); i++) {
                 for (HybridFileParcelable baseFile : files.get(i)) {
 
                     DataUtils dataUtils = DataUtils.getInstance();
@@ -161,7 +161,7 @@ public class MoveFiles extends AsyncTask<ArrayList<String>, String, Boolean> {
     }
 
     @Override
-    public void onPostExecute(Boolean movedCorrectly) {
+    public void onPostExecute(final Boolean movedCorrectly) {
         if (movedCorrectly) {
             if (mainFrag != null && mainFrag.getCurrentPath().equals(paths.get(0))) {
                 // mainFrag.updateList();

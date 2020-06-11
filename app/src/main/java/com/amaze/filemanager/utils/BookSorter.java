@@ -8,7 +8,7 @@ import java.util.Comparator;
 public class BookSorter implements Comparator<String[]> {
 
     @Override
-    public int compare(String[] lhs, String[] rhs) {
+    public int compare(final String[] lhs, final String[] rhs) {
         int result = lhs[0].compareToIgnoreCase(rhs[0]);
 
         if (result == 0) {

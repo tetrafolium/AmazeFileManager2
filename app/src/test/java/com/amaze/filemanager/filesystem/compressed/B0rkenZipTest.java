@@ -36,12 +36,12 @@ public class B0rkenZipTest {
     private Extractor.OnUpdate emptyListener = new Extractor.OnUpdate() {
 
         @Override
-        public void onStart(long totalBytes, String firstEntryName) {
+        public void onStart(final long totalBytes, final String firstEntryName) {
 
         }
 
         @Override
-        public void onUpdate(String entryPath) {
+        public void onUpdate(final String entryPath) {
 
         }
 
@@ -89,7 +89,7 @@ public class B0rkenZipTest {
 
     @Test
     public void testZipHelperTaskShouldOmitInvalidEntries() throws Exception {
-        ZipHelperTask task = new ZipHelperTask(RuntimeEnvironment.application, zipfile1.getAbsolutePath(), null, false, (data) -> {});
+        ZipHelperTask task = new ZipHelperTask(RuntimeEnvironment.application, zipfile1.getAbsolutePath(), null, false, (data) -> { });
         List<CompressedObjectParcelable> result = task.execute().get().result;
         assertEquals(1, result.size());
         assertEquals("good.txt", result.get(0).path);
@@ -98,7 +98,7 @@ public class B0rkenZipTest {
 
     @Test
     public void testZipHelperTaskShouldOmitInvalidEntriesWithBackslash() throws Exception {
-        ZipHelperTask task = new ZipHelperTask(RuntimeEnvironment.application, zipfile2.getAbsolutePath(), null, false, (data) -> {});
+        ZipHelperTask task = new ZipHelperTask(RuntimeEnvironment.application, zipfile2.getAbsolutePath(), null, false, (data) -> { });
         List<CompressedObjectParcelable> result = task.execute().get().result;
         assertEquals(1, result.size());
         assertEquals("good.txt", result.get(0).path);

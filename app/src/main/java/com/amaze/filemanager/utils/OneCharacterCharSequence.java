@@ -12,7 +12,7 @@ public class OneCharacterCharSequence implements CharSequence {
     }
 
     @Override
-    public char charAt(int index) {
+    public char charAt(final int index) {
         if (index < length) return value;
         throw new IndexOutOfBoundsException();
     }
@@ -23,7 +23,7 @@ public class OneCharacterCharSequence implements CharSequence {
     }
 
     @Override
-    public CharSequence subSequence(int start, int end) {
+    public CharSequence subSequence(final int start, final int end) {
         return new OneCharacterCharSequence(value, (end - start));
     }
 

@@ -11,7 +11,7 @@ public class DonationViewHolder extends RecyclerView.ViewHolder {
 
     public final LinearLayout ROOT_VIEW;
     public final TextView TITLE, SUMMARY, PRICE;
-    public DonationViewHolder(View itemView) {
+    public DonationViewHolder(final View itemView) {
         super(itemView);
         ROOT_VIEW = itemView.findViewById(R.id.adapter_donation_root);
         TITLE = itemView.findViewById(R.id.adapter_donation_title);

@@ -16,12 +16,12 @@ public class HybridFileParcelable extends HybridFile implements Parcelable {
     private String name;
     private String link = "";
 
-    public HybridFileParcelable(String path) {
+    public HybridFileParcelable(final String path) {
         super(OpenMode.FILE, path);
         this.path = path;
     }
 
-    public HybridFileParcelable(String path, String permission, long date, long size, boolean isDirectory) {
+    public HybridFileParcelable(final String path, final String permission, final long date, final long size, final boolean isDirectory) {
         super(OpenMode.FILE, path);
         this.date = date;
         this.size = size;
@@ -38,7 +38,7 @@ public class HybridFileParcelable extends HybridFile implements Parcelable {
         else return super.getName();
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -50,7 +50,7 @@ public class HybridFileParcelable extends HybridFile implements Parcelable {
         return link;
     }
 
-    public void setLink(String link) {
+    public void setLink(final String link) {
         this.link = link;
     }
 
@@ -58,7 +58,7 @@ public class HybridFileParcelable extends HybridFile implements Parcelable {
         return date;
     }
 
-    public void setDate(long date) {
+    public void setDate(final long date) {
         this.date = date;
     }
 
@@ -66,7 +66,7 @@ public class HybridFileParcelable extends HybridFile implements Parcelable {
         return size;
     }
 
-    public void setSize(long size) {
+    public void setSize(final long size) {
         this.size = size;
     }
 
@@ -78,7 +78,7 @@ public class HybridFileParcelable extends HybridFile implements Parcelable {
         return name.startsWith(".");
     }
 
-    public void setDirectory(boolean directory) {
+    public void setDirectory(final boolean directory) {
         isDirectory = directory;
     }
 
@@ -90,11 +90,11 @@ public class HybridFileParcelable extends HybridFile implements Parcelable {
         return permission;
     }
 
-    public void setPermission(String permission) {
+    public void setPermission(final String permission) {
         this.permission = permission;
     }
 
-    protected HybridFileParcelable(Parcel in) {
+    protected HybridFileParcelable(final Parcel in) {
         super(OpenMode.getOpenMode(in.readInt()), in.readString());
         permission = in.readString();
         name = in.readString();
@@ -106,12 +106,12 @@ public class HybridFileParcelable extends HybridFile implements Parcelable {
 
     public static final Creator<HybridFileParcelable> CREATOR = new Creator<HybridFileParcelable>() {
         @Override
-        public HybridFileParcelable createFromParcel(Parcel in) {
+        public HybridFileParcelable createFromParcel(final Parcel in) {
             return new HybridFileParcelable(in);
         }
 
         @Override
-        public HybridFileParcelable[] newArray(int size) {
+        public HybridFileParcelable[] newArray(final int size) {
             return new HybridFileParcelable[size];
         }
     };
@@ -122,7 +122,7 @@ public class HybridFileParcelable extends HybridFile implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeInt(mode.ordinal());
         dest.writeString(path);
         dest.writeString(permission);
@@ -144,10 +144,10 @@ public class HybridFileParcelable extends HybridFile implements Parcelable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if(obj == null || (!(obj instanceof HybridFileParcelable)))
+    public boolean equals(final Object obj) {
+        if (obj == null || (!(obj instanceof HybridFileParcelable)))
             return false;
-        return path.equals(((HybridFileParcelable)obj).path);
+        return path.equals(((HybridFileParcelable) obj).path);
     }
 
     @Override
@@ -155,8 +155,8 @@ public class HybridFileParcelable extends HybridFile implements Parcelable {
         int result = path.hashCode();
         result = 37 * result + name.hashCode();
         result = 37 * result + (isDirectory ? 1 : 0);
-        result = 37 * result + (int)(size ^ size >>> 32);
-        result = 37 * result + (int)(date ^ date >>> 32);
+        result = 37 * result + (int) (size ^ size >>> 32);
+        result = 37 * result + (int) (date ^ date >>> 32);
         return result;
     }
 }

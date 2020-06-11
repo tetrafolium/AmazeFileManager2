@@ -86,21 +86,21 @@ public class MainActivityHelper {
      */
     public static String SEARCH_TEXT;
 
-    public MainActivityHelper(MainActivity mainActivity) {
+    public MainActivityHelper(final MainActivity mainActivity) {
         this.mainActivity = mainActivity;
         accentColor = mainActivity.getAccent();
     }
 
-    public void showFailedOperationDialog(ArrayList<HybridFileParcelable> failedOps, Context contextc) {
-        MaterialDialog.Builder mat=new MaterialDialog.Builder(contextc);
+    public void showFailedOperationDialog(final ArrayList<HybridFileParcelable> failedOps, final Context contextc) {
+        MaterialDialog.Builder mat = new MaterialDialog.Builder(contextc);
         mat.title(contextc.getString(R.string.operationunsuccesful));
         mat.theme(mainActivity.getAppTheme().getMaterialDialogTheme());
         mat.positiveColor(accentColor);
         mat.positiveText(R.string.cancel);
         String content = contextc.getString(R.string.operation_fail_following);
-        int k=1;
-        for(HybridFileParcelable s:failedOps) {
-            content=content+ "\n" + (k) + ". " + s.getName();
+        int k = 1;
+        for (HybridFileParcelable s:failedOps) {
+            content = content + "\n" + (k) + ". " + s.getName();
             k++;
         }
         mat.content(content);
@@ -109,7 +109,7 @@ public class MainActivityHelper {
 
     public final BroadcastReceiver mNotificationReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(final Context context, final Intent intent) {
             if (intent != null) {
                 if (intent.getAction().equals(Intent.ACTION_MEDIA_MOUNTED)) {
                     Toast.makeText(mainActivity, "Media Mounted", Toast.LENGTH_SHORT).show();
@@ -171,10 +171,10 @@ public class MainActivityHelper {
             //The redundant equalsIgnoreCase() is needed since ".txt" itself does not end with .txt (i.e. recommended as ".txt.txt"
             if (isValidFilename && text.length() > 0) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mainActivity);
-                if(text.startsWith(".") && !prefs.getBoolean(PreferencesConstants.PREFERENCE_SHOW_HIDDENFILES, false)) {
+                if (text.startsWith(".") && !prefs.getBoolean(PreferencesConstants.PREFERENCE_SHOW_HIDDENFILES, false)) {
                     return new WarnableTextInputValidator.ReturnState(
                         WarnableTextInputValidator.ReturnState.STATE_WARNING, R.string.create_hidden_file_warn);
-                } else if(!text.toLowerCase().endsWith(NEW_FILE_TXT_EXTENSION)) {
+                } else if (!text.toLowerCase().endsWith(NEW_FILE_TXT_EXTENSION)) {
                     return new WarnableTextInputValidator.ReturnState(
                                WarnableTextInputValidator.ReturnState.STATE_WARNING, R.string.create_file_suggest_txt_extension);
                 }
@@ -192,7 +192,7 @@ public class MainActivityHelper {
         });
     }
 
-    private void mk(@StringRes int newText, String prefill, final MaterialDialog.SingleButtonCallback onPositiveAction,
+    private void mk(final @StringRes int newText, final String prefill, final MaterialDialog.SingleButtonCallback onPositiveAction,
                     final WarnableTextInputValidator.OnTextValidate validator) {
         GeneralDialogCreation.showNameDialog(mainActivity,
                                              mainActivity.getResources().getString(R.string.entername),
@@ -204,7 +204,7 @@ public class MainActivityHelper {
         .show();
     }
 
-    public void add(int pos) {
+    public void add(final int pos) {
         final MainFragment ma = (MainFragment) ((TabFragment) mainActivity.getSupportFragmentManager().findFragmentById(R.id.content_frame)).getCurrentTabFragment();
         final String path = ma.getCurrentPath();
 
@@ -223,7 +223,7 @@ public class MainActivityHelper {
         }
     }
 
-    public String getIntegralNames(String path) {
+    public String getIntegralNames(final String path) {
         String newPath = "";
         switch (Integer.parseInt(path)) {
         case 0:
@@ -251,7 +251,7 @@ public class MainActivityHelper {
         return newPath;
     }
 
-    public void guideDialogForLEXA(String path) {
+    public void guideDialogForLEXA(final String path) {
         final MaterialDialog.Builder x = new MaterialDialog.Builder(mainActivity);
         x.theme(mainActivity.getAppTheme().getMaterialDialogTheme());
         x.title(R.string.needsaccess);
@@ -266,8 +266,8 @@ public class MainActivityHelper {
         .negativeText(R.string.cancel)
         .positiveColor(accentColor)
         .negativeColor(accentColor)
-        .onPositive((dialog, which)->triggerStorageAccessFramework())
-        .onNegative((dialog, which)->Toast.makeText(mainActivity, R.string.error, Toast.LENGTH_SHORT).show());
+        .onPositive((dialog, which) -> triggerStorageAccessFramework())
+        .onNegative((dialog, which) -> Toast.makeText(mainActivity, R.string.error, Toast.LENGTH_SHORT).show());
         final MaterialDialog y = x.build();
         y.show();
     }
@@ -277,14 +277,14 @@ public class MainActivityHelper {
         mainActivity.startActivityForResult(intent, 3);
     }
 
-    public void rename(OpenMode mode, final String oldPath, final String newPath,
-                       final Activity context, boolean rootmode) {
-        final Toast toast=Toast.makeText(context, context.getString(R.string.renaming),
+    public void rename(final OpenMode mode, final String oldPath, final String newPath,
+                       final Activity context, final boolean rootmode) {
+        final Toast toast = Toast.makeText(context, context.getString(R.string.renaming),
                                          Toast.LENGTH_SHORT);
         toast.show();
         Operations.rename(new HybridFile(mode, oldPath), new HybridFile(mode, newPath), rootmode, context, new Operations.ErrorCallBack() {
             @Override
-            public void exists(HybridFile file) {
+            public void exists(final HybridFile file) {
                 context.runOnUiThread(() -> {
                     if (toast != null) toast.cancel();
                     Toast.makeText(mainActivity, context.getString(R.string.fileexist),
@@ -293,7 +293,7 @@ public class MainActivityHelper {
             }
 
             @Override
-            public void launchSAF(HybridFile file) {
+            public void launchSAF(final HybridFile file) {
 
             }
 
@@ -355,7 +355,7 @@ public class MainActivityHelper {
     //For Android 5
     public static final int CAN_CREATE_FILES = 2;
 
-    public int checkFolder(final File folder, Context context) {
+    public int checkFolder(final File folder, final Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (FileUtil.isOnExtSdCard(folder, context)) {
                 if (!folder.exists() || !folder.isDirectory()) {
@@ -392,7 +392,7 @@ public class MainActivityHelper {
      * @param file the new compressed file
      * @param baseFiles list of {@link HybridFileParcelable} to be compressed
      */
-    public void compressFiles(File file, ArrayList<HybridFileParcelable> baseFiles) {
+    public void compressFiles(final File file, final ArrayList<HybridFileParcelable> baseFiles) {
         int mode = checkFolder(file.getParentFile(), mainActivity);
         if (mode == 2) {
             mainActivity.oppathe = (file.getPath());
@@ -427,7 +427,7 @@ public class MainActivityHelper {
             }
 
             @Override
-            public void launchSAF(HybridFile file) {
+            public void launchSAF(final HybridFile file) {
 
                 ma.getActivity().runOnUiThread(() -> {
                     if (toast != null) toast.cancel();
@@ -439,12 +439,12 @@ public class MainActivityHelper {
             }
 
             @Override
-            public void launchSAF(HybridFile file, HybridFile file1) {
+            public void launchSAF(final HybridFile file, final HybridFile file1) {
 
             }
 
             @Override
-            public void done(HybridFile hFile, final boolean b) {
+            public void done(final HybridFile hFile, final boolean b) {
                 ma.getActivity().runOnUiThread(() -> {
                     if (b) {
                         ma.updateList();
@@ -485,7 +485,7 @@ public class MainActivityHelper {
             }
 
             @Override
-            public void launchSAF(HybridFile file) {
+            public void launchSAF(final HybridFile file) {
                 if (toast != null) toast.cancel();
                 ma.getActivity().runOnUiThread(() -> {
                     mainActivity.oppathe = path.getPath();
@@ -496,12 +496,12 @@ public class MainActivityHelper {
             }
 
             @Override
-            public void launchSAF(HybridFile file, HybridFile file1) {
+            public void launchSAF(final HybridFile file, final HybridFile file1) {
 
             }
 
             @Override
-            public void done(HybridFile hFile, final boolean b) {
+            public void done(final HybridFile hFile, final boolean b) {
                 ma.getActivity().runOnUiThread(() -> {
                     if (b) {
                         ma.updateList();
@@ -524,7 +524,7 @@ public class MainActivityHelper {
         });
     }
 
-    public void deleteFiles(ArrayList<HybridFileParcelable> files) {
+    public void deleteFiles(final ArrayList<HybridFileParcelable> files) {
         if (files == null || files.size() == 0) return;
         if (files.get(0).isSmb()) {
             new DeleteTask(mainActivity).execute((files));
@@ -539,7 +539,7 @@ public class MainActivityHelper {
         else Toast.makeText(mainActivity, R.string.not_allowed, Toast.LENGTH_SHORT).show();
     }
 
-    public void extractFile(File file) {
+    public void extractFile(final File file) {
         int mode = checkFolder(file.getParentFile(), mainActivity);
         if (mode == 2) {
             mainActivity.oppathe = (file.getPath());
@@ -550,13 +550,13 @@ public class MainActivityHelper {
         } else Toast.makeText(mainActivity, R.string.not_allowed, Toast.LENGTH_SHORT).show();
     }
 
-    public String parseSftpPath(String a) {
+    public String parseSftpPath(final String a) {
         if (a.contains("@"))
             return "ssh://" + a.substring(a.lastIndexOf("@") + 1, a.length());
         else return a;
     }
 
-    public String parseSmbPath(String a) {
+    public String parseSmbPath(final String a) {
         if (a.contains("@"))
             return "smb://" + a.substring(a.indexOf("@") + 1, a.length());
         else return a;
@@ -566,13 +566,13 @@ public class MainActivityHelper {
      * Retrieve a path with {@link OTGUtil#PREFIX_OTG} as prefix
 
      */
-    public String parseOTGPath(String path) {
+    public String parseOTGPath(final String path) {
         if (path.contains(OTGUtil.PREFIX_OTG))
             return path;
         else return OTGUtil.PREFIX_OTG + path.substring(path.indexOf(":") + 1, path.length());
     }
 
-    public String parseCloudPath(OpenMode serviceType, String path) {
+    public String parseCloudPath(final OpenMode serviceType, final String path) {
         switch (serviceType) {
         case DROPBOX:
             if (path.contains(CloudHandler.CLOUD_PREFIX_DROPBOX)) return path;
@@ -602,7 +602,7 @@ public class MainActivityHelper {
      *
      * @param query the text query entered the by user
      */
-    public void search(SharedPreferences sharedPrefs, String query) {
+    public void search(final SharedPreferences sharedPrefs, final String query) {
         TabFragment tabFragment = mainActivity.getTabFragment();
         if (tabFragment == null) return;
         final MainFragment ma = (MainFragment) tabFragment.getCurrentTabFragment();
@@ -641,9 +641,9 @@ public class MainActivityHelper {
      * @param regex           is regular expression search enabled
      * @param matches         is matches enabled for patter matching
      */
-    public static void addSearchFragment(FragmentManager fragmentManager, Fragment fragment,
-                                         String path, String input, OpenMode openMode, boolean rootMode,
-                                         boolean regex, boolean matches) {
+    public static void addSearchFragment(final FragmentManager fragmentManager, final Fragment fragment,
+                                         final String path, final String input, final OpenMode openMode, final boolean rootMode,
+                                         final boolean regex, final boolean matches) {
         Bundle args = new Bundle();
         args.putString(SearchWorkerFragment.KEY_INPUT, input);
         args.putString(SearchWorkerFragment.KEY_PATH, path);
@@ -661,7 +661,7 @@ public class MainActivityHelper {
      * Directory inside the same directory with similar filename shall not be allowed
      * Doesn't work at an OTG path
      */
-    public static boolean isNewDirectoryRecursive(HybridFile file) {
+    public static boolean isNewDirectoryRecursive(final HybridFile file) {
         return file.getName().equals(file.getParentName());
     }
 

@@ -12,12 +12,12 @@ import android.widget.Switch;
  */
 public class CheckBox extends SwitchPreference {
 
-    public CheckBox(Context context, AttributeSet attrs) {
+    public CheckBox(final Context context, final AttributeSet attrs) {
         super(context, attrs);
     }
 
     @Override
-    protected void onBindView(View view) {
+    protected void onBindView(final View view) {
         // Clean listener before invoke SwitchPreference.onBindView
         clearListenerInViewGroup((ViewGroup) view);
         super.onBindView(view);
@@ -28,7 +28,7 @@ public class CheckBox extends SwitchPreference {
      *
      * @param viewGroup The ViewGroup that will need to clear the listener.
      */
-    private void clearListenerInViewGroup(ViewGroup viewGroup) {
+    private void clearListenerInViewGroup(final ViewGroup viewGroup) {
         if (null == viewGroup) {
             return;
         }

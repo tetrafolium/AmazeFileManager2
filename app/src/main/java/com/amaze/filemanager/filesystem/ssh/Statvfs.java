@@ -120,11 +120,11 @@ public class Statvfs
         // f_namemax
         public final int filenameMaxLength;
 
-        public Response(String remotePath, net.schmizz.sshj.sftp.Response response) throws SFTPException, Buffer.BufferException
+        public Response(final String remotePath, final net.schmizz.sshj.sftp.Response response) throws SFTPException, Buffer.BufferException
         {
             response.ensurePacketTypeIs(PacketType.EXTENDED_REPLY);
 
-            if(!response.readStatusCode().equals(net.schmizz.sshj.sftp.Response.StatusCode.OK)) {
+            if (!response.readStatusCode().equals(net.schmizz.sshj.sftp.Response.StatusCode.OK)) {
                 throw new SFTPException("Bad response code: " + response.readStatusCode());
             }
 
@@ -198,7 +198,7 @@ public class Statvfs
          *
          * @see Buffer#readUInt64()
          */
-        private long readUInt64FromBuffer(Buffer buffer) throws Buffer.BufferException
+        private long readUInt64FromBuffer(final Buffer buffer) throws Buffer.BufferException
         {
             long uint64 = (buffer.readUInt32() << 32) + (buffer.readUInt32() & 0xffffffffL);
             return uint64;

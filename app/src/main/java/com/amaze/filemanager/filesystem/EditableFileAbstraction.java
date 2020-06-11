@@ -27,7 +27,7 @@ public class EditableFileAbstraction {
     public final int scheme;
     public final HybridFileParcelable hybridFileParcelable;
 
-    public EditableFileAbstraction(Context context, Uri uri) {
+    public EditableFileAbstraction(final Context context, final Uri uri) {
         switch (uri.getScheme()) {
         case "content":
             this.uri = uri;
@@ -64,12 +64,12 @@ public class EditableFileAbstraction {
             this.scheme = SCHEME_FILE;
 
             String path = uri.getPath();
-            if(path == null) throw new NullPointerException("Uri '" + uri.toString() + "' is not hierarchical!");
+            if (path == null) throw new NullPointerException("Uri '" + uri.toString() + "' is not hierarchical!");
             path = Utils.sanitizeInput(path);
             this.hybridFileParcelable = new HybridFileParcelable(path);
 
             String tempN = hybridFileParcelable.getName(context);
-            if(tempN == null) tempN = uri.getLastPathSegment();
+            if (tempN == null) tempN = uri.getLastPathSegment();
             this.name = tempN;
 
             this.uri = null;

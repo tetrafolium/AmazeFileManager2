@@ -103,7 +103,7 @@ public abstract class AbstractCompressedHelperTaskTest {
     protected abstract CompressedHelperTask createTask(String relativePath);
 
     private void copyArchivesToStorage() throws IOException {
-        for(File f : new File("src/test/resources").listFiles()) {
+        for (File f : new File("src/test/resources").listFiles()) {
             IOUtils.copy(new FileInputStream(f), new FileOutputStream(new File(Environment.getExternalStorageDirectory(), f.getName())));
         }
     }

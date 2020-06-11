@@ -11,21 +11,21 @@ import android.widget.ImageButton;
 
 public class ThemedImageButton extends ThemedImageView {
 
-    public ThemedImageButton(Context context) {
+    public ThemedImageButton(final Context context) {
         super(context);
     }
 
-    public ThemedImageButton(Context context, AttributeSet attrs) {
+    public ThemedImageButton(final Context context, final AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ThemedImageButton(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ThemedImageButton(final Context context, final AttributeSet attrs, final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setFocusable(true);
     }
 
     @Override
-    protected boolean onSetAlpha(int alpha) {
+    protected boolean onSetAlpha(final int alpha) {
         return false;
     }
 

@@ -41,7 +41,7 @@ public class Billing extends RecyclerView.Adapter<RecyclerView.ViewHolder> imple
     private boolean isServiceConnected;
 
 
-    public Billing(BasicActivity activity) {
+    public Billing(final BasicActivity activity) {
         this.activity = activity;
 
         skuList = new ArrayList<>();
@@ -58,7 +58,7 @@ public class Billing extends RecyclerView.Adapter<RecyclerView.ViewHolder> imple
 
 
     @Override
-    public void onPurchasesUpdated(int responseCode, @Nullable List<Purchase> purchases) {
+    public void onPurchasesUpdated(final int responseCode, final @Nullable List<Purchase> purchases) {
         if (responseCode == BillingClient.BillingResponse.OK
                 && purchases != null) {
             for (Purchase purchase : purchases) {
@@ -94,7 +94,7 @@ public class Billing extends RecyclerView.Adapter<RecyclerView.ViewHolder> imple
      * @param responseCode
      * @param skuDetailsList
      */
-    private void popProductsList(int responseCode, List<SkuDetails> skuDetailsList) {
+    private void popProductsList(final int responseCode, final List<SkuDetails> skuDetailsList) {
         if (responseCode == BillingClient.BillingResponse.OK
                 && skuDetailsList != null) {
             showPaymentsDialog(activity);
@@ -104,13 +104,13 @@ public class Billing extends RecyclerView.Adapter<RecyclerView.ViewHolder> imple
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(final @NonNull ViewGroup parent, final int viewType) {
         View rootView = layoutInflater.inflate(R.layout.adapter_donation, parent, false);
         return new DonationViewHolder(rootView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final @NonNull RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof DonationViewHolder) {
             String titleRaw = skuDetails.get(position).getTitle();
             ((DonationViewHolder) holder).TITLE.setText(titleRaw.subSequence(0, titleRaw.lastIndexOf("(")));
@@ -134,7 +134,7 @@ public class Billing extends RecyclerView.Adapter<RecyclerView.ViewHolder> imple
 
     private PurchaseProduct purchaseProduct = new PurchaseProduct() {
         @Override
-        public void purchaseItem(SkuDetails skuDetails) {
+        public void purchaseItem(final SkuDetails skuDetails) {
 
             BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder()
                                                   .setSkuDetails(skuDetails)
@@ -152,7 +152,7 @@ public class Billing extends RecyclerView.Adapter<RecyclerView.ViewHolder> imple
      * We executes a connection request to Google Play
      * @param runnable
      */
-    private void executeServiceRequest(Runnable runnable) {
+    private void executeServiceRequest(final Runnable runnable) {
         if (isServiceConnected) {
             runnable.run();
         } else {
@@ -169,7 +169,7 @@ public class Billing extends RecyclerView.Adapter<RecyclerView.ViewHolder> imple
     private void startServiceConnection(final Runnable executeOnSuccess) {
         billingClient.startConnection(new BillingClientStateListener() {
             @Override
-            public void onBillingSetupFinished(@BillingClient.BillingResponse int billingResponseCode) {
+            public void onBillingSetupFinished(final @BillingClient.BillingResponse int billingResponseCode) {
                 Log.d(Billing.this.getClass().getSimpleName(), "Setup finished. Response code: " + billingResponseCode);
 
                 if (billingResponseCode == BillingClient.BillingResponse.OK) {

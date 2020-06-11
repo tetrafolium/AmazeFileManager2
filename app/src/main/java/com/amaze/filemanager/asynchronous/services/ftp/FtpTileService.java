@@ -21,7 +21,7 @@ import com.amaze.filemanager.R;
 public class FtpTileService extends TileService {
     private BroadcastReceiver ftpReceiver = new BroadcastReceiver() {
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(final Context context, final Intent intent) {
             updateTileState();
         }
     };
@@ -46,7 +46,7 @@ public class FtpTileService extends TileService {
 
     @Override
     public void onClick() {
-        unlockAndRun(()-> {
+        unlockAndRun(() -> {
             if (FtpService.isRunning()) {
                 getApplicationContext().sendBroadcast(new Intent(FtpService.ACTION_STOP_FTPSERVER).setPackage(getPackageName()));
             } else {

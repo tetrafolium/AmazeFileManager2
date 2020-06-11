@@ -34,7 +34,7 @@ public class SearchTextTask extends AsyncTask<Editable, Void, ArrayList<MapEntry
     private StringReader stringReader;
     private LineNumberReader lineNumberReader;
 
-    public SearchTextTask(TextEditorActivity textEditorActivity) {
+    public SearchTextTask(final TextEditorActivity textEditorActivity) {
         this.textEditorActivity = textEditorActivity;
     }
 
@@ -54,7 +54,7 @@ public class SearchTextTask extends AsyncTask<Editable, Void, ArrayList<MapEntry
     }
 
     @Override
-    protected ArrayList<MapEntry> doInBackground(Editable... params) {
+    protected ArrayList<MapEntry> doInBackground(final Editable... params) {
         for (int i = 0; i < (editText.length() - params[0].length()); i++) {
             if (searchTextLength == 0 || isCancelled())
                 break;
@@ -97,7 +97,7 @@ public class SearchTextTask extends AsyncTask<Editable, Void, ArrayList<MapEntry
             }
         }
 
-        if (mapEntries.size()!=0) {
+        if (mapEntries.size() != 0) {
             upButton.setEnabled(true);
             downButton.setEnabled(true);
 

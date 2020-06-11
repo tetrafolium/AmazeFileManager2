@@ -166,11 +166,11 @@ public class ExtractServiceTest {
         assertNull(ShadowToast.getTextOfLatestToast());
     }
 
-    private void performTest(@NonNull File archiveFile) {
+    private void performTest(final @NonNull File archiveFile) {
         Intent intent = new Intent(RuntimeEnvironment.application, ExtractService.class)
         .putExtra(ExtractService.KEY_PATH_ZIP, archiveFile.getAbsolutePath())
         .putExtra(ExtractService.KEY_ENTRIES_ZIP, new String[0])
         .putExtra(ExtractService.KEY_PATH_EXTRACT, new File(Environment.getExternalStorageDirectory(), "test-archive").getAbsolutePath());
-        service.onStartCommand(intent,0, 0);
+        service.onStartCommand(intent, 0, 0);
     }
 }

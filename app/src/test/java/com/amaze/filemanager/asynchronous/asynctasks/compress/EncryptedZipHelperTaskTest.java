@@ -8,9 +8,9 @@ import java.io.File;
 
 public class EncryptedZipHelperTaskTest extends AbstractCompressedHelperTaskTest {
 
-    protected CompressedHelperTask createTask(String relativePath) {
+    protected CompressedHelperTask createTask(final String relativePath) {
         return new ZipHelperTask(RuntimeEnvironment.application, new File(Environment.getExternalStorageDirectory(),
                                  "test-archive-encrypted.zip").getAbsolutePath(),
-                                 relativePath, false, (data) -> {});
+                                 relativePath, false, (data) -> { });
     }
 }

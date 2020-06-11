@@ -42,7 +42,7 @@ public class ColorPreferenceHelper {
      *
      * @return The {@link ColorPreference} object itself.
      */
-    public static UserColorPreferences randomize(Context c) {
+    public static UserColorPreferences randomize(final Context c) {
         @ColorRes int[] colorPos = RANDOM_COMBINATIONS[new Random().nextInt(RANDOM_COMBINATIONS.length)];
 
         return new UserColorPreferences(Utils.getColor(c, colorPos[0]), Utils.getColor(c, colorPos[0]),
@@ -56,18 +56,18 @@ public class ColorPreferenceHelper {
      * @param num The primary color index
      * @return The ColorUsage for the given primary color.
      */
-    public static @ColorInt int getPrimary(UserColorPreferences currentColors, int num) {
-        return num == 1? currentColors.primarySecondTab : currentColors.primaryFirstTab;
+    public static @ColorInt int getPrimary(final UserColorPreferences currentColors, final int num) {
+        return num == 1 ? currentColors.primarySecondTab : currentColors.primaryFirstTab;
     }
 
     private UserColorPreferences currentColors;
 
-    public UserColorPreferences getCurrentUserColorPreferences(Context context, SharedPreferences prefs) {
-        if(currentColors == null) currentColors = getColorPreferences(context, prefs);
+    public UserColorPreferences getCurrentUserColorPreferences(final Context context, final SharedPreferences prefs) {
+        if (currentColors == null) currentColors = getColorPreferences(context, prefs);
         return currentColors;
     }
 
-    public void saveColorPreferences(SharedPreferences prefs, UserColorPreferences userPrefs) {
+    public void saveColorPreferences(final SharedPreferences prefs, final UserColorPreferences userPrefs) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(PreferencesConstants.PREFERENCE_SKIN, userPrefs.primaryFirstTab);
         editor.putInt(PreferencesConstants.PREFERENCE_SKIN_TWO, userPrefs.primarySecondTab);
@@ -78,8 +78,8 @@ public class ColorPreferenceHelper {
         currentColors = userPrefs;
     }
 
-    private UserColorPreferences getColorPreferences(Context c, SharedPreferences prefs) {
-        if(isUsingOldColorsSystem(prefs)) correctToNewColorsSystem(c, prefs);
+    private UserColorPreferences getColorPreferences(final Context c, final SharedPreferences prefs) {
+        if (isUsingOldColorsSystem(prefs)) correctToNewColorsSystem(c, prefs);
 
         int tabOne = prefs.getInt(PreferencesConstants.PREFERENCE_SKIN, Utils.getColor(c, DEFAULT_PRIMARY_FIRST_TAB));
         int tabTwo = prefs.getInt(PreferencesConstants.PREFERENCE_SKIN_TWO, Utils.getColor(c, DEFAULT_PRIMARY_SECOND_TAB));
@@ -93,7 +93,7 @@ public class ColorPreferenceHelper {
      * The old system used indexes, from here on in this file a correction is made so that the
      * indexes are converted into ColorInts
      */
-    private boolean isUsingOldColorsSystem(SharedPreferences prefs) {
+    private boolean isUsingOldColorsSystem(final SharedPreferences prefs) {
         int tabOne = prefs.getInt(PreferencesConstants.PREFERENCE_SKIN, R.color.primary_indigo);
         int tabTwo = prefs.getInt(PreferencesConstants.PREFERENCE_SKIN_TWO, R.color.primary_indigo);
         int accent = prefs.getInt(PreferencesConstants.PREFERENCE_ACCENT, R.color.primary_pink);
@@ -129,7 +129,7 @@ public class ColorPreferenceHelper {
                 R.color.accent_light_green
             );
 
-    private void correctToNewColorsSystem(Context c, SharedPreferences prefs) {
+    private void correctToNewColorsSystem(final Context c, final SharedPreferences prefs) {
         int tabOne = prefs.getInt(PreferencesConstants.PREFERENCE_SKIN, -1);
         int tabTwo = prefs.getInt(PreferencesConstants.PREFERENCE_SKIN_TWO, -1);
         int accent = prefs.getInt(PreferencesConstants.PREFERENCE_ACCENT, -1);
@@ -143,8 +143,8 @@ public class ColorPreferenceHelper {
         editor.apply();
     }
 
-    private @ColorInt int correctForIndex(Context c, int color) {
-        if(color != -1) return Utils.getColor(c, OLD_SYSTEM_LIST.get(color));
+    private @ColorInt int correctForIndex(final Context c, final int color) {
+        if (color != -1) return Utils.getColor(c, OLD_SYSTEM_LIST.get(color));
         else return Utils.getColor(c, R.color.primary_indigo);
     }
 

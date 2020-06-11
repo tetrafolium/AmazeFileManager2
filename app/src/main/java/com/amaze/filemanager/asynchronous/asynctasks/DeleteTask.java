@@ -56,27 +56,27 @@ public class DeleteTask extends AsyncTask<ArrayList<HybridFileParcelable>, Strin
     private CompressedExplorerFragment compressedExplorerFragment;
     private DataUtils dataUtils = DataUtils.getInstance();
 
-    public DeleteTask(Context cd) {
+    public DeleteTask(final Context cd) {
         this.cd = cd;
         rootMode = PreferenceManager.getDefaultSharedPreferences(cd).getBoolean(PreferencesConstants.PREFERENCE_ROOTMODE, false);
     }
 
-    public DeleteTask(Context cd, CompressedExplorerFragment compressedExplorerFragment) {
+    public DeleteTask(final Context cd, final CompressedExplorerFragment compressedExplorerFragment) {
         this.cd = cd;
         rootMode = PreferenceManager.getDefaultSharedPreferences(cd).getBoolean(PreferencesConstants.PREFERENCE_ROOTMODE, false);
         this.compressedExplorerFragment = compressedExplorerFragment;
     }
 
     @Override
-    protected void onProgressUpdate(String... values) {
+    protected void onProgressUpdate(final String... values) {
         super.onProgressUpdate(values);
         Toast.makeText(cd, values[0], Toast.LENGTH_SHORT).show();
     }
 
-    protected Boolean doInBackground(ArrayList<HybridFileParcelable>... p1) {
+    protected Boolean doInBackground(final ArrayList<HybridFileParcelable>... p1) {
         files = p1[0];
         boolean wasDeleted = true;
-        if(files.size()==0)return true;
+        if (files.size() == 0) return true;
 
         if (files.get(0).isOtgFile()) {
             for (HybridFileParcelable file : files) {
@@ -128,7 +128,7 @@ public class DeleteTask extends AsyncTask<ArrayList<HybridFileParcelable>, Strin
                 }
             }
         } else {
-            for(HybridFileParcelable file : files) {
+            for (HybridFileParcelable file : files) {
                 try {
                     if (file.delete(cd, rootMode)) {
                         wasDeleted = true;
@@ -145,10 +145,10 @@ public class DeleteTask extends AsyncTask<ArrayList<HybridFileParcelable>, Strin
         }
 
         // delete file from media database
-        if(!files.get(0).isSmb()) {
+        if (!files.get(0).isSmb()) {
             try {
                 for (HybridFileParcelable f : files) {
-                    delete(cd,f.getPath());
+                    delete(cd, f.getPath());
                 }
             } catch (Exception e) {
                 for (HybridFileParcelable f : files) {
@@ -169,7 +169,7 @@ public class DeleteTask extends AsyncTask<ArrayList<HybridFileParcelable>, Strin
     }
 
     @Override
-    public void onPostExecute(Boolean wasDeleted) {
+    public void onPostExecute(final Boolean wasDeleted) {
 
         Intent intent = new Intent(MainActivity.KEY_INTENT_LOAD_LIST);
         String path = files.get(0).getParent(cd);
@@ -182,7 +182,7 @@ public class DeleteTask extends AsyncTask<ArrayList<HybridFileParcelable>, Strin
             Toast.makeText(cd, cd.getResources().getString(R.string.done), Toast.LENGTH_SHORT).show();
         }
 
-        if (compressedExplorerFragment!=null) {
+        if (compressedExplorerFragment != null) {
             compressedExplorerFragment.files.clear();
         }
 

@@ -38,7 +38,7 @@ public class RootUtils {
      * @param path the path on which action to perform
      * @return String the root of mount point that was ro, and mounted to rw; null otherwise
      */
-    private static String mountFileSystemRW(String path) throws ShellNotRunningException {
+    private static String mountFileSystemRW(final String path) throws ShellNotRunningException {
         String command = "mount";
         ArrayList<String> output = RootHelper.runShellCommandToList(command);
         String mountPoint = "", types = null;
@@ -80,7 +80,7 @@ public class RootUtils {
      *
      * @param path the root of device/filesystem to be mounted as ro
      */
-    private static void mountFileSystemRO(String path) throws ShellNotRunningException {
+    private static void mountFileSystemRO(final String path) throws ShellNotRunningException {
         String command = "umount -r \"" + path + "\"";
         RootHelper.runShellCommand(command);
     }
@@ -88,7 +88,7 @@ public class RootUtils {
     /**
      * Copies file using root
      */
-    public static void copy(String source, String destination) throws ShellNotRunningException {
+    public static void copy(final String source, final String destination) throws ShellNotRunningException {
         // remounting destination as rw
         String mountPoint = mountFileSystemRW(destination);
 
@@ -107,8 +107,8 @@ public class RootUtils {
      * @param updatedPermissions octal notation for permissions
      * @param isDirectory        is given path a directory or file
      */
-    public static void changePermissions(String filePath, int updatedPermissions, boolean isDirectory,
-                                         OnOperationPerform onOperationPerform)
+    public static void changePermissions(final String filePath, final int updatedPermissions, final boolean isDirectory,
+                                         final OnOperationPerform onOperationPerform)
     throws ShellNotRunningException {
 
         String mountPoint = mountFileSystemRW(filePath);
@@ -136,7 +136,7 @@ public class RootUtils {
      * @param path path to new directory
      * @param name name of directory
      */
-    public static void mkDir(String path, String name) throws ShellNotRunningException {
+    public static void mkDir(final String path, final String name) throws ShellNotRunningException {
 
         String mountPoint = mountFileSystemRW(path);
 
@@ -152,7 +152,7 @@ public class RootUtils {
      *
      * @param path path to new file
      */
-    public static void mkFile(String path) throws ShellNotRunningException {
+    public static void mkFile(final String path) throws ShellNotRunningException {
         String mountPoint = mountFileSystemRW(path);
 
         RootHelper.runShellCommand("touch \"" + path + "\"");
@@ -166,7 +166,7 @@ public class RootUtils {
      * Returns file permissions in octal notation
      * Method requires busybox
      */
-    private static int getFilePermissions(String path) throws ShellNotRunningException {
+    private static int getFilePermissions(final String path) throws ShellNotRunningException {
         String line = RootHelper.runShellCommandToList("stat -c  %a \"" + path + "\"").get(0);
 
         return Integer.valueOf(line);
@@ -177,7 +177,7 @@ public class RootUtils {
      *
      * @return boolean whether file was deleted or not
      */
-    public static boolean delete(String path) throws ShellNotRunningException {
+    public static boolean delete(final String path) throws ShellNotRunningException {
         String mountPoint = mountFileSystemRW(path);
         ArrayList<String> result = RootHelper.runShellCommandToList("rm -rf \"" + path + "\"");
 
@@ -192,7 +192,7 @@ public class RootUtils {
     /**
      * Moves file using root
      */
-    public static void move(String path, String destination) throws ShellNotRunningException {
+    public static void move(final String path, final String destination) throws ShellNotRunningException {
         // remounting destination as rw
         String mountPoint = mountFileSystemRW(destination);
 
@@ -212,7 +212,7 @@ public class RootUtils {
      * @param newPath path to file after rename
      * @return if rename was successful or not
      */
-    public static boolean rename(String oldPath, String newPath) throws ShellNotRunningException {
+    public static boolean rename(final String oldPath, final String newPath) throws ShellNotRunningException {
         String mountPoint = mountFileSystemRW(oldPath);
         ArrayList<String> output = RootHelper.runShellCommandToList("mv \"" + oldPath + "\" \"" + newPath + "\"");
 
@@ -224,7 +224,7 @@ public class RootUtils {
         return output.size() == 0;
     }
 
-    public static void cat(String sourcePath, String destinationPath)
+    public static void cat(final String sourcePath, final String destinationPath)
     throws ShellNotRunningException {
 
         String mountPoint = mountFileSystemRW(destinationPath);
@@ -241,9 +241,9 @@ public class RootUtils {
      * For use with {@link RootUtils#CHMOD_COMMAND}
      * (true, false, false,  true, true, false,  false, false, true) => 0461
      */
-    public static int permissionsToOctalString(boolean ur, boolean uw, boolean ux,
-            boolean gr, boolean gw, boolean gx,
-            boolean or, boolean ow, boolean ox) {
+    public static int permissionsToOctalString(final boolean ur, final boolean uw, final boolean ux,
+            final boolean gr, final boolean gw, final boolean gx,
+            final boolean or, final boolean ow, final boolean ox) {
         int u = ((ur ? CHMOD_READ : 0) | (uw ? CHMOD_WRITE : 0) | (ux ? CHMOD_EXECUTE : 0)) << 6;
         int g = ((gr ? CHMOD_READ : 0) | (gw ? CHMOD_WRITE : 0) | (gx ? CHMOD_EXECUTE : 0)) << 3;
         int o = (or ? CHMOD_READ : 0) | (ow ? CHMOD_WRITE : 0) | (ox ? CHMOD_EXECUTE : 0);

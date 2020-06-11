@@ -35,7 +35,7 @@ public class GenerateHashesTask extends AsyncTask<Void, String, String[]> {
     private TextView sha256Text;
     private LinearLayout mMD5LinearLayout, mSHA256LinearLayout;
 
-    public GenerateHashesTask(HybridFileParcelable f, final Context c, final View view) {
+    public GenerateHashesTask(final HybridFileParcelable f, final Context c, final View view) {
         this.context = c;
         this.file = f;
 
@@ -47,7 +47,7 @@ public class GenerateHashesTask extends AsyncTask<Void, String, String[]> {
     }
 
     @Override
-    protected String[] doInBackground(Void... params) {
+    protected String[] doInBackground(final Void... params) {
         String md5 = context.getString(R.string.error);
         String sha256 = context.getString(R.string.error);
 
@@ -55,11 +55,11 @@ public class GenerateHashesTask extends AsyncTask<Void, String, String[]> {
             if (file.isSftp()) {
                 md5 = SshClientUtils.execute(new SshClientSessionTemplate(file.getPath()) {
                     @Override
-                    public String execute(Session session) throws IOException {
+                    public String execute(final Session session) throws IOException {
                         Session.Command cmd = session.exec(String.format("md5sum -b \"%s\" | cut -c -32", SshClientUtils.extractRemotePathFrom(file.getPath())));
                         String result = new String(IOUtils.readFully(cmd.getInputStream()).toByteArray());
                         cmd.close();
-                        if(cmd.getExitStatus() == 0)
+                        if (cmd.getExitStatus() == 0)
                             return result;
                         else {
                             return null;
@@ -68,19 +68,18 @@ public class GenerateHashesTask extends AsyncTask<Void, String, String[]> {
                 });
                 sha256 = SshClientUtils.execute(new SshClientSessionTemplate(file.getPath()) {
                     @Override
-                    public String execute(Session session) throws IOException {
+                    public String execute(final Session session) throws IOException {
                         Session.Command cmd = session.exec(String.format("sha256sum -b \"%s\" | cut -c -64", SshClientUtils.extractRemotePathFrom(file.getPath())));
                         String result = new String(IOUtils.readFully(cmd.getInputStream()).toByteArray());
                         cmd.close();
-                        if(cmd.getExitStatus() == 0)
+                        if (cmd.getExitStatus() == 0)
                             return result;
                         else {
                             return null;
                         }
                     }
                 });
-            }
-            else if (!file.isDirectory(context)) {
+            } else if (!file.isDirectory(context)) {
                 md5 = getMD5Checksum();
                 sha256 = getSHA256Checksum();
             }
@@ -100,14 +99,14 @@ public class GenerateHashesTask extends AsyncTask<Void, String, String[]> {
 
             mMD5LinearLayout.setOnLongClickListener(v -> {
                 FileUtils.copyToClipboard(context, hashes[0]);
-                Toast.makeText(context, context.getResources().getString(R.string.md5).toUpperCase() + " " +
-                               context.getResources().getString(R.string.properties_copied_clipboard), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, context.getResources().getString(R.string.md5).toUpperCase() + " "
+                               + context.getResources().getString(R.string.properties_copied_clipboard), Toast.LENGTH_SHORT).show();
                 return false;
             });
             mSHA256LinearLayout.setOnLongClickListener(v -> {
                 FileUtils.copyToClipboard(context, hashes[1]);
-                Toast.makeText(context, context.getResources().getString(R.string.hash_sha256) + " " +
-                               context.getResources().getString(R.string.properties_copied_clipboard), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, context.getResources().getString(R.string.hash_sha256) + " "
+                               + context.getResources().getString(R.string.properties_copied_clipboard), Toast.LENGTH_SHORT).show();
                 return false;
             });
         } else {

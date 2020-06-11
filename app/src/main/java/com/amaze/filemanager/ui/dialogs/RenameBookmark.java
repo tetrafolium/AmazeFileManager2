@@ -35,7 +35,7 @@ public class RenameBookmark extends DialogFragment {
     private int studiomode = 0;
     private DataUtils dataUtils = DataUtils.getInstance();
 
-    public static RenameBookmark getInstance(String name, String path, int accentColor) {
+    public static RenameBookmark getInstance(final String name, final String path, final int accentColor) {
         RenameBookmark renameBookmark = new RenameBookmark();
         Bundle bundle = new Bundle();
         bundle.putString("title", name);
@@ -47,12 +47,12 @@ public class RenameBookmark extends DialogFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
         Context c = getActivity();
         if (getActivity() instanceof BookmarkCallback)
             bookmarkCallback = (BookmarkCallback) getActivity();
@@ -85,7 +85,7 @@ public class RenameBookmark extends DialogFragment {
             final String s2 = getString(R.string.cantbeempty, c.getString(R.string.path));
             conName.addTextChangedListener(new SimpleTextWatcher() {
                 @Override
-                public void afterTextChanged(Editable s) {
+                public void afterTextChanged(final Editable s) {
                     if (conName.getText().toString().length() == 0)
                         t1.setError(s2);
                     else t1.setError("");
@@ -111,7 +111,7 @@ public class RenameBookmark extends DialogFragment {
                 }
                 ip.addTextChangedListener(new SimpleTextWatcher() {
                     @Override
-                    public void afterTextChanged(Editable s) {
+                    public void afterTextChanged(final Editable s) {
                         if (ip.getText().toString().length() == 0)
                             t2.setError(s1);
                         else t2.setError("");

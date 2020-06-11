@@ -101,10 +101,10 @@ public class CopyService extends AbstractProgressiveService {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, final int startId) {
+    public int onStartCommand(final Intent intent, final int flags, final int startId) {
 
         Bundle b = new Bundle();
-        isRootExplorer = intent.getBooleanExtra(TAG_IS_ROOT_EXPLORER,false);
+        isRootExplorer = intent.getBooleanExtra(TAG_IS_ROOT_EXPLORER, false);
         ArrayList<HybridFileParcelable> files = intent.getParcelableArrayListExtra(TAG_COPY_SOURCES);
         String targetPath = intent.getStringExtra(TAG_COPY_TARGET);
         int mode = intent.getIntExtra(TAG_COPY_OPEN_MODE, OpenMode.UNKNOWN.ordinal());
@@ -190,7 +190,7 @@ public class CopyService extends AbstractProgressiveService {
 
     @Override
     @StringRes
-    protected int getTitle(boolean move) {
+    protected int getTitle(final boolean move) {
         return move ? R.string.moving : R.string.copying;
     }
     public ProgressListener getProgressListener() {
@@ -198,7 +198,7 @@ public class CopyService extends AbstractProgressiveService {
     }
 
     @Override
-    public void setProgressListener(ProgressListener progressListener) {
+    public void setProgressListener(final ProgressListener progressListener) {
         this.progressListener = progressListener;
     }
 
@@ -224,11 +224,11 @@ public class CopyService extends AbstractProgressiveService {
         private OpenMode openMode;
         private boolean isRootExplorer;
 
-        private DoInBackground(boolean isRootExplorer) {
+        private DoInBackground(final boolean isRootExplorer) {
             this.isRootExplorer = isRootExplorer;
         }
 
-        protected Void doInBackground(Bundle... p1) {
+        protected Void doInBackground(final Bundle... p1) {
 
             sourceFiles = p1[0].getParcelableArrayList(TAG_COPY_SOURCES);
 
@@ -269,7 +269,7 @@ public class CopyService extends AbstractProgressiveService {
         }
 
         @Override
-        public void onPostExecute(Void b) {
+        public void onPostExecute(final Void b) {
 
             super.onPostExecute(b);
             //  publishResults(b, "", totalSourceFiles, totalSourceFiles, totalSize, totalSize, 0, true, move);
@@ -288,7 +288,7 @@ public class CopyService extends AbstractProgressiveService {
          * metadata in the database
          * @param sourceFile the file which is to be iterated
          */
-        private void findAndReplaceEncryptedEntry(HybridFileParcelable sourceFile) {
+        private void findAndReplaceEncryptedEntry(final HybridFileParcelable sourceFile) {
 
             // even directories can end with CRYPT_EXTENSION
             if (sourceFile.isDirectory() && !sourceFile.getName().endsWith(CryptUtil.CRYPT_EXTENSION)) {
@@ -342,7 +342,7 @@ public class CopyService extends AbstractProgressiveService {
              * @param mode target file open mode (current path's open mode)
              */
             public void execute(final ArrayList<HybridFileParcelable> sourceFiles, final String targetPath,
-                                final boolean move, OpenMode mode) {
+                                final boolean move, final OpenMode mode) {
 
                 // initial start of copy, initiate the watcher
                 watcherUtil.watch(CopyService.this);
@@ -424,7 +424,7 @@ public class CopyService extends AbstractProgressiveService {
                 }
             }
 
-            void copyRoot(HybridFileParcelable sourceFile, HybridFile targetFile, boolean move) {
+            void copyRoot(final HybridFileParcelable sourceFile, final HybridFile targetFile, final boolean move) {
 
                 try {
                     if (!move) RootUtils.copy(sourceFile.getPath(), targetFile.getPath());
@@ -455,14 +455,14 @@ public class CopyService extends AbstractProgressiveService {
                     }
                     targetFile.setLastModified(sourceFile.lastModified());
 
-                    if(progressHandler.getCancelled()) return;
+                    if (progressHandler.getCancelled()) return;
                     sourceFile.forEachChildrenFile(c, false, file -> {
                         HybridFile destFile = new HybridFile(targetFile.getMode(), targetFile.getPath(),
                                                              file.getName(), file.isDirectory());
                         try {
                             copyFiles(file, destFile, progressHandler);
                         } catch (IOException e) {
-                            throw new IllegalStateException(e);//throw unchecked exception, no throws needed
+                            throw new IllegalStateException(e); //throw unchecked exception, no throws needed
                         }
                     });
                 } else {
@@ -483,7 +483,7 @@ public class CopyService extends AbstractProgressiveService {
     //check if copy is successful
     // avoid using the method as there is no way to know when we would be returning from command callbacks
     // rather confirm from the command result itself, inside it's callback
-    boolean checkFiles(HybridFile hFile1, HybridFile hFile2) throws ShellNotRunningException {
+    boolean checkFiles(final HybridFile hFile1, final HybridFile hFile2) throws ShellNotRunningException {
         if (RootHelper.isDirectory(hFile1.getPath(), isRootExplorer, 5)) {
             if (RootHelper.fileExists(hFile2.getPath())) return false;
             ArrayList<HybridFileParcelable> baseFiles = RootHelper.getFilesList(hFile1.getPath(), true, true, null);
@@ -525,14 +525,14 @@ public class CopyService extends AbstractProgressiveService {
     private BroadcastReceiver receiver3 = new BroadcastReceiver() {
 
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(final Context context, final Intent intent) {
             //cancel operation
             progressHandler.setCancelled(true);
         }
     };
 
     @Override
-    public IBinder onBind(Intent arg0) {
+    public IBinder onBind(final Intent arg0) {
         // TODO Auto-generated method stub
         return mBinder;
     }

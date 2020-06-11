@@ -18,15 +18,15 @@ import com.amaze.filemanager.utils.theme.AppTheme;
 
 public class ThemedImageView extends androidx.appcompat.widget.AppCompatImageView {
 
-    public ThemedImageView(Context context) {
+    public ThemedImageView(final Context context) {
         this(context, null, 0);
     }
 
-    public ThemedImageView(Context context, AttributeSet attrs) {
+    public ThemedImageView(final Context context, final AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ThemedImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ThemedImageView(final Context context, final AttributeSet attrs, final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         BasicActivity a = (BasicActivity) getActivity();
@@ -44,9 +44,9 @@ public class ThemedImageView extends androidx.appcompat.widget.AppCompatImageVie
         Context context = getContext();
         while (context instanceof ContextWrapper) {
             if (context instanceof Activity) {
-                return (Activity)context;
+                return (Activity) context;
             }
-            context = ((ContextWrapper)context).getBaseContext();
+            context = ((ContextWrapper) context).getBaseContext();
         }
         return null;
     }

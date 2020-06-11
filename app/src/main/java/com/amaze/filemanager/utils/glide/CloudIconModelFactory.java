@@ -15,12 +15,12 @@ public class CloudIconModelFactory implements ModelLoaderFactory<String, Bitmap>
 
     private Context context;
 
-    public CloudIconModelFactory(Context context) {
+    public CloudIconModelFactory(final Context context) {
         this.context = context;
     }
 
     @Override
-    public ModelLoader<String, Bitmap> build(MultiModelLoaderFactory multiFactory) {
+    public ModelLoader<String, Bitmap> build(final MultiModelLoaderFactory multiFactory) {
         return new CloudIconModelLoader(context);
     }
 

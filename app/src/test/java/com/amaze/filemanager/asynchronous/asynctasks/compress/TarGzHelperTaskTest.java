@@ -9,10 +9,10 @@ import java.io.File;
 public class TarGzHelperTaskTest extends AbstractCompressedHelperTaskTest {
 
     @Override
-    protected CompressedHelperTask createTask(String relativePath) {
+    protected CompressedHelperTask createTask(final String relativePath) {
         return new GzipHelperTask(RuntimeEnvironment.application,
-                                  new File(Environment.getExternalStorageDirectory(),"test-archive.tar.gz").getAbsolutePath(),
-                                  relativePath, false, (data) -> {});
+                                  new File(Environment.getExternalStorageDirectory(), "test-archive.tar.gz").getAbsolutePath(),
+                                  relativePath, false, (data) -> { });
     }
 
 }

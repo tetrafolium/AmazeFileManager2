@@ -35,7 +35,7 @@ public class CustomFileObserver extends FileObserver {
      */
     private static final int IN_IGNORED = 0x00008000;
     private static final int DEFER_CONSTANT_SECONDS = 5;
-    private static final int DEFER_CONSTANT = DEFER_CONSTANT_SECONDS*1000;
+    private static final int DEFER_CONSTANT = DEFER_CONSTANT_SECONDS * 1000;
     private static final int MASK = CREATE | MOVED_TO | DELETE | MOVED_FROM | DELETE_SELF | MOVE_SELF;
 
     private long lastMessagedTime = 0L;
@@ -47,7 +47,7 @@ public class CustomFileObserver extends FileObserver {
     private final List<String> pathsAdded = Collections.synchronizedList(new ArrayList<>());
     private final List<String> pathsRemoved = Collections.synchronizedList(new ArrayList<>());
 
-    public CustomFileObserver(String path, Handler handler) {
+    public CustomFileObserver(final String path, final Handler handler) {
         super(path, MASK);
         this.path = path;
         this.handler = handler;
@@ -63,7 +63,7 @@ public class CustomFileObserver extends FileObserver {
 
     @Override
     public void startWatching() {
-        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
             startPollingSystem();
         } else {
             super.startWatching();
@@ -74,7 +74,7 @@ public class CustomFileObserver extends FileObserver {
     public void stopWatching() {
         wasStopped = true;
 
-        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
             stopPollingSystem();
         } else {
             super.startWatching();
@@ -82,8 +82,8 @@ public class CustomFileObserver extends FileObserver {
     }
 
     @Override
-    public void onEvent(int event, String path) {
-        if(event == IN_IGNORED) {
+    public void onEvent(final int event, final String path) {
+        if (event == IN_IGNORED) {
             wasStopped = true;
             return;
         }
@@ -106,7 +106,7 @@ public class CustomFileObserver extends FileObserver {
         }
 
 
-        if(deltaTime <= DEFER_CONSTANT) {
+        if (deltaTime <= DEFER_CONSTANT) {
             // defer the observer until unless it reports a change after at least 5 secs of last one
             // keep adding files added, if there were any, to the buffer
 
@@ -114,14 +114,14 @@ public class CustomFileObserver extends FileObserver {
                 @Override
                 public void run() {
 
-                    if(messagingScheduled) return;
+                    if (messagingScheduled) return;
                     sendMessages();
                 }
             }, DEFER_CONSTANT - deltaTime);
 
             messagingScheduled = true;
         } else {
-            if(messagingScheduled) return;
+            if (messagingScheduled) return;
             sendMessages();
         }
     }
@@ -171,9 +171,9 @@ public class CustomFileObserver extends FileObserver {
         private String[] files = null;
         private File file;
 
-        private FileTimerTask(String path, FileObserver fileObserver) {
+        private FileTimerTask(final String path, final FileObserver fileObserver) {
             file = new File(path);
-            if(!file.isDirectory()) throw new IllegalArgumentException("Illegal path, you can only watch directories!");
+            if (!file.isDirectory()) throw new IllegalArgumentException("Illegal path, you can only watch directories!");
             files = file.list();
             this.fileObserver = fileObserver;
         }
@@ -198,7 +198,7 @@ public class CustomFileObserver extends FileObserver {
             }
         }
 
-        private HashSet<String> compare(String[] s1, String[] s2) {
+        private HashSet<String> compare(final String[] s1, final String[] s2) {
             HashSet<String> set1 = new HashSet<>(Arrays.asList(s1));
             HashSet<String> set2 = new HashSet<>(Arrays.asList(s2));
             set1.removeAll(set2);

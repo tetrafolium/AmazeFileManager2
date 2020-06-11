@@ -57,7 +57,7 @@ public class ServiceWatcherUtil {
     /**
      * @param progressHandler to publish progress after certain delay
      */
-    public ServiceWatcherUtil(ProgressHandler progressHandler) {
+    public ServiceWatcherUtil(final ProgressHandler progressHandler) {
         this.progressHandler = progressHandler;
         position = 0L;
         haltCounter = -1;
@@ -71,17 +71,17 @@ public class ServiceWatcherUtil {
      * Watches over the service progress without interrupting the worker thread in respective services
      * Method frees up all the resources and handlers after operation completes.
      */
-    public void watch(ServiceWatcherInteractionInterface interactionInterface) {
+    public void watch(final ServiceWatcherInteractionInterface interactionInterface) {
         runnable = new Runnable() {
             @Override
             public void run() {
 
                 // we don't have a file name yet, wait for service to set
-                if (progressHandler.getFileName()==null) handler.postDelayed(this, 1000);
+                if (progressHandler.getFileName() == null) handler.postDelayed(this, 1000);
 
-                if (position == progressHandler.getWrittenSize() &&
-                        (state != STATE_HALTED
-                         && ++haltCounter >5)) {
+                if (position == progressHandler.getWrittenSize()
+                        && (state != STATE_HALTED
+                         && ++haltCounter > 5)) {
 
                     // new position is same as the last second position, and halt counter is past threshold
 
@@ -203,15 +203,15 @@ public class ServiceWatcherUtil {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                if (handlerThread==null || !handlerThread.isAlive()) {
+                if (handlerThread == null || !handlerThread.isAlive()) {
 
-                    if (pendingIntents.size()==0) {
+                    if (pendingIntents.size() == 0) {
                         // we've done all the work, free up resources (if not already killed by system)
                         waitingHandler.removeCallbacks(this);
                         waitingHandlerThread.quit();
                         return;
                     } else {
-                        if (pendingIntents.size()==1) {
+                        if (pendingIntents.size() == 1) {
                             notificationManager.cancel(NotificationConstants.WAIT_ID);
                         }
                         context.startService(pendingIntents.element());

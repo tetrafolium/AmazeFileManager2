@@ -120,10 +120,10 @@ import static com.amaze.filemanager.utils.files.FileUtils.toHybridFileArrayList;
 
 public class GeneralDialogCreation {
 
-    public static MaterialDialog showBasicDialog(ThemedActivity themedActivity, @StringRes int content,
-            @StringRes int title,
-            @StringRes int postiveText,
-            @StringRes int negativeText) {
+    public static MaterialDialog showBasicDialog(final ThemedActivity themedActivity, final @StringRes int content,
+            final @StringRes int title,
+            final @StringRes int postiveText,
+            final @StringRes int negativeText) {
         int accentColor = themedActivity.getAccent();
         MaterialDialog.Builder a = new MaterialDialog.Builder(themedActivity)
         .content(content)
@@ -137,11 +137,11 @@ public class GeneralDialogCreation {
         return a.build();
     }
 
-    public static MaterialDialog showNameDialog(final MainActivity m, String hint, String prefill,
-            String title, String positiveButtonText,
-            String neutralButtonText, String negativeButtonText,
-            MaterialDialog.SingleButtonCallback positiveButtonAction,
-            WarnableTextInputValidator.OnTextValidate validator) {
+    public static MaterialDialog showNameDialog(final MainActivity m, final String hint, final String prefill,
+            final String title, final String positiveButtonText,
+            final String neutralButtonText, final String negativeButtonText,
+            final MaterialDialog.SingleButtonCallback positiveButtonAction,
+            final WarnableTextInputValidator.OnTextValidate validator) {
         int accentColor = m.getAccent();
         MaterialDialog.Builder builder = new MaterialDialog.Builder(m);
 
@@ -182,7 +182,7 @@ public class GeneralDialogCreation {
     @SuppressWarnings("ConstantConditions")
     public static void deleteFilesDialog(final Context c, final ArrayList<LayoutElementParcelable> layoutElements,
                                          final MainActivity mainActivity, final List<LayoutElementParcelable> positions,
-                                         AppTheme appTheme) {
+                                         final AppTheme appTheme) {
 
         final ArrayList<HybridFileParcelable> itemsToDelete = new ArrayList<>();
         int accentColor = mainActivity.getAccent();
@@ -229,7 +229,7 @@ public class GeneralDialogCreation {
             }
 
             @Override
-            protected Void doInBackground(Void... params) {
+            protected Void doInBackground(final Void... params) {
 
                 for (int i = 0; i < positions.size(); i++) {
                     final LayoutElementParcelable layoutElement = positions.get(i);
@@ -273,7 +273,7 @@ public class GeneralDialogCreation {
             }
 
             @Override
-            protected void onProgressUpdate(Object... result) {
+            protected void onProgressUpdate(final Object... result) {
                 super.onProgressUpdate(result);
 
                 int tempCounterFiles = (int) result[1];
@@ -287,13 +287,13 @@ public class GeneralDialogCreation {
             }
 
             @Override
-            protected void onPostExecute(Void aVoid) {
+            protected void onPostExecute(final Void aVoid) {
                 super.onPostExecute(aVoid);
                 updateViews(sizeTotal, files, directories, counterFiles, counterDirectories);
             }
 
-            private void updateViews(long tempSizeTotal, StringBuilder filesStringBuilder,
-                                     StringBuilder directoriesStringBuilder, int... values) {
+            private void updateViews(final long tempSizeTotal, final StringBuilder filesStringBuilder,
+                                     final StringBuilder directoriesStringBuilder, final int... values) {
 
                 int tempCounterFiles = values[0];
                 int tempCounterDirectories = values[1];
@@ -355,22 +355,22 @@ public class GeneralDialogCreation {
         dialog.show();
     }
 
-    public static void showPropertiesDialogWithPermissions(HybridFileParcelable baseFile, final String permissions,
-            ThemedActivity activity, boolean isRoot, AppTheme appTheme) {
+    public static void showPropertiesDialogWithPermissions(final HybridFileParcelable baseFile, final String permissions,
+            final ThemedActivity activity, final boolean isRoot, final AppTheme appTheme) {
         showPropertiesDialog(baseFile, permissions, activity, isRoot, appTheme, true, false);
     }
 
-    public static void showPropertiesDialogWithoutPermissions(final HybridFileParcelable f, ThemedActivity activity, AppTheme appTheme) {
+    public static void showPropertiesDialogWithoutPermissions(final HybridFileParcelable f, final ThemedActivity activity, final AppTheme appTheme) {
         showPropertiesDialog(f, null, activity, false, appTheme, false, false);
     }
 
-    public static void showPropertiesDialogForStorage(final HybridFileParcelable f, ThemedActivity activity, AppTheme appTheme) {
+    public static void showPropertiesDialogForStorage(final HybridFileParcelable f, final ThemedActivity activity, final AppTheme appTheme) {
         showPropertiesDialog(f, null, activity, false, appTheme, false, true);
     }
 
     private static void showPropertiesDialog(final HybridFileParcelable baseFile, final String permissions,
-            ThemedActivity base, boolean isRoot, AppTheme appTheme,
-            boolean showPermissions, boolean forStorage) {
+            final ThemedActivity base, final boolean isRoot, final AppTheme appTheme,
+            final boolean showPermissions, final boolean forStorage) {
         final ExecutorService executor = Executors.newFixedThreadPool(3);
         final Context c = base.getApplicationContext();
         int accentColor = base.getAccent();
@@ -420,26 +420,26 @@ public class GeneralDialogCreation {
             // setting click listeners for long press
             mNameLinearLayout.setOnLongClickListener(v1 -> {
                 FileUtils.copyToClipboard(c, name);
-                Toast.makeText(c, c.getString(R.string.name) + " " +
-                               c.getString(R.string.properties_copied_clipboard), Toast.LENGTH_SHORT).show();
+                Toast.makeText(c, c.getString(R.string.name) + " "
+                               + c.getString(R.string.properties_copied_clipboard), Toast.LENGTH_SHORT).show();
                 return false;
             });
             mLocationLinearLayout.setOnLongClickListener(v12 -> {
                 FileUtils.copyToClipboard(c, parent);
-                Toast.makeText(c, c.getString(R.string.location) + " " +
-                               c.getString(R.string.properties_copied_clipboard), Toast.LENGTH_SHORT).show();
+                Toast.makeText(c, c.getString(R.string.location) + " "
+                               + c.getString(R.string.properties_copied_clipboard), Toast.LENGTH_SHORT).show();
                 return false;
             });
             mSizeLinearLayout.setOnLongClickListener(v13 -> {
                 FileUtils.copyToClipboard(c, items);
-                Toast.makeText(c, c.getString(R.string.size) + " " +
-                               c.getString(R.string.properties_copied_clipboard), Toast.LENGTH_SHORT).show();
+                Toast.makeText(c, c.getString(R.string.size) + " "
+                               + c.getString(R.string.properties_copied_clipboard), Toast.LENGTH_SHORT).show();
                 return false;
             });
             mDateLinearLayout.setOnLongClickListener(v14 -> {
                 FileUtils.copyToClipboard(c, date);
-                Toast.makeText(c, c.getString(R.string.date) + " " +
-                               c.getString(R.string.properties_copied_clipboard), Toast.LENGTH_SHORT).show();
+                Toast.makeText(c, c.getString(R.string.date) + " "
+                               + c.getString(R.string.properties_copied_clipboard), Toast.LENGTH_SHORT).show();
                 return false;
             });
         }
@@ -554,21 +554,21 @@ public class GeneralDialogCreation {
 
         private Context context;
 
-        public SizeFormatter(Context c) {
+        public SizeFormatter(final Context c) {
             context = c;
         }
 
         @Override
-        public String getFormattedValue(float value, Entry entry, int dataSetIndex,
-                                        ViewPortHandler viewPortHandler) {
-            String prefix = entry.getData() != null && entry.getData() instanceof String ?
-                            (String) entry.getData() : "";
+        public String getFormattedValue(final float value, final Entry entry, final int dataSetIndex,
+                                        final ViewPortHandler viewPortHandler) {
+            String prefix = entry.getData() != null && entry.getData() instanceof String
+                            ? (String) entry.getData() : "";
 
             return prefix + Formatter.formatFileSize(context, (long) value);
         }
     }
 
-    public static void showCloudDialog(final MainActivity mainActivity, AppTheme appTheme, final OpenMode openMode) {
+    public static void showCloudDialog(final MainActivity mainActivity, final AppTheme appTheme, final OpenMode openMode) {
         int accentColor = mainActivity.getAccent();
         final MaterialDialog.Builder builder = new MaterialDialog.Builder(mainActivity);
 
@@ -603,7 +603,7 @@ public class GeneralDialogCreation {
     }
 
     public static void showEncryptWarningDialog(final Intent intent, final MainFragment main,
-            AppTheme appTheme,
+            final AppTheme appTheme,
             final EncryptDecryptUtils.EncryptButtonCallbackInterface
             encryptButtonCallbackInterface) {
         int accentColor = main.getMainActivity().getAccent();
@@ -644,7 +644,7 @@ public class GeneralDialogCreation {
         builder.show();
     }
 
-    public static void showEncryptWithPresetPasswordSaveAsDialog(@NonNull final Context c, @NonNull final MainActivity main, @NonNull String password, @NonNull final Intent intent) {
+    public static void showEncryptWithPresetPasswordSaveAsDialog(@NonNull final Context c, @NonNull final MainActivity main, final @NonNull String password, @NonNull final Intent intent) {
 
         HybridFileParcelable intentParcelable = intent.getParcelableExtra(EncryptService.TAG_SOURCE);
         MaterialDialog saveAsDialog = showNameDialog(main,
@@ -678,7 +678,7 @@ public class GeneralDialogCreation {
     }
 
     public static void showEncryptAuthenticateDialog(final Context c, final Intent intent,
-            final MainActivity main, AppTheme appTheme,
+            final MainActivity main, final AppTheme appTheme,
             final EncryptDecryptUtils.EncryptButtonCallbackInterface
             encryptButtonCallbackInterface) {
 
@@ -698,9 +698,9 @@ public class GeneralDialogCreation {
 
         HybridFileParcelable intentParcelable = intent.getParcelableExtra(EncryptService.TAG_SOURCE);
         encryptSaveAsEditText.setText(intentParcelable.getName().concat(CryptUtil.CRYPT_EXTENSION));
-        textInputLayoutEncryptSaveAs.setHint(intentParcelable.isDirectory() ?
-                                             c.getString(R.string.encrypt_folder_save_as) :
-                                             c.getString(R.string.encrypt_file_save_as));
+        textInputLayoutEncryptSaveAs.setHint(intentParcelable.isDirectory()
+                                             ? c.getString(R.string.encrypt_folder_save_as)
+                                             : c.getString(R.string.encrypt_file_save_as));
 
         passwordEditText.post(() -> {
             InputMethodManager imm = (InputMethodManager) main.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -735,7 +735,7 @@ public class GeneralDialogCreation {
 
         TextWatcher textWatcher = new SimpleTextWatcher() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
                 btnOK.setEnabled(encryptSaveAsEditText.getText().toString().length() > 0
                                  && passwordEditText.getText().toString().length() > 0
                                  && passwordConfirmEditText.getText().toString().length() > 0);
@@ -772,8 +772,8 @@ public class GeneralDialogCreation {
     }
 
     @RequiresApi(api = M)
-    public static void showDecryptFingerprintDialog(final Context c, MainActivity main,
-            final Intent intent, AppTheme appTheme,
+    public static void showDecryptFingerprintDialog(final Context c, final MainActivity main,
+            final Intent intent, final AppTheme appTheme,
             final EncryptDecryptUtils.DecryptButtonCallbackInterface
             decryptButtonCallbackInterface)
     throws GeneralSecurityException, IOException {
@@ -802,8 +802,8 @@ public class GeneralDialogCreation {
         handler.authenticate(manager, object);
     }
 
-    public static void showDecryptDialog(Context c, final MainActivity main, final Intent intent,
-                                         AppTheme appTheme, final String password,
+    public static void showDecryptDialog(final Context c, final MainActivity main, final Intent intent,
+                                         final AppTheme appTheme, final String password,
                                          final EncryptDecryptUtils.DecryptButtonCallbackInterface
                                          decryptButtonCallbackInterface) {
 
@@ -821,10 +821,10 @@ public class GeneralDialogCreation {
         }), null);
     }
 
-    public static void showPasswordDialog(@NonNull Context c, @NonNull final MainActivity main,
-                                          @NonNull AppTheme appTheme, @StringRes int titleText, @StringRes int promptText,
-                                          @NonNull MaterialDialog.SingleButtonCallback positiveCallback,
-                                          @Nullable MaterialDialog.SingleButtonCallback negativeCallback) {
+    public static void showPasswordDialog(final @NonNull Context c, @NonNull final MainActivity main,
+                                          final @NonNull AppTheme appTheme, final @StringRes int titleText, final @StringRes int promptText,
+                                          final @NonNull MaterialDialog.SingleButtonCallback positiveCallback,
+                                          final @Nullable MaterialDialog.SingleButtonCallback negativeCallback) {
         int accentColor = main.getAccent();
 
         MaterialDialog.Builder builder = new MaterialDialog.Builder(c);
@@ -845,7 +845,7 @@ public class GeneralDialogCreation {
         .negativeText(R.string.cancel)
         .negativeColor(accentColor);
 
-        if(negativeCallback != null)
+        if (negativeCallback != null)
             builder.onNegative(negativeCallback);
         else
             builder.onNegative((dialog, which) -> dialog.cancel());
@@ -861,7 +861,7 @@ public class GeneralDialogCreation {
         });
     }
 
-    public static void showSMBHelpDialog(Context m, int accentColor) {
+    public static void showSMBHelpDialog(final Context m, final int accentColor) {
         MaterialDialog.Builder b = new MaterialDialog.Builder(m);
         b.content(m.getText(R.string.smb_instructions));
         b.positiveText(R.string.doit);
@@ -962,7 +962,7 @@ public class GeneralDialogCreation {
         etFilename.post(() -> etFilename.setSelection(0));
     }
 
-    public static void showSortDialog(final MainFragment m, AppTheme appTheme, final SharedPreferences sharedPref) {
+    public static void showSortDialog(final MainFragment m, final AppTheme appTheme, final SharedPreferences sharedPref) {
         final String path = m.getCurrentPath();
         int accentColor = m.getMainActivity().getAccent();
         String[] sort = m.getResources().getStringArray(R.array.sortby);
@@ -999,7 +999,7 @@ public class GeneralDialogCreation {
         a.build().show();
     }
 
-    private static void onSortTypeSelected(MainFragment m, SharedPreferences sharedPref, Set<String> onlyThisFloders, MaterialDialog dialog, boolean desc) {
+    private static void onSortTypeSelected(final MainFragment m, final SharedPreferences sharedPref, final Set<String> onlyThisFloders, final MaterialDialog dialog, final boolean desc) {
         final int sortType = desc ? dialog.getSelectedIndex() + 4 : dialog.getSelectedIndex();
         SortHandler sortHandler = new SortHandler(m.getContext());
         if (onlyThisFloders.contains(m.getCurrentPath())) {
@@ -1019,7 +1019,7 @@ public class GeneralDialogCreation {
         dialog.dismiss();
     }
 
-    public static void showSortDialog(final AppsListFragment m, AppTheme appTheme) {
+    public static void showSortDialog(final AppsListFragment m, final AppTheme appTheme) {
         int accentColor = ((ThemedActivity) m.getActivity()).getAccent();
         String[] sort = m.getResources().getStringArray(R.array.sortbyApps);
         int current = Integer.parseInt(m.Sp.getString("sortbyApps", "0"));
@@ -1048,8 +1048,8 @@ public class GeneralDialogCreation {
     }
 
 
-    public static void showHistoryDialog(final DataUtils dataUtils, SharedPreferences sharedPrefs,
-                                         final MainFragment m, AppTheme appTheme) {
+    public static void showHistoryDialog(final DataUtils dataUtils, final SharedPreferences sharedPrefs,
+                                         final MainFragment m, final AppTheme appTheme) {
         int accentColor = m.getMainActivity().getAccent();
         final MaterialDialog.Builder a = new MaterialDialog.Builder(m.getActivity());
         a.positiveText(R.string.cancel);
@@ -1070,8 +1070,8 @@ public class GeneralDialogCreation {
         x.show();
     }
 
-    public static void showHiddenDialog(DataUtils dataUtils, SharedPreferences sharedPrefs,
-                                        final MainFragment m, AppTheme appTheme) {
+    public static void showHiddenDialog(final DataUtils dataUtils, final SharedPreferences sharedPrefs,
+                                        final MainFragment m, final AppTheme appTheme) {
         int accentColor = m.getMainActivity().getAccent();
         final MaterialDialog.Builder a = new MaterialDialog.Builder(m.getActivity());
         a.positiveText(R.string.cancel);
@@ -1089,7 +1089,7 @@ public class GeneralDialogCreation {
 
     }
 
-    public static void setPermissionsDialog(final View v, View but, final HybridFile file,
+    public static void setPermissionsDialog(final View v, final View but, final HybridFile file,
                                             final String f, final Context context, final MainFragment mainFrag) {
         final CheckBox readown = v.findViewById(R.id.creadown);
         final CheckBox readgroup = v.findViewById(R.id.creadgroup);
@@ -1174,7 +1174,7 @@ public class GeneralDialogCreation {
         a.show();
     }
 
-    public static MaterialDialog showOtgSafExplanationDialog(ThemedActivity themedActivity) {
+    public static MaterialDialog showOtgSafExplanationDialog(final ThemedActivity themedActivity) {
         return GeneralDialogCreation.showBasicDialog(themedActivity, R.string.saf_otg_explanation,
                 R.string.otg_access, R.string.ok, R.string.cancel);
     }
