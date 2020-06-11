@@ -23,7 +23,6 @@
 package com.amaze.filemanager.filesystem.compressed.showcontents.helpers;
 
 import android.content.Context;
-
 import com.amaze.filemanager.adapters.data.CompressedObjectParcelable;
 import com.amaze.filemanager.asynchronous.asynctasks.AsyncTaskResult;
 import com.amaze.filemanager.asynchronous.asynctasks.compress.CompressedHelperTask;
@@ -31,19 +30,17 @@ import com.amaze.filemanager.asynchronous.asynctasks.compress.GzipHelperTask;
 import com.amaze.filemanager.asynchronous.asynctasks.compress.TarHelperTask;
 import com.amaze.filemanager.filesystem.compressed.showcontents.Decompressor;
 import com.amaze.filemanager.utils.OnAsyncTaskFinished;
-
 import java.util.ArrayList;
 
 public class GzipDecompressor extends Decompressor {
 
-    public GzipDecompressor(final Context context) {
-        super(context);
-    }
+  public GzipDecompressor(final Context context) { super(context); }
 
-    @Override
-    public CompressedHelperTask changePath(final String path, final boolean addGoBackItem,
-                                           final OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
-        return new GzipHelperTask(context, filePath, path, addGoBackItem, onFinish);
-    }
-
+  @Override
+  public CompressedHelperTask changePath(
+      final String path, final boolean addGoBackItem,
+      final OnAsyncTaskFinished<
+          AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
+    return new GzipHelperTask(context, filePath, path, addGoBackItem, onFinish);
+  }
 }

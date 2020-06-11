@@ -1,7 +1,7 @@
 package com.amaze.filemanager.adapters.holders;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Check RecyclerAdapter's doc.
@@ -11,7 +11,5 @@ import android.view.View;
  */
 
 public class EmptyViewHolder extends RecyclerView.ViewHolder {
-    public EmptyViewHolder(final View view) {
-        super(view);
-    }
+  public EmptyViewHolder(final View view) { super(view); }
 }

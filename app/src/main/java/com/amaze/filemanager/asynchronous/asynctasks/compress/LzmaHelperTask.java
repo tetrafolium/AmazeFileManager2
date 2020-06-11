@@ -20,60 +20,64 @@
  */
 package com.amaze.filemanager.asynchronous.asynctasks.compress;
 
+import static com.amaze.filemanager.filesystem.compressed.CompressedHelper.SEPARATOR;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.amaze.filemanager.adapters.data.CompressedObjectParcelable;
 import com.amaze.filemanager.asynchronous.asynctasks.AsyncTaskResult;
 import com.amaze.filemanager.utils.OnAsyncTaskFinished;
-
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.lzma.LZMACompressorInputStream;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-
-import static com.amaze.filemanager.filesystem.compressed.CompressedHelper.SEPARATOR;
-
 public class LzmaHelperTask extends CompressedHelperTask {
 
-    private String filePath, relativePath;
+  private String filePath, relativePath;
 
-    public LzmaHelperTask(final String filePath, final String relativePath, final boolean goBack,
-                          final OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> l) {
-        super(goBack, l);
-        this.filePath = filePath;
-        this.relativePath = relativePath;
-    }
+  public LzmaHelperTask(
+      final String filePath, final String relativePath, final boolean goBack,
+      final OnAsyncTaskFinished<
+          AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> l) {
+    super(goBack, l);
+    this.filePath = filePath;
+    this.relativePath = relativePath;
+  }
 
-    @Override
-    void addElements(final @NonNull ArrayList<CompressedObjectParcelable> elements) throws ArchiveException {
-        TarArchiveInputStream tarInputStream = null;
-        try {
-            tarInputStream = new TarArchiveInputStream(
-                new LZMACompressorInputStream(new FileInputStream(filePath)));
+  @Override
+  void addElements(final
+                   @NonNull ArrayList<CompressedObjectParcelable> elements)
+      throws ArchiveException {
+    TarArchiveInputStream tarInputStream = null;
+    try {
+      tarInputStream = new TarArchiveInputStream(
+          new LZMACompressorInputStream(new FileInputStream(filePath)));
 
-            TarArchiveEntry entry;
-            while ((entry = tarInputStream.getNextTarEntry()) != null) {
-                String name = entry.getName();
-                if (name.endsWith(SEPARATOR)) name = name.substring(0, name.length() - 1);
+      TarArchiveEntry entry;
+      while ((entry = tarInputStream.getNextTarEntry()) != null) {
+        String name = entry.getName();
+        if (name.endsWith(SEPARATOR))
+          name = name.substring(0, name.length() - 1);
 
-                boolean isInBaseDir = relativePath.equals("") && !name.contains(SEPARATOR);
-                boolean isInRelativeDir = name.contains(SEPARATOR)
-                                          && name.substring(0, name.lastIndexOf(SEPARATOR)).equals(relativePath);
+        boolean isInBaseDir =
+            relativePath.equals("") && !name.contains(SEPARATOR);
+        boolean isInRelativeDir =
+            name.contains(SEPARATOR) &&
+            name.substring(0, name.lastIndexOf(SEPARATOR)).equals(relativePath);
 
-                if (isInBaseDir || isInRelativeDir) {
-                    elements.add(new CompressedObjectParcelable(entry.getName(),
-                                 entry.getLastModifiedDate().getTime(), entry.getSize(), entry.isDirectory()));
-                }
-            }
-        } catch (IOException e) {
-            throw new ArchiveException(String.format("LZMA archive %s is corrupt", filePath), e);
+        if (isInBaseDir || isInRelativeDir) {
+          elements.add(new CompressedObjectParcelable(
+              entry.getName(), entry.getLastModifiedDate().getTime(),
+              entry.getSize(), entry.isDirectory()));
         }
-
+      }
+    } catch (IOException e) {
+      throw new ArchiveException(
+          String.format("LZMA archive %s is corrupt", filePath), e);
     }
-
+  }
 }

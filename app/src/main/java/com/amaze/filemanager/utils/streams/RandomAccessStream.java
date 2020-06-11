@@ -6,50 +6,47 @@ import java.util.stream.Stream;
 
 public abstract class RandomAccessStream extends InputStream {
 
-    private long markedPosition;
-    private long length;
+  private long markedPosition;
+  private long length;
 
-    public RandomAccessStream(final long length) {
-        this.length = length;
+  public RandomAccessStream(final long length) {
+    this.length = length;
 
-        mark(-1);
+    mark(-1);
+  }
+
+  @Override
+  public synchronized void reset() {
+    moveTo(markedPosition);
+  }
+
+  @Override
+  public synchronized void mark(final int readLimit) {
+    if (readLimit != -1) {
+      throw new IllegalArgumentException(
+          "readLimit argument of RandomAccessStream.mark() is not used, please set to -1!");
     }
 
-    @Override
-    public synchronized void reset() {
-        moveTo(markedPosition);
-    }
+    markedPosition = getCurrentPosition();
+  }
 
-    @Override
-    public synchronized void mark(final int readLimit) {
-        if (readLimit != -1) {
-            throw new IllegalArgumentException("readLimit argument of RandomAccessStream.mark() is not used, please set to -1!");
-        }
+  @Override
+  public boolean markSupported() {
+    return true;
+  }
 
-        markedPosition = getCurrentPosition();
-    }
+  public long availableExact() { return length - getCurrentPosition(); }
 
-    @Override
-    public boolean markSupported() {
-        return true;
-    }
+  public long length() { return length; }
 
-    public long availableExact() {
-        return length - getCurrentPosition();
-    }
+  @Override
+  public int available() throws IOException {
+    throw new IOException("Use availableExact()!");
+  }
 
-    public long length() {
-        return length;
-    }
+  public abstract int read() throws IOException;
 
-    @Override
-    public int available() throws IOException {
-        throw new IOException("Use availableExact()!");
-    }
+  public abstract void moveTo(long position);
 
-    public abstract int read() throws IOException;
-
-    public abstract void moveTo(long position);
-
-    protected abstract long getCurrentPosition();
+  protected abstract long getCurrentPosition();
 }

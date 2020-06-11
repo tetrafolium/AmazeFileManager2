@@ -8,43 +8,43 @@ import android.view.ViewGroup;
 import android.widget.Switch;
 
 /**
- * Created by Arpit on 10/18/2015 edited by Emmanuel Messulam <emmanuelbendavid@gmail.com>
+ * Created by Arpit on 10/18/2015 edited by Emmanuel Messulam
+ * <emmanuelbendavid@gmail.com>
  */
 public class CheckBox extends SwitchPreference {
 
-    public CheckBox(final Context context, final AttributeSet attrs) {
-        super(context, attrs);
+  public CheckBox(final Context context, final AttributeSet attrs) {
+    super(context, attrs);
+  }
+
+  @Override
+  protected void onBindView(final View view) {
+    // Clean listener before invoke SwitchPreference.onBindView
+    clearListenerInViewGroup((ViewGroup)view);
+    super.onBindView(view);
+  }
+
+  /**
+   * Clear listener in Switch for specify ViewGroup.
+   *
+   * @param viewGroup The ViewGroup that will need to clear the listener.
+   */
+  private void clearListenerInViewGroup(final ViewGroup viewGroup) {
+    if (null == viewGroup) {
+      return;
     }
 
-    @Override
-    protected void onBindView(final View view) {
-        // Clean listener before invoke SwitchPreference.onBindView
-        clearListenerInViewGroup((ViewGroup) view);
-        super.onBindView(view);
+    int count = viewGroup.getChildCount();
+    for (int n = 0; n < count; ++n) {
+      View childView = viewGroup.getChildAt(n);
+      if (childView instanceof Switch) {
+        final Switch switchView = (Switch)childView;
+        switchView.setOnCheckedChangeListener(null);
+        return;
+      } else if (childView instanceof ViewGroup) {
+        ViewGroup childGroup = (ViewGroup)childView;
+        clearListenerInViewGroup(childGroup);
+      }
     }
-
-    /**
-     * Clear listener in Switch for specify ViewGroup.
-     *
-     * @param viewGroup The ViewGroup that will need to clear the listener.
-     */
-    private void clearListenerInViewGroup(final ViewGroup viewGroup) {
-        if (null == viewGroup) {
-            return;
-        }
-
-        int count = viewGroup.getChildCount();
-        for (int n = 0; n < count; ++n) {
-            View childView = viewGroup.getChildAt(n);
-            if (childView instanceof Switch) {
-                final Switch switchView = (Switch) childView;
-                switchView.setOnCheckedChangeListener(null);
-                return;
-            } else if (childView instanceof ViewGroup) {
-                ViewGroup childGroup = (ViewGroup) childView;
-                clearListenerInViewGroup(childGroup);
-            }
-        }
-    }
-
+  }
 }

@@ -9,9 +9,9 @@ import com.bumptech.glide.MemoryCategory;
  */
 
 public class GlideApplication extends LeakCanaryApplication {
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        Glide.get(this).setMemoryCategory(MemoryCategory.HIGH);
-    }
+  @Override
+  public void onCreate() {
+    super.onCreate();
+    Glide.get(this).setMemoryCategory(MemoryCategory.HIGH);
+  }
 }

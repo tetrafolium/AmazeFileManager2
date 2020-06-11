@@ -2,7 +2,8 @@
  * SevenZipDecompressor.java
  *
  * Copyright © 2018-2019 N00byKing <N00byKing@hotmail.de>,
- * Emmanuel Messulam<emmanuelbendavid@gmail.com> and Raymond Lai <airwave209gt at gmail.com>.
+ * Emmanuel Messulam<emmanuelbendavid@gmail.com> and Raymond Lai <airwave209gt
+ * at gmail.com>.
  *
  * This file is part of AmazeFileManager.
  *
@@ -25,24 +26,24 @@ package com.amaze.filemanager.filesystem.compressed.showcontents.helpers;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.amaze.filemanager.adapters.data.CompressedObjectParcelable;
 import com.amaze.filemanager.asynchronous.asynctasks.AsyncTaskResult;
 import com.amaze.filemanager.asynchronous.asynctasks.compress.SevenZipHelperTask;
 import com.amaze.filemanager.filesystem.compressed.showcontents.Decompressor;
 import com.amaze.filemanager.utils.OnAsyncTaskFinished;
-
 import java.util.ArrayList;
 
 public class SevenZipDecompressor extends Decompressor {
 
-    public SevenZipDecompressor(final @NonNull Context context) {
-        super(context);
-    }
+  public SevenZipDecompressor(final @NonNull Context context) {
+    super(context);
+  }
 
-    @Override
-    public SevenZipHelperTask changePath(final String path, final boolean addGoBackItem,
-                                         final OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
-        return new SevenZipHelperTask(filePath, path, addGoBackItem, onFinish);
-    }
+  @Override
+  public SevenZipHelperTask changePath(
+      final String path, final boolean addGoBackItem,
+      final OnAsyncTaskFinished<
+          AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
+    return new SevenZipHelperTask(filePath, path, addGoBackItem, onFinish);
+  }
 }

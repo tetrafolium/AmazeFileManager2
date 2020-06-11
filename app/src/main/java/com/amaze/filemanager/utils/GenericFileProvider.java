@@ -1,7 +1,6 @@
 package com.amaze.filemanager.utils;
 
 import androidx.core.content.FileProvider;
-
 import com.amaze.filemanager.BuildConfig;
 
 /**
@@ -12,6 +11,6 @@ import com.amaze.filemanager.BuildConfig;
 
 public class GenericFileProvider extends FileProvider {
 
-    public static final String PROVIDER_NAME = BuildConfig.APPLICATION_ID + ".FILE_PROVIDER";
-
+  public static final String PROVIDER_NAME =
+      BuildConfig.APPLICATION_ID + ".FILE_PROVIDER";
 }

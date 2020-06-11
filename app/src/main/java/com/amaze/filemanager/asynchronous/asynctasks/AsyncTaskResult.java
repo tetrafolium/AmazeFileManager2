@@ -19,37 +19,38 @@
  * along with AmazeFileManager. If not, see <http ://www.gnu.org/licenses/>.
  */
 
-
 package com.amaze.filemanager.asynchronous.asynctasks;
 
 /**
- * Container for AsyncTask results. Allow either result object or exception to be contained.
+ * Container for AsyncTask results. Allow either result object or exception to
+ * be contained.
  *
  * @param <T> Result type
  */
 
 public class AsyncTaskResult<T> {
-    public final T result;
-    public final Throwable exception;
+  public final T result;
+  public final Throwable exception;
 
-    public AsyncTaskResult(final T result) {
-        this.result = result;
-        this.exception = null;
-    }
+  public AsyncTaskResult(final T result) {
+    this.result = result;
+    this.exception = null;
+  }
 
-    public AsyncTaskResult(final Throwable exception) {
-        this.result = null;
-        this.exception = exception;
-    }
+  public AsyncTaskResult(final Throwable exception) {
+    this.result = null;
+    this.exception = exception;
+  }
+
+  /**
+   * Callback interface for use in {@link android.os.AsyncTask}. Think Promise
+   * callback in JS.
+   */
+  public interface Callback<T> {
 
     /**
-     * Callback interface for use in {@link android.os.AsyncTask}. Think Promise callback in JS.
+     * Implement logic on what to do with the result here.
      */
-    public interface Callback<T> {
-
-        /**
-         * Implement logic on what to do with the result here.
-         */
-        void onResult(T result);
-    }
+    void onResult(T result);
+  }
 }

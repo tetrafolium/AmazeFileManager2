@@ -1,13 +1,14 @@
 package com.amaze.filemanager.asynchronous.asynctasks;
 
+import static com.amaze.filemanager.utils.Utils.getColor;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import androidx.core.util.Pair;
 import android.text.SpannableString;
 import android.text.format.Formatter;
 import android.view.View;
-
+import androidx.core.util.Pair;
 import com.afollestad.materialdialogs.Theme;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.filesystem.HybridFileParcelable;
@@ -18,11 +19,8 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.amaze.filemanager.utils.Utils.getColor;
 
 /**
  * Loads data for chart in FileUtils.showPropertiesDialog()
@@ -31,102 +29,109 @@ import static com.amaze.filemanager.utils.Utils.getColor;
  *         on 12/5/2017, at 00:07.
  */
 
-public class LoadFolderSpaceDataTask extends AsyncTask<Void, Long, Pair<String, List<PieEntry>>> {
+public class LoadFolderSpaceDataTask
+    extends AsyncTask<Void, Long, Pair<String, List<PieEntry>>> {
 
-    private static int[] COLORS;
-    private static String[] LEGENDS;
+  private static int[] COLORS;
+  private static String[] LEGENDS;
 
-    private Context context;
-    private AppTheme appTheme;
-    private PieChart chart;
-    private HybridFileParcelable file;
+  private Context context;
+  private AppTheme appTheme;
+  private PieChart chart;
+  private HybridFileParcelable file;
 
-    public LoadFolderSpaceDataTask(final Context c, final AppTheme appTheme, final PieChart chart, final HybridFileParcelable f) {
-        context = c;
-        this.appTheme = appTheme;
-        this.chart = chart;
-        file = f;
-        LEGENDS = new String[] {context.getString(R.string.size), context.getString(R.string.used_by_others), context.getString(R.string.free)};
-        COLORS = new int[] {getColor(c, R.color.piechart_red), getColor(c, R.color.piechart_blue),
-                            getColor(c, R.color.piechart_green)
-                           };
+  public LoadFolderSpaceDataTask(final Context c, final AppTheme appTheme,
+                                 final PieChart chart,
+                                 final HybridFileParcelable f) {
+    context = c;
+    this.appTheme = appTheme;
+    this.chart = chart;
+    file = f;
+    LEGENDS = new String[] {context.getString(R.string.size),
+                            context.getString(R.string.used_by_others),
+                            context.getString(R.string.free)};
+    COLORS = new int[] {getColor(c, R.color.piechart_red),
+                        getColor(c, R.color.piechart_blue),
+                        getColor(c, R.color.piechart_green)};
+  }
+
+  @Override
+  protected Pair<String, List<PieEntry>> doInBackground(final Void... params) {
+    long[] dataArray =
+        FileUtils.getSpaces(file, context, this::publishProgress);
+
+    if (dataArray[0] != -1 && dataArray[0] != 0) {
+      long totalSpace = dataArray[0];
+
+      List<PieEntry> entries = createEntriesFromArray(dataArray, false);
+
+      return new Pair<>(Formatter.formatFileSize(context, totalSpace), entries);
     }
 
-    @Override
-    protected Pair<String, List<PieEntry>> doInBackground(final Void... params) {
-        long[] dataArray = FileUtils.getSpaces(file, context, this::publishProgress);
+    return null;
+  }
 
-        if (dataArray[0] != -1 && dataArray[0] != 0) {
-            long totalSpace = dataArray[0];
+  @Override
+  protected void onProgressUpdate(final Long[] dataArray) {
+    if (dataArray[0] != -1 && dataArray[0] != 0) {
+      long totalSpace = dataArray[0];
 
-            List<PieEntry> entries = createEntriesFromArray(dataArray, false);
+      List<PieEntry> entries = createEntriesFromArray(
+          new long[] {dataArray[0], dataArray[1], dataArray[2]}, true);
 
-            return new Pair<>(Formatter.formatFileSize(context, totalSpace), entries);
-        }
+      updateChart(Formatter.formatFileSize(context, totalSpace), entries);
 
-        return null;
+      chart.notifyDataSetChanged();
+      chart.invalidate();
+    }
+  }
+
+  @Override
+  protected void onPostExecute(final Pair<String, List<PieEntry>> data) {
+    if (data == null) {
+      chart.setVisibility(View.GONE);
+      return;
     }
 
-    @Override
-    protected void onProgressUpdate(final Long[] dataArray) {
-        if (dataArray[0] != -1 && dataArray[0] != 0) {
-            long totalSpace = dataArray[0];
+    updateChart(data.first, data.second);
 
-            List<PieEntry> entries = createEntriesFromArray(
-                                         new long[] {dataArray[0], dataArray[1], dataArray[2]},
-                                         true);
+    chart.notifyDataSetChanged();
+    chart.invalidate();
+  }
 
-            updateChart(Formatter.formatFileSize(context, totalSpace), entries);
+  private List<PieEntry> createEntriesFromArray(final long[] dataArray,
+                                                final boolean loading) {
+    long usedByFolder = dataArray[2],
+         usedByOther = dataArray[0] - dataArray[1] - dataArray[2],
+         freeSpace = dataArray[1];
 
-            chart.notifyDataSetChanged();
-            chart.invalidate();
-        }
-    }
+    List<PieEntry> entries = new ArrayList<>();
+    entries.add(new PieEntry(usedByFolder, LEGENDS[0], loading ? ">" : null));
+    entries.add(new PieEntry(usedByOther, LEGENDS[1], loading ? "<" : null));
+    entries.add(new PieEntry(freeSpace, LEGENDS[2]));
 
-    @Override
-    protected void onPostExecute(final Pair<String, List<PieEntry>> data) {
-        if (data == null) {
-            chart.setVisibility(View.GONE);
-            return;
-        }
+    return entries;
+  }
 
-        updateChart(data.first, data.second);
+  private void updateChart(final String totalSpace,
+                           final List<PieEntry> entries) {
+    boolean isDarkTheme = appTheme.getMaterialDialogTheme() == Theme.DARK;
 
-        chart.notifyDataSetChanged();
-        chart.invalidate();
-    }
+    PieDataSet set = new PieDataSet(entries, null);
+    set.setColors(COLORS);
+    set.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+    set.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+    set.setSliceSpace(5f);
+    set.setAutomaticallyDisableSliceSpacing(true);
+    set.setValueLinePart2Length(1.05f);
+    set.setSelectionShift(0f);
 
-    private List<PieEntry> createEntriesFromArray(final long[] dataArray, final boolean loading) {
-        long usedByFolder = dataArray[2],
-             usedByOther = dataArray[0] - dataArray[1] - dataArray[2],
-             freeSpace = dataArray[1];
+    PieData pieData = new PieData(set);
+    pieData.setValueFormatter(new GeneralDialogCreation.SizeFormatter(context));
+    pieData.setValueTextColor(isDarkTheme ? Color.WHITE : Color.BLACK);
 
-        List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(usedByFolder, LEGENDS[0], loading ? ">" : null));
-        entries.add(new PieEntry(usedByOther, LEGENDS[1], loading ? "<" : null));
-        entries.add(new PieEntry(freeSpace, LEGENDS[2]));
-
-        return entries;
-    }
-
-    private void updateChart(final String totalSpace, final List<PieEntry> entries) {
-        boolean isDarkTheme = appTheme.getMaterialDialogTheme() == Theme.DARK;
-
-        PieDataSet set = new PieDataSet(entries, null);
-        set.setColors(COLORS);
-        set.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
-        set.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
-        set.setSliceSpace(5f);
-        set.setAutomaticallyDisableSliceSpacing(true);
-        set.setValueLinePart2Length(1.05f);
-        set.setSelectionShift(0f);
-
-        PieData pieData = new PieData(set);
-        pieData.setValueFormatter(new GeneralDialogCreation.SizeFormatter(context));
-        pieData.setValueTextColor(isDarkTheme ? Color.WHITE : Color.BLACK);
-
-        chart.setCenterText(new SpannableString(context.getString(R.string.total) + "\n" + totalSpace));
-        chart.setData(pieData);
-    }
-
+    chart.setCenterText(new SpannableString(context.getString(R.string.total) +
+                                            "\n" + totalSpace));
+    chart.setData(pieData);
+  }
 }

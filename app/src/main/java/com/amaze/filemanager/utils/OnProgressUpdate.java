@@ -7,6 +7,4 @@ package com.amaze.filemanager.utils;
  *         on 13/5/2017, at 22:45.
  */
 
-public interface OnProgressUpdate<T> {
-    void onUpdate(T data);
-}
+public interface OnProgressUpdate<T> { void onUpdate(T data); }

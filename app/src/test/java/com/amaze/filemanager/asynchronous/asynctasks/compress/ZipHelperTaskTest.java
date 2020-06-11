@@ -1,16 +1,16 @@
 package com.amaze.filemanager.asynchronous.asynctasks.compress;
 
 import android.os.Environment;
-
-import org.robolectric.RuntimeEnvironment;
-
 import java.io.File;
+import org.robolectric.RuntimeEnvironment;
 
 public class ZipHelperTaskTest extends AbstractCompressedHelperTaskTest {
 
-    protected CompressedHelperTask createTask(final String relativePath) {
-        return new ZipHelperTask(RuntimeEnvironment.application,
-                                 new File(Environment.getExternalStorageDirectory(), "test-archive.zip").getAbsolutePath(),
-                                 relativePath, false, (data) -> { });
-    }
+  protected CompressedHelperTask createTask(final String relativePath) {
+    return new ZipHelperTask(
+        RuntimeEnvironment.application,
+        new File(Environment.getExternalStorageDirectory(), "test-archive.zip")
+            .getAbsolutePath(),
+        relativePath, false, (data) -> {});
+  }
 }

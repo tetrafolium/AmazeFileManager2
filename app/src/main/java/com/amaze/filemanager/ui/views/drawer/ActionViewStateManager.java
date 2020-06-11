@@ -1,9 +1,8 @@
 package com.amaze.filemanager.ui.views.drawer;
 
-import androidx.annotation.ColorInt;
-
 import android.view.MenuItem;
 import android.widget.ImageButton;
+import androidx.annotation.ColorInt;
 
 /**
  * This manages to set the color of the selected ActionView
@@ -11,30 +10,30 @@ import android.widget.ImageButton;
  */
 public class ActionViewStateManager {
 
-    private ImageButton lastItemSelected = null;
-    private @ColorInt int idleIconColor;
-    private @ColorInt int selectedIconColor;
+  private ImageButton lastItemSelected = null;
+  private @ColorInt int idleIconColor;
+  private @ColorInt int selectedIconColor;
 
-    public ActionViewStateManager(final @ColorInt int idleColor, final @ColorInt int accentColor) {
-        idleIconColor = idleColor;
-        selectedIconColor = accentColor;
+  public ActionViewStateManager(final @ColorInt int idleColor,
+                                final @ColorInt int accentColor) {
+    idleIconColor = idleColor;
+    selectedIconColor = accentColor;
+  }
+
+  public void deselectCurrentActionView() {
+    if (lastItemSelected != null) {
+      lastItemSelected.setColorFilter(idleIconColor);
+      lastItemSelected = null;
     }
+  }
 
-    public void deselectCurrentActionView() {
-        if (lastItemSelected != null) {
-            lastItemSelected.setColorFilter(idleIconColor);
-            lastItemSelected = null;
-        }
+  public void selectActionView(final MenuItem item) {
+    if (lastItemSelected != null) {
+      lastItemSelected.setColorFilter(idleIconColor);
     }
-
-    public void selectActionView(final MenuItem item) {
-        if (lastItemSelected != null) {
-            lastItemSelected.setColorFilter(idleIconColor);
-        }
-        if (item.getActionView() != null) {
-            lastItemSelected = (ImageButton) item.getActionView();
-            lastItemSelected.setColorFilter(selectedIconColor);
-        }
+    if (item.getActionView() != null) {
+      lastItemSelected = (ImageButton)item.getActionView();
+      lastItemSelected.setColorFilter(selectedIconColor);
     }
-
+  }
 }

@@ -21,26 +21,23 @@
 package com.amaze.filemanager.filesystem.compressed.showcontents.helpers;
 
 import android.content.Context;
-
 import com.amaze.filemanager.adapters.data.CompressedObjectParcelable;
 import com.amaze.filemanager.asynchronous.asynctasks.AsyncTaskResult;
 import com.amaze.filemanager.asynchronous.asynctasks.compress.CompressedHelperTask;
 import com.amaze.filemanager.asynchronous.asynctasks.compress.LzmaHelperTask;
 import com.amaze.filemanager.filesystem.compressed.showcontents.Decompressor;
 import com.amaze.filemanager.utils.OnAsyncTaskFinished;
-
 import java.util.ArrayList;
 
 public class LzmaDecompressor extends Decompressor {
 
-    public LzmaDecompressor(final Context context) {
-        super(context);
-    }
+  public LzmaDecompressor(final Context context) { super(context); }
 
-    @Override
-    public CompressedHelperTask changePath(final String path, final boolean addGoBackItem,
-                                           final OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
-        return new LzmaHelperTask(filePath, path, addGoBackItem, onFinish);
-    }
-
+  @Override
+  public CompressedHelperTask changePath(
+      final String path, final boolean addGoBackItem,
+      final OnAsyncTaskFinished<
+          AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
+    return new LzmaHelperTask(filePath, path, addGoBackItem, onFinish);
+  }
 }

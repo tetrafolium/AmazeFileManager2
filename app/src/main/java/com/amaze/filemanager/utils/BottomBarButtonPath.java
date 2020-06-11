@@ -10,9 +10,9 @@ import androidx.annotation.DrawableRes;
  */
 
 public interface BottomBarButtonPath {
-    void changePath(String path);
+  void changePath(String path);
 
-    String getPath();
+  String getPath();
 
-    @DrawableRes int getRootDrawable();
+  @DrawableRes int getRootDrawable();
 }

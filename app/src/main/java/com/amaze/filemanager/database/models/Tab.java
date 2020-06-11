@@ -21,29 +21,28 @@
 package com.amaze.filemanager.database.models;
 
 import android.content.SharedPreferences;
-
 import com.amaze.filemanager.utils.files.FileUtils;
 
 /**
  * Created by Vishal on 9/17/2014
  */
 public class Tab {
-    public final int tabNumber;
-    public final String path;
-    public final String home;
+  public final int tabNumber;
+  public final String path;
+  public final String home;
 
-    public Tab(final int tabNo, final String path, final String home) {
-        this.tabNumber = tabNo;
-        this.path = path;
-        this.home = home;
+  public Tab(final int tabNo, final String path, final String home) {
+    this.tabNumber = tabNo;
+    this.path = path;
+    this.home = home;
+  }
+
+  public String getOriginalPath(final boolean savePaths,
+                                final SharedPreferences sharedPreferences) {
+    if (savePaths && FileUtils.isPathAccessible(path, sharedPreferences)) {
+      return path;
+    } else {
+      return home;
     }
-
-    public String getOriginalPath(final boolean savePaths, final SharedPreferences sharedPreferences) {
-        if (savePaths && FileUtils.isPathAccessible(path, sharedPreferences)) {
-            return path;
-        } else {
-            return home;
-        }
-    }
-
+  }
 }

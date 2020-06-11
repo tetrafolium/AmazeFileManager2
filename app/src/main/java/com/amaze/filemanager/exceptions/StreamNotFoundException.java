@@ -7,18 +7,14 @@ package com.amaze.filemanager.exceptions;
  */
 
 public class StreamNotFoundException extends Exception {
-    private static final String MESSAGE = "Can't get stream";
+  private static final String MESSAGE = "Can't get stream";
 
-    public StreamNotFoundException() {
-        super(MESSAGE);
-    }
-    public StreamNotFoundException(final String message) {
-        super(message);
-    }
-    public StreamNotFoundException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
-    public StreamNotFoundException(final Throwable cause) {
-        super(MESSAGE, cause);
-    }
+  public StreamNotFoundException() { super(MESSAGE); }
+  public StreamNotFoundException(final String message) { super(message); }
+  public StreamNotFoundException(final String message, final Throwable cause) {
+    super(message, cause);
+  }
+  public StreamNotFoundException(final Throwable cause) {
+    super(MESSAGE, cause);
+  }
 }

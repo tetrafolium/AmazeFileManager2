@@ -22,42 +22,42 @@
 
 package com.amaze.filemanager.filesystem.compressed.showcontents.helpers;
 
-import android.content.Context;
+import static com.amaze.filemanager.filesystem.compressed.CompressedHelper.SEPARATOR;
 
+import android.content.Context;
+import com.amaze.filemanager.adapters.data.CompressedObjectParcelable;
 import com.amaze.filemanager.asynchronous.asynctasks.AsyncTaskResult;
 import com.amaze.filemanager.asynchronous.asynctasks.compress.RarHelperTask;
-import com.amaze.filemanager.adapters.data.CompressedObjectParcelable;
 import com.amaze.filemanager.filesystem.compressed.showcontents.Decompressor;
 import com.amaze.filemanager.utils.OnAsyncTaskFinished;
 import com.github.junrar.rarfile.FileHeader;
-
 import java.util.ArrayList;
-
-import static com.amaze.filemanager.filesystem.compressed.CompressedHelper.SEPARATOR;
 
 public class RarDecompressor extends Decompressor {
 
-    public RarDecompressor(final Context context) {
-        super(context);
-    }
+  public RarDecompressor(final Context context) { super(context); }
 
-    @Override
-    public RarHelperTask changePath(final String path, final boolean addGoBackItem,
-                                    final OnAsyncTaskFinished<AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
-        return new RarHelperTask(filePath, path, addGoBackItem, onFinish);
-    }
+  @Override
+  public RarHelperTask changePath(
+      final String path, final boolean addGoBackItem,
+      final OnAsyncTaskFinished<
+          AsyncTaskResult<ArrayList<CompressedObjectParcelable>>> onFinish) {
+    return new RarHelperTask(filePath, path, addGoBackItem, onFinish);
+  }
 
-    public static String convertName(final FileHeader file) {
-        String name = file.getFileNameString().replace('\\', '/');
+  public static String convertName(final FileHeader file) {
+    String name = file.getFileNameString().replace('\\', '/');
 
-        if (file.isDirectory()) return name + SEPARATOR;
-        else return name;
-    }
+    if (file.isDirectory())
+      return name + SEPARATOR;
+    else
+      return name;
+  }
 
-    @Override
-    protected String realRelativeDirectory(final String dir) {
-        if (dir.endsWith(SEPARATOR)) dir = dir.substring(0, dir.length() - 1);
-        return dir.replace(SEPARATOR.toCharArray()[0], '\\');
-    }
-
+  @Override
+  protected String realRelativeDirectory(final String dir) {
+    if (dir.endsWith(SEPARATOR))
+      dir = dir.substring(0, dir.length() - 1);
+    return dir.replace(SEPARATOR.toCharArray()[0], '\\');
+  }
 }

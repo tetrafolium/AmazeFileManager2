@@ -1,7 +1,6 @@
 package com.amaze.filemanager.activities;
 
 import com.amaze.filemanager.BuildConfig;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -14,10 +13,15 @@ import org.robolectric.shadows.multidex.ShadowMultiDex;
 @Config(constants = BuildConfig.class, shadows = {ShadowMultiDex.class})
 public class MainActivityTest {
 
-    @Test
-    public void testMainActivity() {
-        ActivityController<MainActivity> controller = Robolectric.buildActivity(MainActivity.class)
-                .create().start().resume().visible().pause().destroy();
-    }
-
+  @Test
+  public void testMainActivity() {
+    ActivityController<MainActivity> controller =
+        Robolectric.buildActivity(MainActivity.class)
+            .create()
+            .start()
+            .resume()
+            .visible()
+            .pause()
+            .destroy();
+  }
 }

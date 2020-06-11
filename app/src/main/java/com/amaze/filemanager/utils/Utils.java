@@ -1,8 +1,9 @@
 /*
  * Utils.java
  *
- * Copyright (C) 2017-2018 Emmanuel Messulam <emmanuelbendavid@gmail.com>, Vishal Nehra <vishalmeham2@gmail.com>,
- * Raymond Lai <airwave209gt@gmail.com> and Contributors.
+ * Copyright (C) 2017-2018 Emmanuel Messulam <emmanuelbendavid@gmail.com>,
+ * Vishal Nehra <vishalmeham2@gmail.com>, Raymond Lai <airwave209gt@gmail.com>
+ * and Contributors.
  *
  * This file is part of Amaze File Manager.
  *
@@ -30,20 +31,18 @@ import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
-import androidx.annotation.ColorRes;
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
-
+import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.filesystem.HybridFileParcelable;
-
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
@@ -56,211 +55,245 @@ import java.util.concurrent.TimeUnit;
 
 public class Utils {
 
-    private static final int INDEX_NOT_FOUND = -1;
-    private static final String INPUT_INTENT_BLACKLIST_COLON = ";";
-    private static final String INPUT_INTENT_BLACKLIST_PIPE = "\\|";
-    private static final String INPUT_INTENT_BLACKLIST_AMP = "&&";
-    private static final String INPUT_INTENT_BLACKLIST_DOTS = "\\.\\.\\.";
-    private static final String DATE_TIME_FORMAT = "%s | %s";
+  private static final int INDEX_NOT_FOUND = -1;
+  private static final String INPUT_INTENT_BLACKLIST_COLON = ";";
+  private static final String INPUT_INTENT_BLACKLIST_PIPE = "\\|";
+  private static final String INPUT_INTENT_BLACKLIST_AMP = "&&";
+  private static final String INPUT_INTENT_BLACKLIST_DOTS = "\\.\\.\\.";
+  private static final String DATE_TIME_FORMAT = "%s | %s";
 
-    //methods for fastscroller
-    public static float clamp(final float min, final float max, final float value) {
-        float minimum = Math.max(min, value);
-        return Math.min(minimum, max);
+  // methods for fastscroller
+  public static float clamp(final float min, final float max,
+                            final float value) {
+    float minimum = Math.max(min, value);
+    return Math.min(minimum, max);
+  }
+
+  public static float getViewRawY(final View view) {
+    int[] location = new int[2];
+    location[0] = 0;
+    location[1] = (int)view.getY();
+    ((View)view.getParent()).getLocationInWindow(location);
+    return location[1];
+  }
+
+  public static void setTint(final Context context, final CheckBox box,
+                             final int color) {
+    if (Build.VERSION.SDK_INT >= 21)
+      return;
+    ColorStateList sl = new ColorStateList(
+        new int[][] {new int[] {-android.R.attr.state_checked},
+                     new int[] {android.R.attr.state_checked}},
+        new int[] {getColor(context, R.color.grey), color});
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      box.setButtonTintList(sl);
+    } else {
+      Drawable drawable = DrawableCompat.wrap(ContextCompat.getDrawable(
+          box.getContext(), R.drawable.abc_btn_check_material));
+      DrawableCompat.setTintList(drawable, sl);
+      box.setButtonDrawable(drawable);
+    }
+  }
+
+  public static String getDate(final @NonNull Context c, final long f) {
+    return String.format(
+        DATE_TIME_FORMAT,
+        DateUtils.formatDateTime(c, f, DateUtils.FORMAT_SHOW_DATE),
+        DateUtils.formatDateTime(c, f, DateUtils.FORMAT_SHOW_TIME));
+  }
+
+  /**
+   * Gets color
+   *
+   * @param color the resource id for the color
+   * @return the color
+   */
+  @SuppressWarnings("deprecation")
+  public static int getColor(final Context c, final @ColorRes int color) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      return c.getColor(color);
+    } else {
+      return c.getResources().getColor(color);
+    }
+  }
+
+  public static int dpToPx(final Context c, final int dp) {
+    DisplayMetrics displayMetrics = c.getResources().getDisplayMetrics();
+    return Math.round(dp *
+                      (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+  }
+
+  /**
+   *   Compares two Strings, and returns the portion where they differ.  (More
+   * precisely, return the remainder of the second String, starting from where
+   * it's different from the first.)
+   *
+   *   For example, difference("i am a machine", "i am a robot") -> "robot".
+   *
+   *   StringUtils.difference(null, null) = null
+   *   StringUtils.difference("", "") = ""
+   *   StringUtils.difference("", "abc") = "abc"
+   *   StringUtils.difference("abc", "") = ""
+   *   StringUtils.difference("abc", "abc") = ""
+   *   StringUtils.difference("ab", "abxyz") = "xyz"
+   *   StringUtils.difference("abcde", "abxyz") = "xyz"
+   *   StringUtils.difference("abcde", "xyz") = "xyz"
+   *
+   *  @param str1 - the first String, may be null
+   *  @param str2 - the second String, may be null
+   *  @return the portion of str2 where it differs from str1; returns the empty
+   * String if they are equal
+   *
+   *  Stolen from Apache's StringUtils
+   *  (https://commons.apache.org/proper/commons-lang/javadocs/api-2.6/org/apache/commons/lang/StringUtils.html#difference(java.lang.String,%20java.lang.String))
+   */
+  public static String differenceStrings(final String str1, final String str2) {
+    if (str1 == null)
+      return str2;
+    if (str2 == null)
+      return str1;
+
+    int at = indexOfDifferenceStrings(str1, str2);
+
+    if (at == INDEX_NOT_FOUND)
+      return "";
+
+    return str2.substring(at);
+  }
+
+  private static int indexOfDifferenceStrings(final CharSequence cs1,
+                                              final CharSequence cs2) {
+    if (cs1 == cs2)
+      return INDEX_NOT_FOUND;
+    if (cs1 == null || cs2 == null)
+      return 0;
+
+    int i;
+    for (i = 0; i < cs1.length() && i < cs2.length(); ++i) {
+      if (cs1.charAt(i) != cs2.charAt(i))
+        break;
     }
 
-    public static float getViewRawY(final View view) {
-        int[] location = new int[2];
-        location[0] = 0;
-        location[1] = (int) view.getY();
-        ((View) view.getParent()).getLocationInWindow(location);
-        return location[1];
+    if (i < cs2.length() || i < cs1.length())
+      return i;
+
+    return INDEX_NOT_FOUND;
+  }
+
+  /**
+   * Force disables screen rotation. Useful when we're temporarily in activity
+   * because of external intent, and don't have to really deal much with
+   * filesystem.
+   */
+  public static void disableScreenRotation(final MainActivity mainActivity) {
+    int screenOrientation =
+        mainActivity.getResources().getConfiguration().orientation;
+
+    if (screenOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+      mainActivity.setRequestedOrientation(
+          ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    } else if (screenOrientation == Configuration.ORIENTATION_PORTRAIT) {
+      mainActivity.setRequestedOrientation(
+          ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
+  }
+
+  public static boolean isDeviceInLandScape(final Activity activity) {
+    return activity.getResources().getConfiguration().orientation ==
+        Configuration.ORIENTATION_LANDSCAPE;
+  }
+
+  /**
+   * Sanitizes input from external application to avoid any attempt of command
+   * injection
+   */
+  public static String sanitizeInput(final String input) {
+    // iterate through input and keep sanitizing until it's fully injection
+    // proof
+    String sanitizedInput;
+    String sanitizedInputTemp = input;
+
+    while (true) {
+      sanitizedInput = sanitizeInputOnce(sanitizedInputTemp);
+      if (sanitizedInput.equals(sanitizedInputTemp))
+        break;
+      sanitizedInputTemp = sanitizedInput;
     }
 
-    public static void setTint(final Context context, final CheckBox box, final int color) {
-        if (Build.VERSION.SDK_INT >= 21) return;
-        ColorStateList sl = new ColorStateList(new int[][] {
-                                                   new int[]{-android.R.attr.state_checked},
-                                                   new int[]{android.R.attr.state_checked}
-                                               }, new int[] {getColor(context, R.color.grey), color});
+    return sanitizedInput;
+  }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            box.setButtonTintList(sl);
-        } else {
-            Drawable drawable = DrawableCompat.wrap(ContextCompat.getDrawable(box.getContext(), R.drawable.abc_btn_check_material));
-            DrawableCompat.setTintList(drawable, sl);
-            box.setButtonDrawable(drawable);
-        }
+  private static String sanitizeInputOnce(final String input) {
+    return input.replaceAll(INPUT_INTENT_BLACKLIST_PIPE, "")
+        .replaceAll(INPUT_INTENT_BLACKLIST_AMP, "")
+        .replaceAll(INPUT_INTENT_BLACKLIST_DOTS, "")
+        .replaceAll(INPUT_INTENT_BLACKLIST_COLON, "");
+  }
+
+  /**
+   * Returns uri associated to specific basefile
+   */
+  public static Uri getUriForBaseFile(final Context context,
+                                      final HybridFileParcelable baseFile) {
+    switch (baseFile.getMode()) {
+    case FILE:
+    case ROOT:
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+        return GenericFileProvider.getUriForFile(
+            context, GenericFileProvider.PROVIDER_NAME,
+            new File(baseFile.getPath()));
+      } else {
+        return Uri.fromFile(new File(baseFile.getPath()));
+      }
+    case OTG:
+      return OTGUtil.getDocumentFile(baseFile.getPath(), context, true)
+          .getUri();
+    case SMB:
+    case DROPBOX:
+    case GDRIVE:
+    case ONEDRIVE:
+    case BOX:
+      Toast
+          .makeText(context, context.getString(R.string.smb_launch_error),
+                    Toast.LENGTH_LONG)
+          .show();
+      return null;
+    default:
+      return null;
     }
+  }
 
-    public static String getDate(final @NonNull Context c, final long f) {
-        return String.format(DATE_TIME_FORMAT, DateUtils.formatDateTime(c, f, DateUtils.FORMAT_SHOW_DATE), DateUtils.formatDateTime(c, f, DateUtils.FORMAT_SHOW_TIME));
+  /**
+   * Gets position of nth to last char in String.
+   * nthToLastCharIndex(1, "a.tar.gz") = 1
+   * nthToLastCharIndex(0, "a.tar.gz") = 5
+   */
+  public static int nthToLastCharIndex(final int elementNumber,
+                                       final String str, final char element) {
+    if (elementNumber <= 0)
+      throw new IllegalArgumentException();
+
+    int occurencies = 0;
+    for (int i = str.length() - 1; i >= 0; i--) {
+      if (str.charAt(i) == element && ++occurencies == elementNumber) {
+        return i;
+      }
     }
+    return -1;
+  }
 
-    /**
-     * Gets color
-     *
-     * @param color the resource id for the color
-     * @return the color
-     */
-    @SuppressWarnings("deprecation")
-    public static int getColor(final Context c, final @ColorRes int color) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return c.getColor(color);
-        } else {
-            return c.getResources().getColor(color);
-        }
-    }
-
-    public static int dpToPx(final Context c, final int dp) {
-        DisplayMetrics displayMetrics = c.getResources().getDisplayMetrics();
-        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-    }
-
-    /**
-     *   Compares two Strings, and returns the portion where they differ.  (More precisely,
-     *   return the remainder of the second String, starting from where it's different from the first.)
-     *
-     *   For example, difference("i am a machine", "i am a robot") -> "robot".
-     *
-     *   StringUtils.difference(null, null) = null
-     *   StringUtils.difference("", "") = ""
-     *   StringUtils.difference("", "abc") = "abc"
-     *   StringUtils.difference("abc", "") = ""
-     *   StringUtils.difference("abc", "abc") = ""
-     *   StringUtils.difference("ab", "abxyz") = "xyz"
-     *   StringUtils.difference("abcde", "abxyz") = "xyz"
-     *   StringUtils.difference("abcde", "xyz") = "xyz"
-     *
-     *  @param str1 - the first String, may be null
-     *  @param str2 - the second String, may be null
-     *  @return the portion of str2 where it differs from str1; returns the empty String if they are equal
-     *
-     *  Stolen from Apache's StringUtils
-     *  (https://commons.apache.org/proper/commons-lang/javadocs/api-2.6/org/apache/commons/lang/StringUtils.html#difference(java.lang.String,%20java.lang.String))
-     */
-    public static String differenceStrings(final String str1, final String str2) {
-        if (str1 == null) return str2;
-        if (str2 == null) return str1;
-
-        int at = indexOfDifferenceStrings(str1, str2);
-
-        if (at == INDEX_NOT_FOUND) return "";
-
-        return str2.substring(at);
-    }
-
-    private static int indexOfDifferenceStrings(final CharSequence cs1, final CharSequence cs2) {
-        if (cs1 == cs2) return INDEX_NOT_FOUND;
-        if (cs1 == null || cs2 == null) return 0;
-
-        int i;
-        for (i = 0; i < cs1.length() && i < cs2.length(); ++i) {
-            if (cs1.charAt(i) != cs2.charAt(i)) break;
-        }
-
-        if (i < cs2.length() || i < cs1.length()) return i;
-
-        return INDEX_NOT_FOUND;
-    }
-
-    /**
-     * Force disables screen rotation. Useful when we're temporarily in activity because of external intent,
-     * and don't have to really deal much with filesystem.
-     */
-    public static void disableScreenRotation(final MainActivity mainActivity) {
-        int screenOrientation = mainActivity.getResources().getConfiguration().orientation;
-
-        if (screenOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-            mainActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        } else if (screenOrientation == Configuration.ORIENTATION_PORTRAIT) {
-            mainActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
-    }
-
-    public static boolean isDeviceInLandScape(final Activity activity) {
-        return activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
-    }
-
-    /**
-     * Sanitizes input from external application to avoid any attempt of command injection
-     */
-    public static String sanitizeInput(final String input) {
-        // iterate through input and keep sanitizing until it's fully injection proof
-        String sanitizedInput;
-        String sanitizedInputTemp = input;
-
-        while (true) {
-            sanitizedInput = sanitizeInputOnce(sanitizedInputTemp);
-            if (sanitizedInput.equals(sanitizedInputTemp)) break;
-            sanitizedInputTemp = sanitizedInput;
-        }
-
-        return sanitizedInput;
-    }
-
-    private static String sanitizeInputOnce(final String input) {
-        return input.replaceAll(INPUT_INTENT_BLACKLIST_PIPE, "").
-               replaceAll(INPUT_INTENT_BLACKLIST_AMP, "").
-               replaceAll(INPUT_INTENT_BLACKLIST_DOTS, "").
-               replaceAll(INPUT_INTENT_BLACKLIST_COLON, "");
-    }
-
-    /**
-     * Returns uri associated to specific basefile
-     */
-    public static Uri getUriForBaseFile(final Context context, final HybridFileParcelable baseFile) {
-        switch (baseFile.getMode()) {
-        case FILE:
-        case ROOT:
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-
-                return GenericFileProvider.getUriForFile(context, GenericFileProvider.PROVIDER_NAME,
-                        new File(baseFile.getPath()));
-            } else {
-                return Uri.fromFile(new File(baseFile.getPath()));
-            }
-        case OTG:
-            return OTGUtil.getDocumentFile(baseFile.getPath(), context, true).getUri();
-        case SMB:
-        case DROPBOX:
-        case GDRIVE:
-        case ONEDRIVE:
-        case BOX:
-            Toast.makeText(context, context.getString(R.string.smb_launch_error),
-                           Toast.LENGTH_LONG).show();
-            return null;
-        default:
-            return null;
-        }
-    }
-
-    /**
-     * Gets position of nth to last char in String.
-     * nthToLastCharIndex(1, "a.tar.gz") = 1
-     * nthToLastCharIndex(0, "a.tar.gz") = 5
-     */
-    public static int nthToLastCharIndex(final int elementNumber, final String str, final char element) {
-        if (elementNumber <= 0) throw new IllegalArgumentException();
-
-        int occurencies = 0;
-        for (int i = str.length() - 1; i >= 0; i--) {
-            if (str.charAt(i) == element && ++occurencies == elementNumber) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    /**
-     * Formats input to plain mm:ss format
-     *
-     * @param timerInSeconds duration in seconds
-     * @return time in mm:ss format
-     */
-    public static String formatTimer(final long timerInSeconds) {
-        final long min = TimeUnit.SECONDS.toMinutes(timerInSeconds);
-        final long sec = TimeUnit.SECONDS.toSeconds(timerInSeconds - TimeUnit.MINUTES.toSeconds(min));
-        return String.format("%02d:%02d", min, sec);
-    }
+  /**
+   * Formats input to plain mm:ss format
+   *
+   * @param timerInSeconds duration in seconds
+   * @return time in mm:ss format
+   */
+  public static String formatTimer(final long timerInSeconds) {
+    final long min = TimeUnit.SECONDS.toMinutes(timerInSeconds);
+    final long sec = TimeUnit.SECONDS.toSeconds(
+        timerInSeconds - TimeUnit.MINUTES.toSeconds(min));
+    return String.format("%02d:%02d", min, sec);
+  }
 }

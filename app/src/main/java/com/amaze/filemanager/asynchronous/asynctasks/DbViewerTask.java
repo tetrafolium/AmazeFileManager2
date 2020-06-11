@@ -4,10 +4,8 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.view.View;
 import android.webkit.WebView;
-
 import com.amaze.filemanager.fragments.DbViewerFragment;
 import com.amaze.filemanager.utils.theme.AppTheme;
-
 import java.util.ArrayList;
 
 /**
@@ -15,139 +13,144 @@ import java.util.ArrayList;
  */
 public class DbViewerTask extends AsyncTask<Void, Integer, Void> {
 
-    Cursor schemaCursor, contentCursor;
-    ArrayList<String> schemaList;
-    ArrayList<String[]> contentList;
-    DbViewerFragment dbViewerFragment;
-    StringBuilder stringBuilder;
-    WebView webView;
-    String htmlInit;
+  Cursor schemaCursor, contentCursor;
+  ArrayList<String> schemaList;
+  ArrayList<String[]> contentList;
+  DbViewerFragment dbViewerFragment;
+  StringBuilder stringBuilder;
+  WebView webView;
+  String htmlInit;
 
-    public DbViewerTask(final Cursor schemaCursor, final Cursor contentCursor, final WebView webView, final DbViewerFragment dbViewerFragment) {
-        this.schemaCursor = schemaCursor;
-        this.contentCursor = contentCursor;
-        this.webView = webView;
-        this.dbViewerFragment = dbViewerFragment;
-        stringBuilder = new StringBuilder();
+  public DbViewerTask(final Cursor schemaCursor, final Cursor contentCursor,
+                      final WebView webView,
+                      final DbViewerFragment dbViewerFragment) {
+    this.schemaCursor = schemaCursor;
+    this.contentCursor = contentCursor;
+    this.webView = webView;
+    this.dbViewerFragment = dbViewerFragment;
+    stringBuilder = new StringBuilder();
 
-        webView.getSettings().setDefaultTextEncodingName("utf-8");
+    webView.getSettings().setDefaultTextEncodingName("utf-8");
+  }
+
+  @Override
+  protected void onPreExecute() {
+    super.onPreExecute();
+
+    if (dbViewerFragment.databaseViewerActivity.getAppTheme().equals(
+            AppTheme.DARK) ||
+        dbViewerFragment.databaseViewerActivity.getAppTheme().equals(
+            AppTheme.BLACK)) {
+
+      htmlInit = "<html><body>"
+                 + "<table border='1' style='width:100%;color:#ffffff'>";
+    } else {
+
+      htmlInit = "<html><body>"
+                 + "<table border='1' style='width:100%;color:#000000'>";
     }
+    stringBuilder.append(htmlInit);
+    dbViewerFragment.loadingText.setVisibility(View.VISIBLE);
+  }
 
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
+  @Override
+  protected void onProgressUpdate(final Integer... values) {
+    super.onProgressUpdate(values);
 
-        if (dbViewerFragment.databaseViewerActivity.getAppTheme().equals(AppTheme.DARK) || dbViewerFragment.databaseViewerActivity.getAppTheme()
-                .equals(AppTheme.BLACK)) {
+    dbViewerFragment.loadingText.setText(values[0] + " records loaded");
+  }
 
-            htmlInit = "<html><body>"
-                       + "<table border='1' style='width:100%;color:#ffffff'>";
-        } else {
+  @Override
+  protected Void doInBackground(final Void... params) {
+    schemaList = getDbTableSchema(schemaCursor);
+    contentList = getDbTableDetails(contentCursor);
+    return null;
+  }
 
-            htmlInit = "<html><body>"
-                       + "<table border='1' style='width:100%;color:#000000'>";
+  @Override
+  protected void onCancelled() {
+    super.onCancelled();
+    dbViewerFragment.getActivity().onBackPressed();
+  }
+
+  @Override
+  protected void onPostExecute(final Void aVoid) {
+    super.onPostExecute(aVoid);
+
+    dbViewerFragment.loadingText.setVisibility(View.GONE);
+
+    // init schema row
+    stringBuilder.append("<tr>");
+    for (String s : schemaList) {
+      stringBuilder.append("<th>").append(s).append("</th>");
+    }
+    stringBuilder.append("</tr>");
+
+    for (String[] strings : contentList) {
+      // init content row
+      stringBuilder.append("<tr>");
+      for (int i = 0; i < strings.length; i++) {
+        stringBuilder.append("<td>").append(strings[i]).append("</td>");
+      }
+      stringBuilder.append("</tr>");
+    }
+    stringBuilder.append("</table></body></html>");
+    webView.loadData(stringBuilder.toString(), "text/html;charset=utf-8",
+                     "utf-8");
+    webView.setVisibility(View.VISIBLE);
+  }
+
+  private ArrayList<String[]> getDbTableDetails(final Cursor c) {
+    ArrayList<String[]> result = new ArrayList<>();
+    int j = 0;
+    for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+      if (!isCancelled()) {
+        j++;
+        publishProgress(j);
+        String[] temp = new String[c.getColumnCount()];
+        for (int i = 0; i < temp.length; i++) {
+          int dataType = c.getType(i);
+          switch (dataType) {
+          case 0:
+            // #FIELD_TYPE_NULL
+            temp[i] = null;
+            break;
+          case 1:
+            // #FIELD_TYPE_INTEGER
+            temp[i] = String.valueOf(c.getInt(i));
+            break;
+          case 2:
+            // #FIELD_TYPE_FLOAT
+            temp[i] = String.valueOf(c.getFloat(i));
+            break;
+          case 3:
+            // #FIELD_TYPE_STRING
+            temp[i] = c.getString(i);
+            break;
+          case 4:
+            // #FIELD_TYPE_BLOB
+            /*byte[] blob = c.getBlob(i);
+            blobString = new String(blob);*/
+            temp[i] = "(BLOB)";
+            break;
+          }
         }
-        stringBuilder.append(htmlInit);
-        dbViewerFragment.loadingText.setVisibility(View.VISIBLE);
+        result.add(temp);
+      } else {
+        break;
+      }
     }
+    return result;
+  }
+  private ArrayList<String> getDbTableSchema(final Cursor c) {
+    ArrayList<String> result = new ArrayList<>();
+    for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+      if (!isCancelled()) {
 
-    @Override
-    protected void onProgressUpdate(final Integer... values) {
-        super.onProgressUpdate(values);
-
-        dbViewerFragment.loadingText.setText(values[0] + " records loaded");
+        result.add(c.getString(1));
+      } else
+        break;
     }
-
-    @Override
-    protected Void doInBackground(final Void... params) {
-        schemaList = getDbTableSchema(schemaCursor);
-        contentList = getDbTableDetails(contentCursor);
-        return null;
-    }
-
-    @Override
-    protected void onCancelled() {
-        super.onCancelled();
-        dbViewerFragment.getActivity().onBackPressed();
-    }
-
-    @Override
-    protected void onPostExecute(final Void aVoid) {
-        super.onPostExecute(aVoid);
-
-        dbViewerFragment.loadingText.setVisibility(View.GONE);
-
-        // init schema row
-        stringBuilder.append("<tr>");
-        for (String s : schemaList) {
-            stringBuilder.append("<th>").append(s).append("</th>");
-        }
-        stringBuilder.append("</tr>");
-
-        for (String[] strings : contentList) {
-            // init content row
-            stringBuilder.append("<tr>");
-            for (int i = 0; i < strings.length; i++) {
-                stringBuilder.append("<td>").append(strings[i]).append("</td>");
-            }
-            stringBuilder.append("</tr>");
-        }
-        stringBuilder.append("</table></body></html>");
-        webView.loadData(stringBuilder.toString(), "text/html;charset=utf-8", "utf-8");
-        webView.setVisibility(View.VISIBLE);
-    }
-
-    private ArrayList<String[]> getDbTableDetails(final Cursor c) {
-        ArrayList<String[]> result = new ArrayList<>();
-        int j = 0;
-        for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-            if (!isCancelled()) {
-                j++;
-                publishProgress(j);
-                String[] temp = new String[c.getColumnCount()];
-                for (int i = 0; i < temp.length; i++) {
-                    int dataType = c.getType(i);
-                    switch (dataType) {
-                    case 0:
-                        // #FIELD_TYPE_NULL
-                        temp[i] = null;
-                        break;
-                    case 1:
-                        // #FIELD_TYPE_INTEGER
-                        temp[i] = String.valueOf(c.getInt(i));
-                        break;
-                    case 2:
-                        // #FIELD_TYPE_FLOAT
-                        temp[i] = String.valueOf(c.getFloat(i));
-                        break;
-                    case 3:
-                        // #FIELD_TYPE_STRING
-                        temp[i] = c.getString(i);
-                        break;
-                    case 4:
-                        // #FIELD_TYPE_BLOB
-                        /*byte[] blob = c.getBlob(i);
-                        blobString = new String(blob);*/
-                        temp[i] = "(BLOB)";
-                        break;
-                    }
-                }
-                result.add(temp);
-            } else {
-                break;
-            }
-        }
-        return result;
-    }
-    private ArrayList<String> getDbTableSchema(final Cursor c) {
-        ArrayList<String> result = new ArrayList<>();
-        for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-            if (!isCancelled()) {
-
-                result.add(c.getString(1));
-            } else
-                break;
-        }
-        return result;
-    }
+    return result;
+  }
 }

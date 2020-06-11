@@ -5,6 +5,4 @@ package com.amaze.filemanager.utils;
  *         on 14/9/2017, at 21:00.
  */
 
-public interface OnAsyncTaskFinished<T> {
-    void onAsyncTaskFinished(T data);
-}
+public interface OnAsyncTaskFinished<T> { void onAsyncTaskFinished(T data); }

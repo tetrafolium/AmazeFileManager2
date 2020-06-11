@@ -1,9 +1,8 @@
 package com.amaze.filemanager.adapters.glide;
 
-import androidx.annotation.Nullable;
 import android.util.SparseArray;
 import android.view.View;
-
+import androidx.annotation.Nullable;
 import com.amaze.filemanager.adapters.data.IconDataParcelable;
 import com.bumptech.glide.ListPreloader;
 import com.bumptech.glide.request.target.SizeReadyCallback;
@@ -18,62 +17,70 @@ import com.bumptech.glide.request.transition.Transition;
  *         on 10/12/2017, at 12:27.
  */
 
-public class RecyclerPreloadSizeProvider implements ListPreloader.PreloadSizeProvider<IconDataParcelable> {
+public class RecyclerPreloadSizeProvider
+    implements ListPreloader.PreloadSizeProvider<IconDataParcelable> {
 
-    private RecyclerPreloadSizeProviderCallback callback;
-    private SparseArray<int[]> viewSizes = new SparseArray<>();
-    private boolean isAdditionClosed = false;
+  private RecyclerPreloadSizeProviderCallback callback;
+  private SparseArray<int[]> viewSizes = new SparseArray<>();
+  private boolean isAdditionClosed = false;
 
-    public RecyclerPreloadSizeProvider(final RecyclerPreloadSizeProviderCallback c) {
-        callback = c;
-    }
+  public RecyclerPreloadSizeProvider(
+      final RecyclerPreloadSizeProviderCallback c) {
+    callback = c;
+  }
+
+  /**
+   * Adds one of the views that can be used to put an image inside.
+   * If the id is already inserted the call will be ignored,
+   * but for performance you should call {@link #closeOffAddition()} once you
+   * are done.
+   *
+   * @param id a unique number for each view loaded to this object
+   * @param v the ciew to load
+   */
+  public void addView(final int id, final View v) {
+    if (!isAdditionClosed && viewSizes.get(id, null) != null)
+      return;
+
+    final int viewNumber = id;
+    new SizeViewTarget(
+        v,
+        (width,
+         height) -> viewSizes.append(viewNumber, new int[] {width, height}));
+  }
+
+  /**
+   * Calls to {@link #addView(int, View)} will be ignored
+   */
+  public void closeOffAddition() { isAdditionClosed = true; }
+
+  @Nullable
+  @Override
+  public int[] getPreloadSize(final IconDataParcelable item,
+                              final int adapterPosition,
+                              final int perItemPosition) {
+    return viewSizes.get(callback.getCorrectView(item, adapterPosition), null);
+  }
+
+  public interface RecyclerPreloadSizeProviderCallback {
 
     /**
-     * Adds one of the views that can be used to put an image inside.
-     * If the id is already inserted the call will be ignored,
-     * but for performance you should call {@link #closeOffAddition()} once you are done.
-     *
-     * @param id a unique number for each view loaded to this object
-     * @param v the ciew to load
+     * Get the id for the view in which the image will be loaded.
+     * @return the view's id
      */
-    public void addView(final int id, final View v) {
-        if (!isAdditionClosed && viewSizes.get(id, null) != null) return;
+    int getCorrectView(IconDataParcelable item, int adapterPosition);
+  }
 
-        final int viewNumber = id;
-        new SizeViewTarget(v, (width, height) -> viewSizes.append(viewNumber, new int[] {width, height}));
+  private static final class SizeViewTarget extends ViewTarget<View, Object> {
+    public SizeViewTarget(final View view, final SizeReadyCallback callback) {
+      super(view);
+      getSize(callback);
     }
 
-    /**
-     * Calls to {@link #addView(int, View)} will be ignored
-     */
-    public void closeOffAddition() {
-        isAdditionClosed = true;
-    }
-
-    @Nullable
     @Override
-    public int[] getPreloadSize(final IconDataParcelable item, final int adapterPosition, final int perItemPosition) {
-        return viewSizes.get(callback.getCorrectView(item, adapterPosition), null);
+    public void onResourceReady(final Object resource,
+                                final Transition<? super Object> transition) {
+      // Do nothing
     }
-
-    public interface RecyclerPreloadSizeProviderCallback {
-
-        /**
-         * Get the id for the view in which the image will be loaded.
-         * @return the view's id
-         */
-        int getCorrectView(IconDataParcelable item, int adapterPosition);
-    }
-
-    private static final class SizeViewTarget extends ViewTarget<View, Object> {
-        public SizeViewTarget(final View view, final SizeReadyCallback callback) {
-            super(view);
-            getSize(callback);
-        }
-
-        @Override
-        public void onResourceReady(final Object resource, final Transition<? super Object> transition) {
-            // Do nothing
-        }
-    }
+  }
 }

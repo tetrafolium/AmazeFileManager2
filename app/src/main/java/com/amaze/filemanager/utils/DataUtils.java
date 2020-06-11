@@ -1,8 +1,9 @@
 /*
  * DataUtils.java
  *
- * Copyright (C) 2016-2018 Arpit Khurana <arpitkh96@gmail.com>, Vishal Nehra <vishalmeham2@gmail.com>,
- * Emmanuel Messulam<emmanuelbendavid@gmail.com>, Raymond Lai <airwave209gt at gmail.com> and Contributors.
+ * Copyright (C) 2016-2018 Arpit Khurana <arpitkh96@gmail.com>, Vishal Nehra
+ * <vishalmeham2@gmail.com>, Emmanuel Messulam<emmanuelbendavid@gmail.com>,
+ * Raymond Lai <airwave209gt at gmail.com> and Contributors.
  *
  * This file is part of Amaze File Manager.
  *
@@ -21,10 +22,8 @@
  */
 package com.amaze.filemanager.utils;
 
-import androidx.annotation.Nullable;
-
 import android.view.MenuItem;
-
+import androidx.annotation.Nullable;
 import com.amaze.filemanager.ui.views.drawer.MenuMetadata;
 import com.amaze.filemanager.utils.application.AppConfig;
 import com.cloudrail.si.interfaces.CloudStorage;
@@ -37,7 +36,6 @@ import com.googlecode.concurrenttrees.radix.node.concrete.DefaultCharArrayNodeFa
 import com.googlecode.concurrenttrees.radix.node.concrete.voidvalue.VoidValue;
 import com.googlecode.concurrenttrees.radixinverted.ConcurrentInvertedRadixTree;
 import com.googlecode.concurrenttrees.radixinverted.InvertedRadixTree;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -48,395 +46,370 @@ import java.util.List;
  * Singleton class to handle data for various services
  */
 
-//Central data being used across activity,fragments and classes
+// Central data being used across activity,fragments and classes
 public class DataUtils {
 
-    public static final int DELETE = 0, COPY = 1, MOVE = 2, NEW_FOLDER = 3,
-                            RENAME = 4, NEW_FILE = 5, EXTRACT = 6, COMPRESS = 7, SAVE_FILE = 8;
+  public static final int DELETE = 0, COPY = 1, MOVE = 2, NEW_FOLDER = 3,
+                          RENAME = 4, NEW_FILE = 5, EXTRACT = 6, COMPRESS = 7,
+                          SAVE_FILE = 8;
 
-    private ConcurrentRadixTree<VoidValue> hiddenfiles = new ConcurrentRadixTree<>(new DefaultCharArrayNodeFactory());
+  private ConcurrentRadixTree<VoidValue> hiddenfiles =
+      new ConcurrentRadixTree<>(new DefaultCharArrayNodeFactory());
 
-    public static final int LIST = 0, GRID = 1;
+  public static final int LIST = 0, GRID = 1;
 
-    private InvertedRadixTree<Integer> filesGridOrList = new ConcurrentInvertedRadixTree<>(new DefaultCharArrayNodeFactory());
+  private InvertedRadixTree<Integer> filesGridOrList =
+      new ConcurrentInvertedRadixTree<>(new DefaultCharArrayNodeFactory());
 
-    private LinkedList<String> history = new LinkedList<>();
-    private ArrayList<String> storages = new ArrayList<>();
+  private LinkedList<String> history = new LinkedList<>();
+  private ArrayList<String> storages = new ArrayList<>();
 
-    private InvertedRadixTree<Integer> tree = new ConcurrentInvertedRadixTree<>(new DefaultCharArrayNodeFactory());
-    private HashMap<MenuItem, MenuMetadata> menuMetadataMap = new HashMap<>(); //Faster HashMap<Integer, V>
+  private InvertedRadixTree<Integer> tree =
+      new ConcurrentInvertedRadixTree<>(new DefaultCharArrayNodeFactory());
+  private HashMap<MenuItem, MenuMetadata> menuMetadataMap =
+      new HashMap<>(); // Faster HashMap<Integer, V>
 
-    private ArrayList<String[]> servers = new ArrayList<>();
-    private ArrayList<String[]> books = new ArrayList<>();
+  private ArrayList<String[]> servers = new ArrayList<>();
+  private ArrayList<String[]> books = new ArrayList<>();
 
-    private ArrayList<CloudStorage> accounts = new ArrayList<>(4);
+  private ArrayList<CloudStorage> accounts = new ArrayList<>(4);
 
-    private DataChangeListener dataChangeListener;
+  private DataChangeListener dataChangeListener;
 
-    private DataUtils() {
+  private DataUtils() {}
 
-    }
+  private static class DataUtilsHolder {
+    private static final DataUtils INSTANCE = new DataUtils();
+  }
 
-    private static class DataUtilsHolder {
-        private static final DataUtils INSTANCE = new DataUtils();
-    }
+  public static DataUtils getInstance() { return DataUtilsHolder.INSTANCE; }
 
-    public static DataUtils getInstance() {
-        return DataUtilsHolder.INSTANCE;
-    }
+  public int containsServer(final String[] a) { return contains(a, servers); }
 
-    public int containsServer(final String[] a) {
-        return contains(a, servers);
-    }
+  public int containsServer(final String path) {
 
-    public int containsServer(final String path) {
+    synchronized (servers) {
 
-        synchronized (servers) {
-
-            if (servers == null) return -1;
-            int i = 0;
-            for (String[] x : servers) {
-                if (x[1].equals(path)) return i;
-                i++;
-
-            }
-        }
+      if (servers == null)
         return -1;
+      int i = 0;
+      for (String[] x : servers) {
+        if (x[1].equals(path))
+          return i;
+        i++;
+      }
     }
+    return -1;
+  }
 
-    public int containsBooks(final String[] a) {
-        return contains(a, books);
-    }
+  public int containsBooks(final String[] a) { return contains(a, books); }
 
-    /*public int containsAccounts(CloudEntry cloudEntry) {
-        return contains(a, accounts);
-    }*/
+  /*public int containsAccounts(CloudEntry cloudEntry) {
+      return contains(a, accounts);
+  }*/
 
-    /**
-     * Checks whether cloud account of certain type is present or not
-     * @param serviceType the {@link OpenMode} of account to check
-     * @return the index of account, -1 if not found
-     */
-    public synchronized int containsAccounts(final OpenMode serviceType) {
-        int i = 0;
-        for (CloudStorage storage : accounts) {
+  /**
+   * Checks whether cloud account of certain type is present or not
+   * @param serviceType the {@link OpenMode} of account to check
+   * @return the index of account, -1 if not found
+   */
+  public synchronized int containsAccounts(final OpenMode serviceType) {
+    int i = 0;
+    for (CloudStorage storage : accounts) {
 
-            switch (serviceType) {
-            case BOX:
-                if (storage instanceof Box)
-                    return i;
-                break;
-            case DROPBOX:
-                if (storage instanceof Dropbox)
-                    return i;
-                break;
-            case GDRIVE:
-                if (storage instanceof GoogleDrive)
-                    return i;
-                break;
-            case ONEDRIVE:
-                if (storage instanceof OneDrive)
-                    return i;
-                break;
-            default:
-                return -1;
-            }
-            i++;
-        }
+      switch (serviceType) {
+      case BOX:
+        if (storage instanceof Box)
+          return i;
+        break;
+      case DROPBOX:
+        if (storage instanceof Dropbox)
+          return i;
+        break;
+      case GDRIVE:
+        if (storage instanceof GoogleDrive)
+          return i;
+        break;
+      case ONEDRIVE:
+        if (storage instanceof OneDrive)
+          return i;
+        break;
+      default:
         return -1;
+      }
+      i++;
     }
+    return -1;
+  }
 
-    public void clear() {
-        hiddenfiles = new ConcurrentRadixTree<>(new DefaultCharArrayNodeFactory());
-        filesGridOrList = new ConcurrentInvertedRadixTree<>(new DefaultCharArrayNodeFactory());
-        history.clear();
-        storages = new ArrayList<>();
-        tree = new ConcurrentInvertedRadixTree<>(new DefaultCharArrayNodeFactory());
-        menuMetadataMap.clear();
-        servers = new ArrayList<>();
-        books = new ArrayList<>();
-        accounts = new ArrayList<>();
+  public void clear() {
+    hiddenfiles = new ConcurrentRadixTree<>(new DefaultCharArrayNodeFactory());
+    filesGridOrList =
+        new ConcurrentInvertedRadixTree<>(new DefaultCharArrayNodeFactory());
+    history.clear();
+    storages = new ArrayList<>();
+    tree = new ConcurrentInvertedRadixTree<>(new DefaultCharArrayNodeFactory());
+    menuMetadataMap.clear();
+    servers = new ArrayList<>();
+    books = new ArrayList<>();
+    accounts = new ArrayList<>();
+  }
+
+  public void registerOnDataChangedListener(final DataChangeListener l) {
+
+    dataChangeListener = l;
+    clear();
+  }
+
+  int contains(final String a, final ArrayList<String[]> b) {
+    int i = 0;
+    for (String[] x : b) {
+      if (x[1].equals(a))
+        return i;
+      i++;
     }
+    return -1;
+  }
 
-    public void registerOnDataChangedListener(final DataChangeListener l) {
-
-        dataChangeListener = l;
-        clear();
+  int contains(final String[] a, final ArrayList<String[]> b) {
+    if (b == null)
+      return -1;
+    int i = 0;
+    for (String[] x : b) {
+      if (x[0].equals(a[0]) && x[1].equals(a[1]))
+        return i;
+      i++;
     }
+    return -1;
+  }
 
-    int contains(final String a, final ArrayList<String[]> b) {
-        int i = 0;
-        for (String[] x : b) {
-            if (x[1].equals(a)) return i;
-            i++;
+  public void removeBook(final int i) {
+    synchronized (books) {
 
+      if (books.size() > i)
+        books.remove(i);
+    }
+  }
+
+  public synchronized void removeAccount(final OpenMode serviceType) {
+    for (CloudStorage storage : accounts) {
+      switch (serviceType) {
+      case BOX:
+        if (storage instanceof Box) {
+          accounts.remove(storage);
+          return;
         }
-        return -1;
-    }
-
-    int contains(final String[] a, final ArrayList<String[]> b) {
-        if (b == null) return -1;
-        int i = 0;
-        for (String[] x : b) {
-            if (x[0].equals(a[0]) && x[1].equals(a[1])) return i;
-            i++;
-
+        break;
+      case DROPBOX:
+        if (storage instanceof Dropbox) {
+          accounts.remove(storage);
+          return;
         }
-        return -1;
-    }
-
-    public void removeBook(final int i) {
-        synchronized (books) {
-
-            if (books.size() > i)
-                books.remove(i);
+        break;
+      case GDRIVE:
+        if (storage instanceof GoogleDrive) {
+          accounts.remove(storage);
+          return;
         }
-    }
-
-    public synchronized void removeAccount(final OpenMode serviceType) {
-        for (CloudStorage storage : accounts) {
-            switch (serviceType) {
-            case BOX:
-                if (storage instanceof Box) {
-                    accounts.remove(storage);
-                    return;
-                }
-                break;
-            case DROPBOX:
-                if (storage instanceof Dropbox) {
-                    accounts.remove(storage);
-                    return;
-                }
-                break;
-            case GDRIVE:
-                if (storage instanceof GoogleDrive) {
-                    accounts.remove(storage);
-                    return;
-                }
-                break;
-            case ONEDRIVE:
-                if (storage instanceof OneDrive) {
-                    accounts.remove(storage);
-                    return;
-                }
-                break;
-            default:
-                return;
-            }
+        break;
+      case ONEDRIVE:
+        if (storage instanceof OneDrive) {
+          accounts.remove(storage);
+          return;
         }
+        break;
+      default:
+        return;
+      }
     }
+  }
 
-    public void removeServer(final int i) {
-        synchronized (servers) {
+  public void removeServer(final int i) {
+    synchronized (servers) {
 
-            if (servers.size() > i)
-                servers.remove(i);
-        }
+      if (servers.size() > i)
+        servers.remove(i);
     }
+  }
 
-    public void addBook(final String[] i) {
-        synchronized (books) {
+  public void addBook(final String[] i) {
+    synchronized (books) { books.add(i); }
+  }
 
-            books.add(i);
-        }
+  public void addBook(final String[] i, final boolean refreshdrawer) {
+    synchronized (books) { books.add(i); }
+    if (refreshdrawer && dataChangeListener != null) {
+      dataChangeListener.onBookAdded(i, true);
     }
+  }
 
-    public void addBook(final String[] i, final boolean refreshdrawer) {
-        synchronized (books) {
+  public void addAccount(final CloudStorage storage) { accounts.add(storage); }
 
-            books.add(i);
-        }
-        if (refreshdrawer && dataChangeListener != null) {
-            dataChangeListener.onBookAdded(i, true);
-        }
+  public void addServer(final String[] i) { servers.add(i); }
+
+  public void addHiddenFile(final String i) {
+
+    synchronized (hiddenfiles) { hiddenfiles.put(i, VoidValue.SINGLETON); }
+    if (dataChangeListener != null) {
+      dataChangeListener.onHiddenFileAdded(i);
     }
+  }
 
-    public void addAccount(final CloudStorage storage) {
-        accounts.add(storage);
+  public void removeHiddenFile(final String i) {
+
+    synchronized (hiddenfiles) { hiddenfiles.remove(i); }
+    if (dataChangeListener != null) {
+      dataChangeListener.onHiddenFileRemoved(i);
     }
+  }
 
-    public void addServer(final String[] i) {
-        servers.add(i);
+  public void setHistory(final LinkedList<String> s) {
+    history.clear();
+    history.addAll(s);
+  }
+
+  public LinkedList<String> getHistory() { return history; }
+
+  public void addHistoryFile(final String i) {
+    history.push(i);
+    if (dataChangeListener != null) {
+      dataChangeListener.onHistoryAdded(i);
     }
+  }
 
-    public void addHiddenFile(final String i) {
+  public void sortBook() { Collections.sort(books, new BookSorter()); }
 
-        synchronized (hiddenfiles) {
+  public synchronized void setServers(final ArrayList<String[]> servers) {
+    if (servers != null)
+      this.servers = servers;
+  }
 
-            hiddenfiles.put(i, VoidValue.SINGLETON);
-        }
-        if (dataChangeListener != null) {
-            dataChangeListener.onHiddenFileAdded(i);
-        }
-    }
+  public synchronized void setBooks(final ArrayList<String[]> books) {
+    if (books != null)
+      this.books = books;
+  }
 
-    public void removeHiddenFile(final String i) {
+  public synchronized void setAccounts(final ArrayList<CloudStorage> accounts) {
+    if (accounts != null)
+      this.accounts = accounts;
+  }
 
-        synchronized (hiddenfiles) {
+  public synchronized ArrayList<String[]> getServers() { return servers; }
 
-            hiddenfiles.remove(i);
-        }
-        if (dataChangeListener != null) {
-            dataChangeListener.onHiddenFileRemoved(i);
-        }
-    }
+  public synchronized ArrayList<String[]> getBooks() { return books; }
 
-    public void setHistory(final LinkedList<String> s) {
-        history.clear();
-        history.addAll(s);
-    }
+  public synchronized ArrayList<CloudStorage> getAccounts() { return accounts; }
 
-    public LinkedList<String> getHistory() {
-        return history;
-    }
-
-    public void addHistoryFile(final String i) {
-        history.push(i);
-        if (dataChangeListener != null) {
-            dataChangeListener.onHistoryAdded(i);
-        }
-    }
-
-    public void sortBook() {
-        Collections.sort(books, new BookSorter());
-    }
-
-    public synchronized void setServers(final ArrayList<String[]> servers) {
-        if (servers != null)
-            this.servers = servers;
-    }
-
-    public synchronized void setBooks(final ArrayList<String[]> books) {
-        if (books != null)
-            this.books = books;
-    }
-
-    public synchronized void setAccounts(final ArrayList<CloudStorage> accounts) {
-        if (accounts != null)
-            this.accounts = accounts;
-    }
-
-    public synchronized ArrayList<String[]> getServers() {
-        return servers;
-    }
-
-    public synchronized ArrayList<String[]> getBooks() {
-        return books;
-    }
-
-    public synchronized ArrayList<CloudStorage> getAccounts() {
-        return accounts;
-    }
-
-    public synchronized CloudStorage getAccount(final OpenMode serviceType) {
-        for (CloudStorage storage : accounts) {
-            switch (serviceType) {
-            case BOX:
-                if (storage instanceof Box)
-                    return storage;
-                break;
-            case DROPBOX:
-                if (storage instanceof Dropbox)
-                    return storage;
-                break;
-            case GDRIVE:
-                if (storage instanceof GoogleDrive)
-                    return storage;
-                break;
-            case ONEDRIVE:
-                if (storage instanceof OneDrive)
-                    return storage;
-                break;
-            default:
-                return null;
-            }
-        }
+  public synchronized CloudStorage getAccount(final OpenMode serviceType) {
+    for (CloudStorage storage : accounts) {
+      switch (serviceType) {
+      case BOX:
+        if (storage instanceof Box)
+          return storage;
+        break;
+      case DROPBOX:
+        if (storage instanceof Dropbox)
+          return storage;
+        break;
+      case GDRIVE:
+        if (storage instanceof GoogleDrive)
+          return storage;
+        break;
+      case ONEDRIVE:
+        if (storage instanceof OneDrive)
+          return storage;
+        break;
+      default:
         return null;
+      }
     }
+    return null;
+  }
 
-    public boolean isFileHidden(final String path) {
-        return getHiddenFiles().getValueForExactKey(path) != null;
+  public boolean isFileHidden(final String path) {
+    return getHiddenFiles().getValueForExactKey(path) != null;
+  }
+
+  public ConcurrentRadixTree<VoidValue> getHiddenFiles() { return hiddenfiles; }
+
+  public synchronized void
+  setHiddenFiles(final ConcurrentRadixTree<VoidValue> hiddenfiles) {
+    if (hiddenfiles != null)
+      this.hiddenfiles = hiddenfiles;
+  }
+
+  public synchronized void setGridfiles(final ArrayList<String> gridfiles) {
+    if (gridfiles != null) {
+      for (String gridfile : gridfiles) {
+        setPathAsGridOrList(gridfile, GRID);
+      }
     }
+  }
 
-    public ConcurrentRadixTree<VoidValue> getHiddenFiles() {
-        return hiddenfiles;
+  public synchronized void setListfiles(final ArrayList<String> listfiles) {
+    if (listfiles != null) {
+      for (String gridfile : listfiles) {
+        setPathAsGridOrList(gridfile, LIST);
+      }
     }
+  }
 
-    public synchronized void setHiddenFiles(final ConcurrentRadixTree<VoidValue> hiddenfiles) {
-        if (hiddenfiles != null) this.hiddenfiles = hiddenfiles;
+  public void setPathAsGridOrList(final String path, final int value) {
+    filesGridOrList.put(path, value);
+  }
+
+  public int getListOrGridForPath(final String path, final int defaultValue) {
+    Integer value = filesGridOrList.getValueForLongestKeyPrefixing(path);
+    return value != null ? value : defaultValue;
+  }
+
+  public void clearHistory() {
+    history.clear();
+    if (dataChangeListener != null) {
+      AppConfig.runInBackground(() -> dataChangeListener.onHistoryCleared());
     }
+  }
 
-    public synchronized void setGridfiles(final ArrayList<String> gridfiles) {
-        if (gridfiles != null) {
-            for (String gridfile : gridfiles) {
-                setPathAsGridOrList(gridfile, GRID);
-            }
-        }
-    }
+  public synchronized List<String> getStorages() { return storages; }
 
-    public synchronized void setListfiles(final ArrayList<String> listfiles) {
-        if (listfiles != null) {
-            for (String gridfile : listfiles) {
-                setPathAsGridOrList(gridfile, LIST);
-            }
-        }
-    }
+  public synchronized void setStorages(final ArrayList<String> storages) {
+    this.storages = storages;
+  }
 
-    public void setPathAsGridOrList(final String path, final int value) {
-        filesGridOrList.put(path, value);
-    }
+  public MenuMetadata getDrawerMetadata(final MenuItem item) {
+    return menuMetadataMap.get(item);
+  }
 
-    public int getListOrGridForPath(final String path, final int defaultValue) {
-        Integer value = filesGridOrList.getValueForLongestKeyPrefixing(path);
-        return value != null ? value : defaultValue;
-    }
+  public void putDrawerMetadata(final MenuItem item,
+                                final MenuMetadata metadata) {
+    menuMetadataMap.put(item, metadata);
+    if (metadata.path != null)
+      tree.put(metadata.path, item.getItemId());
+  }
 
-    public void clearHistory() {
-        history.clear();
-        if (dataChangeListener != null) {
-            AppConfig.runInBackground(() -> dataChangeListener.onHistoryCleared());
-        }
-    }
+  /**
+   * @param path the path to find
+   * @return the id of the longest containing MenuMetadata.path in
+   *     getDrawerMetadata() or null
+   */
+  public @Nullable
+  Integer findLongestContainingDrawerItem(final CharSequence path) {
+    return tree.getValueForLongestKeyPrefixing(path);
+  }
 
-    public synchronized List<String> getStorages() {
-        return storages;
-    }
+  /**
+   * Callbacks to do original changes in database (and ui if required)
+   * The callbacks are called in a main thread
+   */
+  public interface DataChangeListener {
+    void onHiddenFileAdded(String path);
 
-    public synchronized void setStorages(final ArrayList<String> storages) {
-        this.storages = storages;
-    }
+    void onHiddenFileRemoved(String path);
 
-    public MenuMetadata getDrawerMetadata(final MenuItem item) {
-        return menuMetadataMap.get(item);
-    }
+    void onHistoryAdded(String path);
 
-    public void putDrawerMetadata(final MenuItem item, final MenuMetadata metadata) {
-        menuMetadataMap.put(item, metadata);
-        if (metadata.path != null) tree.put(metadata.path, item.getItemId());
-    }
+    void onBookAdded(String path[], boolean refreshdrawer);
 
-    /**
-     * @param path the path to find
-     * @return the id of the longest containing MenuMetadata.path in getDrawerMetadata() or null
-     */
-    public @Nullable Integer findLongestContainingDrawerItem(final CharSequence path) {
-        return tree.getValueForLongestKeyPrefixing(path);
-    }
-
-    /**
-     * Callbacks to do original changes in database (and ui if required)
-     * The callbacks are called in a main thread
-     */
-    public interface DataChangeListener {
-        void onHiddenFileAdded(String path);
-
-        void onHiddenFileRemoved(String path);
-
-        void onHistoryAdded(String path);
-
-        void onBookAdded(String path[], boolean refreshdrawer);
-
-        void onHistoryCleared();
-    }
-
+    void onHistoryCleared();
+  }
 }

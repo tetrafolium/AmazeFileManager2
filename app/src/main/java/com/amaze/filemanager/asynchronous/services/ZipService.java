@@ -1,6 +1,7 @@
 /*
- * Copyright (C) 2014 Arpit Khurana <arpitkh96@gmail.com>, Vishal Nehra <vishalmeham2@gmail.com>
- * Copyright (C) 2017-2018 Emmanuel Messulam <emmanuelbendavid@gmail.com>
+ * Copyright (C) 2014 Arpit Khurana <arpitkh96@gmail.com>, Vishal Nehra
+ * <vishalmeham2@gmail.com> Copyright (C) 2017-2018 Emmanuel Messulam
+ * <emmanuelbendavid@gmail.com>
  *
  * This file is part of Amaze File Manager.
  *
@@ -31,11 +32,10 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.widget.RemoteViews;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.core.app.NotificationCompat;
-import android.widget.RemoteViews;
-
 import com.amaze.filemanager.R;
 import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.filesystem.FileUtil;
@@ -48,275 +48,293 @@ import com.amaze.filemanager.utils.ServiceWatcherUtil;
 import com.amaze.filemanager.utils.application.AppConfig;
 import com.amaze.filemanager.utils.files.FileUtils;
 import com.amaze.filemanager.utils.files.GenericCopyUtil;
-
-import net.lingala.zip4j.exception.ZipException;
-import net.lingala.zip4j.io.ZipOutputStream;
-import net.lingala.zip4j.model.ZipParameters;
-import net.lingala.zip4j.util.Zip4jConstants;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.io.ZipOutputStream;
+import net.lingala.zip4j.model.ZipParameters;
+import net.lingala.zip4j.util.Zip4jConstants;
 
 public class ZipService extends AbstractProgressiveService {
 
-    public static final String KEY_COMPRESS_PATH = "zip_path";
-    public static final String KEY_COMPRESS_FILES = "zip_files";
-    public static final String KEY_COMPRESS_BROADCAST_CANCEL = "zip_cancel";
+  public static final String KEY_COMPRESS_PATH = "zip_path";
+  public static final String KEY_COMPRESS_FILES = "zip_files";
+  public static final String KEY_COMPRESS_BROADCAST_CANCEL = "zip_cancel";
 
-    private final IBinder mBinder = new ObtainableServiceBinder<>(this);
+  private final IBinder mBinder = new ObtainableServiceBinder<>(this);
 
-    private CompressAsyncTask asyncTask;
+  private CompressAsyncTask asyncTask;
 
+  private NotificationManager mNotifyManager;
+  private NotificationCompat.Builder mBuilder;
+  private ProgressHandler progressHandler = new ProgressHandler();
+  private ProgressListener progressListener;
+  // list of data packages, to initiate chart in process viewer fragment
+  private ArrayList<DatapointParcelable> dataPackages = new ArrayList<>();
+  private int accentColor;
+  private SharedPreferences sharedPreferences;
+  private RemoteViews customSmallContentViews, customBigContentViews;
 
-    private NotificationManager mNotifyManager;
-    private NotificationCompat.Builder mBuilder;
-    private ProgressHandler progressHandler = new ProgressHandler();
-    private ProgressListener progressListener;
-    // list of data packages, to initiate chart in process viewer fragment
-    private ArrayList<DatapointParcelable> dataPackages = new ArrayList<>();
-    private int accentColor;
-    private SharedPreferences sharedPreferences;
-    private RemoteViews customSmallContentViews, customBigContentViews;
+  @Override
+  public void onCreate() {
+    registerReceiver(receiver1,
+                     new IntentFilter(KEY_COMPRESS_BROADCAST_CANCEL));
+  }
 
-    @Override
-    public void onCreate() {
-        registerReceiver(receiver1, new IntentFilter(KEY_COMPRESS_BROADCAST_CANCEL));
+  @Override
+  public int onStartCommand(final Intent intent, final int flags,
+                            final int startId) {
+    String mZipPath = intent.getStringExtra(KEY_COMPRESS_PATH);
+
+    ArrayList<HybridFileParcelable> baseFiles =
+        intent.getParcelableArrayListExtra(KEY_COMPRESS_FILES);
+
+    File zipFile = new File(mZipPath);
+
+    mNotifyManager =
+        (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+
+    if (!zipFile.exists()) {
+      try {
+        zipFile.createNewFile();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
 
-    @Override
-    public int onStartCommand(final Intent intent, final int flags, final int startId) {
-        String mZipPath = intent.getStringExtra(KEY_COMPRESS_PATH);
-
-        ArrayList<HybridFileParcelable> baseFiles = intent.getParcelableArrayListExtra(KEY_COMPRESS_FILES);
-
-        File zipFile = new File(mZipPath);
-
-        mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if (!zipFile.exists()) {
-            try {
-                zipFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        accentColor = ((AppConfig) getApplication()).getUtilsProvider()
+    sharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+    accentColor = ((AppConfig)getApplication())
+                      .getUtilsProvider()
                       .getColorPreference()
-                      .getCurrentUserColorPreferences(this, sharedPreferences).accent;
+                      .getCurrentUserColorPreferences(this, sharedPreferences)
+                      .accent;
 
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-        notificationIntent.putExtra(MainActivity.KEY_INTENT_PROCESS_VIEWER, true);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+    Intent notificationIntent = new Intent(this, MainActivity.class);
+    notificationIntent.putExtra(MainActivity.KEY_INTENT_PROCESS_VIEWER, true);
+    PendingIntent pendingIntent =
+        PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
-        customSmallContentViews = new RemoteViews(getPackageName(), R.layout.notification_service_small);
-        customBigContentViews = new RemoteViews(getPackageName(), R.layout.notification_service_big);
+    customSmallContentViews =
+        new RemoteViews(getPackageName(), R.layout.notification_service_small);
+    customBigContentViews =
+        new RemoteViews(getPackageName(), R.layout.notification_service_big);
 
-        Intent stopIntent = new Intent(KEY_COMPRESS_BROADCAST_CANCEL);
-        PendingIntent stopPendingIntent = PendingIntent.getBroadcast(getApplicationContext(),
-                                          1234, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Action action = new NotificationCompat.Action(R.drawable.ic_zip_box_grey,
-                getString(R.string.stop_ftp), stopPendingIntent);
+    Intent stopIntent = new Intent(KEY_COMPRESS_BROADCAST_CANCEL);
+    PendingIntent stopPendingIntent =
+        PendingIntent.getBroadcast(getApplicationContext(), 1234, stopIntent,
+                                   PendingIntent.FLAG_UPDATE_CURRENT);
+    NotificationCompat.Action action = new NotificationCompat.Action(
+        R.drawable.ic_zip_box_grey, getString(R.string.stop_ftp),
+        stopPendingIntent);
 
-        mBuilder = new NotificationCompat.Builder(this, NotificationConstants.CHANNEL_NORMAL_ID)
-        .setSmallIcon(R.drawable.ic_zip_box_grey)
-        .setContentIntent(pendingIntent)
-        .setCustomContentView(customSmallContentViews)
-        .setCustomBigContentView(customBigContentViews)
-        .setCustomHeadsUpContentView(customSmallContentViews)
-        .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
-        .addAction(action)
-        .setOngoing(true)
-        .setColor(accentColor);
+    mBuilder = new NotificationCompat
+                   .Builder(this, NotificationConstants.CHANNEL_NORMAL_ID)
+                   .setSmallIcon(R.drawable.ic_zip_box_grey)
+                   .setContentIntent(pendingIntent)
+                   .setCustomContentView(customSmallContentViews)
+                   .setCustomBigContentView(customBigContentViews)
+                   .setCustomHeadsUpContentView(customSmallContentViews)
+                   .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                   .addAction(action)
+                   .setOngoing(true)
+                   .setColor(accentColor);
 
-        NotificationConstants.setMetadata(this, mBuilder, NotificationConstants.TYPE_NORMAL);
-        startForeground(NotificationConstants.ZIP_ID, mBuilder.build());
-        initNotificationViews();
+    NotificationConstants.setMetadata(this, mBuilder,
+                                      NotificationConstants.TYPE_NORMAL);
+    startForeground(NotificationConstants.ZIP_ID, mBuilder.build());
+    initNotificationViews();
 
-        super.onStartCommand(intent, flags, startId);
-        super.progressHalted();
-        asyncTask = new CompressAsyncTask(this, baseFiles, mZipPath);
-        asyncTask.execute();
-        // If we get killed, after returning from here, restart
-        return START_STICKY;
+    super.onStartCommand(intent, flags, startId);
+    super.progressHalted();
+    asyncTask = new CompressAsyncTask(this, baseFiles, mZipPath);
+    asyncTask.execute();
+    // If we get killed, after returning from here, restart
+    return START_STICKY;
+  }
+
+  @Override
+  protected NotificationManager getNotificationManager() {
+    return mNotifyManager;
+  }
+
+  @Override
+  protected NotificationCompat.Builder getNotificationBuilder() {
+    return mBuilder;
+  }
+
+  @Override
+  protected int getNotificationId() {
+    return NotificationConstants.ZIP_ID;
+  }
+
+  @Override
+  @StringRes
+  protected int getTitle(final boolean move) {
+    return R.string.compressing;
+  }
+
+  @Override
+  protected RemoteViews getNotificationCustomViewSmall() {
+    return customSmallContentViews;
+  }
+
+  @Override
+  protected RemoteViews getNotificationCustomViewBig() {
+    return customBigContentViews;
+  }
+
+  public ProgressListener getProgressListener() { return progressListener; }
+
+  @Override
+  public void setProgressListener(final ProgressListener progressListener) {
+    this.progressListener = progressListener;
+  }
+
+  @Override
+  protected ArrayList<DatapointParcelable> getDataPackages() {
+    return dataPackages;
+  }
+
+  @Override
+  protected ProgressHandler getProgressHandler() {
+    return progressHandler;
+  }
+
+  public class CompressAsyncTask extends AsyncTask<Void, Void, Void> {
+
+    @SuppressLint("StaticFieldLeak") private ZipService zipService;
+    private ZipOutputStream zos;
+    private String zipPath;
+    private ServiceWatcherUtil watcherUtil;
+    private long totalBytes = 0L;
+    private ArrayList<HybridFileParcelable> baseFiles;
+
+    public CompressAsyncTask(final ZipService zipService,
+                             final ArrayList<HybridFileParcelable> baseFiles,
+                             final String zipPath) {
+      this.zipService = zipService;
+      this.baseFiles = baseFiles;
+      this.zipPath = zipPath;
+    }
+
+    protected Void doInBackground(final Void... p1) {
+      // setting up service watchers and initial data packages
+      // finding total size on background thread (this is necessary condition
+      // for SMB!)
+      totalBytes = FileUtils.getTotalBytes(baseFiles,
+                                           zipService.getApplicationContext());
+
+      progressHandler.setSourceSize(baseFiles.size());
+      progressHandler.setTotalSize(totalBytes);
+      progressHandler.setProgressListener(
+          (speed) -> publishResults(speed, false, false));
+
+      zipService.addFirstDatapoint(baseFiles.get(0).getName(), baseFiles.size(),
+                                   totalBytes, false);
+
+      execute(zipService.getApplicationContext(),
+              FileUtils.hybridListToFileArrayList(baseFiles), zipPath);
+      return null;
     }
 
     @Override
-    protected NotificationManager getNotificationManager() {
-        return mNotifyManager;
+    protected void onCancelled() {
+      super.onCancelled();
+      progressHandler.setCancelled(true);
+      File zipFile = new File(zipPath);
+      if (zipFile.exists())
+        zipFile.delete();
     }
 
     @Override
-    protected NotificationCompat.Builder getNotificationBuilder() {
-        return mBuilder;
+    public void onPostExecute(final Void a) {
+      watcherUtil.stopWatch();
+      Intent intent = new Intent(MainActivity.KEY_INTENT_LOAD_LIST);
+      intent.putExtra(MainActivity.KEY_INTENT_LOAD_LIST_FILE, zipPath);
+      zipService.sendBroadcast(intent);
+      zipService.stopSelf();
     }
 
-    @Override
-    protected int getNotificationId() {
-        return NotificationConstants.ZIP_ID;
-    }
+    public void execute(final @NonNull Context context,
+                        final ArrayList<File> baseFiles, final String zipPath) {
+      OutputStream out;
+      File zipDirectory = new File(zipPath);
+      watcherUtil = new ServiceWatcherUtil(progressHandler);
+      watcherUtil.watch(ZipService.this);
 
-    @Override
-    @StringRes
-    protected int getTitle(final boolean move) {
-        return R.string.compressing;
-    }
+      try {
+        out = FileUtil.getOutputStream(zipDirectory, context);
+        zos = new ZipOutputStream(new BufferedOutputStream(out));
 
-    @Override
-    protected RemoteViews getNotificationCustomViewSmall() {
-        return customSmallContentViews;
-    }
+        int fileProgress = 0;
+        for (File file : baseFiles) {
+          if (isCancelled())
+            return;
 
-    @Override
-    protected RemoteViews getNotificationCustomViewBig() {
-        return customBigContentViews;
-    }
-
-    public ProgressListener getProgressListener() {
-        return progressListener;
-    }
-
-    @Override
-    public void setProgressListener(final ProgressListener progressListener) {
-        this.progressListener = progressListener;
-    }
-
-    @Override
-    protected ArrayList<DatapointParcelable> getDataPackages() {
-        return dataPackages;
-    }
-
-    @Override
-    protected ProgressHandler getProgressHandler() {
-        return progressHandler;
-    }
-
-    public class CompressAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        @SuppressLint("StaticFieldLeak")
-        private ZipService zipService;
-        private ZipOutputStream zos;
-        private String zipPath;
-        private ServiceWatcherUtil watcherUtil;
-        private long totalBytes = 0L;
-        private ArrayList<HybridFileParcelable> baseFiles;
-
-        public CompressAsyncTask(final ZipService zipService, final ArrayList<HybridFileParcelable> baseFiles, final String zipPath) {
-            this.zipService = zipService;
-            this.baseFiles = baseFiles;
-            this.zipPath = zipPath;
+          progressHandler.setFileName(file.getName());
+          progressHandler.setSourceFilesProcessed(++fileProgress);
+          compressFile(file, "");
         }
-
-        protected Void doInBackground(final Void... p1) {
-            // setting up service watchers and initial data packages
-            // finding total size on background thread (this is necessary condition for SMB!)
-            totalBytes = FileUtils.getTotalBytes(baseFiles, zipService.getApplicationContext());
-
-            progressHandler.setSourceSize(baseFiles.size());
-            progressHandler.setTotalSize(totalBytes);
-            progressHandler.setProgressListener((speed) ->
-                                                publishResults(speed, false, false));
-
-
-            zipService.addFirstDatapoint(baseFiles.get(0).getName(), baseFiles.size(), totalBytes, false);
-
-            execute(zipService.getApplicationContext(), FileUtils.hybridListToFileArrayList(baseFiles), zipPath);
-            return null;
+      } catch (IOException | ZipException e) {
+        e.printStackTrace();
+      } finally {
+        try {
+          zos.flush();
+          zos.close();
+        } catch (IOException e) {
+          e.printStackTrace();
         }
-
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-            progressHandler.setCancelled(true);
-            File zipFile = new File(zipPath);
-            if (zipFile.exists()) zipFile.delete();
-        }
-
-        @Override
-        public void onPostExecute(final Void a) {
-            watcherUtil.stopWatch();
-            Intent intent = new Intent(MainActivity.KEY_INTENT_LOAD_LIST);
-            intent.putExtra(MainActivity.KEY_INTENT_LOAD_LIST_FILE, zipPath);
-            zipService.sendBroadcast(intent);
-            zipService.stopSelf();
-        }
-
-        public void execute(final @NonNull Context context, final ArrayList<File> baseFiles, final String zipPath) {
-            OutputStream out;
-            File zipDirectory = new File(zipPath);
-            watcherUtil = new ServiceWatcherUtil(progressHandler);
-            watcherUtil.watch(ZipService.this);
-
-            try {
-                out = FileUtil.getOutputStream(zipDirectory, context);
-                zos = new ZipOutputStream(new BufferedOutputStream(out));
-
-                int fileProgress = 0;
-                for (File file : baseFiles) {
-                    if (isCancelled()) return;
-
-                    progressHandler.setFileName(file.getName());
-                    progressHandler.setSourceFilesProcessed(++fileProgress);
-                    compressFile(file, "");
-                }
-            } catch (IOException | ZipException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    zos.flush();
-                    zos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        private void compressFile(final File file, final String path) throws IOException, NullPointerException, ZipException {
-            if (progressHandler.getCancelled()) return;
-
-            if (!file.isDirectory()) {
-                byte[] buf = new byte[GenericCopyUtil.DEFAULT_BUFFER_SIZE];
-                int len;
-                ZipParameters parameters = new ZipParameters();
-                parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
-                parameters.setFileNameInZip(path + "/" + file.getName());
-                zos.putNextEntry(file, parameters);
-                ServiceWatcherUtil.position += file.length();
-                return;
-            }
-
-            if (file.list() == null) return;
-
-            for (File currentFile : file.listFiles()) {
-                compressFile(currentFile, path + File.separator + file.getName());
-            }
-        }
+      }
     }
 
-    /**
-     * Class used for the client Binder.  Because we know this service always
-     * runs in the same process as its clients, we don't need to deal with IPC.
-     */
+    private void compressFile(final File file, final String path)
+        throws IOException, NullPointerException, ZipException {
+      if (progressHandler.getCancelled())
+        return;
 
-    private BroadcastReceiver receiver1 = new BroadcastReceiver() {
-        @Override
-        public void onReceive(final Context context, final Intent intent) {
-            progressHandler.setCancelled(true);
-        }
-    };
+      if (!file.isDirectory()) {
+        byte[] buf = new byte[GenericCopyUtil.DEFAULT_BUFFER_SIZE];
+        int len;
+        ZipParameters parameters = new ZipParameters();
+        parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
+        parameters.setFileNameInZip(path + "/" + file.getName());
+        zos.putNextEntry(file, parameters);
+        ServiceWatcherUtil.position += file.length();
+        return;
+      }
 
+      if (file.list() == null)
+        return;
+
+      for (File currentFile : file.listFiles()) {
+        compressFile(currentFile, path + File.separator + file.getName());
+      }
+    }
+  }
+
+  /**
+   * Class used for the client Binder.  Because we know this service always
+   * runs in the same process as its clients, we don't need to deal with IPC.
+   */
+
+  private BroadcastReceiver receiver1 = new BroadcastReceiver() {
     @Override
-    public IBinder onBind(final Intent arg0) {
-        return mBinder;
+    public void onReceive(final Context context, final Intent intent) {
+      progressHandler.setCancelled(true);
     }
+  };
 
-    @Override
-    public void onDestroy() {
-        this.unregisterReceiver(receiver1);
-    }
+  @Override
+  public IBinder onBind(final Intent arg0) {
+    return mBinder;
+  }
 
+  @Override
+  public void onDestroy() {
+    this.unregisterReceiver(receiver1);
+  }
 }
