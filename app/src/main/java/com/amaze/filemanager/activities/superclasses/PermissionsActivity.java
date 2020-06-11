@@ -34,11 +34,9 @@ public class PermissionsActivity extends ThemedActivity
         requestStoragePermission(permissionCallbacks[STORAGE_PERMISSION]);
       }
 
-    } else if (requestCode == INSTALL_APK_PERMISSION) {
-      if (isGranted(grantResults)) {
-        permissionCallbacks[INSTALL_APK_PERMISSION].onPermissionGranted();
-        permissionCallbacks[INSTALL_APK_PERMISSION] = null;
-      }
+    } else if ((requestCode == INSTALL_APK_PERMISSION) && (isGranted(grantResults))) {
+      permissionCallbacks[INSTALL_APK_PERMISSION].onPermissionGranted();
+      permissionCallbacks[INSTALL_APK_PERMISSION] = null;
     }
   }
 

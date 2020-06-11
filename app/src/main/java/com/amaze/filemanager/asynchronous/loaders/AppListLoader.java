@@ -88,11 +88,9 @@ public class AppListLoader extends AsyncTaskLoader<AppListLoader.AppsDataPair> {
 
   @Override
   public void deliverResult(final AppsDataPair data) {
-    if (isReset()) {
-
-      if (data != null)
-        onReleaseResources(data); // TODO onReleaseResources() is empty
-    }
+    
+    if ((isReset()) && (data != null))
+      onReleaseResources(data);
 
     // preserving old data for it to be closed
     AppsDataPair oldData = mApps;

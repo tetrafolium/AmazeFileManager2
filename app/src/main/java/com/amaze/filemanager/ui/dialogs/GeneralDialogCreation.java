@@ -318,14 +318,11 @@ public class GeneralDialogCreation {
         int tempCounterDirectories = values[1];
 
         // Hide category and list for directories when zero.
-        if (tempCounterDirectories == 0) {
+        
+        if ((tempCounterDirectories == 0) && (tempCounterDirectories == 0)) {
 
-          if (tempCounterDirectories == 0) {
-
-            categoryDirectories.setVisibility(View.GONE);
-            listDirectories.setVisibility(View.GONE);
-          }
-          // Hide category and list for files when zero.
+          categoryDirectories.setVisibility(View.GONE);
+          listDirectories.setVisibility(View.GONE);
         }
 
         if (tempCounterFiles == 0) {

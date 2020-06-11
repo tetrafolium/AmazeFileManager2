@@ -740,10 +740,8 @@ public class MainActivity extends PermissionsActivity
     if (usb != null && !rv.contains(usb.getPath()))
       rv.add(usb.getPath());
 
-    if (SDK_INT >= Build.VERSION_CODES.KITKAT) {
-      if (SingletonUsbOtg.getInstance().isDeviceConnected()) {
-        rv.add(OTGUtil.PREFIX_OTG + "/");
-      }
+    if ((SDK_INT >= Build.VERSION_CODES.KITKAT) && (SingletonUsbOtg.getInstance().isDeviceConnected())) {
+      rv.add(OTGUtil.PREFIX_OTG + "/");
     }
     return rv;
   }
@@ -1749,11 +1747,9 @@ public class MainActivity extends PermissionsActivity
     } else if (intent.getAction() != null) {
       checkForExternalIntent(intent);
 
-      if (SDK_INT >= Build.VERSION_CODES.KITKAT) {
-        if (intent.getAction().equals(UsbManager.ACTION_USB_DEVICE_DETACHED)) {
-          SingletonUsbOtg.getInstance().resetUsbOtgRoot();
-          drawer.refreshDrawer();
-        }
+      if ((SDK_INT >= Build.VERSION_CODES.KITKAT) && (intent.getAction().equals(UsbManager.ACTION_USB_DEVICE_DETACHED))) {
+        SingletonUsbOtg.getInstance().resetUsbOtgRoot();
+        drawer.refreshDrawer();
       }
     }
   }

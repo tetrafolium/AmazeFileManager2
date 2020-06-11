@@ -43,14 +43,12 @@ public class RootUtils {
     for (String line : output) {
       String[] words = line.split(" ");
 
-      if (path.contains(words[2])) {
-        // current found point is bigger than last one, hence not a conflicting
-        // one we're finding the best match, this omits for eg. / and /sys when
-        // we're actually looking for /system
-        if (words[2].length() > mountPoint.length()) {
-          mountPoint = words[2];
-          types = words[5];
-        }
+      // current found point is bigger than last one, hence not a conflicting
+      // one we're finding the best match, this omits for eg. / and /sys when
+      // we're actually looking for /system
+      if ((path.contains(words[2])) && (words[2].length() > mountPoint.length())) {
+        mountPoint = words[2];
+        types = words[5];
       }
     }
 

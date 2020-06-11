@@ -183,12 +183,10 @@ public class EncryptDecryptUtils {
     EncryptedEntry matchedEntry = null;
     // find closest path which matches with database entry
     for (EncryptedEntry encryptedEntry : handler.getAllEntries()) {
-      if (path.contains(encryptedEntry.getPath())) {
-
-        if (matchedEntry == null || matchedEntry.getPath().length() <
-                                        encryptedEntry.getPath().length()) {
-          matchedEntry = encryptedEntry;
-        }
+      
+      if ((path.contains(encryptedEntry.getPath())) && (matchedEntry == null || matchedEntry.getPath().length() <
+                                        encryptedEntry.getPath().length())) {
+        matchedEntry = encryptedEntry;
       }
     }
     return matchedEntry;

@@ -539,17 +539,15 @@ public class RecyclerAdapter
       if (isBackButton) {
         holder.about.setVisibility(View.GONE);
       }
-      if (mainFrag.IS_LIST) {
-        if (p == getItemCount() - 1) {
-          holder.rl.setMinimumHeight((int)minRowHeight);
-          if (itemsDigested.size() ==
-              (getBoolean(PREFERENCE_SHOW_GOBACK_BUTTON) ? 1 : 0))
-            holder.txtTitle.setText(R.string.nofiles);
-          else {
-            holder.txtTitle.setText("");
-          }
-          return;
+      if ((mainFrag.IS_LIST) && (p == getItemCount() - 1)) {
+        holder.rl.setMinimumHeight((int)minRowHeight);
+        if (itemsDigested.size() ==
+            (getBoolean(PREFERENCE_SHOW_GOBACK_BUTTON) ? 1 : 0))
+          holder.txtTitle.setText(R.string.nofiles);
+        else {
+          holder.txtTitle.setText("");
         }
+        return;
       }
       if (!this.stoppedAnimation && !itemsDigested.get(p).getAnimating()) {
         animate(holder);
@@ -859,17 +857,15 @@ public class RecyclerAdapter
         }
 
         if (itemsDigested.get(p).getChecked() == ListItem.CHECKED) {
-          if (holder.genericIcon.getVisibility() == View.VISIBLE) {
-
-            if ((rowItem.filetype != Icons.IMAGE &&
+          
+          if ((holder.genericIcon.getVisibility() == View.VISIBLE) && ((rowItem.filetype != Icons.IMAGE &&
                  rowItem.filetype != Icons.APK &&
                  rowItem.filetype != Icons.VIDEO) ||
-                !getBoolean(PREFERENCE_SHOW_THUMB)) {
-              View iconBackground = getBoolean(PREFERENCE_USE_CIRCULAR_IMAGES)
-                                        ? holder.genericIcon
-                                        : holder.iconLayout;
-              iconBackground.setBackgroundColor(goBackColor);
-            }
+                !getBoolean(PREFERENCE_SHOW_THUMB))) {
+            View iconBackground = getBoolean(PREFERENCE_USE_CIRCULAR_IMAGES)
+                                      ? holder.genericIcon
+                                      : holder.iconLayout;
+            iconBackground.setBackgroundColor(goBackColor);
           }
 
           holder.checkImageViewGrid.setVisibility(View.VISIBLE);

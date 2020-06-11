@@ -106,10 +106,8 @@ public class PreferencesActivity extends ThemedActivity {
 
   @Override
   public void onBackPressed() {
-    if (currentFragment instanceof ColorPref) {
-      if (((ColorPref)currentFragment).onBackPressed())
-        return;
-    }
+    if ((currentFragment instanceof ColorPref) && (((ColorPref)currentFragment).onBackPressed()))
+      return;
 
     if (selectedItem != START_PREFERENCE && restartActivity) {
       restartActivity(this);

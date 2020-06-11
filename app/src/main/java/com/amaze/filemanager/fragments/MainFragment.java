@@ -564,9 +564,8 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
         return true;
       }
 
-      if (getMainActivity().mReturnIntent)
-        if (Build.VERSION.SDK_INT >= 16)
-          showOption(R.id.openmulti, menu);
+      if ((getMainActivity().mReturnIntent) && (Build.VERSION.SDK_INT >= 16))
+        showOption(R.id.openmulti, menu);
       // tv.setText(positions.size());
       if (!results) {
         hideOption(R.id.openparent, menu);
@@ -583,16 +582,14 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
             hideOption(R.id.openmulti, menu);
           }
 
-          if (getMainActivity().mReturnIntent)
-            if (Build.VERSION.SDK_INT >= 16)
-              showOption(R.id.openmulti, menu);
+          if ((getMainActivity().mReturnIntent) && (Build.VERSION.SDK_INT >= 16))
+            showOption(R.id.openmulti, menu);
 
         } else {
           try {
             showOption(R.id.share, menu);
-            if (getMainActivity().mReturnIntent)
-              if (Build.VERSION.SDK_INT >= 16)
-                showOption(R.id.openmulti, menu);
+            if ((getMainActivity().mReturnIntent) && (Build.VERSION.SDK_INT >= 16))
+              showOption(R.id.openmulti, menu);
             for (LayoutElementParcelable e : adapter.getCheckedItems()) {
               File x = new File(e.desc);
               if (x.isDirectory()) {
@@ -620,17 +617,15 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
             hideOption(R.id.share, menu);
             hideOption(R.id.openmulti, menu);
           }
-          if (getMainActivity().mReturnIntent)
-            if (Build.VERSION.SDK_INT >= 16)
-              showOption(R.id.openmulti, menu);
+          if ((getMainActivity().mReturnIntent) && (Build.VERSION.SDK_INT >= 16))
+            showOption(R.id.openmulti, menu);
 
         } else {
           hideOption(R.id.openparent, menu);
           hideOption(R.id.addshortcut, menu);
 
-          if (getMainActivity().mReturnIntent)
-            if (Build.VERSION.SDK_INT >= 16)
-              showOption(R.id.openmulti, menu);
+          if ((getMainActivity().mReturnIntent) && (Build.VERSION.SDK_INT >= 16))
+            showOption(R.id.openmulti, menu);
           try {
             for (LayoutElementParcelable e : adapter.getCheckedItems()) {
               File x = new File(e.desc);
@@ -1033,12 +1028,10 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
     EncryptedEntry matchedEntry = null;
     // find closest path which matches with database entry
     for (EncryptedEntry encryptedEntry : handler.getAllEntries()) {
-      if (path.contains(encryptedEntry.getPath())) {
-
-        if (matchedEntry == null || matchedEntry.getPath().length() <
-                                        encryptedEntry.getPath().length()) {
-          matchedEntry = encryptedEntry;
-        }
+      
+      if ((path.contains(encryptedEntry.getPath())) && (matchedEntry == null || matchedEntry.getPath().length() <
+                                        encryptedEntry.getPath().length())) {
+        matchedEntry = encryptedEntry;
       }
     }
     return matchedEntry;
@@ -1334,10 +1327,8 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
               dialog.getCustomView().findViewById(R.id.singleedittext_input);
           String name1 = textfield.getText().toString();
 
-          if (f.isSmb()) {
-            if (f.isDirectory() && !name1.endsWith("/"))
-              name1 = name1 + "/";
-          }
+          if ((f.isSmb()) && (f.isDirectory() && !name1.endsWith("/")))
+            name1 = name1 + "/";
           getMainActivity().mainActivityHelper.rename(
               openMode, f.getPath(), CURRENT_PATH + "/" + name1, getActivity(),
               getMainActivity().isRootExplorer());
@@ -1467,10 +1458,8 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
       SearchWorkerFragment fragment =
           (SearchWorkerFragment)fm.findFragmentByTag(
               MainActivity.TAG_ASYNC_HELPER);
-      if (fragment != null) {
-        if (fragment.mSearchAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
-          fragment.mSearchAsyncTask.cancel(true);
-        }
+      if ((fragment != null) && (fragment.mSearchAsyncTask.getStatus() == AsyncTask.Status.RUNNING)) {
+        fragment.mSearchAsyncTask.cancel(true);
       }
       loadlist(new File(CURRENT_PATH).getPath(), true, OpenMode.UNKNOWN);
       results = false;
@@ -1598,12 +1587,10 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
     if (mediaScannerConnection != null)
       mediaScannerConnection.disconnect();
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-
-      if (!isEncryptOpen && encryptBaseFiles.size() != 0) {
-        // we've opened the file and are ready to delete it
-        new DeleteTask(getActivity()).execute(encryptBaseFiles);
-      }
+    
+    if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) && (!isEncryptOpen && encryptBaseFiles.size() != 0)) {
+      // we've opened the file and are ready to delete it
+      new DeleteTask(getActivity()).execute(encryptBaseFiles);
     }
   }
 
@@ -1622,10 +1609,8 @@ public class MainFragment extends Fragment implements BottomBarButtonPath {
       name = (aMFile.isDirectory() && name.endsWith("/"))
                  ? name.substring(0, name.length() - 1)
                  : name;
-      if (path.equals(smbPath)) {
-        if (name.endsWith("$"))
-          continue;
-      }
+      if ((path.equals(smbPath)) && (name.endsWith("$")))
+        continue;
       if (aMFile.isDirectory()) {
         folder_count++;
 

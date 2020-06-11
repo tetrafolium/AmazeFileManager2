@@ -333,7 +333,7 @@ public class FtpService extends Service implements Runnable {
         (WifiManager)context.getApplicationContext().getSystemService(
             Context.WIFI_SERVICE);
     Boolean enabled = callIsWifiApEnabled(wm);
-    return enabled != null ? enabled : false;
+    return enabled != null && enabled;
   }
 
   public static InetAddress getLocalInetAddress(final Context context) {

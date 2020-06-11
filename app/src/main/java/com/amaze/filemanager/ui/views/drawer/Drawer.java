@@ -366,18 +366,16 @@ public class Drawer implements NavigationView.OnNavigationItemSelectedListener {
       Collections.sort(accountAuthenticationList, new BookSorter());
     }
 
-    if (mainActivity.getBoolean(PREFERENCE_SHOW_SIDEBAR_FOLDERS)) {
-      if (dataUtils.getBooks().size() > 0) {
+    if ((mainActivity.getBoolean(PREFERENCE_SHOW_SIDEBAR_FOLDERS)) && (dataUtils.getBooks().size() > 0)) {
 
-        Collections.sort(dataUtils.getBooks(), new BookSorter());
+      Collections.sort(dataUtils.getBooks(), new BookSorter());
 
-        synchronized (dataUtils.getBooks()) {
-          for (String[] file : dataUtils.getBooks()) {
-            addNewItem(menu, FOLDERS_GROUP, order++, file[0],
-                       new MenuMetadata(file[1]),
-                       R.drawable.ic_folder_white_24dp,
-                       R.drawable.ic_edit_24dp);
-          }
+      synchronized (dataUtils.getBooks()) {
+        for (String[] file : dataUtils.getBooks()) {
+          addNewItem(menu, FOLDERS_GROUP, order++, file[0],
+                     new MenuMetadata(file[1]),
+                     R.drawable.ic_folder_white_24dp,
+                     R.drawable.ic_edit_24dp);
         }
       }
     }

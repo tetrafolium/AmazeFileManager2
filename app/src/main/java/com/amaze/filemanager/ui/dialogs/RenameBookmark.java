@@ -148,15 +148,13 @@ public class RenameBookmark extends DialogFragment {
               }
             }
             int i = -1;
-            if ((i = dataUtils.containsBooks(new String[] {title, path})) !=
-                -1) {
-              if (!t.equals(title) && t.length() >= 1) {
-                dataUtils.removeBook(i);
-                dataUtils.addBook(new String[] {name, t});
-                dataUtils.sortBook();
-                if (bookmarkCallback != null) {
-                  bookmarkCallback.modify(path, title, t, name);
-                }
+            if (((i = dataUtils.containsBooks(new String[] {title, path})) !=
+                -1) && (!t.equals(title) && t.length() >= 1)) {
+              dataUtils.removeBook(i);
+              dataUtils.addBook(new String[] {name, t});
+              dataUtils.sortBook();
+              if (bookmarkCallback != null) {
+                bookmarkCallback.modify(path, title, t, name);
               }
             }
             materialDialog.dismiss();

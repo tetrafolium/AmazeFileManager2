@@ -537,11 +537,9 @@ public class Operations {
         }
         return 1;
       }
-    } else if (Build.VERSION.SDK_INT == 19) {
-      // Assume that Kitkat workaround works
-      if (FileUtil.isOnExtSdCard(folder, context))
-        return 1;
-    }
+    } else // Assume that Kitkat workaround works
+    if ((Build.VERSION.SDK_INT == 19) && (FileUtil.isOnExtSdCard(folder, context)))
+      return 1;
 
     // file not on external sd card
     if (FileUtil.isWritable(new File(folder, "DummyFile"))) {
