@@ -155,7 +155,7 @@ public static boolean isFileExtractable(final String path) {
 }
 
 /**
- * Gets the name of the file without compression extention.
+ * Gets the name of the file without compression extension.
  * For example:
  * "s.tar.gz" to "s"
  * "s.tar" to "s"

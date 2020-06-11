@@ -29,7 +29,7 @@ public class CustomFileObserver extends FileObserver {
 public static final int GOBACK = -1, NEW_ITEM = 0, DELETED_ITEM = 1;
 
 /**
- * When the bserver stops observing this event is recieved
+ * When the bserver stops observing this event is received
  * Check:
  * http://rswiki.csie.org/lxr/http/source/include/linux/inotify.h?a=m68k#L45
  */

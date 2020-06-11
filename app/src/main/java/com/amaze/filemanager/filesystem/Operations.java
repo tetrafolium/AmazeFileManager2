@@ -31,7 +31,7 @@ import net.schmizz.sshj.sftp.SFTPClient;
 public class Operations {
 
 // reserved characters by OS, shall not be allowed in file names
-private static final String FOREWARD_SLASH = "/";
+private static final String FOREWORD_SLASH = "/";
 private static final String BACKWARD_SLASH = "\\";
 private static final String COLON = ":";
 private static final String ASTERISK = "*";
@@ -575,7 +575,7 @@ public static boolean isFileNameValid(final String fileName) {
 
 	// TODO: check file name validation only for FAT filesystems
 	return !(fileName.contains(ASTERISK) || fileName.contains(BACKWARD_SLASH) ||
-	         fileName.contains(COLON) || fileName.contains(FOREWARD_SLASH) ||
+	         fileName.contains(COLON) || fileName.contains(FOREWORD_SLASH) ||
 	         fileName.contains(GREATER_THAN) || fileName.contains(LESS_THAN) ||
 	         fileName.contains(QUESTION_MARK) || fileName.contains(QUOTE));
 }

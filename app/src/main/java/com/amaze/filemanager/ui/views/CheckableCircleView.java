@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import com.amaze.filemanager.R;
 
 /**
- * This is a circle taht can have a check (√) in the middle
+ * This is a circle that can have a check (√) in the middle
  */
 public class CheckableCircleView extends View {
 
